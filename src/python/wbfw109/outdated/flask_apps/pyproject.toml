@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "study-flask"
+version = "0.1.0"
+description = ""
+authors = ["wbfw109 <wbfw109@gmail.com>"]
+packages = [
+    { include = "mysite", from = "flask_apps"},  
+]
+
+[tool.poetry.dependencies]
+python = "^3.10, <3.11"
+Flask = "*"
+Flask-SocketIO = "*"
+aiohttp = "*"
+gevent = "*"
+gevent-websocket = "*"
+python-socketio = "*"
+redis = "*"
+celery = "*"
+SQLAlchemy = "*"
+psycopg2-binary = "*"
+beautifulsoup4 = "*"
+selenium = "*"
+requests = "*"
+seaborn = "*"
+bokeh = "*"
+matplotlib = "*"
+keras-adabound = "*"
+pyparsing = "*"
+labelImg = "*"
+
+[tool.poetry.dev-dependencies]
+study-core = {path = "../study-core", extras=["ml"], develop = true}
+black = "*"
+pytest = "*"
+flake8 = "*"
+ipykernel = "*"
+bandit = "*"
+coverage = "*"
+pylint = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

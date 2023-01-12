@@ -1,0 +1,3 @@
+- fugue icon set by designer Yusuke Kamiyamane ; https://p.yusukekamiyamane.com/
+- Web Driver for crawling ; https://pypi.org/project/selenium/
+- in oder to use yarn berry, install nvm from https://learn.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl

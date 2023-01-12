@@ -1,0 +1,60 @@
+@startuml deployment
+legend
+Deployment Diagram
+end legend
+
+node EndPoint
+cloud Cloud {
+    node Services {
+        node MLModel
+        node Backend {
+            database DB {
+                node MongoDB {
+                    node MongoExpress
+                }
+            }
+            node ELKStack {
+                node ElasticSearch
+                node Logstash
+                node Kibana
+                node Beats
+            }
+            node Kafka
+            node NginX
+            node Gunicorn {
+                node Uvicorn
+            }
+            node FastAPI
+        }
+        node Frontend {
+            node Svelte
+        }
+    }
+}
+
+Gunicorn .. FastAPI
+NginX .. Gunicorn
+
+MLModel <--> Backend
+Svelte <--> NginX
+Svelte <--> EndPoint
+FastAPI <--> DB
+DB .. ElasticSearch
+Beats --> Kafka : collect data, forward to
+Kafka --> Logstash : queueing message as broker, pass to
+Logstash --> ElasticSearch : aggregate data and processing, ship to
+ElasticSearch --> Kibana: from indexed data, virtualize
+
+node DevOps {
+    node Docker
+    node Kubernetes
+    node JenkinsCI
+    node ArgoCD
+    node GitHub {
+        node Actions
+    }
+}
+Docker --> Kubernetes
+JenkinsCI --> ArgoCD
+
+@enduml

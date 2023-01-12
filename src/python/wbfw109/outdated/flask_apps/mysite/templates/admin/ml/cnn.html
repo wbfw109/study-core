@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}CNN from cifar-10 dataset{% endblock %}</h1>
+<!-- {% if g.user %}
+    <a class="action" href="{{ url_for('tutorial/blog.create') }}">New</a>
+  {% endif %} -->
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="image" class="form-label">Image</label>
+    <input class="form-control" type="file" id="image" name="image" value="{{request.form['image']}}">
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3" value="Classify">Classify</button>
+  </div>
+</form>
+<div>Class = {{class_predicted or ''}}</div>
+
+<hr>
+<hr>
+<ul>Available class</ul>
+{% for class_name in class_names %}
+<li>{{class_name}}</li>
+{% endfor %}
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+  $(function () {
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{
+  "python.analysis.typeCheckingMode": "strict",
+  "python.linting.ignorePatterns": [
+    "temp_cache/*",
+    "src/python/wbfw109/labs/**/*",
+    "src/python/wbfw109/outdated/**/*"
+  ],
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "eslint.nodePath": ".yarn/sdks",
+  "plantuml.server": "http://localhost:9999",
+  "plantuml.render": "PlantUMLServer",
+  "plantuml.includepaths": ["services/*/diagrams"],
+  "plantuml.exportSubFolder": false,
+  "plantuml.exportFormat": "svg",
+  // environment variables for tasks.json ~
+  "myGitBranch.dev": "dev",
+  "myGitBranch.main": "main",
+
+  // common workplace settings ~
+  "editor.tabSize": 2,
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.autoImportUserSymbols": true,
+  "python.analysis.completeFunctionParens": true,
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.formatOnPaste": false,
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "python.linting.enabled": true,
+  "python.linting.banditEnabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [
+    "--disable=C0301,E0015,W0611,W0703",
+    "--variable-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$",
+    "--attr-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$",
+    "--argument-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$"
+  ],
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--target-version", "py311"],
+  "isort.args": ["--profile", "black"],
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  "[feature]": {
+    "editor.defaultFormatter": "alexkrechik.cucumberautocomplete"
+  },
+  "search.exclude": {
+    // "ref/algorithms_ref.json": true,
+    "services/glossary_service/": true,
+    "src/python/wbfw109/outdated/**/*": true,
+    ".pnp.*": true,
+    ".yarn/": true,
+    "package-lock.json": true,
+    "poetry.lock": true,
+    "yarn.lock": true,
+    // "**/tutorials": true
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "notebook.output.textLineLimit": 100,
+  "replacerules.rules": {
+    "Remove Type hint of list in single line": {
+      "find": "( ->|:) ?(list\\)?[(list\\[[\\w ]+\\])(\\]?)",
+      "replace": "$1 list",
+      "languages": ["python"]
+    },
+    "Remove Type hint of list in multiple line": {
+      "find": "(:) list\\[(\n.+){2}(?==)",
+      "replace": "$1 list",
+      "languages": ["python"]
+    },
+    "Remove Type hint of Final": {
+      "find": ": Final\\[(.+)\\]",
+      "replace": ": $1",
+      "languages": ["python"]
+    },
+    "Remove Type hint of Literal": {
+      "find": ": Literal\\[.+\\]",
+      "replace": "",
+      "languages": ["python"]
+    },
+    "Remove Type hint of importing": {
+      "find": "(Final, |, Final|Literal, |, Literal)",
+      "replace": "",
+      "languages": ["python"]
+    }
+  },
+  "replacerules.rulesets": {
+    "Remove Type hint": {
+      "rules": [
+        "Remove Type hint of list in single line",
+        "Remove Type hint of list in multiple line",
+        "Remove Type hint of Final",
+        "Remove Type hint of Literal",
+        "Remove Type hint of importing"
+      ]
+    }
+  },
+  "cucumberautocomplete.steps": ["features/*.py"],
+  "cucumberautocomplete.customParameters": [
+    {
+      "parameter": "(u'",
+      "value": "('"
+    }
+  ],
+  "cucumberautocomplete.syncfeatures": "features/*feature",
+  "cucumberautocomplete.gherkinDefinitionPart": "@(given|when|then|step)\\(",
+  "cucumberautocomplete.strictGherkinValidation": true,
+  "cucumberautocomplete.strictGherkinCompletion": true,
+  "cucumberautocomplete.smartSnippets": true,
+  "cucumberautocomplete.stepsInvariants": true,
+  "cucumberautocomplete.onTypeFormat": true,
+  "yaml.schemas": {},
+  "svelte.enable-ts-plugin": true,
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}

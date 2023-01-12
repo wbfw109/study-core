@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Multiple Linear Regression from UCI wine dataset (red wine){% endblock %}</h1>
+  <!-- {% if g.user %}
+    <a class="action" href="{{ url_for('tutorial/blog.create') }}">New</a>
+  {% endif %} -->
+{% endblock %}
+
+{% block content %}
+  <hr>
+  <form method="post">
+    {% for input_column in input_columns %}
+    <div class="mb-3 row">
+      <label for="{{input_column}}" class="col-sm-2 col-form-label">{{input_column}}</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="{{input_column}}" name="{{input_column}}" value="{{request.form[input_column]}}">
+      </div>
+    </div>
+    {% endfor %}
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-3" value="Predict">Predict</button>
+    </div>
+  </form>
+  <div>Result = {{result or ''}}</div>
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+  $(function(){
+});
+</script>
+{% endblock %}

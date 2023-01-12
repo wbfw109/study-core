@@ -1,0 +1,79 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "[Git] dev: push with '.' commit message",
+      "type": "shell",
+      "command": "git checkout ${config:myGitBranch.dev} && git add . && git commit -m '.' && git push origin ${config:myGitBranch.dev}",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "[_Git] dev: rebase with upstream as main branch",
+      "type": "shell",
+      "command": "git checkout ${config:myGitBranch.dev} && git rebase ${config:myGitBranch.main}",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "[_Git] main: merge from dev branch and push",
+      "type": "shell",
+      "command": "git checkout ${config:myGitBranch.main} && git merge --squash ${config:myGitBranch.dev} && git commit -m '${input:commitMessage}' && git push origin ${config:myGitBranch.main}",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "[Git] merge with rebase and back to dev branch",
+      "type": "shell",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "[_Git] dev: rebase with upstream as main branch",
+        "[_Git] main: merge from dev branch and push"
+      ],
+      "command": "git checkout ${config:myGitBranch.dev}",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "[Web] [Tutorials] Run Uvicorn dev server",
+      "type": "shell",
+      "command": "source \"$(poetry env info --path)/bin/activate.fish\" && uvicorn src.python.wbfw109.tutorials.fastapi.main:app --reload",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "[Web] [Tutorials] Run Svelte (Vite) server",
+      "type": "shell",
+      "command": "yarn run nx run svelte_app:dev",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "type": "command",
+      "id": "prettierBin", // for prettier extension limitation
+      "command": "yarn bin prettier"
+    },
+    {
+      "type": "promptString",
+      "id": "commitMessage",
+      "description": "Commit message to main upstream.",
+      "default": "update minor points"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src/wbfw109/glossary_app"
+    ],
+    "python.analysis.typeCheckingMode": "off",
+    "python.linting.ignorePatterns": [
+        "${workspaceFolder}/**/*"
+    ],
+}

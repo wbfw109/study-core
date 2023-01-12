@@ -1,0 +1,9 @@
+[project]
+resources_root = "resources"
+src_root = "src"
+
+[algorithms]
+parent_path_order = ["company", "contest"]
+problem_path_order = ["season", "round", "name"]
+python_packages_path = "python/wbfw109/algorithms"
+

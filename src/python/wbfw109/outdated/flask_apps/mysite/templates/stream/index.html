@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}videos in server{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <hr>
+    <img src="{{ url_for('stream.video_feed') }}">
+  <hr>
+  {# 
+    <img src="{{ url_for('stream.video_feed_my_camera') }}" height="480" width="640">
+  #}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
