@@ -1,0 +1,12 @@
+github:
+  root:
+    "Fine-grained personal access tokens":
+      expiry_date: "2024-01-10"
+      repository: wbfw109/wbfw109.github.io
+      permissions:
+        repository:
+          Contents: "Read and write"
+          Pages: "Read and write"
+      used_in:
+        repository: "study-core"
+        actions: "secrets"

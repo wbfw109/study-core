@@ -1,0 +1,32 @@
+{
+  "name": "svelte_app",
+  "packageManager": "yarn@3.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "yarn run vite dev",
+    "build": "yarn run vite build",
+    "preview": "yarn run vite preview",
+    "test": "yarn run playwright test",
+    "check": "yarn run svelte-kit sync && yarn run svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "yarn run svelte-kit sync && yarn run svelte-check --tsconfig ./tsconfig.json --watch",
+    "test:unit": "yarn run vitest",
+    "lint": "yarn run prettier --plugin-search-dir . --check . && eslint .",
+    "format": "yarn run prettier --plugin-search-dir . --write ."
+  },
+  "devDependencies": {
+    "@fontsource/fira-mono": "^4.5.10",
+    "@neoconfetti/svelte": "^1.0.0",
+    "@playwright/test": "^1.28.1",
+    "@sveltejs/adapter-auto": "^1.0.0",
+    "@sveltejs/kit": "^1.0.0",
+    "@tsconfig/esm": "^1.0.2",
+    "eslint-plugin-svelte": "^2.14.1",
+    "svelte": "^3.55.0",
+    "svelte-check": "^2.10.2",
+    "tslib": "^2.4.1",
+    "vite": "^4.0.1",
+    "vitest": "^0.25.8",
+    "yarn-upgrade-all": "^0.7.1"
+  }
+}

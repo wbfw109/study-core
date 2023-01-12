@@ -1,0 +1,42 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - mytutorial</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='tutorial/style.css') }}">
+<nav>
+  <h1>mytutorial</h1>
+  <ul>
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('tutorial/auth.logout') }}">Log Out</a>
+    {% else %}
+      <li><a href="{{ url_for('tutorial/auth.register') }}">Register</a>
+      <li><a href="{{ url_for('tutorial/auth.login') }}">Log In</a>
+    {% endif %}
+  </ul>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>
+
+{#
+■ g is automatically available in templates.
+  Based on if g.user is set (from load_logged_in_user), either the username and a log out link are displayed
+  , or links to register and log in are displayed.
+  url_for() is also automatically available, and is used to generate URLs to views instead of writing them out manually.
+
+● A useful pattern used here is to place {% block title %} inside {% block header %}.
+  This will set the title block and then output the value of it into the header block
+  , so that both the window and page share the same title without writing it twice.
+
+  ● The input tags are using the required attribute here.
+    This tells the browser not to submit the form until those fields are filled in.
+    If the user is using an older browser that doesn’t support that attribute
+    , or if they are using something besides a browser to make requests, you still want to validate the data in the Flask view.
+    It’s important to always fully validate the data on the server, even if the client does some validation as well.
+
+#}

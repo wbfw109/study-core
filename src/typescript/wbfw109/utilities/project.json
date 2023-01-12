@@ -1,0 +1,40 @@
+{
+  "name": "utilities",
+  "$schema": "./nx/schemas/project-schema.json",
+  "sourceRoot": "src/typescript/wbfw109/utilities/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/src/typescript/wbfw109/utilities",
+        "main": "src/typescript/wbfw109/utilities/src/index.ts",
+        "tsConfig": "src/typescript/wbfw109/utilities/tsconfig.lib.json",
+        "assets": ["src/typescript/wbfw109/utilities/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn node tools/scripts/publish.mjs utilities {args.ver} {args.tag}"
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["src/typescript/wbfw109/utilities/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/vite:test",
+      "outputs": ["{projectRoot}/coverage"],
+      "options": {
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

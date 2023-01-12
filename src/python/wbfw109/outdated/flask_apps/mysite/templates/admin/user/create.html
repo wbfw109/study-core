@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}
+  {% if you is none %}
+  New User
+  {% else %}
+  Existing User
+  {% endif %}
+  {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+  <label for="name">Name</label>
+  <input name="name" value="{{ request.form['name'] or you['name'] }}" required>
+  <label for="age">Age</label>
+  <input name="age" value="{{ request.form['age'] or you['age']}}">
+  {% if you is none %}
+  <label for="image">Image</label>
+  <input type="file" name="image" value="{{ request.form['image'] or you['image']}}">
+  <input type="submit" value="Save">
+  {% else %}
+  <div class="user_image">
+    {# Ajax image #}
+  </div>
+  {% endif %}
+
+</form>
+<a href="/admin/user">
+  <button>previous</button>
+</a>
+{% endblock %}
+{% block scripts %}
+{% if you is none %}
+<script>
+  $(function () {
+    $('input[name="age"]').on("change keyup paste input", function () {
+      enforceFloat(this);
+    });
+  });
+</script>
+
+{% else %}
+<script>
+  $(function () {
+    (function (user_id) {
+      $.ajax({
+        type: "POST",
+        url: `/admin/user/get_thumbnail/${user_id}`,
+        dataType: 'json',
+        contentType: 'application/json',
+        data: user_id,
+        success: function (response) {
+          $(".user_image").append(
+            `<a href="{{ url_for('download_file', subpath=you['image']).replace('%5C', '/') }}">`
+              + `<img src="data:image;base64, ${response.image}" alt="your image" style="width:50%">`
+              + `</a>`
+            )
+        },
+        error: function (err) {
+          console.log("error2")
+        }
+      });
+    }(window.location.href.substring(window.location.href.lastIndexOf('/') + 1)));
+  });
+
+</script>
+{% endif %}
+
+{% endblock %}

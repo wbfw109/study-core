@@ -1,0 +1,25 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Pynecone as Development",
+      "type": "shell",
+      "command": "source \"$(poetry env info --path)/bin/activate.fish\" && cd \"${workspaceFolder}/src/wbfw109/glossary_app\" && pc run --env dev",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Run Pynecone as Production",
+      "type": "shell",
+      "command": "source \"$(poetry env info --path)/bin/activate.fish\" && cd \"${workspaceFolder}/src/wbfw109/glossary_app\" && pc run --env prod",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ],
+}

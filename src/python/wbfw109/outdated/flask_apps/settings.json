@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "/home/wbfw109/.local_files/tensorflow/models/research"
+    ]
+}

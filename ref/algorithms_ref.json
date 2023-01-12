@@ -1,0 +1,2897 @@
+{
+  "google": {
+    "code_jam": [
+      {
+        "season": "2022",
+        "round": "qualification",
+        "name": "punched_cards",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3E1T4wQJEJIK7R_RWjefoWZtCdTj6wKoFQag8BiM1wbpMy2HiOFsxytqkU/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "qualification",
+        "name": "3d_printing",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3xhUow5bHeFGPS1erqXprOnIZpPR-G6SMHhAKyQcRlVKR-66afsf0J1luH/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "qualification",
+        "name": "d1000000",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0aTbOJrVpTwHL0NBm_OGz_fJ3wSRLeEhFeUYVBN0nQ9T8UrYVnQYpVYauw/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "qualification",
+        "name": "chain_reactions",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U25GFu1uaNa2Pa6zRBVp7EuesOobiqzkmwjnX9jjmiYkNNH6kbXQU-Ww8c1/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "qualification",
+        "name": "twisty_little_passages",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3RZNgcxXrkH2_6VkJNCKqP0eq4chLwlfkVTiLdVQLewmiXfgBu6o3iGi8Ezq5BxsFiumNi/local_testing_tool.py3",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1a_2022",
+        "name": "double_or_one_thing",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1DzY6nWLJNBIlNh4WymxBcIdw3RWm1ZJ-G-VbwLOWay7WV0sStB3ToYIdP/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1a_2022",
+        "name": "equal_sum",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2nR_pHqupcZJ54PUIEy78CRtM4E8WTinlUOiBQHdOxI0n8wUyeCrfOyJ52GycbSYBxTNc/local_testing_tool.py",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1a_2022",
+        "name": "weightlifting",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3jwxNjM9Guj0PaLg0ymYj5Em-Qzx-kN4vuoUhGOsdSpn_CkLgkNLy-7w8j/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1b_2022",
+        "name": "pancake_deque",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0Imla8AwfLKN2QLQqYEDufjDK1AD0mUkvEXEH6_8d_ezBGCRwnx2GDCKev/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1b_2022",
+        "name": "controlled_inflation",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0Mw6MqatuAoQeJp8pdCYkqqfGtjyFHLiq4WhkhBSwnG9ppbzdrsDxZWRcB/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1b_2022",
+        "name": "asedatab",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3JAGba7WjEayI4xjRTNUnLvTQE6vp0pnQMW-5arPA2UyR2gLP5uHapFBHmKc9Q5krfc8H2/local_testing_tool.py3",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1c_2022",
+        "name": "letter_blocks",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0CQJMMFAinIuKspTJZOTOPUjgk0Yj4JuNZrxnN-rlnUWw-tGBxd_tj8lxM/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1c_2022",
+        "name": "squary",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2YrsIKHO_VLtP3NCokQ4C8iO5VQMBXn9VMJK_vEUSv9I0eDj8TzkzHaqEZ/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_1c_2022",
+        "name": "intranets",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U21jxKlzSxTDwNy7vKuji78Ibbd34_U2Qq9aoUMYep8zuHChGBRCMZhyyHq/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_2_2022",
+        "name": "spiraling_into_control",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U09qeQLfeTOVBOGh1NTz9bZEvv8N4q5pS678a9l_JAyUX6DzgDxK3Sph6ZL/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_2_2022",
+        "name": "pixelated_circle",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U04Il7EMfKy2gGKAEQs6MheKw4H6x1K9tTV97Ijm8pFkaVHk8PgZrS-_Nve/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_2_2022",
+        "name": "saving_the_jelly",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3Lm25HCxosq9qSyOr2hCg9XTfmvNkZiuTNs3fcniIRA30NI5256VJmE6DV/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_2_2022",
+        "name": "i_obot",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3uie44d5tDLEs4tIJDxPvWJqBUZbiqSwyJklP7y5pS0Z4zgukDGOmNVch3/test_data.zip",
+        "is_in_resources": true
+      },
+      {
+        "season": "2022",
+        "round": "round_3_2022",
+        "name": "revenge_of_gorosort",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1psMbAqvyEo3rAS-psHnxcO5v_G03u6SpaLtEL5VwAOslvZaF9W1XJ5UGG-f9_KaKONLEZ/local_testing_tool.py3",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "round_3_2022",
+        "name": "duck_duck_geese",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2eqZdjVzrp_wspvhK3R04djJniGnaXr-bc0Yi45GVngGTd_AksjleZ2Yfn/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "round_3_2022",
+        "name": "mascot_maze",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0x-zZceOclrn0W3js2_4kUTUfR_9vnTbLO5lFPRmCcoNJTbMi_TgWbpwM4/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "round_3_2022",
+        "name": "win_as_second",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3yfweG-lYrBwWQGWJ8qTZOP8w_1ljld4Bzbzyu6oqI8hxixNU_mZjcZzaGFyJMGRfJnh6I/local_testing_tool.py3",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "world_finals_2022",
+        "name": "wonderland_chase",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U16byKzg5R8U0-QmJOWFA-SECjnuQdoYp8Rz1_f_NCdNV-0Hdx6lAZQfnXx/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "world_finals_2022",
+        "name": "goose_goose_ducks_",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2PbgBeDaMzKgc_XNJ-NvzF86TskE0AjFlrKHAwpvL2ooR-0XMZ88nvHaXQ/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "world_finals_2022",
+        "name": "slide_parade",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3xbFNwDE-03rEn8B2bs87m8RMEe-80x5_j0FpH8qfTe51vIBN8k51TaUZy/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "world_finals_2022",
+        "name": "schr\u00f6dinger_and_pavlov",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U14CdGu7kdT8EwOmGFHbKvkBR4vP8GAqcLdnHStqXHMEH5k7v3ln8O34RRe/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2022",
+        "round": "world_finals_2022",
+        "name": "triangles",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0OAbgxInaWPc_MyRd55S0MxzHcI3uGiOLRQvEJon9z_9SrpC64_82AyoP9/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "qualification_round_2021",
+        "name": "reversort",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0chWHYu10ERzEGMsRHm-_jfTBb7212qBfbYGOWjy2jqvKZuCKPZRgyQ99o/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "qualification_round_2021",
+        "name": "moons_and_umbrellas",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U08BVI11_oYHVlC6jw8waDOelpYoVkdd6yjqsD9VfqOH9xzjbdznJgHjv9z/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "qualification_round_2021",
+        "name": "reversort_engineering",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0RX3LvHviaNZTWGICysqzJf56ww-9mU_lI0wDXjKQvRM3C1NXe5by-hZs0/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "qualification_round_2021",
+        "name": "median_sort",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2P_Jo-LdjSsbvduwvNv8WUPV7__5WXReNs62pv07ijo-MZu51K8W_uZLA4zC7k3JY4fXY/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "qualification_round_2021",
+        "name": "cheating_detection",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U30fW5PiSmZEfEG0hGHJefpFLz3YfLyDcRn0TbKZY2qGQm8SKIiKtntbfAo/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1a_2021",
+        "name": "append_sort",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3FD-gH0Lfu2HMLHaF2hBx23E65k_5ntDxS_8aPHfVXvMQcHpCzUEXF9Zqf/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1a_2021",
+        "name": "prime_time",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1TNFSJdQ5mBeGWYzaMZ-ahPPtDT5x0d5rm0VWBC0ppcy3nriaiufqlqaB1/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1a_2021",
+        "name": "hacked_exam",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2T_g-AwwZkWqD7fsoiBfVYS_dj7_FI076NMAaxYAZH0WH9NVchvKlYF6RJ/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1b_2021",
+        "name": "broken_clock",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3VDACc-HI9sEUR9k21uPN27IKb91r3EPsWYj9YtXoPfW4UjF-9gIBCEkeQ/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1b_2021",
+        "name": "subtransmutation",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U16ya6F0kaR73j6sfiOaDDD3FapiUXdRVjP5Qz9_nE3qLHTjL78c4GKQTg1/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1b_2021",
+        "name": "digit_blocks",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1OT891I1NATNTQRyZMHMNjY_jjM9zyedlMx9BBbeYqmEU6znOgsbu-1nsSNOh6lpeuKnk/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1c_2021",
+        "name": "closest_pick",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3d_NCrbgGUn7_AEncZHkv1zKdRf9q4VjywVW-dTtiahe_W0RMyQOYMAa-r/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1c_2021",
+        "name": "roaring_years",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2SOTnu4kceaoG_A1CmeDkr6hp-znUL6HBc5NP7FRqPaXKekE3jSTUxuoT0/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_1c_2021",
+        "name": "double_or_noting",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0brhpkH0tsuvTPlJKZK3giKMHQul8yLReUh_KqWmzVaeigN1AqmbGGAw_k/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_2_2021",
+        "name": "minimum_sort",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0KFjctCSNOKbsk-2BWRbS6Kh0KVYXC_JiPCNHIxStbH2srSM1-EPa5OjqDR1eCHcjK0_4/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_2_2021",
+        "name": "matrygons",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1HbTXEQSmg1dj492Cwn1EZXkgazIzUL_HQ7c7ivnH4pSZWOLWm5-xqSbzM/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_2_2021",
+        "name": "hidden_pancakes",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U075M-fHPkfNz2LGbt4anNcFMzlIFG_S2KwDS6FQnT6DGGySroKXhdceOe0/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_2_2021",
+        "name": "retiling",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0k_qo0pOSosn0CUYdjRDTqrvEF0gEB8SLXDtIZZsp1lh587f7I7i4RBQHj/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_3_2021",
+        "name": "build_a_pair",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2-9DZB7Z_dsGoAbMKjRf1DVKoBlnI4JOkw9srAvoBTCOPO_MGOV3willYQ/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_3_2021",
+        "name": "square_free",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U05WjIKN_dWgfvvERw5ZIppnMVLS6jgJpHanJew9AzSi-dB--0dB6QgXJiw/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_3_2021",
+        "name": "fence_design",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3fqKkWPyKGHQQCdu3LiLZqzpCfq1jmgRAIjdsroDtF2uQLu4ygII7uTZ88/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "round_3_2021",
+        "name": "binary_search_game",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1T_MtjyZNX3jLrLPbAtlstDZOFRf2N2mZyguFJI-AgNyN3v0NTeFjdr7j-/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "world_finals_2021",
+        "name": "cutting_cake",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U382652dNsc7uKP4rDSXFRc88RmFlG1o8Gh3zTNsyrGOs29_-N7SlrVV3oS/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "world_finals_2021",
+        "name": "slide_circuits",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1xTTIogrhg-Ss2R73rjgGWgMAhmpt4UFV659rck1oOewIuJgeoYnq6ADyS/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "world_finals_2021",
+        "name": "ropes",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1TZvp_frwE3M9nb3apXfFjNjNvG9TugsThjf4w6mynVP6ALOMs2EIcmcEiWhPDYZ-Qavg/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "world_finals_2021",
+        "name": "divisible_divisions",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1wvgi8Nyj0XA9IwHk_X8ICbICA_JUzNfRovfZgXNh2Bfd-9mODX_VvV8Ei/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2021",
+        "round": "world_finals_2021",
+        "name": "infinitree",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1u8h1W-vRIEH9Ue0mYMMsUflt5-gzZwQtbsd6aXSgmRTxpp2rHD9b1dY0X/test_data.zip",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "qualification_round_2020",
+        "name": "vestigium",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "qualification_round_2020",
+        "name": "nesting_depth",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "qualification_round_2020",
+        "name": "parenting_partnering_returns",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "qualification_round_2020",
+        "name": "esab_atad",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1bB4GGc9WFjLma5-q6PDRgcnun5bwDwr-tuIoI7znF2ODrlVMejzFvmEKzi9NjYOSnwA/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "qualification_round_2020",
+        "name": "indicium",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1a_2020",
+        "name": "pattern_matching",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1a_2020",
+        "name": "pascal_walk",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1a_2020",
+        "name": "square_dance",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1b_2020",
+        "name": "expogo",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1b_2020",
+        "name": "blindfolded_bullseye",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1eKN8DWhKFd0inXwpTaV8CG06Ssy09KjDAFpn-kgIOh2CJArkVPQNbMm3vlA/testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1b_2020",
+        "name": "join_the_ranks",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1c_2020",
+        "name": "overexcited_fan",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1c_2020",
+        "name": "overrandomized",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_1c_2020",
+        "name": "oversized_pancake_choppers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_2_2020",
+        "name": "incremental_house_of_pancakes",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_2_2020",
+        "name": "security_update",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_2_2020",
+        "name": "wormhole_in_one",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_2_2020",
+        "name": "emacs++",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_3_2020",
+        "name": "naming_compromise",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_3_2020",
+        "name": "thermometers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_3_2020",
+        "name": "pen_testing",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2VjELWozIhyidpYJRp67MmwrnjOD8qaiExfStCWO0QZMLI_3SO0b5dHAtajGh0L6NAGg/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "round_3_2020",
+        "name": "recalculating",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "virtual_world_finals_2020",
+        "name": "pack_the_slopes",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "virtual_world_finals_2020",
+        "name": "adjacent_and_consecutive",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "virtual_world_finals_2020",
+        "name": "hexacoin_jam",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "virtual_world_finals_2020",
+        "name": "musical_cords",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2020",
+        "round": "virtual_world_finals_2020",
+        "name": "replace_all",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "qualification_round_2019",
+        "name": "foregone_solution",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "qualification_round_2019",
+        "name": "you_can_go_your_own_way",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "qualification_round_2019",
+        "name": "cryptopangrams",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "qualification_round_2019",
+        "name": "dat_bae",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3PROs_A8UKRSJFPXUiWJIH6x9roNCOyGP4Dsp1uILfOlsxmOjLqFE5DQlAzXSAzy65/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1a_2019",
+        "name": "pylons",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1a_2019",
+        "name": "golf_gophers",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3ZtaulNgPCmugwsrK5veN6B-QJtqzYU-RpMElFRH9UNrZ2sQvGYpRglpzw_5G1OyCS/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1a_2019",
+        "name": "alien_rhyme",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1b_2019",
+        "name": "manhattan_crepe_cart",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1b_2019",
+        "name": "draupnir",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3ixZUvQBx1_1wkSRqm1uLLoahkc-9C3_R2fo5x10iLWMJcLgPQHbLKce4wiCZuKkmF/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1b_2019",
+        "name": "fair_fight",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1c_2019",
+        "name": "robot_programming_strategy",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1c_2019",
+        "name": "power_arrangers",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0F65hHczJA3tJctZ6_C28YK4o0AOsjp-6qdcWreMND7EFS4QTXUQCy7wHfhU4DcFqU/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_1c_2019",
+        "name": "bacterial_tactics",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_2_2019",
+        "name": "new_elements_part_1",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_2_2019",
+        "name": "pottery_lottery",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3mqj-hBFT3YFhO_s0tHdhpiRRIY4yyY7Hy9EdF_A0mJtuTTjaTrqlJvyHGyCD-ZQOH/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_2_2019",
+        "name": "new_elements_part_2",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_2_2019",
+        "name": "contransmutation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_3_2019",
+        "name": "zillionim",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3iHuu3KKcKakKA_H5kNk3DUYb2uxwBcMrqqYlChTWL4wIcCG2XvVcF95xcGJ0IUVU2/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_3_2019",
+        "name": "pancake_pyramid",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_3_2019",
+        "name": "datacenter_duplex",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "round_3_2019",
+        "name": "napkin_folding",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "world_finals_2019",
+        "name": "board_meeting",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0Yeo1oa_oKI_flVqE5hUhNQXAamm5ph_BzGOkO15EnRbIJePLfOSdA89lUWK2M1rje/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "world_finals_2019",
+        "name": "sorting_permutation_unit",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "world_finals_2019",
+        "name": "won_t_sum_must_now",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "world_finals_2019",
+        "name": "juggle_struggle_part_1",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "world_finals_2019",
+        "name": "juggle_struggle_part_2",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2019",
+        "round": "world_finals_2019",
+        "name": "go_to_considered_helpful",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "practice_session_2018",
+        "name": "number_guessing",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0-x8CXV1_EJRtCXE8GrKCS6RQqTnOgFyy3YZaEIifVaGv3KKWEhQ2lu9tdZ6zzAA/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "practice_session_2018",
+        "name": "senate_evacuation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "practice_session_2018",
+        "name": "steed_2_cruise_control",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "practice_session_2018",
+        "name": "bathroom_stalls",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "qualification_round_2018",
+        "name": "saving_the_universe_again",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "qualification_round_2018",
+        "name": "trouble_sort",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "qualification_round_2018",
+        "name": "go_gopher_",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U0c_xTypHwT19Zz9dAH3-E9ONx0WluYGgBjvaefb5352Eldf4uDjOf3bd3Grje_RXg/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "qualification_round_2018",
+        "name": "cubic_ufo",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1a_2018",
+        "name": "waffle_choppers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1a_2018",
+        "name": "bit_party",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1a_2018",
+        "name": "edgy_baking",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1b_2018",
+        "name": "rounding_error",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1b_2018",
+        "name": "mysterious_road_signs",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1b_2018",
+        "name": "transmutation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1c_2018",
+        "name": "a_whole_new_word",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1c_2018",
+        "name": "lollipop_shop",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U3EOBzVVIJdI6pPc-bDXii3rZm0qalF87w3yM31iFmPaNk0YL-t1rYWQr6p0fdwEe0b/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_1c_2018",
+        "name": "ant_stack",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_2_2018",
+        "name": "falling_balls",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_2_2018",
+        "name": "graceful_chainsaw_jugglers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_2_2018",
+        "name": "costume_change",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_2_2018",
+        "name": "gridception",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_3_2018",
+        "name": "field_trip",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_3_2018",
+        "name": "name_preserving_network",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U2g7kyyN7SWZGI79QFxsKdb0jXxL-7IuhLLa3TX8I8EBeotOlnpSvlyyFOQShNjwz0D/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_3_2018",
+        "name": "raise_the_roof",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "round_3_2018",
+        "name": "fence_construction",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "world_finals_2018",
+        "name": "jurisdiction_restrictions",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "world_finals_2018",
+        "name": "two_tiling",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "world_finals_2018",
+        "name": "go_gophers_",
+        "dataset_hyperlink": "https://codejam.googleapis.com/dashboard/get_file/AQj_6U1NCRgoTlsikqelaoEC3CWhWdeuMPhA0wyjie1xl5NHPRZPEIu2lhXK7Ede9RYhVJSw/local_testing_tool.py",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "world_finals_2018",
+        "name": "swordmaster",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2018",
+        "round": "world_finals_2018",
+        "name": "the_cartesian_job",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "qualification_round_2017",
+        "name": "oversized_pancake_flipper",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "qualification_round_2017",
+        "name": "tidy_numbers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "qualification_round_2017",
+        "name": "bathroom_stalls",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "qualification_round_2017",
+        "name": "fashion_show",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1a_2017",
+        "name": "alphabet_cake",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1a_2017",
+        "name": "ratatouille",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1a_2017",
+        "name": "play_the_dragon",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1b_2017",
+        "name": "steed_2_cruise_control",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1b_2017",
+        "name": "stable_neigh_bors",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1b_2017",
+        "name": "pony_express",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1c_2017",
+        "name": "ample_syrup",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1c_2017",
+        "name": "parenting_partnering",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_1c_2017",
+        "name": "core_training",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_2_2017",
+        "name": "fresh_chocolate",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_2_2017",
+        "name": "roller_coaster_scheduling",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_2_2017",
+        "name": "beaming_with_joy",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_2_2017",
+        "name": "shoot_the_turrets",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_3_2017",
+        "name": "googlements",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_3_2017",
+        "name": "good_news_and_bad_news",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_3_2017",
+        "name": "mountain_tour",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "round_3_2017",
+        "name": "slate_modern",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "world_finals_2017",
+        "name": "dice_straight",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "world_finals_2017",
+        "name": "operation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "world_finals_2017",
+        "name": "spanning_planning",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "world_finals_2017",
+        "name": "omnicircumnavigation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "world_finals_2017",
+        "name": "stack_management",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2017",
+        "round": "world_finals_2017",
+        "name": "teleporters",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "qualification_round_2016",
+        "name": "counting_sheep",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "qualification_round_2016",
+        "name": "revenge_of_the_pancakes",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "qualification_round_2016",
+        "name": "coin_jam",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "qualification_round_2016",
+        "name": "fractiles",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1a_2016",
+        "name": "the_last_word",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1a_2016",
+        "name": "rank_and_file",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1a_2016",
+        "name": "bffs",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1b_2016",
+        "name": "getting_the_digits",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1b_2016",
+        "name": "close_match",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1b_2016",
+        "name": "technobabble",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1c_2016",
+        "name": "senate_evacuation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1c_2016",
+        "name": "slides_",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_1c_2016",
+        "name": "fashion_police",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_2_2016",
+        "name": "rather_perplexing_showdown",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_2_2016",
+        "name": "red_tape_committee",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_2_2016",
+        "name": "the_gardener_of_seville",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_2_2016",
+        "name": "freeform_factory",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_3_2016",
+        "name": "teaching_assistant",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_3_2016",
+        "name": "forest_university",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_3_2016",
+        "name": "rebel_against_the_empire",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "round_3_2016",
+        "name": "go++",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "world_finals_2016",
+        "name": "family_hotel",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "world_finals_2016",
+        "name": "integeregex",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "world_finals_2016",
+        "name": "gallery_of_pillars",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "world_finals_2016",
+        "name": "map_reduce",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2016",
+        "round": "world_finals_2016",
+        "name": "radioactive_islands",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "qualification_round_2015",
+        "name": "standing_ovation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "qualification_round_2015",
+        "name": "infinite_house_of_pancakes",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "qualification_round_2015",
+        "name": "dijkstra",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "qualification_round_2015",
+        "name": "ominous_omino",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1a_2015",
+        "name": "mushroom_monster",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1a_2015",
+        "name": "haircut",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1a_2015",
+        "name": "logging",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1b_2015",
+        "name": "counter_culture",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1b_2015",
+        "name": "noisy_neighbors",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1b_2015",
+        "name": "hiking_deer",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1c_2015",
+        "name": "brattleship",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1c_2015",
+        "name": "typewriter_monkey",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_1c_2015",
+        "name": "less_money_more_problems",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_2_2015",
+        "name": "pegman",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_2_2015",
+        "name": "kiddie_pool",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_2_2015",
+        "name": "bilingual",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_2_2015",
+        "name": "drum_decorator",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_3_2015",
+        "name": "fairland",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_3_2015",
+        "name": "smoothing_window",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_3_2015",
+        "name": "runaway_quail",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_3_2015",
+        "name": "log_set",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "round_3_2015",
+        "name": "river_flow",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "world_finals_2015",
+        "name": "campinatorics",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "world_finals_2015",
+        "name": "costly_binary_search",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "world_finals_2015",
+        "name": "pretty_good_proportion",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "world_finals_2015",
+        "name": "taking_over_the_world",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "world_finals_2015",
+        "name": "merlin_qa",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2015",
+        "round": "world_finals_2015",
+        "name": "crane_truck",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "qualification_round_2014",
+        "name": "magic_trick",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "qualification_round_2014",
+        "name": "cookie_clicker_alpha",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "qualification_round_2014",
+        "name": "deceitful_war",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "qualification_round_2014",
+        "name": "minesweeper_master",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1a_2014",
+        "name": "charging_chaos",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1a_2014",
+        "name": "full_binary_tree",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1a_2014",
+        "name": "proper_shuffle",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1b_2014",
+        "name": "the_repeater",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1b_2014",
+        "name": "new_lottery_game",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1b_2014",
+        "name": "the_bored_traveling_salesman",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1c_2014",
+        "name": "part_elf",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1c_2014",
+        "name": "reordering_train_cars",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_1c_2014",
+        "name": "enclosure",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_2_2014",
+        "name": "data_packing",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_2_2014",
+        "name": "up_and_down",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_2_2014",
+        "name": "don_t_break_the_nile",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_2_2014",
+        "name": "trie_sharding",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_3_2014",
+        "name": "magical_marvelous_tour",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_3_2014",
+        "name": "last_hit",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_3_2014",
+        "name": "crime_house",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "round_3_2014",
+        "name": "willow",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "world_finals_2014",
+        "name": "checkerboard_matrix",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "world_finals_2014",
+        "name": "power_swapper",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "world_finals_2014",
+        "name": "symmetric_trees",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "world_finals_2014",
+        "name": "paradox_sort",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "world_finals_2014",
+        "name": "allergy_testing",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2014",
+        "round": "world_finals_2014",
+        "name": "aram",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "qualification_round_2013",
+        "name": "tic_tac_toe_tomek",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "qualification_round_2013",
+        "name": "lawnmower",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "qualification_round_2013",
+        "name": "treasure",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "qualification_round_2013",
+        "name": "fair_and_square",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1a_2013",
+        "name": "bullseye",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1a_2013",
+        "name": "manage_your_energy",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1a_2013",
+        "name": "good_luck",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1b_2013",
+        "name": "osmos",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1b_2013",
+        "name": "garbled_email",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1b_2013",
+        "name": "falling_diamonds",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1c_2013",
+        "name": "consonants",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1c_2013",
+        "name": "pogo",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_1c_2013",
+        "name": "the_great_wall",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_2_2013",
+        "name": "ticket_swapping",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_2_2013",
+        "name": "many_prizes",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_2_2013",
+        "name": "erd\u0151s\u2013szekeres",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_2_2013",
+        "name": "multiplayer_pong",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_3_2013",
+        "name": "cheaters",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_3_2013",
+        "name": "rural_planning",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_3_2013",
+        "name": "are_we_lost_yet_",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "round_3_2013",
+        "name": "observation_wheel",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "world_finals_2013",
+        "name": "graduation_requirements",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "world_finals_2013",
+        "name": "drummer",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "world_finals_2013",
+        "name": "x_marks_the_spot",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "world_finals_2013",
+        "name": "can_t_stop",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2013",
+        "round": "world_finals_2013",
+        "name": "let_me_tell_you_a_story",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "qualification_round_2012",
+        "name": "speaking_in_tongues",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "qualification_round_2012",
+        "name": "dancing_with_the_googlers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "qualification_round_2012",
+        "name": "recycled_numbers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "qualification_round_2012",
+        "name": "hall_of_mirrors",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1a_2012",
+        "name": "password_problem",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1a_2012",
+        "name": "kingdom_rush",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1a_2012",
+        "name": "cruise_control",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1b_2012",
+        "name": "safety_in_numbers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1b_2012",
+        "name": "tide_goes_in_tide_goes_out",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1b_2012",
+        "name": "equal_sums",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1c_2012",
+        "name": "diamond_inheritance",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1c_2012",
+        "name": "box_factory",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_1c_2012",
+        "name": "out_of_gas",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_2_2012",
+        "name": "swinging_wild",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_2_2012",
+        "name": "aerobics",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_2_2012",
+        "name": "mountain_view",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_2_2012",
+        "name": "descending_in_the_dark",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_3_2012",
+        "name": "perfect_game",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_3_2012",
+        "name": "havannah",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_3_2012",
+        "name": "quality_food",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "round_3_2012",
+        "name": "lost_password",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "world_finals_2012",
+        "name": "zombie_smash",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "world_finals_2012",
+        "name": "upstairs/downstairs",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "world_finals_2012",
+        "name": "xeno_archaeology",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "world_finals_2012",
+        "name": "twirling_towards_freedom",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2012",
+        "round": "world_finals_2012",
+        "name": "shifting_paths",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "qualification_round_2011",
+        "name": "bot_trust",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "qualification_round_2011",
+        "name": "candy_splitting",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "qualification_round_2011",
+        "name": "magicka",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "qualification_round_2011",
+        "name": "gorosort",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1a_2011",
+        "name": "freecell_statistics",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1a_2011",
+        "name": "the_killer_word",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1a_2011",
+        "name": "pseudominion",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1b_2011",
+        "name": "rpi",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1b_2011",
+        "name": "revenge_of_the_hot_dogs",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1b_2011",
+        "name": "house_of_kittens",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1c_2011",
+        "name": "square_tiles",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1c_2011",
+        "name": "space_emergency",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_1c_2011",
+        "name": "perfect_harmony",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_2_2011",
+        "name": "airport_walkways",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_2_2011",
+        "name": "spinning_blade",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_2_2011",
+        "name": "expensive_dinner",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_2_2011",
+        "name": "a_i_war",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_3_2011",
+        "name": "irregular_cakes",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_3_2011",
+        "name": "dire_straights",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_3_2011",
+        "name": "perpetual_motion",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "round_3_2011",
+        "name": "mystery_square",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "world_finals_2011",
+        "name": "rains_over_atlantis",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "world_finals_2011",
+        "name": "runs",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "world_finals_2011",
+        "name": "program_within_a_program",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "world_finals_2011",
+        "name": "ace_in_the_hole",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2011",
+        "round": "world_finals_2011",
+        "name": "google_royale",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "qualification_round_2010",
+        "name": "fair_warning",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "qualification_round_2010",
+        "name": "snapper_chain",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "qualification_round_2010",
+        "name": "theme_park",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1a_2010",
+        "name": "rotate",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1a_2010",
+        "name": "make_it_smooth",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1a_2010",
+        "name": "number_game",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1b_2010",
+        "name": "file_fix_it",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1b_2010",
+        "name": "picking_up_chicks",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1b_2010",
+        "name": "your_rank_is_pure",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1c_2010",
+        "name": "rope_intranet",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1c_2010",
+        "name": "load_testing",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_1c_2010",
+        "name": "making_chess_boards",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_2_2010",
+        "name": "elegant_diamond",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_2_2010",
+        "name": "world_cup_2010",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_2_2010",
+        "name": "bacteria",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_2_2010",
+        "name": "grazing_google_goats",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_3_2010",
+        "name": "de_rng_ed",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_3_2010",
+        "name": "hot_dog_proliferation",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_3_2010",
+        "name": "different_sum",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "round_3_2010",
+        "name": "fence",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "world_finals_2010",
+        "name": "candy_store",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "world_finals_2010",
+        "name": "city_tour",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "world_finals_2010",
+        "name": "letter_stamper",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "world_finals_2010",
+        "name": "travel_plan",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "world_finals_2010",
+        "name": "ninjutsu",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2010",
+        "round": "world_finals_2010",
+        "name": "the_paths_of_yin_yang",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "qualification_round_2009",
+        "name": "alien_language",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "qualification_round_2009",
+        "name": "watersheds",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "qualification_round_2009",
+        "name": "welcome_to_code_jam",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1a_2009",
+        "name": "multi_base_happiness",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1a_2009",
+        "name": "crossing_the_road",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1a_2009",
+        "name": "collecting_cards",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1b_2009",
+        "name": "decision_tree",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1b_2009",
+        "name": "the_next_number",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1b_2009",
+        "name": "square_math",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1c_2009",
+        "name": "all_your_base",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1c_2009",
+        "name": "center_of_mass",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_1c_2009",
+        "name": "bribe_the_prisoners",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_2_2009",
+        "name": "crazy_rows",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_2_2009",
+        "name": "a_digging_problem",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_2_2009",
+        "name": "stock_charts",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_2_2009",
+        "name": "watering_plants",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_3_2009",
+        "name": "ez_sokoban",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_3_2009",
+        "name": "alphabetomials",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_3_2009",
+        "name": "football_team",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "round_3_2009",
+        "name": "interesting_ranges",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "world_finals_2009",
+        "name": "year_of_more_code_jam",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "world_finals_2009",
+        "name": "min_perimeter",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "world_finals_2009",
+        "name": "wi_fi_towers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "world_finals_2009",
+        "name": "doubly_sorted_grid",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "world_finals_2009",
+        "name": "marbles",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2009",
+        "round": "world_finals_2009",
+        "name": "lights",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "qualification_round_2008",
+        "name": "fly_swatter",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "qualification_round_2008",
+        "name": "saving_the_universe",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "qualification_round_2008",
+        "name": "train_timetable",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1a_2008",
+        "name": "minimum_scalar_product",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1a_2008",
+        "name": "milkshakes",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1a_2008",
+        "name": "numbers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1b_2008",
+        "name": "crop_triangles",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1b_2008",
+        "name": "number_sets",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1b_2008",
+        "name": "mousetrap",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1c_2008",
+        "name": "text_messaging_outrage",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1c_2008",
+        "name": "ugly_numbers",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_1c_2008",
+        "name": "increasing_speed_limits",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_2_2008",
+        "name": "cheating_a_boolean_tree",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_2_2008",
+        "name": "triangle_areas",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_2_2008",
+        "name": "star_wars",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_2_2008",
+        "name": "permrle",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_3_2008",
+        "name": "how_big_are_the_pockets_",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_3_2008",
+        "name": "endless_knight",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_3_2008",
+        "name": "portal",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "round_3_2008",
+        "name": "no_cheating",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "apac_semifinal_2008",
+        "name": "what_are_birds_",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "apac_semifinal_2008",
+        "name": "apocalypse_soon",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "apac_semifinal_2008",
+        "name": "millionaire",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "apac_semifinal_2008",
+        "name": "modern_art_plagiarism",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "amer_semifinal_2008",
+        "name": "mixing_bowls",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "amer_semifinal_2008",
+        "name": "test_passing_probability",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "amer_semifinal_2008",
+        "name": "code_sequence",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "amer_semifinal_2008",
+        "name": "king",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "emea_semifinal_2008",
+        "name": "painting_a_fence",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "emea_semifinal_2008",
+        "name": "scaled_triangle",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "emea_semifinal_2008",
+        "name": "rainbow_trees",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "emea_semifinal_2008",
+        "name": "bus_stops",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "world_finals_2008",
+        "name": "juice",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "world_finals_2008",
+        "name": "ping_pong_balls",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "world_finals_2008",
+        "name": "mine_layer",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "world_finals_2008",
+        "name": "bridge_builders",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      },
+      {
+        "season": "2008",
+        "round": "world_finals_2008",
+        "name": "the_year_of_code_jam",
+        "dataset_hyperlink": "",
+        "is_in_resources": false
+      }
+    ]
+  }
+}

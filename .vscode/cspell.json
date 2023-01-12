@@ -1,0 +1,69 @@
+// cSpell Settings
+{
+  // Version of the setting file.  Always 0.2
+  "version": "0.2",
+  // language - current active spelling language
+  "language": "en",
+  // words - list of words to be always considered correct
+  "words": [
+    "Buildah",
+    "chromedriver",
+    "darkorange",
+    "dataclass",
+    "dataclasses",
+    "deeppink",
+    "deques",
+    "dtype",
+    "Dunders",
+    "enio",
+    "fastapi",
+    "fira",
+    "fontsource",
+    "fromarray",
+    "getattr",
+    "Getattr",
+    "getipython",
+    "githubusercontent",
+    "greenyellow",
+    "Hstack",
+    "iinfo",
+    "interactiveshell",
+    "ipython",
+    "matplotlib",
+    "mkdirp",
+    "msgpack",
+    "msgspec",
+    "muxing",
+    "ndarray",
+    "neoconfetti",
+    "nlevels",
+    "nrwl",
+    "nxext",
+    "nxkit",
+    "popleft",
+    "pyenv",
+    "pynecone",
+    "qualname",
+    "reactable",
+    "replacerules",
+    "rulesets",
+    "Skopeo",
+    "streetsidesoftware",
+    "sveltekit",
+    "svgling",
+    "tailwindcss",
+    "trivago",
+    "tsmerge",
+    "visualstudio",
+    "vsmarketplacebadge",
+    "wbfw",
+    "webelement",
+    "yarnpkg"
+  ]
+  // flagWords - list of words to be always considered incorrect
+  // This is useful for offensive words and common spelling errors.
+  // For example "hte" should be "the"
+  // "flagWords": [
+  //     "hte"
+  // ]
+}

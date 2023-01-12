@@ -1,0 +1,16 @@
+{
+  "python.analysis.typeCheckingMode": "strict",
+  "python.linting.ignorePatterns": [
+    "temp_cache/*",
+    "src/python/wbfw109/labs/**/*",
+    "src/python/wbfw109/outdated/**/*"
+  ],
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "eslint.nodePath": ".yarn/sdks",
+  "plantuml.server": "http://localhost:9999",
+  "plantuml.render": "PlantUMLServer",
+  "plantuml.includepaths": ["services/*/diagrams"],
+  "plantuml.exportSubFolder": false,
+  "plantuml.exportFormat": "svg",
+  "cSpell.words": []
+}
