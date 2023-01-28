@@ -82,7 +82,3 @@ from wbfw109.libs.utilities.ipython import (
 InteractiveShell.ast_node_interactivity = "all"
 # %doctest_mode
 #%%
-
-
-x = [i for i in range(5)]
-x[-1:2]
