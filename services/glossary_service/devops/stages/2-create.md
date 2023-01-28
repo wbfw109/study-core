@@ -40,7 +40,7 @@ with **Agile** software development practices
         - ✅ add on-click event that move screen from element of Side bar to element of Body section (as permalink).
       - ✅ add tooltips
     - add search bar using overlay  
-      ➡️ More study required (; implementation not using wrapped react component).
+      ➡️ More study required (; implementation not using wrapped (ready-made) react component).
     - build app in production-mode and public hosting.  
       ➡️ Pynecone currently not support public hosting.
 2. Slack bot
