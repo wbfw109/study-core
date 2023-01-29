@@ -12,5 +12,8 @@
   "plantuml.includepaths": ["services/*/diagrams"],
   "plantuml.exportSubFolder": false,
   "plantuml.exportFormat": "svg",
-  "cSpell.words": []
+  "cSpell.words": [],
+  "python.analysis.autoImportUserSymbols": true,
+  "python.analysis.completeFunctionParens": true,
+  "python.analysis.autoImportCompletions": true
 }

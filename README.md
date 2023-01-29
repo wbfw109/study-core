@@ -77,7 +77,6 @@ Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, Dunde
   - About Nested class, Inheritance 🔪 get (child, descendant) classes, is inner class, get outer class
   - About Converting json to dataclass 🔪 SelfReferenceHelper, MixInJsonSerializable
 - [parsing](src/python/wbfw109/libs/parsing.py) ; Parsing trees.
-  - About Explicit node 🔪 convert Explicit syntax node to Syntax Tree (recursive dict), get explicit syntax node group by level
   - About Implicit node 🔪 convert Implicit syntax node to Syntax Tree (recursive dict)
   - About Third-party compatibility 🔪 convert syntax Tree to Recursive Tuple tree (library: svgling to draw Syntax tree as .svg image format)
 - [path](src/python/wbfw109/libs/path.py) ; Path resolutions.

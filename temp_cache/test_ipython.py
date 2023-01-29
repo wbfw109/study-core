@@ -47,6 +47,7 @@ from typing import (
     MutableSequence,
     NamedTuple,
     Never,
+    NotRequired,
     Optional,
     ParamSpec,
     Self,
@@ -82,3 +83,10 @@ from wbfw109.libs.utilities.ipython import (
 InteractiveShell.ast_node_interactivity = "all"
 # %doctest_mode
 #%%
+class Point2D(TypedDict):
+    x: int
+    y: int
+    label: NotRequired[str]
+
+Point2D(x=2, y=3)
+# Alternative syntax
