@@ -18,7 +18,7 @@
   - [3. Toy program](#3-toy-program)
   - [4. Services](#4-services)
     - [4.1. Glossary service](#41-glossary-service)
-    - [4.2. AI Service](#42-ai-service)
+    - [4.2. E-Commerce Service](#42-e-commerce-service)
   - [5. DevOps: GitOps](#5-devops-gitops)
     - [5.1. Packaging: Docker](#51-packaging-docker)
     - [5.2. Pipeline: GitHub Actions](#52-pipeline-github-actions)
@@ -169,9 +169,10 @@ Purpose of All Services is **Scaffolding** or **Minimum viable product (MVP)** f
 ### 4.1. Glossary service
 
 It provides English words as **tree structure**, I learned and related with Computer Science, with description in Korean.  
-Main tech is **Pynecone** (Web full stack framework)
 
-- Run command ```pc run --env prod``` [in the python environment](services/glossary_service/pyproject.toml).
+Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS, React_**
+
+- Run command ```pc init``` (one time) and ```pc run --env prod``` [in the python environment](services/glossary_service/pyproject.toml).
 
 [Words Data](ref/computer_science_words_korean.json) and [**Entry point**: glossary_app.py](services/glossary_service/src/wbfw109/glossary_app/glossary_app/glossary_app.py)
 
@@ -184,12 +185,12 @@ Main tech is **Pynecone** (Web full stack framework)
 
 [![Glossary app PV](https://img.youtube.com/vi/LBqgitY_j5A/0.jpg)](https://youtu.be/LBqgitY_j5A "Glossary app PV")
 
-### 4.2. AI Service
+### 4.2. E-Commerce Service
 
 📰 Currently in development
 
-- [1-Plan (Draft)](services/ai_service/devops/stages/1-plan.md)
-- Deployment diagram ![Deployment diagram](resources_readme/services/ai_service/devops/diagrams/deployment.svg?raw=1)
+- [1-Plan (Draft)](services/e_commerce_service/devops/stages/1-plan.md)  
+  - [Deployment diagram](resources_readme/services/e_commerce_service/devops/diagrams/deployment.svg?raw=1)
 
 ---
 

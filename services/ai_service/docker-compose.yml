@@ -1,2 +1,0 @@
-# $shell> docker compose -f services/ai_service/docker-compose.yml up -d
-# TODO: for Jenkins CI, ArgoCD

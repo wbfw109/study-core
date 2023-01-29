@@ -617,10 +617,9 @@ class HybridSorts(MixInParentAlgorithmVisualization):
 
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
-    VisualizationManager.call_root_classes()
-
     if VisualizationManager.central_control_state:
         # Do not change this.
+        VisualizationManager.call_root_classes()
         only_class_list = []
     else:
         only_class_list = [ExchangeSorts, MergeSorts.MergeSort]

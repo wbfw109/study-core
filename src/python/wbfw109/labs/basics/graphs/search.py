@@ -222,6 +222,7 @@ class DfsAndBfs(MixInParentAlgorithmVisualization):
 
                 if discovered_node not in explored_node_list:
                     explored_node_list.append(discovered_node)
+                    # update <self.dst.graph> with newly discovered nodes that do not exist in <self.dst.graph>.
                     self.dst.graph.update(
                         {
                             implicit_new_node: []
@@ -246,13 +247,12 @@ class DfsAndBfs(MixInParentAlgorithmVisualization):
 
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
-    VisualizationManager.call_root_classes()
-
     if VisualizationManager.central_control_state:
         # Do not change this.
+        VisualizationManager.call_root_classes()
         only_class_list = []
     else:
-        only_class_list = [DfsAndBfs]
+        only_class_list = [DfsAndBfs.DFS]
 
     VisualizationManager.call_parent_algorithm_classes(
         dst=GraphDST.get_default_implicit_dict(),

@@ -2,7 +2,7 @@
 
 ---
 
-Updated on 📅 2023-01-10 20:27:52
+Updated on 📅 2023-01-29 22:01:01
 
 - [Plan](#plan)
   - [1. Plan](#1-plan)
@@ -18,20 +18,23 @@ Updated on 📅 2023-01-10 20:27:52
 
 ### 1.1. Motivation
 
-Services using Machine Learning have Similar form.
+- Services using Machine Learning have Similar form.
+  - NoSQL DBMS for unstructured data and ElasticSearch for fast searching.
+  - Apache Kafka for Data Streaming which uses Publish-Subscribe pattern.
+  - Backend Server and, Web Frontend or Application.
+  - These are maintained as Container and deployed to Cluster and Cloud Environment.
 
-- NoSQL DBMS for unstructured data and ElasticSearch for fast searching.
-- Apache Kafka for Data Streaming which uses Publish-Subscribe pattern.
-- Backend Server and, Web Frontend or Application.
-- These are maintained as Container and deployed to Cluster and Cloud Environment.
+- I heard Push notification functionality of PWA will be supported on IOS from WWDC 2022 (already available in Android).  
+  Also PassKeys technology for Authorization is evolving with support from MS, Apple, and Google.
 
-Additionally I heard Push notification functionality of PWA will be supported on IOS from WWDC 2022 (already available in Android).
-Also PassKeys technology for Authorization is evolving with support from MS, Apple, and Google.
-Therefore It only need to create PWA, not mobile apps.
+- In web development, Jamstack's interest is rising (Backend for Frontend pattern).
 
-And in web development, Jamstack's interest is rising (Backend for Frontend pattern).
+- If target of AI service is E-Commerce, I could experience to implement functions:
+  - Payment system in way of subscription or one-time with optional products.
+  - Recommendation system based on Deep learning.
+  - Notification function from PWA.
 
-So I will try implementation systematically these schemes in GitOPs practices by representing UML form as possible.
+So I will try implementation systematically these schemes through GitOPs practices by representing UML form as possible.
 
 &nbsp;
 
