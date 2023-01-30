@@ -5,24 +5,24 @@
 
 - [study-core](#study-core)
   - [1. Main Directory Structure](#1-main-directory-structure)
-  - [2. Sources](#2-sources)
-    - [2.1. Basic algorithms](#21-basic-algorithms)
-      - [2.1.1 Python: Specification](#211-python-specification)
-    - [2.2. Libraries](#22-libraries)
-      - [2.2.1. Python Libraries](#221-python-libraries)
-    - [2.3. Utilities](#23-utilities)
-      - [2.3.1. Python Utilities](#231-python-utilities)
-        - [2.3.1. Visualization Manager (Python)](#231-visualization-manager-python)
-      - [2.3.2. Shell Utilities](#232-shell-utilities)
-        - [2.3.2.1. Backup Docker volumes (Bash)](#2321-backup-docker-volumes-bash)
-  - [3. Toy program](#3-toy-program)
-  - [4. Services](#4-services)
-    - [4.1. Glossary service](#41-glossary-service)
-    - [4.2. E-Commerce Service](#42-e-commerce-service)
-  - [5. DevOps: GitOps](#5-devops-gitops)
-    - [5.1. Packaging: Docker](#51-packaging-docker)
-    - [5.2. Pipeline: GitHub Actions](#52-pipeline-github-actions)
-      - [5.2.1 Workflow: CD to GitHub Pages](#521-workflow-cd-to-github-pages)
+  - [2. DevOps: GitOps](#2-devops-gitops)
+    - [2.1. Packaging: Docker](#21-packaging-docker)
+    - [2.2. Pipeline: GitHub Actions](#22-pipeline-github-actions)
+      - [2.2.1 Workflow: CD to GitHub Pages](#221-workflow-cd-to-github-pages)
+  - [3. Sources](#3-sources)
+    - [3.1. Basic algorithms](#31-basic-algorithms)
+      - [3.1.1 Python: Specification](#311-python-specification)
+    - [3.2. Libraries](#32-libraries)
+      - [3.2.1. Python Libraries](#321-python-libraries)
+    - [4.3. Utilities](#43-utilities)
+      - [4.3.1. Python Utilities](#431-python-utilities)
+        - [4.3.1. Visualization Manager (Python)](#431-visualization-manager-python)
+      - [4.3.2. Shell Utilities](#432-shell-utilities)
+        - [4.3.2.1. Backup Docker volumes (Bash)](#4321-backup-docker-volumes-bash)
+  - [4. Toy program](#4-toy-program)
+  - [5. Services](#5-services)
+    - [5.1. Glossary service](#51-glossary-service)
+    - [5.2. E-Commerce Service](#52-e-commerce-service)
 
 ## 1. Main Directory Structure
 
@@ -43,9 +43,36 @@
 - 📁 src/typescript
 - 📁 services
 
-## 2. Sources
 
-### 2.1. Basic algorithms
+## 2. DevOps: GitOps
+
+### 2.1. Packaging: Docker
+
+Currently, one [docker-comose.yml](ref/dockerfiles/docker-compose.yml) exists used in development environment.
+
+Run ```docker compose -f ref/dockerfiles/docker-compose.yml up -d```
+
+- **Plant UML** in order to write UML diagram
+- **Mongo DB** (Document based NoSQL) with **Mongo Express**
+- **PostgreSQL** (R-DBMS) with **pg Admin**
+
+---
+
+### 2.2. Pipeline: GitHub Actions
+
+It is not triggered in this repository because of no access permission. (already triggered in original repository "study-core")
+
+#### 2.2.1 [Workflow: CD to GitHub Pages](.github/workflows/github-pages-CD-workflow.yml)
+
+When [2.3.1. Visualization Manager (Python)](#231-visualization-manager-python) outputs as .html file,
+ipython_central_control.html file will be modified. So whenever only the file changes and push operation is occurred, this workflow triggered.
+
+- It not traces all file in GitHub Pages repository when pull & push.  
+Because a part of directory in GitHub Pages repository may be later written, so I used sparse-checkout in Git SCM.
+
+## 3. Sources
+
+### 3.1. Basic algorithms
 
 ![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [2.3.1. Visualization Manager (Python)](#231-visualization-manager-python)
 
@@ -56,7 +83,7 @@
 
 ---
 
-#### 2.1.1 Python: Specification
+#### 3.1.1 Python: Specification
 
 |Name|location|
 |:---|:---|
@@ -68,9 +95,9 @@ Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, Dunde
 
 ---
 
-### 2.2. Libraries
+### 3.2. Libraries
 
-#### 2.2.1. Python Libraries
+#### 3.2.1. Python Libraries
 
 - objects.[object](src/python/wbfw109/libs/objects/object.py) ; Operations on first-class object.
   - About Variables 🔪 default value map, get field annotations, initialize_fields
@@ -87,11 +114,11 @@ Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, Dunde
   - About Generic TypeVar 🔪 T, DST (Data Structure type decorated with dataclasses.dataclass)
   - About Generic with Typed 🔪 Json Primitive ValueType, Json Type, Recursive Tuple, Single Linked List
 
-### 2.3. Utilities
+### 4.3. Utilities
 
-#### 2.3.1. Python Utilities
+#### 4.3.1. Python Utilities
 
-##### 2.3.1. [Visualization Manager (Python)](src/python/wbfw109/libs/utilities/ipython.py#L389)
+##### 4.3.1. [Visualization Manager (Python)](src/python/wbfw109/libs/utilities/ipython.py#L389)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
@@ -134,9 +161,9 @@ Most of my implementations comply this rule. If you want to check all contents t
 
 ---
 
-#### 2.3.2. Shell Utilities
+#### 4.3.2. Shell Utilities
 
-##### 2.3.2.1. [Backup Docker volumes (Bash)](src/bash/wbfw109/docker-backup-volumes.sh)
+##### 4.3.2.1. [Backup Docker volumes (Bash)](src/bash/wbfw109/docker-backup-volumes.sh)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
@@ -151,7 +178,7 @@ Backed up files will be stored in ```ref/dockerfiles/backup```. (hardcoded)
 
 ---
 
-## 3. Toy program
+## 4. Toy program
 
 |Language|Type|Main tech|Name|location|
 |:---|:---|:---|:---|:---|
@@ -161,13 +188,13 @@ Backed up files will be stored in ```ref/dockerfiles/backup```. (hardcoded)
 
 ---
 
-## 4. Services
+## 5. Services
 
 Purpose of All Services is **Scaffolding** or **Minimum viable product (MVP)** for PoC
 
-### 4.1. Glossary service
+### 5.1. Glossary service
 
-It provides English words as **tree structure**, I learned and related with Computer Science, with description in Korean.  
+It provides English words with description in Korean related with Computer Science as **tree structure**, that I learned  .
 
 Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS, React_**
 
@@ -184,7 +211,7 @@ Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS,
 
 [![Glossary app PV](https://img.youtube.com/vi/LBqgitY_j5A/0.jpg)](https://youtu.be/LBqgitY_j5A "Glossary app PV")
 
-### 4.2. E-Commerce Service
+### 5.2. E-Commerce Service
 
 📰 Currently in development
 
@@ -192,29 +219,3 @@ Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS,
   - [Deployment diagram](resources_readme/services/e_commerce_service/devops/diagrams/deployment.svg?raw=1)
 
 ---
-
-## 5. DevOps: GitOps
-
-### 5.1. Packaging: Docker
-
-Currently, one [docker-comose.yml](ref/dockerfiles/docker-compose.yml) exists used in development environment.
-
-Run ```docker compose -f ref/dockerfiles/docker-compose.yml up -d```
-
-- **Plant UML** in order to write UML diagram
-- **Mongo DB** (Document based NoSQL) with **Mongo Express**
-- **PostgreSQL** (R-DBMS) with **pg Admin**
-
----
-
-### 5.2. Pipeline: GitHub Actions
-
-It is not triggered in this repository because of no access permission. (already triggered in original repository "study-core")
-
-#### 5.2.1 [Workflow: CD to GitHub Pages](.github/workflows/github-pages-CD-workflow.yml)
-
-When [2.3.1. Visualization Manager (Python)](#231-visualization-manager-python) outputs as .html file,
-ipython_central_control.html file will be modified. So whenever only the file changes and push operation is occurred, this workflow triggered.
-
-- It not traces all file in GitHub Pages repository when pull & push.  
-Because a part of directory in GitHub Pages repository may be later written, so I used sparse-checkout in Git SCM.
