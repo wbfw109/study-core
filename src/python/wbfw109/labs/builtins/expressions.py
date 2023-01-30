@@ -111,6 +111,7 @@ class LambdaExpression(VisualizationRoot):
 
         lambda_expression.visualize()
 
+#%%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
@@ -119,3 +120,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
     else:
         only_class_list = []
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
+
+# list comprehension

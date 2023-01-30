@@ -127,7 +127,7 @@ class DundersTruthyValue(VisualizationRoot):
             )
 
         def __str__(self) -> str:
-            return "Falsy Values"
+            return "It can be evaluated in condition as Pythonic way."
 
         def check_values(self) -> None:
             self.append_line_into_df_in_wrap(

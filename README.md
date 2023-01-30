@@ -14,11 +14,11 @@
       - [3.1.1 Python: Specification](#311-python-specification)
     - [3.2. Libraries](#32-libraries)
       - [3.2.1. Python Libraries](#321-python-libraries)
-    - [4.3. Utilities](#43-utilities)
-      - [4.3.1. Python Utilities](#431-python-utilities)
-        - [4.3.1. Visualization Manager (Python)](#431-visualization-manager-python)
-      - [4.3.2. Shell Utilities](#432-shell-utilities)
-        - [4.3.2.1. Backup Docker volumes (Bash)](#4321-backup-docker-volumes-bash)
+    - [3.3. Utilities](#33-utilities)
+      - [3.3.1. Python Utilities](#331-python-utilities)
+        - [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python)
+      - [3.3.2. Shell Utilities](#332-shell-utilities)
+        - [3.3.2.1. Backup Docker volumes (Bash)](#3321-backup-docker-volumes-bash)
   - [4. Toy program](#4-toy-program)
   - [5. Services](#5-services)
     - [5.1. Glossary service](#51-glossary-service)
@@ -43,7 +43,6 @@
 - 📁 src/typescript
 - 📁 services
 
-
 ## 2. DevOps: GitOps
 
 ### 2.1. Packaging: Docker
@@ -64,7 +63,7 @@ It is not triggered in this repository because of no access permission. (already
 
 #### 2.2.1 [Workflow: CD to GitHub Pages](.github/workflows/github-pages-CD-workflow.yml)
 
-When [2.3.1. Visualization Manager (Python)](#231-visualization-manager-python) outputs as .html file,
+When [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python) outputs a .html file,
 ipython_central_control.html file will be modified. So whenever only the file changes and push operation is occurred, this workflow triggered.
 
 - It not traces all file in GitHub Pages repository when pull & push.  
@@ -74,7 +73,7 @@ Because a part of directory in GitHub Pages repository may be later written, so 
 
 ### 3.1. Basic algorithms
 
-![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [2.3.1. Visualization Manager (Python)](#231-visualization-manager-python)
+![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python)
 
 |Language|Type|Name|location|
 |:---|:---|:---|:---|
@@ -114,11 +113,11 @@ Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, Dunde
   - About Generic TypeVar 🔪 T, DST (Data Structure type decorated with dataclasses.dataclass)
   - About Generic with Typed 🔪 Json Primitive ValueType, Json Type, Recursive Tuple, Single Linked List
 
-### 4.3. Utilities
+### 3.3. Utilities
 
-#### 4.3.1. Python Utilities
+#### 3.3.1. Python Utilities
 
-##### 4.3.1. [Visualization Manager (Python)](src/python/wbfw109/libs/utilities/ipython.py#L389)
+##### 3.3.1. [Visualization Manager (Python)](src/python/wbfw109/libs/utilities/ipython.py#L389)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
@@ -143,7 +142,7 @@ Most of my implementations comply this rule. If you want to check all contents t
 
 - or you could directly run. in shell, type ```poetry install --with web,db,vision``` and run ```>Python: Select Interpreter``` command in VSCode. And,
 
-  **1.** Open file ```temp_cache/ipython_central_control.py```  
+  **1.** Open file: [labs_visualization.py](src/python/wbfw109/central_control/labs_visualization.py)  
   **2.** Run the file by typing ```Ctrl+Enter (command: Jupyter: Run Current Cell)``` with nothing changes.  
 
 👍 Furthermore [in this module](src/python/wbfw109/libs/utilities/ipython.py), you could also visualize graph as .svg image format by using function \<visualize_implicit_tree\>
@@ -161,9 +160,9 @@ Most of my implementations comply this rule. If you want to check all contents t
 
 ---
 
-#### 4.3.2. Shell Utilities
+#### 3.3.2. Shell Utilities
 
-##### 4.3.2.1. [Backup Docker volumes (Bash)](src/bash/wbfw109/docker-backup-volumes.sh)
+##### 3.3.2.1. [Backup Docker volumes (Bash)](src/bash/wbfw109/docker-backup-volumes.sh)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
