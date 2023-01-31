@@ -4,7 +4,9 @@
 📝 **Note that** this repository is currently integrating from previous [small project sources](src/python/wbfw109/outdated/). so can be incomplete.
 
 - [study-core](#study-core)
-  - [1. Main Directory Structure](#1-main-directory-structure)
+  - [1. Installation](#1-installation)
+    - [1.1. Main Directory Structure](#11-main-directory-structure)
+    - [1.2. Steps](#12-steps)
   - [2. DevOps: GitOps](#2-devops-gitops)
     - [2.1. Packaging: Docker](#21-packaging-docker)
     - [2.2. Pipeline: GitHub Actions](#22-pipeline-github-actions)
@@ -24,24 +26,52 @@
     - [5.1. Glossary service](#51-glossary-service)
     - [5.2. E-Commerce Service](#52-e-commerce-service)
 
-## 1. Main Directory Structure
+## 1. Installation
 
-- 📁 features ; for BDD (incomplete...)
+### 1.1. Main Directory Structure
+
+- 📁 features ; for BDD **_(incomplete...)_**
 - 📁 [ref](ref/) ; crawled data, project settings (toml), etc.
 - 📁 [src/bash/wbfw109](src/bash/wbfw109/) ; common scripts like (setup.sh, install-selenium-driver.sh) and custom scripts.
 - 📁 [src/python/wbfw109](src/python/wbfw109/)
-  - 📁 **algorithms** ; solutions of problems (adding...).
+  - 📁 algorithms ; solutions in coding competitions **_(incomplete...)_**
   - 📁 [labs](src/python/wbfw109/labs/) ; research on specification
-  - 📁 tests ; for simple testing on a statement or library.
   - 📁 tutorials ; as the word itself. when starting a library.
-  - 📁 libs ; common libraries
+  - 📁 [libs](src/python/wbfw109/libs/) ; common libraries
     - 📁 [utilities](src/python/wbfw109/libs/utilities)
       - 📁 [self](src/python/wbfw109/libs/utilities/self/) ; code that should only be used in this project: crawling, settings
       - 📑 ipython.py ; visualization helper in Python Interactive Windows
-    - 📁 objects
+    - 📁 [objects](src/python/wbfw109/libs/objects/)
     - 📑~ typing.py, path.py, string.py, parsing.py
 - 📁 src/typescript
-- 📁 services
+- 📁 [services](services/) ; glossary_service, e_commerce_service (in development)
+
+### 1.2. Steps
+
+It is different according to used tech in each Workspace.
+
+
+Used Tech in each Workspace:
+
+- study-core (root repository): Python, Typescript, [Optional: Docker]
+  - Python: run command: ```poetry install --with web,db,vision``` in root repository directory
+
+  - Typescript
+    1. download [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) in VS Code Extensions
+    2. run command: ```yarn dlx @yarnpkg/sdks vscode && yarn install```
+    3. yarn install  
+  https://yarnpkg.com/getting-started/migration#editor-support
+
+docker compose -f ref/dockerfiles/docker-compose.yml up -d
+
+- glossary_service (service): Python
+  - Python: run command: ```poetry install``` in ... repository directory
+
+- _**\<plan\>** e_commerce_service (service)_: Python, Typescript, Docker
+
+on Python
+on Typescript (Javascript)
+on Docker
 
 ## 2. DevOps: GitOps
 
