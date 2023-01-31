@@ -73,8 +73,8 @@
 - study-core (repository)  
   In root directory of the repository,  
   - Python
-    - run command: ```poetry install --with web,db,vision```
-    - run command (F1) in VSCode: ```>Python: Select Interpreter```
+    - run command: ```poetry install --with web,db,vision && poetry env info```
+    - run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
   - Typescript: run command: ```yarn install```
   - _**(Optional)**_ Docker: run command: ```docker compose -f ref/dockerfiles/docker-compose.yml up -d```  
     - [docker-comose.yml](ref/dockerfiles/docker-compose.yml)
@@ -85,8 +85,8 @@
 - glossary_service (service)  
   In the [service directory](services/glossary_service/),  
   - Python
-    - run command: ```poetry install```
-    - run command (F1) in VSCode: ```>Python: Select Interpreter```
+    - run command: ```poetry install && poetry env info```
+    - run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
 
 - e_commerce_service (service)  
   📰 In development: Python, Typescript, Docker
