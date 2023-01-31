@@ -1,12 +1,14 @@
 
 # study-core
 
-📝 **Note that** this repository is currently integrating from previous [small project sources](src/python/wbfw109/outdated/). so can be incomplete.
+📝 **Note that** this repository is currently integrating from [outdated small project sources](src/python/wbfw109/outdated/). so can be incomplete.
 
 - [study-core](#study-core)
   - [1. Installation](#1-installation)
     - [1.1. Main Directory Structure](#11-main-directory-structure)
-    - [1.2. Steps](#12-steps)
+    - [1.2. Steps to start](#12-steps-to-start)
+      - [1.2.1. Common settings](#121-common-settings)
+      - [1.2.2. Settings by workspace](#122-settings-by-workspace)
   - [2. DevOps: GitOps](#2-devops-gitops)
     - [2.1. Packaging: Docker](#21-packaging-docker)
     - [2.2. Pipeline: GitHub Actions](#22-pipeline-github-actions)
@@ -46,46 +48,58 @@
 - 📁 src/typescript
 - 📁 [services](services/) ; glossary_service, e_commerce_service (in development)
 
-### 1.2. Steps
+### 1.2. Steps to start
 
-It is different according to used tech in each Workspace.
+#### 1.2.1. Common settings
 
+- VS Code
+  1. download [VS Code](https://code.visualstudio.com/download)
+  2. download [some extensions](.vscode/extensions.json)
 
-Used Tech in each Workspace:
+- Python
+  1. download [poetry](https://python-poetry.org/docs/#installation).
 
-- study-core (root repository): Python, Typescript, [Optional: Docker]
-  - Python: run command: ```poetry install --with web,db,vision``` in root repository directory
+- Typescript
+    1. download [yarn](https://yarnpkg.com/getting-started/install) (yarn berry PnP).
+    2. download [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) in VS Code Extensions from [Editor support](https://yarnpkg.com/getting-started/migration#editor-support).  
+      and run command: ```yarn dlx @yarnpkg/sdks vscode```  
+      and select [Use Workspace Version](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript) in VSCode
 
-  - Typescript
-    1. download [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) in VS Code Extensions
-    2. run command: ```yarn dlx @yarnpkg/sdks vscode && yarn install```
-    3. yarn install  
-  https://yarnpkg.com/getting-started/migration#editor-support
+- Docker
+    1. download [Docker](https://docs.docker.com/engine/install/).
 
-docker compose -f ref/dockerfiles/docker-compose.yml up -d
+#### 1.2.2. Settings by workspace
 
-- glossary_service (service): Python
-  - Python: run command: ```poetry install``` in ... repository directory
+- study-core (repository)  
+  In root directory of the repository,  
+  - Python
+    - run command: ```poetry install --with web,db,vision```
+    - run command (F1) in VSCode: ```>Python: Select Interpreter```
+  - Typescript: run command: ```yarn install```
+  - _**(Optional)**_ Docker: run command: ```docker compose -f ref/dockerfiles/docker-compose.yml up -d```  
+    - [docker-comose.yml](ref/dockerfiles/docker-compose.yml)
+      - **Plant UML** in order to write UML diagram
+      - **Mongo DB** (Document based NoSQL) with **Mongo Express**
+      - **PostgreSQL** (R-DBMS) with **pg Admin**
 
-- _**\<plan\>** e_commerce_service (service)_: Python, Typescript, Docker
+- glossary_service (service)  
+  In the [service directory](services/glossary_service/),  
+  - Python
+    - run command: ```poetry install```
+    - run command (F1) in VSCode: ```>Python: Select Interpreter```
 
-on Python
-on Typescript (Javascript)
-on Docker
+- e_commerce_service (service)  
+  📰 In development: Python, Typescript, Docker
+
+&nbsp;
+
+---
 
 ## 2. DevOps: GitOps
 
 ### 2.1. Packaging: Docker
 
 Currently, one [docker-comose.yml](ref/dockerfiles/docker-compose.yml) exists used in development environment.
-
-Run ```docker compose -f ref/dockerfiles/docker-compose.yml up -d```
-
-- **Plant UML** in order to write UML diagram
-- **Mongo DB** (Document based NoSQL) with **Mongo Express**
-- **PostgreSQL** (R-DBMS) with **pg Admin**
-
----
 
 ### 2.2. Pipeline: GitHub Actions
 
@@ -98,6 +112,10 @@ ipython_central_control.html file will be modified. So whenever only the file ch
 
 - It not traces all file in GitHub Pages repository when pull & push.  
 Because a part of directory in GitHub Pages repository may be later written, so I used sparse-checkout in Git SCM.
+
+&nbsp;
+
+---
 
 ## 3. Sources
 
@@ -170,10 +188,9 @@ Moreover you can manipulate through central control by calling class method \<ca
 
 Most of my implementations comply this rule. If you want to check all contents that have been implemented in this way so far, just open ![#f00](https://placehold.co/15x15/f00/f00.png) **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html).**
 
-- or you could directly run. in shell, type ```poetry install --with web,db,vision``` and run ```>Python: Select Interpreter``` command in VSCode. And,
-
-  **1.** Open file: [labs_visualization.py](src/python/wbfw109/central_control/labs_visualization.py)  
-  **2.** Run the file by typing ```Ctrl+Enter (command: Jupyter: Run Current Cell)``` with nothing changes.  
+- or you could directly run.
+    1. Open file: [labs_visualization.py](src/python/wbfw109/central_control/labs_visualization.py)  
+    2. Run the file by typing ```Ctrl+Enter (command: Jupyter: Run Current Cell)``` with nothing changes.  
 
 👍 Furthermore [in this module](src/python/wbfw109/libs/utilities/ipython.py), you could also visualize graph as .svg image format by using function \<visualize_implicit_tree\>
 
@@ -227,7 +244,7 @@ It provides English words with description in Korean related with Computer Scien
 
 Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS, React_**
 
-- Run command ```pc init``` (one time) and ```pc run --env prod``` [in the python environment](services/glossary_service/pyproject.toml).
+- Run command: ```pc init``` (one time) and ```pc run --env prod```
 
 [Words Data](ref/computer_science_words_korean.json) and [**Entry point**: glossary_app.py](services/glossary_service/src/wbfw109/glossary_app/glossary_app/glossary_app.py)
 
@@ -246,5 +263,3 @@ Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS,
 
 - [1-Plan (Draft)](services/e_commerce_service/devops/stages/1-plan.md)  
   - [Deployment diagram](resources_readme/services/e_commerce_service/devops/diagrams/deployment.svg?raw=1)
-
----
