@@ -1,3 +1,5 @@
+# %shell> poetry install --with web,db,vision
+
 [tool.poetry]
 name = "study-core"
 version = "0.1.0"

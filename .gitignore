@@ -14,7 +14,7 @@ vite.config.ts.timestamp-*
 .yarn/
 # pynecone ~
 .web
-
+# unset VS Code settings under the file
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,node,svelte,visualstudiocode
@@ -332,13 +332,13 @@ poetry.toml
 package
 
 ### VisualStudioCode ###
-.vscode/*
-!.vscode/cspell.json
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+# .vscode/*
+# !.vscode/cspell.json
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+# !.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/

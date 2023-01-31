@@ -1,19 +1,20 @@
 # %shell> poetry install
 
 [tool.poetry]
-name = "wbfw109-glossary-service"
+name = "wbfw109-e-commerce-service"
 version = "0.1.0"
 description = ""
 authors = ["wbfw109 <wbfw109@gmail.com>"]
 packages = [
-    { include= "wbfw109/glossary_app", from = "src"}
+    { include= "wbfw109/e_commerce_app", from = "src/backend"}
 ]
 
 
 [tool.poetry.dependencies]
 python = "~3.11, <3.12"
 study-core = {path = "../../../study-core", develop = true}
-pynecone-io = {version = "^0.1.13", allow-prereleases = true}
+fastapi = "^0.88.0"
+uvicorn = {extras = ["standard"], version = "^0.20.0"}
 
 [tool.poetry.group.dev.dependencies]
 black = "*"
@@ -30,6 +31,7 @@ pytest-cov = "*"
 pytest-bdd = "*"
 pytest-selenium = "^4.0.0"
 pytest-factoryboy = "^2.5.1"
+
 
 [build-system]
 requires = ["poetry-core>=1.1.0"]
