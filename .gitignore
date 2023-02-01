@@ -233,7 +233,7 @@ instance/
 docs/_build/
 
 # PyBuilder
-.pybuilder/
+.pybuilder/`
 target/
 
 # Jupyter Notebook
