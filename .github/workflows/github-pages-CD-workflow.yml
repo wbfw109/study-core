@@ -1,5 +1,5 @@
 name: GitHub pages CD
-run-name: Update ${{ github.actor }} GitHub Pages 🚀
+run-name: "Update ${{ github.actor }} GitHub Pages: 🚀 Visualization Manager Output"
 on:
   push:
     branches: [main]

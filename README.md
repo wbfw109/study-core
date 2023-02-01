@@ -262,4 +262,7 @@ Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS,
 📰 Currently in development
 
 - [1-Plan (Draft)](services/e_commerce_service/devops/stages/1-plan.md)  
-  - [Deployment diagram](resources_readme/services/e_commerce_service/devops/diagrams/deployment.svg?raw=1)
+  - [Deployment diagram](services/e_commerce_service/resources_readme/diagrams/deployment.svg?raw=1)
+- 3-Verify
+  - coverages
+    - [backend](https://wbfw109.github.io/coverages/backend/index.html)

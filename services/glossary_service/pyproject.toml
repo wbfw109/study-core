@@ -28,8 +28,12 @@ pyupgrade = "^3.3.1"
 pytest = "*"
 pytest-cov = "*"
 pytest-bdd = "*"
-pytest-selenium = "^4.0.0"
-pytest-factoryboy = "^2.5.1"
+
+[tool.pytest.ini_options]
+bdd_features_base_dir = "features/"
+addopts = [
+    "--import-mode=importlib",
+]
 
 [build-system]
 requires = ["poetry-core>=1.1.0"]
