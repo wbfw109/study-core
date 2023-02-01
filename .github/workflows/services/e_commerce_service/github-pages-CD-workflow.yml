@@ -1,41 +1,41 @@
-# name: GitHub pages CD
-# run-name: "Update ${{ github.actor }} GitHub Pages: 🚀 E-Commerce service Coverage"
-# on:
-#   push:
-#     branches: [main]
-#     paths:
-#       - "services/e_commerce_service/resources_readme/coverages/backend"
-# # Allow one concurrent deployment
-# concurrency:
-#   group: "pages"
-#   cancel-in-progress: true
+name: GitHub pages CD
+run-name: "Update ${{ github.actor }} GitHub Pages: 🚀 E-Commerce service Coverage"
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/e_commerce_service/resources/coverages/backend"
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
-# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-# jobs:
-#   ipython-output:
-#     runs-on: ubuntu-latest
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  ipython-output:
+    runs-on: ubuntu-latest
 
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-#       - name: "Does search nested directory in Github workflow?"
-#         run: echo 'yes'
-#       # - name: "Settings: directory, account"
-#       #   run: |
-#       #     mkdir /home/runner/work/_target_repository && cd /home/runner/work/_target_repository
-#       #     git config --global user.name "${{github.actor}}"
-#       #     git config --global user.email "${{github.actor}}@gmail.com"
-#       # - name: Sparse checkout
-#       #   uses: snow-actions/sparse-checkout@v1.2.0
-#       #   with:
-#       #     repository: wbfw109/wbfw109.github.io
-#       #     patterns: |
-#       #       visualization_manager/
-#       #     path: /home/runner/work/_target_repository
-#       #     token: "${{secrets.STATIC_GITHUB_PAGES_TOKEN}}"
-#       # - name: Replace existing file with new file and reflect to remote origin
-#       #   run: |
-#       #     cd /home/runner/work/_target_repository
-#       #     mv "${{ github.workspace }}/resources_readme/visualization_manager/ipython_central_control.html" visualization_manager/ipython_central_control.html
-#       #     git add . && git commit -m "." && git push origin main
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: "Does search nested directory in Github workflow?"
+        run: echo 'yes'
+      # - name: "Settings: directory, account"
+      #   run: |
+      #     mkdir /home/runner/work/_target_repository && cd /home/runner/work/_target_repository
+      #     git config --global user.name "${{github.actor}}"
+      #     git config --global user.email "${{github.actor}}@gmail.com"
+      # - name: Sparse checkout
+      #   uses: snow-actions/sparse-checkout@v1.2.0
+      #   with:
+      #     repository: wbfw109/wbfw109.github.io
+      #     patterns: |
+      #       visualization_manager/
+      #     path: /home/runner/work/_target_repository
+      #     token: "${{secrets.STATIC_GITHUB_PAGES_TOKEN}}"
+      # - name: Replace existing file with new file and reflect to remote origin
+      #   run: |
+      #     cd /home/runner/work/_target_repository
+      #     mv "${{ github.workspace }}/resources_readme/visualization_manager/ipython_central_control.html" visualization_manager/ipython_central_control.html
+      #     git add . && git commit -m "." && git push origin main
