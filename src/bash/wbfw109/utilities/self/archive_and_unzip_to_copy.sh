@@ -27,4 +27,4 @@ rm $temp_archive_target
 
 git add . && git commit -m "$1" && git push origin main
 
-# bash src/bash/wbfw109/utilities/self/archive_and_unzip_to_copy.sh 'add graph visualization, resturct restructure python library path, add visualization manager caption to DataFrame, from now on graph search can be used in VisualizationManager'
+# bash src/bash/wbfw109/utilities/self/archive_and_unzip_to_copy.sh "message"
