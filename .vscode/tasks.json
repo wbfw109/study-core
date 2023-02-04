@@ -4,13 +4,39 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "backup to GitHub with '.' commit message",
+      "label": "[Git] dev: push with '.' commit message",
       "type": "shell",
-      "command": "git add . && git commit -m '.' && git push origin main",
+      "command": "git checkout ${config:myGitBranch.dev} && git commit -am '.' && git push origin ${config:myGitBranch.dev}",
       "presentation": {
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "[_Git] dev: rebase with upstream as main branch",
+      "type": "shell",
+      "command": "git checkout ${config:myGitBranch.dev} && git rebase ${config:myGitBranch.main}",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "[_Git] main: merge from dev branch and push",
+      "type": "shell",
+      "command": "git checkout ${config:myGitBranch.main} && git merge ${config:myGitBranch.dev} && git push origin ${config:myGitBranch.main}",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "[Git] merge with rebase and back to dev branch",
+      "dependsOn": [
+        "[_Git] dev: rebase with upstream as main branch",
+        "[_Git] main: merge from dev branch and push"
+      ],
+      "command": "git checkout ${config:myGitBranch.dev}"
     },
     {
       "label": "[Web] [Tutorials] Run Uvicorn dev server",
@@ -33,9 +59,14 @@
   ],
   "inputs": [
     {
-      "id": "prettier_bin", // for prettier extension limitation
       "type": "command",
+      "id": "prettierBin", // for prettier extension limitation
       "command": "yarn bin prettier"
+    },
+    {
+      "type": "promptString",
+      "id": "commitMessage",
+      "description": "Commit message to main upstream."
     }
   ]
 }
