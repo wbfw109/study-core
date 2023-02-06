@@ -1,0 +1,28 @@
+# %shell> docker compose -f docker/docker-compose-test.yml up -d
+## only for test in GitHub Actions
+name: e-commerce-test
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5440:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: my_db
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      # POSTGRES_INITDB_WALDIR: By default the transaction log is stored in a subdirectory of the main Postgres data folder (PGDATA).
+      # POSTGRES_HOST_AUTH_METHOD: If unspecified then md5 password authentication is used.
+      # PGDATA
+    volumes:
+      - type: volume
+        source: pg-data
+        target: /var/lib/postgresql/data
+
+
+volumes:
+  pg-data:
+
+# networks:
+#   stadium:

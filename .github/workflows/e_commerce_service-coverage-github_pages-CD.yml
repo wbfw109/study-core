@@ -1,0 +1,65 @@
+name: GitHub pages CD
+run-name: "Update ${{ github.actor }} GitHub Pages: 🚀 E-Commerce service backend Coverage"
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/e_commerce_service/src/backend/tests"
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+env:
+  DOCKER_COMPOSE_PATH: docker/docker-compose-test.yml
+  SPARSE_CHECKOUT_ABSOLUTE_PATH: /home/runner/work/_target_repository
+  WORKING_DIRECTORY: services/e_commerce_service
+  SPARSE_CHECKOUT_PATTERN: services/e_commerce_service/
+  GITHUB_PAGES_TARGET_PATH: services/e_commerce_service/coverages/backend
+  RESOURCE_OUTPUT_PATH: resources/coverages/backend
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  coverage-output:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/e_commerce_service
+    steps:
+      - uses: actions/checkout@v3
+      - name: docker compose up
+        run: docker compose -f "${{ env.DOCKER_COMPOSE_PATH }}" up -d
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "poetry"
+      - name: install python packages, pytest outputs .html, remove .gitignore at destination directory
+        run: |
+          poetry install --with test
+          source "$(poetry env info --path)/bin/activate"
+          pytest --cov=src/backend/ --cov-report="html:${{ env.RESOURCE_OUTPUT_PATH }}"
+          rm "${{ env.RESOURCE_OUTPUT_PATH }}/.gitignore"
+      # sparse checkout ~
+      - name: set git account and directory
+        run: |
+          mkdir --parents "${{ env.SPARSE_CHECKOUT_ABSOLUTE_PATH }}" && cd "${{ env.SPARSE_CHECKOUT_ABSOLUTE_PATH }}"
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@gmail.com"
+      - name: Sparse checkout
+        uses: snow-actions/sparse-checkout@v1.2.0
+        with:
+          repository: wbfw109/wbfw109.github.io
+          patterns: |
+            ${{ env.SPARSE_CHECKOUT_PATTERN }}
+          path: /home/runner/work/_target_repository
+          token: "${{ secrets.STATIC_GITHUB_PAGES_TOKEN }}"
+      - name: replace existing directory with new directory, push to remote origin main
+        run: |
+          cd "${{ env.SPARSE_CHECKOUT_ABSOLUTE_PATH }}"
+          rm -r "${{ env.GITHUB_PAGES_TARGET_PATH }}"
+          mv "${{ github.workspace }}/${{ env.WORKING_DIRECTORY }}/${{ env.RESOURCE_OUTPUT_PATH }}" "${{ env.GITHUB_PAGES_TARGET_PATH }}"
+          git add . && git commit -m "." && git push origin main
+      # post process ~
+      - name: docker compose down
+        run: docker compose -f "${{ env.DOCKER_COMPOSE_PATH }}" down

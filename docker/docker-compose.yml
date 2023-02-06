@@ -1,5 +1,6 @@
-# %shell> docker compose -f ref/dockerfiles/docker-compose.yml up -d
-## for development
+# %shell> docker compose -f docker/docker-compose.yml up -d
+## only for development
+name: study-core
 services:
   plantuml:
     image: plantuml/plantuml-server:jetty
@@ -9,8 +10,6 @@ services:
     image: mongo
     ports:
       - 27017:27017
-    networks:
-      - stadium
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -19,8 +18,6 @@ services:
     image: mongo-express
     ports:
       - 8081:8081
-    networks:
-      - stadium
     restart: always
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo
@@ -31,8 +28,6 @@ services:
     image: postgres
     ports:
       - "5432:5432"
-    networks:
-      - stadium
     restart: always
     environment:
       POSTGRES_USER: root
@@ -51,8 +46,6 @@ services:
     restart: always
     ports:
       - "5050:80"
-    networks:
-      - stadium
     environment:
       PGADMIN_DEFAULT_EMAIL: root@gmail.com
       PGADMIN_DEFAULT_PASSWORD: example
@@ -67,6 +60,3 @@ volumes:
   my-data:
   pg-data:
   pgadmin-data:
-
-networks:
-  stadium:

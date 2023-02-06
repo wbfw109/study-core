@@ -1,3 +1,4 @@
+# deprecated
 #!/bin/bash
 help()
 {

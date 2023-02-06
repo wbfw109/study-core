@@ -11,9 +11,10 @@
       - [1.2.2. Settings by workspace](#122-settings-by-workspace)
   - [2. DevOps Toolchains as GitOps](#2-devops-toolchains-as-gitops)
     - [2.1. Version Control: GitHub](#21-version-control-github)
-    - [2.2. Pipeline: GitHub Actions](#22-pipeline-github-actions)
-      - [2.2.1 Workflow: CD to GitHub Pages](#221-workflow-cd-to-github-pages)
-    - [2.3. Packaging: Docker](#23-packaging-docker)
+    - [2.2. Automation of jobs: tasks.json (in VS code)](#22-automation-of-jobs-tasksjson-in-vs-code)
+    - [2.3. Pipeline: GitHub Actions](#23-pipeline-github-actions)
+      - [2.3.1 Workflow: CD to GitHub Pages](#231-workflow-cd-to-github-pages)
+    - [2.4. Packaging: Docker](#24-packaging-docker)
   - [3. Sources](#3-sources)
     - [3.1. Basic algorithms](#31-basic-algorithms)
       - [3.1.1 Python: Specification](#311-python-specification)
@@ -28,6 +29,7 @@
   - [5. Services](#5-services)
     - [5.1. Glossary service](#51-glossary-service)
     - [5.2. E-Commerce Service](#52-e-commerce-service)
+      - [5.2.1. Pipeline: GitHub Actions](#521-pipeline-github-actions)
 
 ## 1. Installation
 
@@ -53,45 +55,71 @@
 
 #### 1.2.1. Common settings
 
-- VS Code
+- _IDE_: VS Code  
+  🔱 _Main reason why I choose this_: [Lightweight and powerful.](https://code.visualstudio.com/docs/setup/setup-overview)
   1. download [VS Code](https://code.visualstudio.com/download)
-  2. download [some extensions](.vscode/extensions.json)
+     1. download [some extensions](.vscode/extensions.json)
 
-- Python
-  1. download [poetry](https://python-poetry.org/docs/#installation).
+- Python  
+  1. download latest [Python directly](https://www.python.org/downloads/) or using [pyenv](https://github.com/pyenv/pyenv#installation) (Recommend)
+  2. download latest [poetry](https://python-poetry.org/docs/#installation).  
+     🔱 _Main reason why I choose this_: At that time, time in resolving dependencies was faster than Pipenv.
 
-- Typescript
-    1. download [yarn](https://yarnpkg.com/getting-started/install) (yarn berry PnP).
-    2. download [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) in VS Code Extensions from [Editor support](https://yarnpkg.com/getting-started/migration#editor-support).  
-      and run command: ```yarn dlx @yarnpkg/sdks vscode```  
-      and select [Use Workspace Version](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript) in VSCode
+- Typescript  
+  🔱 _Main reason why I choose this_: [Static type-checking](https://www.typescriptlang.org/docs/handbook/2/basic-types.html)  
+
+  1. download [yarn](https://yarnpkg.com/getting-started/install) (yarn berry PnP).  
+      🔱 _Main reason why I choose this_: [Plug'n'Play](https://yarnpkg.com/features/pnp)  
+      &nbsp;
+      1. download [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) in VS Code Extensions from [Yarn Editor support](https://yarnpkg.com/getting-started/migration#editor-support).
+      2. run command: ```yarn dlx @yarnpkg/sdks vscode```
+      3. select [Use Workspace Version](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript) in VSCode
 
 - Docker
     1. download [Docker](https://docs.docker.com/engine/install/).
 
 #### 1.2.2. Settings by workspace
 
+---
+
 - study-core (repository)  
-  In root directory of the repository,  
+  In root directory of the repository,
   - Python
-    - run command: ```poetry install --with web,db,vision && poetry env info```
-    - run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+    1. run command: ```poetry install --with web,db,vision,test,dev && poetry env info```  
+      _**(Optional)**_ packages for development: ... ```--with test,dev```
+
+    2. run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+
   - Typescript: run command: ```yarn install```
-  - _**(Optional)**_ Docker: run command: ```docker compose -f ref/dockerfiles/docker-compose.yml up -d```  
-    - [docker-comose.yml](ref/dockerfiles/docker-compose.yml)
+
+  - _**(Optional)**_ Docker: run command: ```docker compose -f docker/docker-compose.yml up -d```  
+    - [docker-comose.yml](docker/docker-compose.yml)
       - **Plant UML** in order to write UML diagram
       - **Mongo DB** (Document based NoSQL) with **Mongo Express**
       - **PostgreSQL** (R-DBMS) with **pg Admin**
 
+---
+
 - glossary_service (service)  
-  In the [service directory](services/glossary_service/),  
+  In the [glossary service directory](services/glossary_service/),  
+  &nbsp;
+
   - Python
-    - run command: ```poetry install && poetry env info```
-    - run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+      1. run command: ```poetry install && poetry env info```
+      2. run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+
+---
+
+📰 In development
 
 - e_commerce_service (service)  
-  📰 In development: Python, Typescript, Docker
+  In the [e-commerce service directory](services/e_commerce_service/),  
+  &nbsp;
 
+  - Python
+    1. run command: ```poetry install --with test,dev && poetry env info```  
+      _**(Optional)**_ packages for development: ... ```--with test,dev```
+    2. run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
 &nbsp;
 
 ---
@@ -100,20 +128,30 @@
 
 ### 2.1. Version Control: GitHub
 
-It is Single contributor project.  
-**Branching strategy**
+It is Single contributor project so I set Lock branch in Branch protection rule about collaborators.
 
-- main
-- dev (features, bugfix, hotfix)
+- **Branching strategy**
+  - main
+  - dev (features, bugfix, hotfix)
 
-### 2.2. Pipeline: GitHub Actions
+### 2.2. Automation of jobs: [tasks.json](.vscode/tasks.json) (in VS code)
 
-The main reason I choose this:
+- I distinguish categories using prefix of square brackets in "label" key of job.  
+  - 🛍️ E.g. labels that start with \[Git\], \[_Git\], \[Web\]
+  - String surrounded by square brackets means that it is used as a sequence of tasks that are rarely used individually.
 
-- [About billing for GitHub Actions](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#about-billing-for-github-actions)  
-    > GitHub Actions usage is free for standard GitHub-hosted runners in public repositories, and for self-hosted runners.
+- **List of jobs**
+  - git (checkout, add, commit, rebase, merge, push) on (dev | main) branch
+  - Run web server for tutorials: (Fastapi, Svelte)
 
-#### 2.2.1 [Workflow: CD to GitHub Pages](.github/workflows/github-pages-CD-workflow.yml)
+### 2.3. Pipeline: GitHub Actions
+
+🔱 _Main reason why I choose this_: [About billing for GitHub Actions](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#about-billing-for-github-actions)
+> GitHub Actions usage is free for standard GitHub-hosted runners in public repositories, and for self-hosted runners.
+
+📝 About other workflows for services, see the corresponding service header.
+
+#### 2.3.1 [Workflow: CD to GitHub Pages](.github/workflows/github_pages-CD.yml)
 
 It is triggered in only main branch.
 
@@ -123,9 +161,9 @@ ipython_central_control.html file will be modified. So whenever only the file ch
 - It not traces all file in GitHub Pages repository when pull & push.  
 Because a part of directory in GitHub Pages repository may be later written, so I used sparse-checkout in Git SCM.
 
-### 2.3. Packaging: Docker
+### 2.4. Packaging: Docker
 
-Currently, one [docker-comose.yml](ref/dockerfiles/docker-compose.yml) exists used in development environment.
+Currently, one [docker-comose.yml](docker/docker-compose.yml) exists used in development environment.
 
 &nbsp;
 
@@ -191,7 +229,7 @@ It raises readability of contents of classes that inherits \<VisualizationRoot\>
   Just call the class method \<call_root_classes\>.
 - In a case where to group classes or detail implementation is required, you can use \<MixInParentAlgorithmVisualization\>, \<ChildAlgorithmVisualization\> such as in solutions of sorting.  
   Also you are able to pass a data object as same data by calling class method \<call_parent_algorithm_classes\> for benchmarking.  
-  For example in sorting solutions, \<target_list\> was passed as argument.
+  🛍️ E.g. in sorting solutions, \<target_list\> was passed as argument.
 
 You could select classes you want to show by passing argument \<only_class_list>\, otherwise it shows available classes in a module.
 
@@ -210,7 +248,7 @@ Most of my implementations comply this rule. If you want to check all contents t
 
 ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Pictures**
 <details>
-  <summary>Examples (consecutively calling different files)</summary>
+  <summary>🛍️ E.g. (consecutively calling different files)</summary>
   
 ![Visualization Manager 1](resources_readme/visualization_manager/1.png?raw=1)
 ![Visualization Manager 2](resources_readme/visualization_manager/2.png?raw=1)
@@ -232,7 +270,7 @@ Most of my implementations comply this rule. If you want to check all contents t
 If you pass volume names, it filters unknown volumes and backups remainder with suffix in ISO-8601 datetime format in which colons (:) are replaced with "".
 
 Run ```src/bash/wbfw109/docker-backup-volumes.sh <volume_name_1> [<volume_name_2>, ...]```.  
-Backed up files will be stored in ```ref/dockerfiles/backup```. (hardcoded)
+Backed up files will be stored in ```docker/volume_backup/```. (hardcoded)
 
 &nbsp;
 
@@ -271,6 +309,8 @@ Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS,
 
 [![Glossary app PV](https://img.youtube.com/vi/LBqgitY_j5A/0.jpg)](https://youtu.be/LBqgitY_j5A "Glossary app PV")
 
+---
+
 ### 5.2. E-Commerce Service
 
 📰 Currently in development
@@ -279,5 +319,8 @@ Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS,
   - [Deployment diagram](services/e_commerce_service/resources_readme/diagrams/deployment.svg?raw=1)
 - 3-Verify
   - coverages
-    - backend
-    <!-- - [backend](https://wbfw109.github.io/coverages/backend/index.html) -->
+    - [backend](https://wbfw109.github.io/services/e_commerce_service/coverages/backend/index.html)
+
+#### 5.2.1. Pipeline: GitHub Actions
+
+- [Backend test coverage CD to GitHub Pages](.github/workflows/e_commerce_service-coverage-github_pages-CD.yml)
