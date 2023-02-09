@@ -1,12 +1,28 @@
 #!/bin/bash
-help()
+function help()
 {
-  echo "[INFO] Command Helper: backup your docker volumes into 'docker/volume_backup/' dir."
+  echo "🔎 Usage: docker-backup-volumes.sh <volume_name_1> [<volume_name_2>, ...]"
+  echo "'docker_backup_volumes.sh': backup your docker volumes into 'docker/volume_backup/' dir."
   echo "  - arugments: docker volume name"
 }
 
-if [[ -z $1 ]]
-then
+while [ -n "$1" ]; do
+  case "$1" in
+    -h | --help )
+      help
+      exit ;;
+    -- )
+      exit ;;
+    * )
+      echo -e "❔ unrecognized option '$1'\n"
+      help
+      exit ;;
+  esac
+  shift
+done
+
+
+if [[ -z $1 ]]; then
   help
   exit 1
 fi
@@ -14,11 +30,9 @@ fi
 backup_dir="docker/volume_backup"
 eval mkdir --parents $backup_dir
 declare -a input_volume_name_array=($@)
-volume_name_str=$(docker volume ls --format "{{.Name}}")
-declare -a volume_name_array=($volume_name_str)
+declare -a volume_name_array=($(docker volume ls --format "{{.Name}}"))
 
-for input_volume_name in ${input_volume_name_array[@]}
-do
+for input_volume_name in ${input_volume_name_array[@]}; do
   if [[ " ${volume_name_array[@]} " =~ " ${input_volume_name} " ]]; then
     eval docker run -v "$input_volume_name":/dbdata --name dbstore ubuntu /bin/bash
     current_date_time=$(date --iso-8601=seconds)

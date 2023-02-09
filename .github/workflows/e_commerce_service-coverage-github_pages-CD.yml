@@ -1,10 +1,10 @@
-name: GitHub pages CD
+name: E-Commerce Service
 run-name: "Update ${{ github.actor }} GitHub Pages: 🚀 E-Commerce service backend Coverage"
 on:
   push:
     branches: [main]
     paths:
-      - "services/e_commerce_service/src/backend/tests"
+      - "services/e_commerce_service/src/backend/tests/**"
 # Allow one concurrent deployment
 concurrency:
   group: "pages"

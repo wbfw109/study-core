@@ -1,6 +1,6 @@
 # deprecated
 #!/bin/bash
-help()
+function help()
 {
   echo "[INFO] Command Helper: Upload public repository 'study-python-core' from this repository."
   echo "  - require only one arugment: git commit message"

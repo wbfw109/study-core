@@ -1,9 +1,16 @@
 
 # study-core
 
-📝 **Note that** this repository is currently integrating from [outdated small project sources](src/python/wbfw109/outdated/). so can be incomplete.
+📝 See each docs about Algorithms, Libraries, Toy program.
+
+- [study-core-python](src/python/README.md)
+
+💫 This repository is currently integrating from [outdated small project sources](src/python/wbfw109/outdated/). so can be incomplete.
+
+## Table of contents (TOC)
 
 - [study-core](#study-core)
+  - [Table of contents (TOC)](#table-of-contents-toc)
   - [1. Installation](#1-installation)
     - [1.1. Main Directory Structure](#11-main-directory-structure)
     - [1.2. Steps to start](#12-steps-to-start)
@@ -13,29 +20,25 @@
     - [2.1. Version Control: GitHub](#21-version-control-github)
     - [2.2. Automation of jobs: tasks.json (in VS code)](#22-automation-of-jobs-tasksjson-in-vs-code)
     - [2.3. Pipeline: GitHub Actions](#23-pipeline-github-actions)
-      - [2.3.1 Workflow: CD to GitHub Pages](#231-workflow-cd-to-github-pages)
     - [2.4. Packaging: Docker](#24-packaging-docker)
-  - [3. Sources](#3-sources)
-    - [3.1. Basic algorithms](#31-basic-algorithms)
-      - [3.1.1 Python: Specification](#311-python-specification)
-    - [3.2. Libraries](#32-libraries)
-      - [3.2.1. Python Libraries](#321-python-libraries)
-    - [3.3. Utilities](#33-utilities)
-      - [3.3.1. Python Utilities](#331-python-utilities)
-        - [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python)
-      - [3.3.2. Shell Utilities](#332-shell-utilities)
-        - [3.3.2.1. Backup Docker volumes (Bash)](#3321-backup-docker-volumes-bash)
-  - [4. Toy program](#4-toy-program)
-  - [5. Services](#5-services)
-    - [5.1. Glossary service](#51-glossary-service)
-    - [5.2. E-Commerce Service](#52-e-commerce-service)
-      - [5.2.1. Pipeline: GitHub Actions](#521-pipeline-github-actions)
+  - [3. Utilities](#3-utilities)
+    - [3.1. Python Utilities](#31-python-utilities)
+      - [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python)
+    - [3.2. Shell Utilities](#32-shell-utilities)
+      - [3.2.1. install Protocol Buffers (protoc) 3 (Bash)](#321-install-protocol-buffers-protoc-3-bash)
+      - [3.2.2. Backup Docker volumes (Bash)](#322-backup-docker-volumes-bash)
+  - [4. Services](#4-services)
+    - [4.1. Glossary service](#41-glossary-service)
+    - [4.2. E-Commerce Service](#42-e-commerce-service)
+      - [4.2.1. Pipeline: GitHub Actions](#421-pipeline-github-actions)
 
 ## 1. Installation
 
 ### 1.1. Main Directory Structure
+<!-- 
+- 📁 docs ; sub-docs **_(incomplete...)_**
+- 📁 features ; for BDD **_(incomplete...)_** -->
 
-- 📁 features ; for BDD **_(incomplete...)_**
 - 📁 [ref](ref/) ; crawled data, project settings (toml), etc.
 - 📁 [src/bash/wbfw109](src/bash/wbfw109/) ; common scripts like (setup.sh, install-selenium-driver.sh) and custom scripts.
 - 📁 [src/python/wbfw109](src/python/wbfw109/)
@@ -63,7 +66,7 @@
 - Python  
   1. download latest [Python directly](https://www.python.org/downloads/) or using [pyenv](https://github.com/pyenv/pyenv#installation) (Recommend)
   2. download latest [poetry](https://python-poetry.org/docs/#installation).  
-     🔱 _Main reason why I choose this_: At that time, time in resolving dependencies was faster than Pipenv.
+     🔱 _Main reason why I choose this_: [At that time](https://github.com/wbfw109/crawling_copy#1-select-python-virtual-environment), time in resolving dependencies was faster than Pipenv.
 
 - Typescript  
   🔱 _Main reason why I choose this_: [Static type-checking](https://www.typescriptlang.org/docs/handbook/2/basic-types.html)  
@@ -77,6 +80,11 @@
 
 - Docker
     1. download [Docker](https://docs.docker.com/engine/install/).
+
+- Protocol Buffers
+  🔱 _Main reason why I choose this_: [Communication between internal microservices as SsoT](https://cloud.google.com/run/docs/triggering/grpc)  
+
+  1. run file: [Protocol Buffers Compiler (protoc)](src/bash/wbfw109/setup/install_protoc_3.sh) **(only for linux-x86_64 OS).**
 
 #### 1.2.2. Settings by workspace
 
@@ -120,6 +128,9 @@
     1. run command: ```poetry install --with test,dev && poetry env info```  
       _**(Optional)**_ packages for development: ... ```--with test,dev```
     2. run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+
+  - Protocol Buffers
+
 &nbsp;
 
 ---
@@ -138,7 +149,7 @@ It is Single contributor project so I set Lock branch in Branch protection rule 
 
 - I distinguish categories using prefix of square brackets in "label" key of job.  
   - 🛍️ E.g. labels that start with \[Git\], \[_Git\], \[Web\]
-  - String surrounded by square brackets means that it is used as a sequence of tasks that are rarely used individually.
+  - String with prefix of one underscore, surrounded by square brackets means that it is used as a sequence of tasks that are rarely used individually.
 
 - **List of jobs**
   - git (checkout, add, commit, rebase, merge, push) on (dev | main) branch
@@ -151,15 +162,11 @@ It is Single contributor project so I set Lock branch in Branch protection rule 
 
 📝 About other workflows for services, see the corresponding service header.
 
-#### 2.3.1 [Workflow: CD to GitHub Pages](.github/workflows/github_pages-CD.yml)
-
-It is triggered in only main branch.
-
-When [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python) outputs a .html file,
-ipython_central_control.html file will be modified. So whenever only the file changes and push operation is occurred, this workflow triggered.
-
-- It not traces all file in GitHub Pages repository when pull & push.  
-Because a part of directory in GitHub Pages repository may be later written, so I used sparse-checkout in Git SCM.
+- [Workflow: CD to GitHub Pages](.github/workflows/github_pages-CD.yml)  
+  Main tech is **git sparse-checkout**.  
+  This workflow triggered whenever  
+  1. [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python) outputs a .html file (ipython_central_control.html) and modified,
+  2. and if push operation is occurred in only main branch.
 
 ### 2.4. Packaging: Docker
 
@@ -169,59 +176,27 @@ Currently, one [docker-comose.yml](docker/docker-compose.yml) exists used in dev
 
 ---
 
-## 3. Sources
+## 3. Utilities
 
-### 3.1. Basic algorithms
+### 3.1. Python Utilities
 
-![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python)
-
-|Language|Type|Name|location|
-|:---|:---|:---|:---|
-|Python  |Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](src/python/wbfw109/labs/basics/sequences/sorting.py#L158)|
-|Python  |Graph search  |DFS, BFS |[class DfsAndBfs](src/python/wbfw109/labs/basics/graphs/search.py#L142)|
-
----
-
-#### 3.1.1 Python: Specification
-
-|Name|location|
-|:---|:---|
-Built-ins statements: (for-in loop)  |[class ForStatement](src/python/wbfw109/labs/builtins/statements.py#L74)|
-Built-ins expressions: (lambda)  |[class LambdaExpression](src/python/wbfw109/labs/builtins/expressions.py#L74)|
-Built-ins functions: (zip(), min())  |[class ZipFunc, MinFunc](src/python/wbfw109/labs/builtins/functions.py#L71)|
-Built-ins system: (Zero Based Numbering)  |[class ZeroBasedNumbering](src/python/wbfw109/labs/builtins/system.py#L74)|
-Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, DundersGetattr, DundersIter](src/python/wbfw109/labs/dunders_names.py#L74)|
-
----
-
-### 3.2. Libraries
-
-#### 3.2.1. Python Libraries
-
-- objects.[object](src/python/wbfw109/libs/objects/object.py) ; Operations on first-class object.
-  - About Variables 🔪 default value map, get field annotations, initialize_fields
-  - About Nested class, Inheritance 🔪 get (child, descendant) classes, is inner class, get outer class
-  - About Converting json to dataclass 🔪 SelfReferenceHelper, MixInJsonSerializable
-- [parsing](src/python/wbfw109/libs/parsing.py) ; Parsing trees.
-  - About Implicit node 🔪 convert Implicit syntax node to Syntax Tree (recursive dict)
-  - About Third-party compatibility 🔪 convert syntax Tree to Recursive Tuple tree (library: svgling to draw Syntax tree as .svg image format)
-- [path](src/python/wbfw109/libs/path.py) ; Path resolutions.
-  - About module format string 🔪 get valid path pair from sys path, convert module path to qualified name, get module name list from paths
-- [string](src/python/wbfw109/libs/string.py) ; String operations.
-  - About naming convention 🔪 rename to snake case, rename to snake case with replace
-- [typing](src/python/wbfw109/libs/typing.py) ; Typing for common used type.
-  - About Generic TypeVar 🔪 T, DST (Data Structure type decorated with dataclasses.dataclass)
-  - About Generic with Typed 🔪 Json Primitive ValueType, Json Type, Recursive Tuple, Single Linked List
-
-### 3.3. Utilities
-
-#### 3.3.1. Python Utilities
-
-##### 3.3.1. [Visualization Manager (Python)](src/python/wbfw109/libs/utilities/ipython.py#L389)
+#### 3.3.1. [Visualization Manager (Python)](src/python/wbfw109/libs/utilities/ipython.py#L389)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
 |Python  |Visualization  |pandas, IPython, Generic, inspect, Path, contextlib  |
+
+![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Pictures**
+<details>
+  <summary>🛍️ E.g. (consecutively calling different files)</summary>
+  
+![Visualization Manager 1](resources_readme/visualization_manager/1.png?raw=1)
+![Visualization Manager 2](resources_readme/visualization_manager/2.png?raw=1)
+![Visualization Manager 3](resources_readme/visualization_manager/3.png?raw=1)
+</details>
+
+![#f00](https://placehold.co/15x15/f00/f00.png) **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)**
+  ; check all contents that have been implemented in this way so far
 
 It raises readability of contents of classes that inherits \<VisualizationRoot\> | \<MixInParentAlgorithmVisualization\>, \<ChildAlgorithmVisualization\> **in environment using iPython (Python Interactive Windows).**
 
@@ -238,65 +213,58 @@ By tracing call stack, it only shows contents of current running file or cell ra
 
 Moreover you can manipulate through central control by calling class method \<call_modules\> with searchable paths argument as (absolute | relative) (packages | modules (.py)). It automatically filters same absolute path and selects one of shortest relative path.
 
-Most of my implementations comply this rule. If you want to check all contents that have been implemented in this way so far, just open ![#f00](https://placehold.co/15x15/f00/f00.png) **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html).**
-
-- or you could directly run.
-    1. Open file: [labs_visualization.py](src/python/wbfw109/central_control/labs_visualization.py)  
-    2. Run the file by typing ```Ctrl+Enter (command: Jupyter: Run Current Cell)``` with nothing changes.  
-
 👍 Furthermore [in this module](src/python/wbfw109/libs/utilities/ipython.py), you could also visualize graph as .svg image format by using function \<visualize_implicit_tree\>
-
-![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Pictures**
-<details>
-  <summary>🛍️ E.g. (consecutively calling different files)</summary>
-  
-![Visualization Manager 1](resources_readme/visualization_manager/1.png?raw=1)
-![Visualization Manager 2](resources_readme/visualization_manager/2.png?raw=1)
-![Visualization Manager 3](resources_readme/visualization_manager/3.png?raw=1)
-</details>
 
 &nbsp;
 
 ---
 
-#### 3.3.2. Shell Utilities
+### 3.2. Shell Utilities
 
-##### 3.3.2.1. [Backup Docker volumes (Bash)](src/bash/wbfw109/docker-backup-volumes.sh)
+#### 3.2.1. [install Protocol Buffers (protoc) 3 (Bash)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh)
+
+|Language|Type|Main tech|
+|:---|:---|:---|
+|Bash  |setup  |Github API, jq, semver  |
+
+- 🔎 Usage: ```install_protoc_3.sh [-u | --update]```.
+
+Install Protocolf Buffers Compiler 3 as linux-x86_64 distribution from [GitHub Releases](https://github.com/protocolbuffers/protobuf).  
+If protoc already installed, it compares current version with latest version and prints whether current protoc is up to date or not.
+
+- and if with --update arguments, update.
+
+#### 3.2.2. [Backup Docker volumes (Bash)](src/bash/wbfw109/docker-backup-volumes.sh)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
 |Bash  |Recovery  |Docker  |
 
+- 🔎 Usage: ```docker-backup-volumes.sh <volume_name_1> [<volume_name_2>, ...]```.
+
 If you pass volume names, it filters unknown volumes and backups remainder with suffix in ISO-8601 datetime format in which colons (:) are replaced with "".
 
-Run ```src/bash/wbfw109/docker-backup-volumes.sh <volume_name_1> [<volume_name_2>, ...]```.  
 Backed up files will be stored in ```docker/volume_backup/```. (hardcoded)
+
 
 &nbsp;
 
 ---
 
-## 4. Toy program
-
-|Language|Type|Main tech|Name|location|
-|:---|:---|:---|:---|:---|
-|Python  |Crawling  |XPath  |Google CodeJam Crawler  |[function crawl_algorithms_code_jam()](src/python/wbfw109/libs/utilities/self/algorithms.py#L200)|
-|Python  |Image Processing  |Generator, decorator  |Thumbnail Generator  |[class ThumbGenExample](src/python/wbfw109/labs/dunders_names.py#L411)|
-|Python  |Communication  |socket, selector  |Echo: (Stream type, muxing, Non-blocking) |[class SockEchoCommunication](src/python/wbfw109/labs/networking.py#L73)|
-
----
-
-## 5. Services
+## 4. Services
 
 Purpose of All Services is **Scaffolding** or **Minimum viable product (MVP)** for PoC
 
-### 5.1. Glossary service
+### 4.1. Glossary service
 
 It provides English words with description in Korean related with Computer Science as **tree structure**, that I learned  .
 
 Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS, React_**
 
-- Run command: ```pc init``` (one time) and ```pc run --env prod```
+How to run:
+
+- In [glossary_app directory](services/glossary_service/src/wbfw109/glossary_app),  
+  Run command: ```pc init``` (one time) and ```pc run --env prod```
 
 [Words Data](ref/computer_science_words_korean.json) and [**Entry point**: glossary_app.py](services/glossary_service/src/wbfw109/glossary_app/glossary_app/glossary_app.py)
 
@@ -311,16 +279,16 @@ Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS,
 
 ---
 
-### 5.2. E-Commerce Service
+### 4.2. E-Commerce Service
 
 📰 Currently in development
 
 - [1-Plan (Draft)](services/e_commerce_service/devops/stages/1-plan.md)  
-  - [Deployment diagram](services/e_commerce_service/resources_readme/diagrams/deployment.svg?raw=1)
+  - [Deployment diagram](resources_readme/services/e_commerce_service/diagrams/deployment.svg?raw=1)
 - 3-Verify
   - coverages
     - [backend](https://wbfw109.github.io/services/e_commerce_service/coverages/backend/index.html)
 
-#### 5.2.1. Pipeline: GitHub Actions
+#### 4.2.1. Pipeline: GitHub Actions
 
 - [Backend test coverage CD to GitHub Pages](.github/workflows/e_commerce_service-coverage-github_pages-CD.yml)

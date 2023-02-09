@@ -1,4 +1,6 @@
 ### Project
+temp_cache/man
+temp_cache/json.json
 resources/
 *Zone.Identifier
 package-lock.json

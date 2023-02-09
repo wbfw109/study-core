@@ -1,4 +1,4 @@
-name: GitHub pages CD
+name: Study Core
 run-name: "Update ${{ github.actor }} GitHub Pages: 🚀 Visualization Manager Output"
 on:
   push:

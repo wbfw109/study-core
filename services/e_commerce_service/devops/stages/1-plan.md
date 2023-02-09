@@ -70,15 +70,16 @@ So I will try implementation systematically these schemes through GitOPs practic
 4. **Kafka** ; Distributed event store and stream processing with Publish-Subscribe Pattern
 5. API
     1. **FastAPI** ; 🔐 [_MIT license_](https://github.com/tiangolo/fastapi/blob/master/LICENSE) with **Gunicorn** (using **uvicorn**)
-    2. **NginX**
-6. Frontend: **Svelte** (Typescript) with PWA
-7. package type: Container
+    2. Protocol Buffers ; 🔐 [_MIT license_](https://github.com/protocolbuffers/protobuf/blob/main/LICENSE)
+    3. gRPC
+6. proxy
+   1. **NginX**
+7. Frontend: **Svelte** (Typescript) with PWA
+8. package type: Container
     1. container platform: **Docker**
     2. orchestration: **Kubernetes**
-8. CI/CD
-    1. GitHub Actions
-    2. **JenKins CI**
-    3. **Argo CD**
+9. CI/CD
+    1. GitHub Actions  <!-- , JenKins CI, Argo CD -->
 9.Version Control: **GitHub**
 
 ### 2.2. Work breakdown structure
