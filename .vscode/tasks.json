@@ -1,44 +1,22 @@
 {
   // See https://go.microsoft.com/fwlink/?LinkId=733558
   // for the documentation about the tasks.json format
+  // ??? tasks dependonds
   "version": "2.0.0",
   "tasks": [
     {
       "label": "[Git] dev: push with '.' commit message",
       "type": "shell",
-      "command": "git checkout ${config:myGitBranch.dev} && git add . && git commit -m '.' && git push origin ${config:myGitBranch.dev}",
+      "command": "git checkout ${config:myGitBranch.dev} && git add . && git commit -m '${input:commitMessage}' && git push origin ${config:myGitBranch.dev}",
       "presentation": {
         "reveal": "always",
         "panel": "new"
       }
     },
     {
-      "label": "[_Git] dev: rebase with upstream as main branch",
+      "label": "[Git] merge dev to main with rebase and re-initialize dev branch",
       "type": "shell",
-      "command": "git checkout ${config:myGitBranch.dev} && git rebase ${config:myGitBranch.main}",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "[_Git] main: merge from dev branch and push",
-      "type": "shell",
-      "command": "git checkout ${config:myGitBranch.main} && git merge --squash ${config:myGitBranch.dev} && git commit -m '${input:commitMessage}' && git push origin ${config:myGitBranch.main}",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "[Git] merge with rebase and back to dev branch",
-      "type": "shell",
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "[_Git] dev: rebase with upstream as main branch",
-        "[_Git] main: merge from dev branch and push"
-      ],
-      "command": "git checkout ${config:myGitBranch.dev}",
+      "command": "bash src/bash/wbfw109/utilities/self/tasks/merge_with_rebase_and_reinit_dev.sh --message '${input:commitMessage}'",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -72,8 +50,8 @@
     {
       "type": "promptString",
       "id": "commitMessage",
-      "description": "Commit message to main upstream.",
-      "default": "update minor points"
+      "description": "Commit message",
+      "default": "update minor points."
     }
   ]
 }

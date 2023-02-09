@@ -40,7 +40,9 @@
 - 📁 features ; for BDD **_(incomplete...)_** -->
 
 - 📁 [ref](ref/) ; crawled data, project settings (toml), etc.
-- 📁 [src/bash/wbfw109](src/bash/wbfw109/) ; common scripts like (setup.sh, install-selenium-driver.sh) and custom scripts.
+- 📁 [src/bash/wbfw109/utilities](src/bash/wbfw109/utilities/)
+  - 📁 [setup](src/bash/wbfw109/utilities/setup/)
+  - 📁 [self/tasks](src/bash/wbfw109/utilities/self/tasks/) ; scripts used in .vscode/tasks.json
 - 📁 [src/python/wbfw109](src/python/wbfw109/)
   - 📁 algorithms ; solutions in coding competitions **_(incomplete...)_**
   - 📁 [labs](src/python/wbfw109/labs/) ; research on specification
@@ -84,7 +86,7 @@
 - Protocol Buffers
   🔱 _Main reason why I choose this_: [Communication between internal microservices as SsoT](https://cloud.google.com/run/docs/triggering/grpc)  
 
-  1. run file: [Protocol Buffers Compiler (protoc)](src/bash/wbfw109/setup/install_protoc_3.sh) **(only for linux-x86_64 OS).**
+  1. run file: [Protocol Buffers Compiler (protoc)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh) **(only for linux-x86_64 OS).**
 
 #### 1.2.2. Settings by workspace
 
@@ -137,6 +139,12 @@
 
 ## 2. DevOps Toolchains as GitOps
 
+📝 About other elements for services, see the corresponding service header.
+
+study-core
+
+- [3-Verify](devops/stages/3-verify.md)
+
 ### 2.1. Version Control: GitHub
 
 It is Single contributor project so I set Lock branch in Branch protection rule about collaborators.
@@ -147,10 +155,6 @@ It is Single contributor project so I set Lock branch in Branch protection rule 
 
 ### 2.2. Automation of jobs: [tasks.json](.vscode/tasks.json) (in VS code)
 
-- I distinguish categories using prefix of square brackets in "label" key of job.  
-  - 🛍️ E.g. labels that start with \[Git\], \[_Git\], \[Web\]
-  - String with prefix of one underscore, surrounded by square brackets means that it is used as a sequence of tasks that are rarely used individually.
-
 - **List of jobs**
   - git (checkout, add, commit, rebase, merge, push) on (dev | main) branch
   - Run web server for tutorials: (Fastapi, Svelte)
@@ -159,8 +163,6 @@ It is Single contributor project so I set Lock branch in Branch protection rule 
 
 🔱 _Main reason why I choose this_: [About billing for GitHub Actions](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#about-billing-for-github-actions)
 > GitHub Actions usage is free for standard GitHub-hosted runners in public repositories, and for self-hosted runners.
-
-📝 About other workflows for services, see the corresponding service header.
 
 - [Workflow: CD to GitHub Pages](.github/workflows/github_pages-CD.yml)  
   Main tech is **git sparse-checkout**.  
@@ -225,7 +227,7 @@ Moreover you can manipulate through central control by calling class method \<ca
 
 |Language|Type|Main tech|
 |:---|:---|:---|
-|Bash  |setup  |Github API, jq, semver  |
+|Bash  |Setup  |Github API, jq, semver  |
 
 - 🔎 Usage: ```install_protoc_3.sh [-u | --update]```.
 
@@ -234,7 +236,7 @@ If protoc already installed, it compares current version with latest version and
 
 - and if with --update arguments, update.
 
-#### 3.2.2. [Backup Docker volumes (Bash)](src/bash/wbfw109/docker-backup-volumes.sh)
+#### 3.2.2. [Backup Docker volumes (Bash)](src/bash/wbfw109/utilities/docker-backup-volumes.sh)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
@@ -245,7 +247,6 @@ If protoc already installed, it compares current version with latest version and
 If you pass volume names, it filters unknown volumes and backups remainder with suffix in ISO-8601 datetime format in which colons (:) are replaced with "".
 
 Backed up files will be stored in ```docker/volume_backup/```. (hardcoded)
-
 
 &nbsp;
 
