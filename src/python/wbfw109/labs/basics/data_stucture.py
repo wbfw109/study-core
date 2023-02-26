@@ -106,9 +106,9 @@ class ObjectTypes:
             self.tuple_: tuple = ()  # type:ignore
             self.set: set[Any] = set()
             self.list: list[Any] = []
-            self.stack: list[Any] = self.list.copy()
+            self.stack: list[Any] = self.list.copy()  # LIFO
             self.dict: dict[Any, Any] = {}
-            self.queue: Queue[Any] = Queue()
+            self.queue: Queue[Any] = Queue()  # FIFO
 
         def test_stack_operations(self) -> None:
             self.stack.extend([1, 3, 5, 7])
@@ -145,6 +145,10 @@ from collections import deque
 # x[100:3]
 # x[3 : 1000]
 # x[-1:2]
+# Also valid:   list(map(sum, zip(card_stack_list[::2], card_stack_list[1::2])))
+
+# heap 이 동적으로 생성되고 삭제되는 데이터에서 이 데이터들끼리 비교가 필요할 때 사용하면 좋다. 그리디 알고리즘에서 자주 사용된다.
+# heapq 는 작업할떄마다 자동으로 힙정렬되므로 사용하기 좋다.
 
 
 def data_structure():

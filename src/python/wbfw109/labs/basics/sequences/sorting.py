@@ -324,7 +324,11 @@ class SelectionSorts(MixInParentAlgorithmVisualization):
     #  Therefore, the performance of this algorithm is O(n + n log n) = O(n log n).
     # TODO: equal key version that have O(n)?, sift up version
     class HeapSort(ChildAlgorithmVisualization[SortingDST]):
-        """It uses complete binary tree"""
+        """It uses complete binary tree
+        - Python heapq library:
+            Our pop method returns the smallest item, not the largest
+            (called a “min heap” in textbooks; a “max heap” is more common in texts because of its suitability for in-place sorting).
+        """
 
         def __init__(self, /, dst: Optional[SortingDST]) -> None:
             super().__init__(columns=["elapsed time", "verification"], dst=dst)

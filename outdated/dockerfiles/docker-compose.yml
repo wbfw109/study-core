@@ -1,0 +1,69 @@
+# docker-compose -f docker-compose.yml up -d --no-recreate
+## for development
+version: '3.8'
+services:
+  # my_php_apache:
+  #   build:
+  #     context: ./php-apache
+  #     dockerfile: Dockerfile
+  #   container_name: rtmes-php_apache
+  #   environment:
+  #       - PORT=8000
+  #   ports:
+  #     - 8000:8000
+  #   networks:
+  #     - stadium    
+  #   volumes:
+  #     - type: bind
+  #       source: /home/zaid/repository/rtmes/
+  #       target: /var/www/html/
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - stadium
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: my_db
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      # POSTGRES_INITDB_WALDIR: By default the transaction log is stored in a subdirectory of the main Postgres data folder (PGDATA).
+      # POSTGRES_HOST_AUTH_METHOD: If unspecified then md5 password authentication is used.
+      # PGDATA
+    volumes:
+      - type: volume
+        source: my_data
+        target: /var/lib/postgresql/data
+        volume:
+          nocopy: true
+    restart: always
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - stadium
+    restart: always
+  # zaid_redis:
+  #   image: redis
+  #   command: redis-server --requirepass root --port 6379 --appendonly yes
+  #   # https://redis.io/topics/persistence
+  #   ports:
+  #     - 6379:6379
+  #   networks:
+  #     - stadium
+  #   volumes:
+  #     - type: volume
+  #       source: zaid_data
+  #       target: /usr/local/etc/redis
+  #       volume:
+  #         nocopy: true    
+  #   restart: always
+
+
+volumes:
+  my_data:
+
+networks:
+  stadium:

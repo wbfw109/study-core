@@ -3,7 +3,7 @@
   "python.linting.ignorePatterns": [
     "temp_cache/*",
     "src/python/wbfw109/labs/**/*",
-    "src/python/wbfw109/outdated/**/*"
+    "outdated/**/*"
   ],
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "eslint.nodePath": ".yarn/sdks",

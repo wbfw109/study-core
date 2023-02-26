@@ -121,6 +121,8 @@ class Operators(VisualizationRoot):
         for_statement.visualize()
 
 
+#%%
+
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
         # Do not change this.
@@ -130,3 +132,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
 
 #%%
+
+# while else: https://docs.python.org/3/reference/compound_stmts.html#the-while-statement

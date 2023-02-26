@@ -557,5 +557,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         # Do not change this.
         only_class_list = []
     else:
-        only_class_list = []
+        only_class_list = [DundersTruthyValue]
     VisualizationManager.call_root_classes(only_class_list=only_class_list)

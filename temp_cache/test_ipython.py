@@ -83,10 +83,14 @@ from wbfw109.libs.utilities.ipython import (
 InteractiveShell.ast_node_interactivity = "all"
 # %doctest_mode
 #%%
-class Point2D(TypedDict):
-    x: int
-    y: int
-    label: NotRequired[str]
 
-Point2D(x=2, y=3)
-# Alternative syntax
+# Pythonic
+from collections import deque
+from queue import Queue
+
+x = Queue()
+x.put(1)
+x.put(2)
+x.put(3)
+
+x[0]

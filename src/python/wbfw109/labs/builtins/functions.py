@@ -175,7 +175,7 @@ class MinFunc(VisualizationRoot):
                     (k for k, value in my_dict.items() if value),
                     key=lambda k: len(my_dict[k]),
                 ),
-                "If two or more positional arguments are provided, 📝 the smallest of the positional arguments is returned.",
+                "🛍️ e.g. get 'key' of dict in a condition. not 'value'.",
             ]
         )
         min_func.visualize()
@@ -195,4 +195,9 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
 # ] = lambda i, path_pair_list: len(path_pair_list[i].relative_parent.parts)
 # for k, g in itertools.groupby(data, key=lambda x: x["word"]):
 # k is key, g is group
+
+# input vs sys.stdin.readline speed  https://stackoverflow.com/a/57200421/15252251
+# It checks if it is TTY every time as input() runs by syscall and it works much more slow than sys.stdin.readline()
+
+
 #%%

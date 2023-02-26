@@ -1,7 +1,7 @@
 #!/bin/bash
 function help()
 {
-  echo "🔎 Usage: docker-backup-volumes.sh <volume_name_1> [<volume_name_2>, ...]"
+  echo "🔎 Usage: docker-backup-volumes.sh <volume_name_1> [<volume_name_2> ...]"
   echo "'docker_backup_volumes.sh': backup your docker volumes into 'docker/volume_backup/' dir."
   echo "  - arugments: docker volume name"
 }

@@ -31,4 +31,4 @@ main_branch="main"
 
 eval "git checkout $dev_branch && git rebase $main_branch" &&
 eval "git checkout $main_branch && git merge --squash $dev_branch && git commit -m '$commit_message' && git push origin $main_branch" &&
-eval "git checkout -D $dev_branch && git checkout -b $dev_branch"
+eval "git branch -D $dev_branch && git checkout -b $dev_branch"

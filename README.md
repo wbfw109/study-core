@@ -5,7 +5,7 @@
 
 - [study-core-python](src/python/README.md)
 
-💫 This repository is currently integrating from [outdated small project sources](src/python/wbfw109/outdated/). so can be incomplete.
+💫 This repository is currently integrating from [outdated small project sources](outdated/). so can be incomplete.
 
 ## Table of contents (TOC)
 
@@ -25,7 +25,7 @@
     - [3.1. Python Utilities](#31-python-utilities)
       - [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python)
     - [3.2. Shell Utilities](#32-shell-utilities)
-      - [3.2.1. install Protocol Buffers (protoc) 3 (Bash)](#321-install-protocol-buffers-protoc-3-bash)
+      - [3.2.1. install Protocol Buffers Compiler (protoc) 3 (Bash)](#321-install-protocol-buffers-compiler-protoc-3-bash)
       - [3.2.2. Backup Docker volumes (Bash)](#322-backup-docker-volumes-bash)
   - [4. Services](#4-services)
     - [4.1. Glossary service](#41-glossary-service)
@@ -83,10 +83,10 @@
 - Docker
     1. download [Docker](https://docs.docker.com/engine/install/).
 
-- Protocol Buffers
+- Protocol Buffers  
   🔱 _Main reason why I choose this_: [Communication between internal microservices as SsoT](https://cloud.google.com/run/docs/triggering/grpc)  
 
-  1. run file: [Protocol Buffers Compiler (protoc)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh) **(only for linux-x86_64 OS).**
+  1. run file: [Protocol Buffers Compiler (protoc)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh) **(only for linux-x86_64 OS).** or follow [the guide](https://github.com/protocolbuffers/protobuf#protocol-compiler-installation)
 
 #### 1.2.2. Settings by workspace
 
@@ -223,7 +223,7 @@ Moreover you can manipulate through central control by calling class method \<ca
 
 ### 3.2. Shell Utilities
 
-#### 3.2.1. [install Protocol Buffers (protoc) 3 (Bash)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh)
+#### 3.2.1. [install Protocol Buffers Compiler (protoc) 3 (Bash)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh)
 
 |Language|Type|Main tech|
 |:---|:---|:---|
@@ -231,7 +231,9 @@ Moreover you can manipulate through central control by calling class method \<ca
 
 - 🔎 Usage: ```install_protoc_3.sh [-u | --update]```.
 
-Install Protocolf Buffers Compiler 3 as linux-x86_64 distribution from [GitHub Releases](https://github.com/protocolbuffers/protobuf).  
+Install protoc 3 as linux-x86_64 distribution from [GitHub Releases](https://github.com/protocolbuffers/protobuf).  
+"jq" parses json data received from GitHub API.
+
 If protoc already installed, it compares current version with latest version and prints whether current protoc is up to date or not.
 
 - and if with --update arguments, update.
@@ -242,7 +244,7 @@ If protoc already installed, it compares current version with latest version and
 |:---|:---|:---|
 |Bash  |Recovery  |Docker  |
 
-- 🔎 Usage: ```docker-backup-volumes.sh <volume_name_1> [<volume_name_2>, ...]```.
+- 🔎 Usage: ```docker-backup-volumes.sh <volume_name_1> [<volume_name_2> ...]```.
 
 If you pass volume names, it filters unknown volumes and backups remainder with suffix in ISO-8601 datetime format in which colons (:) are replaced with "".
 
