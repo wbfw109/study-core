@@ -14,7 +14,6 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solv
 ## 1. Link
 
 - [**My Profile - backjoon**](https://www.acmicpc.net/user/gnv112)
-- [**My Profile - Solved.ac**](https://solved.ac/profile/gnv112)
 - [Help](https://help.acmicpc.net/)
   - [Tier Profile](https://github.com/mazassumnida/mazassumnida)
 - [Homepage](https://www.acmicpc.net/)
