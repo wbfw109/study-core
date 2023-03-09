@@ -153,6 +153,8 @@ from collections import deque
 
 def data_structure():
     """
+    m-ary tree, b tree, B+ tree
+
     single linked list
     https://docs.python.org/3/library/collections.abc.html#collections-abstract-base-classes
     TODO:

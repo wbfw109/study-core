@@ -12,13 +12,16 @@
     - [1.2 Design patterns](#12-design-patterns)
     - [1.3 Specification](#13-specification)
   - [2. Libraries](#2-libraries)
-  - [3. Toy program](#3-toy-program)
+  - [3. Snippet](#3-snippet)
+  - [4. Toy program](#4-toy-program)
 
 ## 1. Algorithms
 
 ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
 
 - [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
+
+&nbsp;
 
 ---
 
@@ -28,9 +31,10 @@
 
 |Type|Name|location|
 |:---|:---|:---|
-|Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L157)|
-|Graph search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L142)|
-|Graph routing  |(Minimum Spanning Tree) |[class Kruskal](wbfw109/labs/basics/graphs/routing.py#L160)|
+|Sequence Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L23)|
+|Sequence Search  |binary |[class BinarySearch](wbfw109/labs/basics/sequences/search.py#L44)|
+|Graph Search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L23)|
+|Graph Routing  |(Minimum Spanning Tree) |[class Kruskal](wbfw109/labs/basics/graphs/routing.py#L105)|
 
 &nbsp;
 
@@ -40,7 +44,7 @@
 
 |Type|Name|location|
 |:---|:---|:---|
-|Creational pattern  |interning |[class Interning](wbfw109/labs/design_patterns.py#L72)|
+|Creational pattern  |interning |[class Interning](wbfw109/labs/design_patterns.py#L18)|
 
 &nbsp;
 
@@ -50,11 +54,11 @@
 
 |Name|location|
 |:---|:---|
-Built-ins statements: (for-in loop)  |[class ForStatement, Operators](wbfw109/labs/builtins/statements.py#L74)|
-Built-ins expressions: (lambda)  |[class LambdaExpression](wbfw109/labs/builtins/expressions.py#L74)|
-Built-ins functions: (zip(), min())  |[class ZipFunc, MinFunc](wbfw109/labs/builtins/functions.py#L71)|
-Built-ins system: (Zero Based Numbering)  |[class DataSize, ZeroBasedNumbering](wbfw109/labs/builtins/system.py#L74)|
-Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L74)|
+|Built-ins statements: (for-in loop)  |[class ForStatement, Operators](wbfw109/labs/builtins/statements.py#L16)|
+|Built-ins expressions: (lambda)  |[class LambdaExpression](wbfw109/labs/builtins/expressions.py#L16)|
+|Built-ins functions: (zip(), min())  |[class ZipFunc, MinFunc](wbfw109/labs/builtins/functions.py#L18)|
+|Built-ins system: (Zero Based Numbering)  |[class DataSize, ZeroBasedNumbering](wbfw109/labs/builtins/system.py#L18)|
+|Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L36)|
 
 ---
 
@@ -77,7 +81,15 @@ Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, Dunde
 
 ---
 
-## 3. Toy program
+## 3. [Snippet](wbfw109/template/snippet.py)
+
+- **Transpose iterations**
+  - get_square_iterators_against_gravity()
+  - assemble(), reassemble(), reassemble_i()
+
+---
+
+## 4. Toy program
 
 |Language|Type|Main tech|Name|location|
 |:---|:---|:---|:---|:---|

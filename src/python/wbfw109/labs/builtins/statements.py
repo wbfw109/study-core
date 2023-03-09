@@ -1,73 +1,16 @@
 # %%
 from __future__ import annotations
 
-import collections
-import concurrent.futures
-import dataclasses
-import datetime
-import enum
-import functools
-import inspect
-import itertools
-import json
-import logging
-import math
-import operator
-import os
-import pprint
-import random
-import re
-import selectors
-import shutil
-import socket
-import sys
-import threading
-import time
-import unittest
-import xml.etree.ElementTree as ET
-from abc import ABC, abstractmethod
-from array import array
-from collections.abc import Generator, Sequence
-from enum import Enum
-from pathlib import Path
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
-from urllib.parse import urlparse
-
-import IPython
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from IPython import display
 from IPython.core.interactiveshell import InteractiveShell
-from PIL import Image
-from wbfw109.libs.utilities.ipython import (
+from wbfw109.libs.utilities.ipython import (  # type: ignore
     VisualizationManager,
     VisualizationRoot,
-    display_data_frame_with_my_settings,
 )
 
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
-
-
-#%%
 
 
 class ForStatement(VisualizationRoot):
@@ -135,6 +78,8 @@ class Operators(VisualizationRoot):
         operators.visualize()
 
 
+#%%
+
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
         # Do not change this.
@@ -143,8 +88,7 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         only_class_list = []
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
 
-#%%
-
 # while else: https://docs.python.org/3/reference/compound_stmts.html#the-while-statement
 
 # >>> ["."]*3     ['.', '.', '.'] .  not ["."], ["."], ["."]
+# pow = 1; pow <<= 2; pow >> 1

@@ -8,7 +8,8 @@ from typing import Iterator, Optional
 
 def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     """https://www.acmicpc.net/problem/2473
-
+    data structure 업데이트.. visualization root 포함되게
+    escape_marble_2 구슬만 움직이도록 해서 다시-
     두 용액 합쳣을떄처럼 적절한 범위 내에서 경우의 수 다 확인해봐야함.
     A .. B  ... C
     B 를 움직이고 
@@ -38,13 +39,13 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
 
     third_i 를 처음부터 이진탐색해서 결정하기.
 
-    escape_marble_2 구슬만 움직이도록 해서 다시-
     
     A ........B  C
     sum() < 0:
     
     이진탐색.. 음.. 모듈화?할까? predicate 만 달라지도록
-    def binary_search(predicate: )
+    def binary_search(predicate):
+    
     
     
     =================

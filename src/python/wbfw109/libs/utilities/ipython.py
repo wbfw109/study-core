@@ -213,10 +213,7 @@ class VisualizationRoot:
                 header_string = str(self)
             self.df = get_data_frame_for_test(
                 iterables_for_product=[  # type: ignore
-                    *[
-                        ["🔪 " + "🔪 ".join(x.split(":"))]
-                        for x in header_string.split("\n")
-                    ],
+                    *[["🔪 ".join(x.split(":"))] for x in header_string.split("\n")],
                     columns,
                 ]
             )
@@ -561,17 +558,17 @@ class VisualizationManager:
             obj_to_be_inspected=obj_to_be_inspected,
             parent_class=MixInParentAlgorithmVisualization,
         )
-        available_classes: Iterable[
-            type[MixInParentAlgorithmVisualizationT_co]
-        ] = VisualizationManager._get_valid_classes(loaded_classes, call_stack_level=1)
-
-        # when the file also have <VisualizationRoot> but not load these
+        # when the file also have <VisualizationRoot> but not load these, ignore these.
         VisualizationManager._get_valid_classes(
             get_child_classes(
                 obj_to_be_inspected=obj_to_be_inspected, parent_class=VisualizationRoot
             ),
             call_stack_level=1,
         )
+
+        available_classes: Iterable[
+            type[MixInParentAlgorithmVisualizationT_co]
+        ] = VisualizationManager._get_valid_classes(loaded_classes, call_stack_level=1)
 
         filtered_dict: dict[
             type[MixInParentAlgorithmVisualizationT_co],

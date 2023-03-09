@@ -1,71 +1,17 @@
 # %%
 from __future__ import annotations
 
-import collections
-import concurrent.futures
 import dataclasses
-import datetime
-import enum
-import functools
-import inspect
-import itertools
-import json
-import logging
-import math
-import operator
-import os
-import pprint
-import random
-import re
-import selectors
-import shutil
-import socket
-import sys
-import threading
-import time
-import unittest
-import xml.etree.ElementTree as ET
-from abc import ABC, abstractmethod
-from array import array
 from collections import OrderedDict
-from collections.abc import Generator, Sequence
-from enum import Enum
-from pathlib import Path
+from typing import Any, Generic, Optional, TypeVar
 
-# Kruskal's algorithm in Python
-from pprint import pprint
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Generic,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
-from urllib.parse import urlparse
-
-import IPython
 import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-import pandas as pd
-from IPython import display
+import networkx as nx  # type: ignore
 from IPython.core.interactiveshell import InteractiveShell
-from PIL import Image
-from wbfw109.libs.utilities.ipython import (
+from wbfw109.libs.utilities.ipython import (  # type: ignore
     ChildAlgorithmVisualization,
     MixInParentAlgorithmVisualization,
     VisualizationManager,
-    VisualizationRoot,
     display_data_frame_with_my_settings,
 )
 
@@ -74,7 +20,6 @@ InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
 
-#%%
 
 T = TypeVar("T")
 
@@ -199,7 +144,7 @@ class MinimumSpanningTree(MixInParentAlgorithmVisualization):
             )
             self.dst.graph.add_edges_from([(edge.v1.v, edge.v2.v, {"weight": edge.weight}) for edge in self.dst.edge_list])  # type: ignore
 
-        # find() of Union-find functions (used way: Halving; Pointer jumping)
+        # find() of Union-find functions while updating pointers (used way: Path Halving using Pointer jumping)
         def find_root(self, node: Vertex[T]) -> Vertex[T]:
             while node.parent != node:
                 node.parent = node.parent.parent
@@ -286,7 +231,7 @@ class MinimumSpanningTree(MixInParentAlgorithmVisualization):
 
         @classmethod
         def test_case(cls, dst: Optional[TreeDST[T]]) -> None:  # type: ignore
-            algorithm = MinimumSpanningTree.Kruskal(dst=dst)
+            algorithm = MinimumSpanningTree.Kruskal(dst=dst)  # type: ignore
             algorithm.append_line_into_df_in_wrap(algorithm.measure())
             algorithm.visualize()
 
@@ -295,13 +240,12 @@ class MinimumSpanningTree(MixInParentAlgorithmVisualization):
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
         # Do not change this.
-        # VisualizationManager.call_root_classes()
         only_class_list = []
     else:
         only_class_list = [MinimumSpanningTree.Kruskal]  # type: ignore
     VisualizationManager.call_parent_algorithm_classes(
         dst=TreeDST.get_default_tree_dst(),
-        only_class_list=only_class_list,
+        only_class_list=only_class_list,  # type: ignore
     )
 
 
