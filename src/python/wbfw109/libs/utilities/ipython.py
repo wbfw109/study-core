@@ -447,6 +447,7 @@ class VisualizationManager:
     def _get_valid_classes(
         cls, loaded_classes: Iterable[type[T]], *, call_stack_level: int
     ) -> list[type[T]]:
+        """It add classes into <_previous_loaded_classes_dict> and returns disjoint classes."""
         current_call_stack_level: int = call_stack_level + 1
         # It must be loaded in other file because it use inspect.stack()[1] (previous caller file)
         available_classes: list[type[T]] = []
@@ -564,6 +565,14 @@ class VisualizationManager:
             type[MixInParentAlgorithmVisualizationT_co]
         ] = VisualizationManager._get_valid_classes(loaded_classes, call_stack_level=1)
 
+        # when the file also have <VisualizationRoot> but not load these
+        VisualizationManager._get_valid_classes(
+            get_child_classes(
+                obj_to_be_inspected=obj_to_be_inspected, parent_class=VisualizationRoot
+            ),
+            call_stack_level=1,
+        )
+
         filtered_dict: dict[
             type[MixInParentAlgorithmVisualizationT_co],
             list[type[ChildAlgorithmVisualizationT_co]],
@@ -584,6 +593,7 @@ class VisualizationManager:
                         inner_class=cls_,
                     ):
                         filtered_dict[outer_cls] = [cls_]  # type:ignore
+
         if not filtered_dict:
             filtered_dict = {x: [] for x in available_classes}
 
@@ -611,7 +621,7 @@ class VisualizationManager:
             ]
         )
         ```
-        
+
         ---
         It assume that
         - Similar code of the following code is written in last of each file:

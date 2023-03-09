@@ -188,6 +188,8 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
     else:
         only_class_list = []
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
+
+
 # partial 에서 positional.. lambda 에서는 순서 중요. 함수에서는 args, keywords 가 나눠져잇지만 여긴 아님.
 # "TypeError: got multiple values for argument" after applying functools.partial() 그래서 발생 가능.
 #    get_max_relative_parent_len: Callable[

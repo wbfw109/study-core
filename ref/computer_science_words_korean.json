@@ -1,5 +1,33 @@
 [
   {
+    "word_name": ": Algorithms",
+    "description": [],
+    "children": [
+      {
+        "word_name": ": Graph",
+        "description": [],
+        "children": [
+          {
+            "word_name": ": MST",
+            "description": [
+              "(연결되어 있고, 간선에 가중치가 있고, 순환 없이 모든 정점을 연결하는) 무방향 그래프에서 가중치의 합이 최소인 신장 트리.",
+              "각각의 신장 트리는 n-1 개의 간선을 가짐."
+            ],
+            "children": []
+          },
+          {
+            "word_name": ": Cut",
+            "description": [
+              "그래프의 정점들을 공집합이 아닌 두 개의 서로소 집합으로 분할하는 것.",
+              "cut-set: 분할된 집합의 각 부분집합에서 하나의 진입점을 가지고 있는 간선의 집합으로, 간선은 cut 을 교차한다고 말함. "
+            ],
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
     "word_name": ": Data Structure",
     "description": [],
     "children": [
@@ -22,6 +50,36 @@
               "개체의 인스턴스가 다른 객체의 collection 인 (class | data structure)."
             ],
             "children": []
+          }
+        ]
+      },
+      {
+        "word_name": ": Graph",
+        "description": [
+          "서로 다른 '객체'들 간에 짝을 이루는 어떠한 관계가 있는 자료구조로, 각 노드는 방향성을 가질 수도 있음.",
+          "여기에서 '객체' 는 (정점, 노드, 포인트) 라고도 불리고, '관계' 는 (간선, 링크, 라인) 이라고도 불림."
+        ],
+        "children": [
+          {
+            "word_name": ": Tree",
+            "description": [
+              "임의의 연결된 두 개의 노드가 정확히 한개의 경로로만 연결되어있는 비순환 무방향 트리."
+            ],
+            "children": [
+              {
+                "word_name": ": Multi-way tree",
+                "description": [],
+                "children": [
+                  {
+                    "word_name": ": Merge-find set",
+                    "description": [
+                      "== Disjoint-set data structure  |  union-find data structure"
+                    ],
+                    "children": []
+                  }
+                ]
+              }
+            ]
           }
         ]
       },

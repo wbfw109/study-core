@@ -94,7 +94,7 @@ class Glossary(VisualizationRoot):
     @classmethod
     def test_case(cls):
         glossary: Glossary = cls()
-        glossary.append_line_into_df_in_wrap(["BigO", "V", "'Vertex' (node)"])
+        glossary.append_line_into_df_in_wrap(["BigO", "V", "'Vertex' == 'node'"])
         glossary.append_line_into_df_in_wrap(["BigO", "E", "'Edge'"])
         glossary.append_line_into_df_in_wrap(
             ["BigO", "d", "'distance' from the start node"]
@@ -112,6 +112,7 @@ class Glossary(VisualizationRoot):
                 "Implicit node (not specified in edges in <given node>",
             ]
         )
+        glossary.append_line_into_df_in_wrap(["name", "search key", "== start node"])
         glossary.visualize()
 
 
@@ -143,18 +144,24 @@ class DfsAndBfs(MixInParentAlgorithmVisualization):
         def __init__(self, /, dst: Optional[GraphDST]) -> None:
             super().__init__(columns=["elapsed time", "verification"], dst=dst)
             self.big_o_visualization.append_line_into_df_in_wrap(
-                ["-", "-", "|V| + |E|  =  b^d", "|V|"]
+                ["-", "-", "|V| + |E|  =  b^d", "|V|  =  b^d"]
             )
             self.result: list[str] = []
             self.big_o_visualization.df_caption = [
+                "⚙️ In BFS, usually a queue is needed to keep track of the child nodes that were encountered but not yet explored",
+                "    , and BFS may use hash table used to keep track of the visited vertices.",
+                "  - It could be implemented by by replacing stack with queue in depth_first_search, but that is somewhat nonstandard one.",
+                "",
                 "⚙️ [Worse-case] Time complexity: O(|V| + |E|)",
                 "  - In the case that every vertex and every edge will be explored in the worst case.",
-                "  - Note that O(|E|) may vary between O(1) and O(|V|^{2}), depending on how sparse the input graph is.",
+                "  - Note that O(|E|) may vary between O(1) and O(|V|^2), depending on how sparse the input graph is.",
                 "⚙️ [Worse-case] Space complexity: O(|V|)",
                 "  - In the case that it is need to hold all vertices in the queue.",
                 "",
-                "⚙️ In BFS, usually a queue is needed to keep track of the child nodes that were encountered but not yet explored.",
-                "  - It could be implemented by by replacing stack with queue in depth_first_search, but that is somewhat nonstandard one.",
+                "⚙️ When working with graphs that are too large to store explicitly (or infinite)",
+                "  - it is more practical to describe the complexity of breadth-first search in different terms",
+                "    : to find the nodes that are at distance d from the start node (measured in number of edge traversals), BFS takes O(b^d) time and memory",
+                "    : 🛍️ e.g. Is the Worse-case the complexity of complete binary tree is O(2^d)",
             ]
 
         def __str__(self) -> str:
@@ -198,14 +205,15 @@ class DfsAndBfs(MixInParentAlgorithmVisualization):
             )
             self.result: list[str] = []
             self.big_o_visualization.df_caption = [
+                "⚙️ In DFS, usually a stack is needed to keep track of the nodes discovered so far along a specified branch which helps in backtracking of the graph",
+                "    , and DFS may use hash table used to keep track of the visited vertices.",
+                "",
                 "⚙️ [Worse-case] Time complexity",
                 "  - O(|V| + |E|): In the case that explicit graphs is traversed without repetition.",
                 "  - O(b^d): In the case of implicit graphs.",
                 "⚙️ [Worse-case] Space complexity",
-                "  - O(|V| + |E|): In the case that explicit graphs is traversed without repetition.",
+                "  - O(|V|): In the case that explicit graphs is traversed without repetition.",
                 "  - O(longest path length searched) = O(b*d): In the case of implicit graphs without elimination of duplicate nodes.",
-                "",
-                "⚙️ In DFS, usually a stack is needed to keep track of the nodes discovered so far along a specified branch which helps in backtracking of the graph.",
             ]
 
         def __str__(self) -> str:
@@ -222,7 +230,8 @@ class DfsAndBfs(MixInParentAlgorithmVisualization):
 
                 if discovered_node not in explored_node_list:
                     explored_node_list.append(discovered_node)
-                    # update <self.dst.graph> with newly discovered nodes that do not exist in <self.dst.graph>.
+
+                    # (optional) update <self.dst.graph> with newly discovered nodes that do not exist in <self.dst.graph>.
                     self.dst.graph.update(
                         {
                             implicit_new_node: []
@@ -231,6 +240,7 @@ class DfsAndBfs(MixInParentAlgorithmVisualization):
                             ).difference(self.dst.graph)
                         }
                     )
+
                     stack_for_backtracking.extend(self.dst.graph[discovered_node])
             self.result = explored_node_list
 
@@ -253,7 +263,6 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         only_class_list = []
     else:
         only_class_list = [DfsAndBfs.DFS]
-
     VisualizationManager.call_parent_algorithm_classes(
         dst=GraphDST.get_default_implicit_dict(),
         only_class_list=only_class_list,
@@ -265,3 +274,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
 #     import doctest
 
 #     doctest.testmod()
+
+# Dijkstra's algorithm, A*

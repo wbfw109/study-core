@@ -56,7 +56,6 @@ from IPython import display
 from IPython.core.interactiveshell import InteractiveShell
 from PIL import Image
 from wbfw109.libs.utilities.ipython import (
-    ChildAlgorithmVisualization,
     VisualizationManager,
     VisualizationRoot,
     display_data_frame_with_my_settings,
@@ -103,9 +102,20 @@ class ForStatement(VisualizationRoot):
 
 
 class Operators(VisualizationRoot):
+    """https://docs.python.org/3/reference/expressions.html#comparisons"""
+
     def __init__(self) -> None:
         VisualizationRoot.__init__(
-            self, columns=["eval", "print"], has_df_lock=False, should_highlight=True
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+        self.df_caption.extend(
+            [
+                "⚙️ Comparisons can be chained arbitrarily.",
+                "  - a == b == c  equals 'a == b and b == c'",
+            ]
         )
 
     def __str__(self) -> str:
@@ -113,15 +123,51 @@ class Operators(VisualizationRoot):
 
     @classmethod
     def test_case(cls):
-        for_statement: Operators = cls()
-        # start_i = -1
-        # end_i = 4
-        # for_statement.append_line_into_df_in_wrap(["", "start_i = -1, end_i = 4"])
+        operators: Operators = cls()
+        c = b = a = 1
+        operators.append_line_into_df_in_wrap(["", "c = b = a = 1"])
+        operators.append_line_into_df_in_wrap(
+            [
+                a == b == c,
+                "a == b == c",
+            ]
+        )
+        operators.visualize()
 
-        for_statement.visualize()
 
+class Operators(VisualizationRoot):
+    """https://docs.python.org/3/reference/expressions.html#comparisons"""
 
-#%%
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+        self.df_caption.extend(
+            [
+                "⚙️ Comparisons can be chained arbitrarily.",
+                "  - a == b == c  equals 'a == b and b == c'",
+            ]
+        )
+
+    def __str__(self) -> str:
+        return "TODO: ...."
+
+    @classmethod
+    def test_case(cls):
+        operators: Operators = cls()
+        c = b = a = 1
+        operators.append_line_into_df_in_wrap(["", "c = b = a = 1"])
+        operators.append_line_into_df_in_wrap(
+            [
+                a == b == c,
+                "a == b == c",
+            ]
+        )
+        operators.visualize()
+
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:

@@ -19,12 +19,16 @@
 |Language|Type|Name|location|
 |:---|:---|:---|:---|
 |Python  |Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L157)|
-|Python  |Graph search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L141)|
+|Python  |Graph search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L142)|
+|Python  |Graph routing  |(Minimum Spanning Tree) |[class Kruskal](wbfw109/labs/basics/graphs/routing.py#L160)|
+
+&nbsp;
 
 ---
 
-- Algorithm Problems & Solution
-  - [baekjoon](wbfw109/algorithms/baekjoon/README.md)
+![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Algorithm Problems & Solution**
+
+- [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
 
 ---
 
@@ -32,10 +36,10 @@
 
 |Name|location|
 |:---|:---|
-Built-ins statements: (for-in loop)  |[class ForStatement](wbfw109/labs/builtins/statements.py#L74)|
+Built-ins statements: (for-in loop)  |[class ForStatement, Operators](wbfw109/labs/builtins/statements.py#L74)|
 Built-ins expressions: (lambda)  |[class LambdaExpression](wbfw109/labs/builtins/expressions.py#L74)|
 Built-ins functions: (zip(), min())  |[class ZipFunc, MinFunc](wbfw109/labs/builtins/functions.py#L71)|
-Built-ins system: (Zero Based Numbering)  |[class ZeroBasedNumbering](wbfw109/labs/builtins/system.py#L74)|
+Built-ins system: (Zero Based Numbering)  |[class DataSize, ZeroBasedNumbering](wbfw109/labs/builtins/system.py#L74)|
 Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L74)|
 
 ---

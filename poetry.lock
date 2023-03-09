@@ -1220,7 +1220,7 @@ python-versions = ">=3.5"
 name = "networkx"
 version = "3.0"
 description = "Python package for creating and manipulating graphs and networks"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.8"
 
@@ -2611,7 +2611,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.11, <3.12"
-content-hash = "1da58f52ec6b8c38620f496a058e8d65c016aa52e4174d35df9a21dea1886783"
+content-hash = "7559ed167d44ceb9f152f0c984a331873d586ce2b0f0a5be4eac300c0c6bd04f"
 
 [metadata.files]
 absl-py = [

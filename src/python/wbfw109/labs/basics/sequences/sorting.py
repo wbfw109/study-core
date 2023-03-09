@@ -435,7 +435,6 @@ class SelectionSorts(MixInParentAlgorithmVisualization):
             algorithm.visualize()
 
 
-# TODO: glossary
 class InsertionSorts(MixInParentAlgorithmVisualization):
     """Insertion sort, Shellsort, Splaysort, Tree sort, Lsibrary sort, Patience sorting"""
 
@@ -618,7 +617,7 @@ class HybridSorts(MixInParentAlgorithmVisualization):
 
 
 # Timsort...
-
+#%%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
@@ -626,7 +625,7 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         VisualizationManager.call_root_classes()
         only_class_list = []
     else:
-        only_class_list = [ExchangeSorts, MergeSorts.MergeSort]
+        only_class_list = [MergeSorts.MergeSort]
     VisualizationManager.call_parent_algorithm_classes(
         dst=SortingDST.get_default_sorting_dst(),
         only_class_list=only_class_list,

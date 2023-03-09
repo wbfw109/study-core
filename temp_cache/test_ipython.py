@@ -16,7 +16,6 @@ import logging
 import math
 import operator
 import os
-import pprint
 import random
 import re
 import selectors
@@ -32,6 +31,7 @@ from array import array
 from collections.abc import Generator, Sequence
 from enum import Enum
 from pathlib import Path
+from pprint import pprint
 from types import ModuleType
 from typing import (
     Any,
@@ -81,16 +81,21 @@ from wbfw109.libs.utilities.ipython import (
 
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
+
 # %doctest_mode
 #%%
 
-# Pythonic
-from collections import deque
-from queue import Queue
+cnt_iter = itertools.count(0)
+arr = [
+    [0, 2, 3, 4, 0, 1],
+    [3, 0, 3, 0, 0, 1],
+    [6, 2, 4, 0, 0, 1],
+    [0, 2, 0, 0, 2, 1],
+    [4, 4, 3, 4, 4, 1],
+]
 
-x = Queue()
-x.put(1)
-x.put(2)
-x.put(3)
-
-x[0]
+for x in range(3):
+    print(x)
+else:
+    # loop fell through without finding a factor
+    print("is a prime number")

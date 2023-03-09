@@ -9,7 +9,6 @@
       "program": "${file}",
       "args": []
     },
-
     {
       "name": "Python: Current File",
       "type": "python",
