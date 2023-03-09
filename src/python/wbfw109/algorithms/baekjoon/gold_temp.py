@@ -11,9 +11,13 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
 
     두 용액 합쳣을떄처럼 적절한 범위 내에서 경우의 수 다 확인해봐야함.
     A .. B  ... C
+    B 를 움직이고 
 
+    
+    
     맞나? A C 는 하나씩 움직인다 치면, 이진탐색 될거같은데
     가운데꺼 계산해보고 abs(sum) 이 이전꺼보다 더 작을떄까지만.
+    속도가 더 빨라지긴하는데 이거는 다른 모듈에서
 
     Inner loop
         assume that B starts from A+1,
@@ -35,10 +39,14 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     third_i 를 처음부터 이진탐색해서 결정하기.
 
     escape_marble_2 구슬만 움직이도록 해서 다시-
-    tuple 덧셈 operator.add map 으로 바꾸기-?
     
     A ........B  C
     sum() < 0:
+    
+    이진탐색.. 음.. 모듈화?할까? predicate 만 달라지도록
+    def binary_search(predicate: )
+    
+    
     =================
     
     """
@@ -64,6 +72,7 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     right_i: int = n - 1
     third_i: int = -1
     while left_i < right_i:
+        inner_left_i: int = 
         while left_i < third_i < right_i:
             # binary search
         

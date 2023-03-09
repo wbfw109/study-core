@@ -773,6 +773,7 @@ def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
             - to make <passing_distance_list> as set type for membership testing
     """
     import dataclasses
+    import operator
     import sys
     from array import array
     from collections.abc import MutableSequence
@@ -813,9 +814,8 @@ def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
     while route_state_set:
         route_state = route_state_set.pop()
         for direction in DIRECTIONS:
-            new_point = (
-                route_state.point[0] + direction[0],
-                route_state.point[1] + direction[1],
+            new_point: tuple[int, int] = tuple(
+                map(operator.add, route_state.point, direction)
             )
             if (
                 0 <= new_point[0] < n
@@ -927,6 +927,7 @@ def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
             instead code to compare <is_explored> can be replaced by checking for ripened tomatoes
             , so that code will be simple.
     """
+    import operator
     import sys
     from collections import deque
 
@@ -972,9 +973,8 @@ def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
         # add some tomatoes to <next_exploration_deque> from <explored_deque>.
         explored_point = explored_deque.popleft()
         for direction in DIRECTIONS:
-            new_point: tuple[int, int] = (
-                explored_point[0] + direction[0],
-                explored_point[1] + direction[1],
+            new_point: tuple[int, int] = tuple(
+                map(operator.add, explored_point, direction)
             )
 
             if (
@@ -1582,6 +1582,7 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
             2.1. if fishes that baby shark can prey on exist, baby shark preys on one of fishes by the precedence.
             2.2. else, re-run "1" step.
     """
+    import operator
     import sys
     from collections import deque
     from typing import Literal
@@ -1663,11 +1664,9 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
         # add points to <next_exploration_deque> from <explored_deque>
         explored_point: tuple[int, int] = explored_deque.popleft()
         for direction in DIRECTIONS:
-            new_point: tuple[int, int] = (
-                explored_point[0] + direction[0],
-                explored_point[1] + direction[1],
+            new_point: tuple[int, int] = tuple(
+                map(operator.add, explored_point, direction)
             )
-
             # if it is new exploration point,
             if (
                 0 <= new_point[0] < n
@@ -1841,6 +1840,7 @@ def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str
             , and after virus_entry_point.get(), filter some directions of surrounding points toward the entry point.
     """
     import itertools
+    import operator
     import sys
     from collections import deque
 
@@ -1898,24 +1898,23 @@ def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str
 
         # spread virus; Graph search from <virus_points>
         while len(explored_deque) > 0:
-            new_virus_point = explored_deque.popleft()
+            explored_point = explored_deque.popleft()
             for direction in DIRECTIONS:
-                explored_point: tuple[int, int] = (
-                    new_virus_point[0] + direction[0],
-                    new_virus_point[1] + direction[1],
+                new_point: tuple[int, int] = tuple(
+                    map(operator.add, explored_point, direction)
                 )
 
-                # check that <explored_point> can be spread by virus.
+                # check that <new_point> can be spread by virus.
                 if (
-                    0 <= explored_point[0] < n
-                    and 0 <= explored_point[1] < m
-                    and lab_space[explored_point[0]][explored_point[1]] == 0
+                    0 <= new_point[0] < n
+                    and 0 <= new_point[1] < m
+                    and lab_space[new_point[0]][new_point[1]] == 0
                 ):
                     # spread virus cell to empty cell.
-                    lab_space[explored_point[0]][explored_point[1]] = 2
-                    explored_deque.appendleft(explored_point)
+                    lab_space[new_point[0]][new_point[1]] = 2
+                    explored_deque.appendleft(new_point)
                     empty_point_len -= 1
-                    backtracking_to_empty.append(explored_point)
+                    backtracking_to_empty.append(new_point)
         empty_points_len_list.append(empty_point_len)
 
         # post-process. original <lab_space> will be recovered by backtracking.

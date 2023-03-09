@@ -114,41 +114,7 @@ class Operators(VisualizationRoot):
         self.df_caption.extend(
             [
                 "⚙️ Comparisons can be chained arbitrarily.",
-                "  - a == b == c  equals 'a == b and b == c'",
-            ]
-        )
-
-    def __str__(self) -> str:
-        return "TODO: ...."
-
-    @classmethod
-    def test_case(cls):
-        operators: Operators = cls()
-        c = b = a = 1
-        operators.append_line_into_df_in_wrap(["", "c = b = a = 1"])
-        operators.append_line_into_df_in_wrap(
-            [
-                a == b == c,
-                "a == b == c",
-            ]
-        )
-        operators.visualize()
-
-
-class Operators(VisualizationRoot):
-    """https://docs.python.org/3/reference/expressions.html#comparisons"""
-
-    def __init__(self) -> None:
-        VisualizationRoot.__init__(
-            self,
-            columns=["eval", "print", "note"],
-            has_df_lock=False,
-            should_highlight=True,
-        )
-        self.df_caption.extend(
-            [
-                "⚙️ Comparisons can be chained arbitrarily.",
-                "  - a == b == c  equals 'a == b and b == c'",
+                "   'a == b == c' equals 'a == b and b == c'.",
             ]
         )
 
@@ -180,3 +146,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
 #%%
 
 # while else: https://docs.python.org/3/reference/compound_stmts.html#the-while-statement
+
+# >>> ["."]*3     ['.', '.', '.'] .  not ["."], ["."], ["."]

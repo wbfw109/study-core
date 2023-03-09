@@ -72,9 +72,7 @@ InteractiveShell.ast_node_interactivity = "all"
 
 
 class DataSize(VisualizationRoot):
-    """...
-    🧑‍🤝‍🧑 quotatio fromn 🔗 https://rushter.com/blog/python-strings-and-memory
-    """
+    """https://rushter.com/blog/python-strings-and-memory"""
 
     def __init__(self) -> None:
         VisualizationRoot.__init__(
@@ -87,8 +85,6 @@ class DataSize(VisualizationRoot):
             "⚙️ Empty string occupy 49 bytes Because it stores supplementary information",
             "    , such as hash, length, length in bytes, encoding type and string flags.",
             "  - ASCII bytes additionally occupy 1 byte",
-            "⚙️ Python uses interning way to names of string as well as constants, variables, functions, etc.",
-            "  - It stores only one copy of same immutable object and shares in order to save space complexity",
         ]
 
     def __str__(self) -> str:
@@ -97,11 +93,12 @@ class DataSize(VisualizationRoot):
     @classmethod
     def test_case(cls):
         data_size: DataSize = cls()
-        sys.getsizeof("")
-        for obj in ["", "a", "abc", 100]:
+
+        for obj in ["", "a", "abc"]:
             data_size.append_line_into_df_in_wrap(
-                [f"sys.getsizeof( {obj} )", f"{sys.getsizeof(obj)} bytes"]
+                [f"sys.getsizeof( '{obj}' )", f"{sys.getsizeof(obj)} bytes"]
             )
+
         data_size.visualize()
 
 
@@ -157,7 +154,7 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         # Do not change this.
         only_class_list = []
     else:
-        only_class_list = []
+        only_class_list = [DataSize]
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
 
 
@@ -193,6 +190,3 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
 #                 [array("b", [row, column]) for column in range(max_column - 1, -1, -1)]
 #                 for row in range(0, max_row, 1)
 #             ]
-
-
-# >>> ["."]*3     ['.', '.', '.'] .  not ["."], ["."], ["."]

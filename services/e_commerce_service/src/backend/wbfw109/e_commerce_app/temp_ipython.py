@@ -39,4 +39,3 @@ InteractiveShell.ast_node_interactivity = "all"
 # print(api_implementation.Type())
 
 #%%
-

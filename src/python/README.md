@@ -7,32 +7,46 @@
 
 - [study-core-python](#study-core-python)
   - [Table of contents (TOC)](#table-of-contents-toc)
-  - [1. Basic algorithms](#1-basic-algorithms)
-    - [1.1 Specification](#11-specification)
+  - [1. Algorithms](#1-algorithms)
+    - [1.1 Basic](#11-basic)
+    - [1.2 Design patterns](#12-design-patterns)
+    - [1.3 Specification](#13-specification)
   - [2. Libraries](#2-libraries)
   - [3. Toy program](#3-toy-program)
 
-## 1. Basic algorithms
+## 1. Algorithms
 
-![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [3.3.1. Visualization Manager (Python)](../../README.md#331-visualization-manager-python)
-
-|Language|Type|Name|location|
-|:---|:---|:---|:---|
-|Python  |Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L157)|
-|Python  |Graph search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L142)|
-|Python  |Graph routing  |(Minimum Spanning Tree) |[class Kruskal](wbfw109/labs/basics/graphs/routing.py#L160)|
-
-&nbsp;
-
----
-
-![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Algorithm Problems & Solution**
+![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
 
 - [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
 
 ---
 
-### 1.1 Specification
+![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [3.3.1. Visualization Manager (Python)](../../README.md#331-visualization-manager-python)
+
+### 1.1 Basic
+
+|Type|Name|location|
+|:---|:---|:---|
+|Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L157)|
+|Graph search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L142)|
+|Graph routing  |(Minimum Spanning Tree) |[class Kruskal](wbfw109/labs/basics/graphs/routing.py#L160)|
+
+&nbsp;
+
+---
+
+### 1.2 Design patterns
+
+|Type|Name|location|
+|:---|:---|:---|
+|Creational pattern  |interning |[class Interning](wbfw109/labs/design_patterns.py#L72)|
+
+&nbsp;
+
+---
+
+### 1.3 Specification
 
 |Name|location|
 |:---|:---|
