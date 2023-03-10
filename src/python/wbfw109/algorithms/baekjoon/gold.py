@@ -11,12 +11,103 @@ from typing import Iterator, Optional
 # week 2-2: sorting
 
 
+def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
+    """get the Zero-closest sum of three solution ; https://www.acmicpc.net/problem/2473
+
+    Time Complexity (Worst-case): O(n^2) from loop of variant of 3SUM problem
+        - O(n(log n)) from Tim sort
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Purpose
+        - to compare absolute sums of two solution by explicitly control two index pointers with exclusive range.
+
+    Consideration
+        - It is almost similar with function <mix_two_solutions> (problem). refer to that.
+    """
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    class TargetFound(Exception):
+        pass
+
+    # Title: input
+    # condition (3 ≤ N < 5000)
+    n: int = int(input_())
+    # condition (-(10^9) ≤ each number of solution ≤ 10^9)
+    # negative integer is acid solution, positive integer is alkaline solution.
+    solutions: list[int] = list(map(int, input_().split()))
+    zero_closest_solutions_i: tuple[int, int, int] = (0, 1, 2)
+    zero_closest_abs: int = sys.maxsize
+
+    # Title: solve
+    solutions.sort()
+    try:
+        for i in range(n - 2):
+            j = i + 1
+            k = n - 1
+
+            while j < k:
+                temp_sum: int = solutions[i] + solutions[j] + solutions[k]
+                if (new_abs := abs(temp_sum)) < zero_closest_abs:
+                    zero_closest_solutions_i = (i, j, k)
+                    zero_closest_abs = new_abs
+                    if temp_sum == 0:
+                        raise TargetFound
+
+                # 'if temp_sum == 0' is evaluated in upper expressions.
+                if temp_sum < 0:
+                    j += 1
+                else:
+                    k -= 1
+    except TargetFound:
+        pass
+
+    result_as_str = " ".join(
+        map(
+            str,
+            ((solutions[i] for i in zero_closest_solutions_i)),
+        )
+    )
+
+    # Title: output
+    print(result_as_str)
+    return result_as_str
+
+
+def test_mix_three_solutions() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "4",
+                "1 2 3 -1",
+            ],
+            ["-1 1 2"],
+        ],
+        [
+            [
+                "5",
+                "-99 -100 -100 -105 -100",
+            ],
+            ["-100 -100 -99"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(mix_three_solutions(iter(input_lines)), output_lines[0])
+        print(f"elapsed time: {time.time() - start_time}")
+
+
 def bundle_up_numbers(input_lines: Optional[Iterator[str]] = None) -> str:
     """get Maximum sum by optionally bundling up numbers ; https://www.acmicpc.net/problem/1744
 
     Time Complexity (Worst-case): O(n(log n)) from Tim sort
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) from Tim sort
 
     Purpose
         - to compare absolute sums of two solution by explicitly control two index pointers with exclusive range.
@@ -106,23 +197,35 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     """get the Zero-closest sum of two solution ; https://www.acmicpc.net/problem/2470
 
     Time Complexity (Worst-case): O(n(log n)) from Tim sort
+        - O(n) from loop of variant of 3SUM problem; that is variant of 2SUM problem.
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Definition
+        Abs := Absolute value of the sum closest to zero
+        Array := Sorted Array
+        Sum : = sum of two values
+        O := Optimized value that make Minimum Abs with one control variable existed.
+            - the Optimized value is different for each a independent variable.
+            - the Optimized value may exist or not in given Array
+                Assume that the value is between consecutive two values in the Array.
+                To determine which values minimize Abs
+                , It should test both; each sum of (the control variable, one of consecutive two values)
+
+                if so, even if a pointer (<left_i> | <right_i> moves one by one, it could covers that range.
 
     Purpose
         - to compare absolute sums of two solution by explicitly control two index pointers with exclusive range.
 
     Consideration
         - ❔ How do I compose up inside of the loop?
-            one solution must compare at least other two solution.
-            so in the loop only one of <left_i> or <right_i> pointer must move.
+            chaining one by one in order to test sum of solution, one loop must have one predicate.
 
     Implementation
         - even if I implement by using Binary Search
             , since purpose is testing sum of two solution rather than searching one target
             , Anyway after Binary search it must be tested in condition where fixed one control variable (unchanged) and change another variable.
             so Binary Search useless.
-        - It is variant of 3SUM problem.
         - if list of solution is sorted state, It can calculate systematically all solution in order.
             if <temp_sum> is less than zero, two selections exist: increase (<left_i> | <right_i>).
             but <right_i> starts with end of the list, so it doesn't have to be bothered.
@@ -205,6 +308,7 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
         - O( Number( BFS(bridges)) ) from BFS
             = the number of (given islands cells, bridges)
         - O( Number( bridges) ) from Kruscal's algorithm
+            - O(E) from Tim sort
 
     Definition
         - Number( BFS(islands) ): |V| + |E|; Time occurred to distinguish islands in given 10*10 grid
@@ -215,7 +319,7 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
             - the number of cells identified in order to check constructable bridge are edges (up to 4 directions in each the cell).
         - MST(bridges)
             - O(E(log E)) from Tim sort
-            - O(|E|) from iterating Edges in Kruscal's algorithm
+            - O(E) from iterating Edges in Kruscal's algorithm
             - O(α(n)) from Union-Find in Kruscal's algorithm
 
     Purpose
@@ -2216,7 +2320,7 @@ def thieve_jewels(input_lines: Optional[Iterator[str]] = None) -> str:
         - O(k) from bag loop  *
             ( O(1) comparison from Jewel consumed iteration  +  O(log k) from Hip (pop | push) )
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) from Tim sort
 
     Definition
         - n: the number of jewels.
@@ -2506,7 +2610,7 @@ def assign_lecture_room(input_lines: Optional[Iterator[str]] = None) -> str:
         - O(n(log n)) from Tim sort
         - O(n-1) from loop  *  ( O(1) comparison  +  O(log n) from Hip (pop | push) at least )
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) from Tim sort
 
     Definition
         - n: the number of lectures.

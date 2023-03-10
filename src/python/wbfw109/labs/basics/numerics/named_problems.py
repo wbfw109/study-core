@@ -1,17 +1,13 @@
 # %%
 from __future__ import annotations
 
-import dataclasses
-import operator
 import random
-from typing import Any, Literal, Optional
 
 from IPython.core.interactiveshell import InteractiveShell
 from wbfw109.libs.utilities.ipython import (  # type: ignore
-    ChildAlgorithmVisualization,
-    MixInParentAlgorithmVisualization,
     VisualizationManager,
     VisualizationRoot,
+    display_data_frame_with_my_settings,
 )
 
 # + allow multiple print
@@ -20,11 +16,22 @@ InteractiveShell.ast_node_interactivity = "all"
 # %doctest_mode
 
 
-class BubbleSort(VisualizationRoot):
+class ThreeSum(VisualizationRoot):
+    """
+    O := Optimized value that make Minimum Abs with two control variable existed.
+        - the Optimized value is different for each a independent variable.
+        - the Optimized value may exist or not in given Array
+            Assume that the value is between consecutive two values in the Array.
+            To determine which values are closest to zero
+            , It should test both; each sum of (the two control variable, one of consecutive two values)
+
+            if so, even if a pointer (<left_i> | <right_i> moves one by one, it could covers that range.
+    """
+
     def __init__(self) -> None:
         VisualizationRoot.__init__(
             self,
-            columns=["eval", "print", "note"],
+            columns=["var", "eval", "print"],
             has_df_lock=False,
             should_highlight=True,
         )
@@ -33,43 +40,60 @@ class BubbleSort(VisualizationRoot):
             has_df_lock=False,
             should_highlight=False,
         )
-        self.big_o_visualization.append_line_into_df_in_wrap(["n", "n^2", "n^2", "1"])
+        self.big_o_visualization.append_line_into_df_in_wrap(["-", "-", "n^2", "n"])
         self.big_o_visualization.df_caption = [
-            "⚙️ [Worse-case] Time complexity",
-            "  - ( O(N^2) comparisons, O(N^2) swaps ) where n is the number of items being sorted",
+            "⚙️ [Worse-case] Space complexity",
+            "  - O(n) from Tim sort",
         ]
+        self.target_list = [random.randint(-10, 10) for _ in range(10)]
+        self.found_list: list[str] = []
 
     def __str__(self) -> str:
-        return "\n".join(
-            [
-                "Properties: comparison-based, In-place",
-                "methods: Exchanging",
-            ]
-        )
+        return "-"
 
     def solve(self) -> None:
-        target_list_len: int = len(self.dst.target_list)
-        # Note: Optimization: by using <last_swapped_i>
-        while True:
-            last_swapped_i = 0
-            for i in range(target_list_len - 1):
-                # in sublist loop, Swapping all like bubble
-                if self.dst.target_list[i] > self.dst.target_list[i + 1]:
-                    self.dst.target_list[i], self.dst.target_list[i + 1] = (
-                        self.dst.target_list[i + 1],
-                        self.dst.target_list[i],
-                    )
-                    last_swapped_i = i + 1
-            if last_swapped_i <= 1:
-                break
+        self.target_list.sort()
+        n: int = len(self.target_list)
+        for i in range(n - 2):
+            j: int = i + 1
+            k: int = n - 1
 
-    def verify(self) -> bool | Any:
-        return SortingDST.verify_sorting(self.dst)
+            while j < k:
+                if (
+                    temp_sum := self.target_list[i]
+                    + self.target_list[j]
+                    + self.target_list[k]
+                ) == 0:
+                    self.found_list.append(
+                        f"{self.target_list[i]},{self.target_list[j]},{self.target_list[k]}"
+                    )
+                    # We need to update both end and start together since the array values are distinct.
+                    k -= 1
+                    j += 1
+
+                elif temp_sum > 0:
+                    k -= 1
+                else:
+                    j += 1
+
+    def visualize(self) -> None:
+        display_data_frame_with_my_settings(self.df, caption=self.df_caption)
+        if not self.big_o_visualization.df.empty:
+            display_data_frame_with_my_settings(
+                self.big_o_visualization.df, caption=self.big_o_visualization.df_caption
+            )
 
     @classmethod
-    def test_case(cls, dst: Optional[SortingDST]) -> None:  # type: ignore
-        algorithm = ExchangeSorts.BubbleSort(dst=dst)
-        algorithm.append_line_into_df_in_wrap(algorithm.measure())
+    def test_case(cls) -> None:  # type: ignore
+        algorithm = ThreeSum()
+        algorithm.solve()
+        # Array range is -100 ~ 100, array size is 100.
+        algorithm.append_line_into_df_in_wrap(
+            ["Target list", "[random.randint(-10, 10) for _ in range(10)]"]
+        )
+        algorithm.append_line_into_df_in_wrap(
+            ["Found combinations", "", algorithm.found_list]
+        )
         algorithm.visualize()
 
 
@@ -78,11 +102,7 @@ class BubbleSort(VisualizationRoot):
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
         # Do not change this.
-        VisualizationManager.call_root_classes()
         only_class_list = []
     else:
-        only_class_list = [MergeSorts.MergeSort]
-    VisualizationManager.call_parent_algorithm_classes(
-        dst=SortingDST.get_default_sorting_dst(),
-        only_class_list=only_class_list,
-    )
+        only_class_list = [ThreeSum]
+    VisualizationManager.call_root_classes(only_class_list)

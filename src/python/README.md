@@ -34,7 +34,8 @@
 |Sequence Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L23)|
 |Sequence Search  |binary |[class BinarySearch](wbfw109/labs/basics/sequences/search.py#L44)|
 |Graph Search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L23)|
-|Graph Routing  |(Minimum Spanning Tree) |[class Kruskal](wbfw109/labs/basics/graphs/routing.py#L105)|
+|Graph Routing  |Kruskal |[class MinimumSpanningTree](wbfw109/labs/basics/graphs/routing.py#L105)|
+|Numerics Named problems  |3SUM |[class ThreeSum](wbfw109/labs/basics/numerics/named_problems.py#L19)|
 
 &nbsp;
 
