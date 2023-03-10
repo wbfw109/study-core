@@ -7,9 +7,9 @@ from typing import Iterator, Optional
 
 
 def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
-    """https://www.acmicpc.net/problem/2473
+    """get the Zero-closest sum of three solution ; https://www.acmicpc.net/problem/2473
 
-
+    variant of 3SUM problem
     data structure 업데이트.. visualization root 포함되게
     escape_marble_2 구슬만 움직이도록 해서 다시-
     두 용액 합쳣을떄처럼 적절한 범위 내에서 경우의 수 다 확인해봐야함.
@@ -37,7 +37,7 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     sum (generator) 보다 이미 있는 리스트라면 인덱스로 접근해서 직접 더하는게 더 빠른가?
     ㅇㅇ 맞다.. 유의미한 차이를 보인다.. 통과 못햇음.. generator 도 결국 그만큼 순환해서 생성해야 하므로..
 
-
+    sorted 보다는 sort가 더빠르다. (in-place sorting vs create new sorted array)
 
     """
     import sys
@@ -55,7 +55,7 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     n: int = int(input_())
     # condition (-(10^9) ≤ each number of solution ≤ 10^9)
     # negative integer is acid solution, positive integer is alkaline solution.
-    solutions = list(map(int, input_().split()))
+    solutions: list[int] = list(map(int, input_().split()))
     zero_closest_solutions_i: tuple[int, int, int] = (0, 1, 2)
     zero_closest_abs: int = sys.maxsize
 
@@ -97,13 +97,13 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
 def test_mix_three_solutions() -> None:
     test_case = unittest.TestCase()
     for input_lines, output_lines in [
-        # [
-        #     [
-        #         "4",
-        #         "1 2 3 -1",
-        #     ],
-        #     ["-1 1 2"],
-        # ],
+        [
+            [
+                "4",
+                "1 2 3 -1",
+            ],
+            ["-1 1 2"],
+        ],
         [
             [
                 "5",
@@ -111,20 +111,6 @@ def test_mix_three_solutions() -> None:
             ],
             ["-100 -100 -99"],
         ],
-        # [
-        #     [
-        #         "6",
-        #         "-104 239 997 627 722 -942",
-        #     ],
-        #     ["-942 239 722"],
-        # ],
-        # [
-        #     [
-        #         "10",
-        #         "254336095 47691541 257341582 -144645454 861485597 33299316 -291023334 -255047743 -645353494 329443014",
-        #     ],
-        #     ["-291023334 33299316 257341582"],
-        # ],
     ]:
         start_time = time.time()
         test_case.assertEqual(mix_three_solutions(iter(input_lines)), output_lines[0])

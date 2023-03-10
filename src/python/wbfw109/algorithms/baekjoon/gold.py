@@ -122,6 +122,7 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
             , since purpose is testing sum of two solution rather than searching one target
             , Anyway after Binary search it must be tested in condition where fixed one control variable (unchanged) and change another variable.
             so Binary Search useless.
+        - It is variant of 3SUM problem.
         - if list of solution is sorted state, It can calculate systematically all solution in order.
             if <temp_sum> is less than zero, two selections exist: increase (<left_i> | <right_i>).
             but <right_i> starts with end of the list, so it doesn't have to be bothered.
