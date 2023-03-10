@@ -40,3 +40,11 @@ InteractiveShell.ast_node_interactivity = "all"
 
 #%%
 # variant of binary search.. as predicate instead of look_up_target
+
+import sys
+
+x = [1, 2, 3, 4]
+for y in x:
+    x.append(3)
+    print("...")
+x

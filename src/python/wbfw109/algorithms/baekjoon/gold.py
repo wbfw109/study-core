@@ -24,6 +24,11 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
 
     Consideration
         - It is almost similar with function <mix_two_solutions> (problem). refer to that.
+
+    Implementation
+        - when get the sum of three values, to use sum() functions is slower than a way of direct indexing access/
+            This appears to be because sum() creates an iterator once every execution.
+            It causes Timeout in baekjoon site.
     """
     import sys
 
@@ -205,7 +210,7 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
         Abs := Absolute value of the sum closest to zero
         Array := Sorted Array
         Sum : = sum of two values
-        O := Optimized value that make Minimum Abs with one control variable existed.
+        O := Optimized value that make Minimum Abs with one control variable existed
             - the Optimized value is different for each a independent variable.
             - the Optimized value may exist or not in given Array
                 Assume that the value is between consecutive two values in the Array.

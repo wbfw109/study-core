@@ -18,14 +18,16 @@ InteractiveShell.ast_node_interactivity = "all"
 
 class ThreeSum(VisualizationRoot):
     """
-    O := Optimized value that make Minimum Abs with two control variable existed.
-        - the Optimized value is different for each a independent variable.
-        - the Optimized value may exist or not in given Array
-            Assume that the value is between consecutive two values in the Array.
-            To determine which values are closest to zero
-            , It should test both; each sum of (the two control variable, one of consecutive two values)
+    Deduction
+        O := Optimized value that make Minimum Abs with two control variable existed
+            1. the Optimized value is different for each a independent variable.
+            2. the Optimized value may exist or not in given Array
 
-            if so, even if a pointer (<left_i> | <right_i> moves one by one, it could covers that range.
+        Assume that the value is between consecutive two values in the Array.
+        To determine which values are closest to zero
+        , It should test both; each sum of (the two control variable, one of consecutive two values)
+
+        if so, even if a pointer (<left_i> | <right_i> moves one by one, it could covers that range.
     """
 
     def __init__(self) -> None:

@@ -106,3 +106,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
 
 # for in loop 에서 하나씩 해당 iterator 의 요소를 pop 하는 경우, --
 # 0 based 에서 배열의 개수 condition 확인: 3 index - 0 index = 4개
+# https://stackoverflow.com/questions/65445377/python-list-comprehension-performance
+# [None]*n is very fast, it allocates the underlying buffer exactly then does a C-level loop. [None for _ in range(n)] is a python level loop that uses append,
