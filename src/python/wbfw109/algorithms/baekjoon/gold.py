@@ -5,6 +5,10 @@ import unittest
 from pprint import pprint
 from typing import Iterator, Optional
 
+# week 4-2: graph theory
+# week 4-1: shortest path
+# week 3-2: dynamic programming
+
 # week 3-1: binary search
 
 
@@ -24,7 +28,7 @@ def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> 
             In this case, always loop is performed as many length of measurable weights until before for each weight.
             namely, it's Recurrence Relation will be:
                 when loop count = 1, Sum(1) = 1.
-                when loop count > 1 , Sum(loop_count) = (1 + Sum(loop_count-1))
+                when loop count > 1 , Sum(loop_count) = 1 + Sum(loop_count-1)
             It's Time complexity is 2^(loop_count-1)
             , and causes "Out of Memory" in the submit site.
         - 🚣 key point is reasoning with Inductive reasoning.
