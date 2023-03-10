@@ -11,6 +11,99 @@ from typing import Iterator, Optional
 # week 2-2: sorting
 
 
+def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> str:
+    """get Maximum measurable weight by using weights ; https://www.acmicpc.net/problem/2437
+
+    Time Complexity (Worst-case):  O(n(log n)) from Tim sort
+        - O(n) in loop from given weights.
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Implementation
+        - Things I've done in the implementation which uses hash table as set type.
+            In this case, always loop is performed as many length of measurable weights until before for each weight.
+            namely, it's Recurrence Relation will be:
+                when loop count = 1, Sum(1) = 1.
+                when loop count > 1 , Sum(loop_count) = (1 + Sum(loop_count-1))
+            It's Time complexity is 2^(loop_count-1)
+            , and causes "Out of Memory" in the submit site.
+        - 🚣 key point is reasoning with Inductive reasoning.
+            (debug some cases, set temporarily hypothesis, find the rules)
+            refer to Debugging of <test_weigh_weights_on_the_scales>
+    """
+
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition (1 ≤ N < 1000)
+    n: int = int(input_())
+    # condition (1 ≤ each weight of weights ≤ 10^6)
+    weights: list[int] = list(map(int, input_().split()))
+    # condition (1 ≤ weights to be measured ≤ n)
+    not_found_weight: int = 1
+    measurable_weight: int = 0
+
+    # Title: solve
+    weights.sort()
+    for weight in weights:
+        if weight <= measurable_weight + 1:
+            measurable_weight += weight
+        else:
+            not_found_weight = measurable_weight + 1
+            break
+    else:
+        not_found_weight = measurable_weight + 1
+
+    # Title: output
+    print(not_found_weight)
+    return str(not_found_weight)
+
+
+def test_weigh_weights_on_the_scales() -> None:
+    """Debugging
+    =====
+    4
+    1 2 4 9
+    -----
+    -> 1        -> 2, 3     -> 4, 5, 6, 7        -> [X] 9
+
+    Found; If not checked still Next weight  <=  Current maximum measurable weight + 1:
+            Current maximum measurable weight  +=  Next weight
+        else:
+            Not found weight  =  Current maximum measurable weight +1
+            break
+    and, one exception: loop of all given weights is over,
+        Not found weight  =  Current maximum measurable weight +1
+    """
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "7",
+                "3 1 6 2 7 30 1",
+            ],
+            ["21"],
+        ],
+        [
+            [
+                "5",
+                "1 2 3 4 5",
+            ],
+            ["16"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            weigh_weights_on_the_scales(iter(input_lines)), output_lines[0]
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
 def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     """get the Zero-closest sum of three solution ; https://www.acmicpc.net/problem/2473
 
@@ -28,7 +121,7 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     Implementation
         - when get the sum of three values, to use sum() functions is slower than a way of direct indexing access/
             This appears to be because sum() creates an iterator once every execution.
-            It causes Timeout in baekjoon site.
+            It causes "Timeout" in the submit site.
     """
     import sys
 
