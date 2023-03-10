@@ -62,7 +62,9 @@ class SortedListSearch(MixInParentAlgorithmVisualization):
         def __str__(self) -> str:
             """the variant was first published by Hermann Bottenbruch.
             - to check that whether the middle element is equal to the target equal only would be performed when one element is left (when L=R).
-                This results in a faster comparison loop, as one comparison is eliminated per iteration.
+                This results in a faster comparison loop, as one comparison is eliminated per iteration
+                , while it requires only one more iteration on average
+            - but it seems that if predicate is complex, it is inefficient than original binary search.
             """
             return "Advanced version: Deferred Detection of Equality"
 
