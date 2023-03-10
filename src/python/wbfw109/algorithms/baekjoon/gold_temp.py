@@ -13,52 +13,33 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     data structure 업데이트.. visualization root 포함되게
     escape_marble_2 구슬만 움직이도록 해서 다시-
     두 용액 합쳣을떄처럼 적절한 범위 내에서 경우의 수 다 확인해봐야함.
+    독립변인.. 테스트를 잘해야한다..
     A .. B  ... C
     B 를 움직이고
+    A -1
 
-    It is similar but in this case, binary search can be used on third-pointer.
+    It is similar <mix_two_solutions>.
+    even if <third_i>
+    binary search can be used on third-pointer.
+    bu
 
-    맞나? A C 는 하나씩 움직인다 치면, 이진탐색 될거같은데
-    가운데꺼 계산해보고 abs(sum) 이 이전꺼보다 더 작을떄까지만.
-    속도가 더 빨라지긴하는데 이거는 다른 모듈에서
+    음.. 차례대로 왼쪽 -1 오른쪽 -1 하면 비는 경우가 생김...
+    0 1 2 3 4
+    L=0, R=4
+    L=1, R=4
+    L=1, R=3    -> L= 0, R=3 일 경우가 그렇다..
+    이런경우라면 차라리 for 루프를 돌리자.
+    이진 검색이 의미가 있나?.. 약간 있긴 하다 . 왜냐하면 "절대값"이 최소가 되는 것을 구해야 하기 때문에
+    i, j 의 중첩 루프 안에서도 j 가 변화한다면 k 의 위치가 왼쪽 또는 오른쪽으로 변할 수가 있다.
+    최악의 경우 n*n*log n 이 되는데,
+    +1씩 비교하며 접근하면, n*2 이 된다.
 
-    Inner loop
-        assume that B starts from A+1,
-        abs(new_sum) in B loop
-        if abs(new_sum) < abs(sum):
-            update sum as new_sum
-
-        if new_sum > 0:
-            break inner loop (B-- since I starts with B from A+1, impossible so break.)
-        else:
-            B++
-
-    Outer loop
-        A 를 다음꺼로 옮겨야할지 C를 이전꺼로 옮겨야할지 뭐부터?
-        마지막으로 계산한 용액의 합이 0 미만이면 A+1
-        아니라면 C-1
-        겹치지 않게.
-
-    third_i 를 처음부터 이진탐색해서 결정하기.
+    sum (generator) 보다 이미 있는 리스트라면 인덱스로 접근해서 직접 더하는게 더 빠른가?
+    ㅇㅇ 맞다.. 유의미한 차이를 보인다.. 통과 못햇음.. generator 도 결국 그만큼 순환해서 생성해야 하므로..
 
 
-    A x......m..y
-        means that A is negative and abs(A) is similar with m.
-        that means, it just need to check additionally two solutions: one of A ~ m, one of m ~ y
-    sum() < 0:
-    A .B`......B
-        means that  B` ~ B value is
-
-    이진탐색.. 음.. 모듈화?할까? predicate 만 달라지도록
-    def binary_search(predicate):
-
-
-    애초에 두 용액 합치는거도.. 0... n 있으면
-    n 을 2진탐색하면서 구해보고, 최종위치까지 구해보고,
-    =================
 
     """
-    import math
     import sys
 
     if input_lines:
@@ -75,171 +56,79 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     # condition (-(10^9) ≤ each number of solution ≤ 10^9)
     # negative integer is acid solution, positive integer is alkaline solution.
     solutions = list(map(int, input_().split()))
-    zero_closest_solutions_i: tuple[int, int, int] = (-1, -1, -1)
+    zero_closest_solutions_i: tuple[int, int, int] = (0, 1, 2)
     zero_closest_abs: int = sys.maxsize
 
     # Title: solve
     solutions.sort()
-    # outer i
-    left_i: int = 0
-    right_i: int = n - 1
-    # inner j
-    left_j: int = 1
-    right_j: int = n - 2
     try:
-        while left_i < right_i:
-            while left_j != right_j:
-                # binary search
-                middle_j: int = math.ceil((left_j + right_j) / 2)
+        for i in range(n - 2):
+            j = i + 1
+            k = n - 1
 
-                temp_sum: int = sum((solutions[x] for x in [left_i, middle_j, right_i]))
+            while j < k:
+                temp_sum: int = solutions[i] + solutions[j] + solutions[k]
                 if (new_abs := abs(temp_sum)) < zero_closest_abs:
-                    zero_closest_solutions_i = (left_i, middle_j, right_i)
-                    if new_abs == 0:
+                    zero_closest_solutions_i = (i, j, k)
+                    zero_closest_abs = new_abs
+                    if temp_sum == 0:
                         raise TargetFound
 
-                if temp_sum > 0:
-                    right_j = middle_j - 1
+                # 'if temp_sum == 0' is evaluated in upper expressions.
+                if temp_sum < 0:
+                    j += 1
                 else:
-                    left_j = middle_j
-            else:
-                temp_sum: int = sum((solutions[x] for x in [left_i, left_j, right_i]))
-                if (new_abs := abs(temp_sum)) < zero_closest_abs:
-                    zero_closest_solutions_i = (left_i, left_j, right_i)
-                    if new_abs == 0:
-                        raise TargetFound
-
+                    k -= 1
     except TargetFound:
         pass
-
-
-def test_mix_three_solutions() -> None:
-    test_case = unittest.TestCase()
-    for input_lines, output_lines in [
-        [
-            [
-                "5",
-                "-2 6 -97 -6 98",
-            ],
-            ["-97 -2 98"],
-        ],
-        [
-            [
-                "7",
-                "-2 -3 -24 -6 98 100 61",
-            ],
-            ["-6 -3 -2"],
-        ],
-    ]:
-        start_time = time.time()
-        test_case.assertEqual(mix_three_solutions(iter(input_lines)), output_lines[0])
-        print(f"elapsed time: {time.time() - start_time}")
-
-
-# test_mix_three_solutions()
-
-
-def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get the Zero-closest sum of two solution ; https://www.acmicpc.net/problem/2470
-
-    assume that A is control variable (unchanged)
-    A ...aa..bb..B
-    A 에서 찾은게 최적의 bb
-    B 에서 찾은 최적의 aa
-
-    A 는 aa 전까지만 하면 되고, Y 는 bb 전까지만 하면 된다?
-
-    means that A is negative and abs(A) is similar with m.
-    that means, it just need to check additionally two solutions: one of A ~ m, one of m ~ y
-    sum() < 0:
-    A .B`......B
-        means that  B` ~ B value is
-    언제 break 해야함?
-
-    """
-    import math
-    import sys
-
-    if input_lines:
-        input_ = lambda: next(input_lines)
-    else:
-        input_ = sys.stdin.readline
-
-    # Title: input
-    # condition (2 ≤ N ≤ 100,000)
-    n: int = int(input_())
-    # condition (-(10^9) ≤ each number of solution ≤ 10^9)
-    # negative integer is acid solution, positive integer is alkaline solution.
-    solutions = list(map(int, input_().split()))
-    zero_closest_solutions_indexes: tuple[int, int] = (-1, -1)
-    zero_closest_abs = sys.maxsize
-
-    # Title: solve
-    solutions.sort()
-    left_i: int = 0
-    right_i: int = n - 1
-
-    def predicate_found(i: int, j: int) -> Optional[int]:
-        nonlocal zero_closest_abs, zero_closest_solutions_indexes
-        temp_sum: int = solutions[i] + solutions[j]
-        print("temp_sum", temp_sum, "i,j", i, j)
-        if (new_abs := abs(temp_sum)) < zero_closest_abs:
-            zero_closest_abs = new_abs
-            zero_closest_solutions_indexes = (i, j)
-            if temp_sum == 0:
-                return None
-        return temp_sum
-
-    def binary_search(left_j: int, right_j: int, fixed_i: int) -> bool:
-        while left_j <= right_j:
-            middle_j = math.ceil((left_j + right_j) / 2)
-            print("middle_j (", fixed_i, middle_j, ")")
-            temp_sum = predicate_found(fixed_i, middle_j)
-            if not temp_sum:
-                return True
-
-            # if temp_sum == 0:  is already checked upper expressions
-            if temp_sum < 0:
-                left_j = middle_j + 1
-            else:
-                right_j = middle_j - 1
-        return False
-
-    indexing_result_1 = binary_search(left_i + 1, right_i, fixed_i=left_i)
-    left_i_limit: int = zero_closest_solutions_indexes[1]
-    zero_closest_abs = sys.maxsize
-    indexing_result_2 = binary_search(left_i, right_i - 1, fixed_i=right_i)
-    right_i_limit: int = zero_closest_solutions_indexes[1]
-    print("limit", left_i_limit, right_i_limit)
-    if not indexing_result_1 and not indexing_result_2:
-        are_remained: list[bool] = [left_i <= left_i_limit, right_i >= right_i_limit]
-        print(left_i, left_i_limit, right_i, right_i_limit)
-        while any(are_remained):
-            if are_remained[0]:
-                if left_i + 1 <= left_i_limit:
-                    left_i += 1
-                    if predicate_found(left_i, right_i):
-                        break
-                else:
-                    are_remained[0] = False
-            if are_remained[1]:
-                if right_i - 1 >= right_i_limit:
-                    right_i += 1
-                    if predicate_found(left_i, right_i):
-                        break
-                else:
-                    are_remained[1] = False
 
     result_as_str = " ".join(
         map(
             str,
-            (
-                solutions[zero_closest_solutions_indexes[0]],
-                solutions[zero_closest_solutions_indexes[1]],
-            ),
+            ((solutions[i] for i in zero_closest_solutions_i)),
         )
     )
 
     # Title: output
     print(result_as_str)
     return result_as_str
+
+
+def test_mix_three_solutions() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        # [
+        #     [
+        #         "4",
+        #         "1 2 3 -1",
+        #     ],
+        #     ["-1 1 2"],
+        # ],
+        [
+            [
+                "5",
+                "-99 -100 -100 -105 -100",
+            ],
+            ["-100 -100 -99"],
+        ],
+        # [
+        #     [
+        #         "6",
+        #         "-104 239 997 627 722 -942",
+        #     ],
+        #     ["-942 239 722"],
+        # ],
+        # [
+        #     [
+        #         "10",
+        #         "254336095 47691541 257341582 -144645454 861485597 33299316 -291023334 -255047743 -645353494 329443014",
+        #     ],
+        #     ["-291023334 33299316 257341582"],
+        # ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(mix_three_solutions(iter(input_lines)), output_lines[0])
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+test_mix_three_solutions()

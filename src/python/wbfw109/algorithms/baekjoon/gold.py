@@ -140,7 +140,7 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     # condition (-(10^9) ≤ each number of solution ≤ 10^9)
     # negative integer is acid solution, positive integer is alkaline solution.
     solutions = list(map(int, input_().split()))
-    zero_closest_solutions_indexes: tuple[int, int] = (-1, -1)
+    zero_closest_solutions_i: tuple[int, int] = (0, 1)
     zero_closest_abs: int = sys.maxsize
 
     # Title: solve
@@ -152,10 +152,11 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
 
         if (new_abs := abs(temp_sum)) < zero_closest_abs:
             zero_closest_abs = new_abs
-            zero_closest_solutions_indexes = (left_i, right_i)
+            zero_closest_solutions_i = (left_i, right_i)
             if temp_sum == 0:
                 break
 
+        # 'if temp_sum == 0' is evaluated in upper expressions.
         if temp_sum < 0:
             left_i += 1
         else:
@@ -163,10 +164,7 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     result_as_str = " ".join(
         map(
             str,
-            (
-                solutions[zero_closest_solutions_indexes[0]],
-                solutions[zero_closest_solutions_indexes[1]],
-            ),
+            ((solutions[i] for i in zero_closest_solutions_i)),
         )
     )
 
