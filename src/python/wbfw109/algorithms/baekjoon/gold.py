@@ -77,7 +77,7 @@ def test_weigh_weights_on_the_scales() -> None:
     -> 1        -> 2, 3     -> 4, 5, 6, 7        -> [X] 9
 
     Hypothesis
-        if Current maximum measurable weight + 1   >=   If not checked still Next weight:
+        if Current maximum measurable weight + 1   >=   not checked still Next weight:
             Current maximum measurable weight  +=  Next weight
         else:
             Not found weight  =  Current maximum measurable weight +1
