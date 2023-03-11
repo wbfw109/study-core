@@ -5,18 +5,31 @@ import unittest
 from pprint import pprint
 from typing import Iterator, Optional
 
-# 중량 제한 ; https://www.acmicpc.net/problem/1939
-# 공유기 설치 ; https://www.acmicpc.net/problem/2110
-# 개똥벌레 ; https://www.acmicpc.net/problem/3020
 
-# data structure 업데이트.. visualization root 포함되게
-# escape_marble_2 구슬만 움직이도록 해서 다시-
+def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
+    """https://www.acmicpc.net/problem/1939"""
+    pass
+
+
+def set_up_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
+    """https://www.acmicpc.net/problem/2110"""
+    pass
+
+
+def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
+    """https://www.acmicpc.net/problem/3020
+    중앙값에서부터 양방향 탐색
+
+
+    data structure 업데이트.. visualization root 포함되게
+    escape_marble_2 구슬만 움직이도록 해서 다시-
+    """
+    pass
 
 
 def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
     """🔍 get Minimum distance to hang balloons to teams ; https://www.acmicpc.net/problem/4716
 
-    벨만포드 알고리즘? MCMF  알고리즘?
     우선순위가 주어짐. 힙 문제?
     기회비용 비교?
     sorted 대신 sort 쓰기
