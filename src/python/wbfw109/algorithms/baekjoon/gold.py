@@ -55,7 +55,7 @@ def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> 
     # Title: solve
     weights.sort()
     for weight in weights:
-        if weight <= measurable_weight + 1:
+        if measurable_weight + 1 >= weight:
             measurable_weight += weight
         else:
             not_found_weight = measurable_weight + 1
@@ -76,7 +76,8 @@ def test_weigh_weights_on_the_scales() -> None:
     -----
     -> 1        -> 2, 3     -> 4, 5, 6, 7        -> [X] 9
 
-    Found; If not checked still Next weight  <=  Current maximum measurable weight + 1:
+    Hypothesis
+        if Current maximum measurable weight + 1   >=   If not checked still Next weight:
             Current maximum measurable weight  +=  Next weight
         else:
             Not found weight  =  Current maximum measurable weight +1
@@ -307,12 +308,13 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
         Abs := Absolute value of the sum closest to zero
         Array := Sorted Array
         Sum : = sum of two values
+
         O := Optimized value that make Minimum Abs with one control variable existed
             - the Optimized value is different for each a independent variable.
             - the Optimized value may exist or not in given Array
                 Assume that the value is between consecutive two values in the Array.
                 To determine which values minimize Abs
-                , It should test both; each sum of (the control variable, one of consecutive two values)
+                🚣, It should test both; each sum of (the control variable, one of consecutive two values)
 
                 if so, even if a pointer (<left_i> | <right_i> moves one by one, it could covers that range.
 
