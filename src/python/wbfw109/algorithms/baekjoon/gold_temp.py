@@ -6,19 +6,90 @@ from pprint import pprint
 from typing import Iterator, Optional
 
 
+# 부분수열의 합 ; https://www.acmicpc.net/problem/1208
+# 주어진 조건에 따라 (정수여야 함) 조화수열은 아니다.
+def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
+    """https://www.acmicpc.net/problem/1208
+    3SUM 에 대한 일반화? 하지만 조기 종료 가능할듯보이기도..
+    비슷한 문제지만 더해봐야 하는 원소의 개수 제한이 없고, 목표 합이 0 이 아니다.
+    40개 전체를 더해봐야 할수도 있음.
+    합이 0이라면 1개의 원소만 가진 부분수열도 포함해야 함.
+    0 1 .. 3 4 ... end (9)
+    0 . 2
+    2 == n-3 이 되면, 0 을 1로 만들어야함. 즉, 다음 for문 진행.
+    0 == n-4 이 되면 다음에 더할 자릿수 1개 추가필요
+        마지막꺼의 경우 break 를 사용하지 않으니까 else 로. 빼면 될듯.
+
+    값의 초기화는 어떻게?
+
+
+    target_subsequences_count = 0
+    n= 1일떄 순환해서 해당 value 이면 타겟카운트에 1추가.
+        다음 값이 target_sum 보다 커지는 시점에서 조기 종료 가능함.
+    if n >= 2
+    while n >= n:
+        control_values_i: deque[int] = []
+
+        inner_i = len(control_values_i)+1
+        inner_j = n-1
+
+        while inner_i < inner_j:
+            ...
+            ...
+
+        for i, x in enumerate(control_values_i):
+            if x == n-3-i:
+
+            else:
+                break
+        else:
+            control_values_i.appendleft(...)
+
+        operands_count+1
+
+
+    """
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition (1 ≤ N < 40)
+    # condition (1 ≤ <target_sum> < 10^6)
+    n, target_sum = map(int, input_().split())
+    sequence: list[int] = list(map(int, input_().split()))
+
+
 def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
-    """https://www.acmicpc.net/problem/1939"""
+    """https://www.acmicpc.net/problem/1939
+    BFS 중량제한...
+    넓게 생각하자...
+    경로 탐색 = 노드/방향에 따라 움직이면 BFS 고려해보기?
+
+
+
+    """
     pass
 
 
 def set_up_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
-    """https://www.acmicpc.net/problem/2110"""
+    """https://www.acmicpc.net/problem/2110
+    3SUM 의 변환.
+    중복되는거 제거하는 게 없음.
+
+    공유기 어려워보임..
+    """
     pass
 
 
 def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
     """https://www.acmicpc.net/problem/3020
     중앙값에서부터 양방향 탐색
+
+    종유석, 석순 각 정렬하고-- 그 크기보다 큰거는 더 이상 탐색안하고 나머지 길이만 더하면 됨.
 
 
     data structure 업데이트.. visualization root 포함되게
@@ -65,6 +136,20 @@ def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
     여기서 기회비용은 abs(A 와 떨어진 거리 - B 와 떨어진 거리) 이다.
 
     //''';;;각 테스트케이스에 대해서...
+    힙 사용할 필요가 없엇구나
+
+
+
+    [x(a=2, b=4), y(a=5, b=15)]
+    -2                  -10
+    y x
+    key: lambda k: k.a-k.b
+
+    스택으로 될듯
+
+
+    a = 20
+    b = 20
 
     """
     import dataclasses
@@ -93,9 +178,10 @@ def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
     team_heapq: list[tuple[int, Team]] = []
     for _ in range(n):
         line: list[int] = list(map(int, input_().split()))
-
-        # if required balloons is none, it is not need to process.
-        if line[0] == 0:
+        if line == [0, 0, 0]:
+            break
+        elif line[0] == 0:
+            # if required balloons is none, it is not need to process.
             continue
 
         team_heapq.append(

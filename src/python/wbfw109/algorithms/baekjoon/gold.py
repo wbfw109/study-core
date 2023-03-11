@@ -5,6 +5,7 @@ import unittest
 from pprint import pprint
 from typing import Iterator, Optional
 
+# week 5-1: string
 # week 4-2: graph theory
 # week 4-1: shortest path
 # week 3-2: dynamic programming
@@ -29,7 +30,7 @@ def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> 
             namely, it's Recurrence Relation will be:
                 when loop count = 1, Sum(1) = 1.
                 when loop count > 1 , Sum(loop_count) = 1 + Sum(loop_count-1)
-            It's Time complexity is 2^(loop_count-1)
+            Each loop's length's is 2^(loop_count-1).
             , and causes "Out of Memory" in the submit site.
         - 🚣 key point is reasoning with Inductive reasoning.
             (debug some cases, set temporarily hypothesis, find the rules)
@@ -77,8 +78,8 @@ def test_weigh_weights_on_the_scales() -> None:
     -> 1        -> 2, 3     -> 4, 5, 6, 7        -> [X] 9
 
     Hypothesis
-        if Current maximum measurable weight + 1   >=   not checked still Next weight:
-            Current maximum measurable weight  +=  Next weight
+        if Current maximum measurable weight + 1   >=   still not checked a Next weight:
+            Current maximum measurable weight  +=  a Next weight
         else:
             Not found weight  =  Current maximum measurable weight +1
             break
@@ -124,7 +125,7 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
         - It is almost similar with function <mix_two_solutions> (problem). refer to that.
 
     Implementation
-        - when get the sum of three values, to use sum() functions is slower than a way of direct indexing access/
+        - when get the sum of three values, to use sum() functions is slower than a way of direct indexing access.
             This appears to be because sum() creates an iterator once every execution.
             It causes "Timeout" in the submit site.
     """
