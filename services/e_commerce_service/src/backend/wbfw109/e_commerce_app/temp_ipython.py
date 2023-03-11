@@ -53,3 +53,9 @@ while 1:
         a -= val
         b -= k - val
     print(ans)
+    
+    
+#%%
+
+control_var_i = [1, 5, 10]
+list(range(len(control_var_i)+1))

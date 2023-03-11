@@ -14,42 +14,19 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     비슷한 문제지만 더해봐야 하는 원소의 개수 제한이 없고, 목표 합이 0 이 아니다.
     40개 전체를 더해봐야 할수도 있음.
     합이 0이라면 1개의 원소만 가진 부분수열도 포함해야 함.
-    0 1 .. 3 4 ... end (9)
-    0 . 2
+    0 1 2 . . . 3 4 . end (9)
+    ...
+    0 . 1 . . 2 3 4 . end (9)
+    0 . . 1 2 . 3 4 . end (9)
     2 == n-3 이 되면, 0 을 1로 만들어야함. 즉, 다음 for문 진행.
+        다음 루프 진행 전에 상위 자리수 자릿수 +1 로 초기화.
     0 == n-4 이 되면 다음에 더할 자릿수 1개 추가필요
         마지막꺼의 경우 break 를 사용하지 않으니까 else 로. 빼면 될듯.
-
-    값의 초기화는 어떻게?
-
-
-    target_subsequences_count = 0
-    n= 1일떄 순환해서 해당 value 이면 타겟카운트에 1추가.
-        다음 값이 target_sum 보다 커지는 시점에서 조기 종료 가능함.
-    if n >= 2
-    while n >= n:
-        control_values_i: deque[int] = []
-
-        inner_i = len(control_values_i)+1
-        inner_j = n-1
-
-        while inner_i < inner_j:
-            ...
-            ...
-
-        for i, x in enumerate(control_values_i):
-            if x == n-3-i:
-
-            else:
-                break
-        else:
-            control_values_i.appendleft(...)
-
-        operands_count+1
 
 
     """
     import sys
+    from collections import deque
 
     if input_lines:
         input_ = lambda: next(input_lines)
@@ -61,6 +38,81 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     # condition (1 ≤ <target_sum> < 10^6)
     n, target_sum = map(int, input_().split())
     sequence: list[int] = list(map(int, input_().split()))
+    target_subsequences_count = 0
+    control_var_i: deque[int] = deque()
+
+    # Title: solve
+    sequence.sort()
+    # when the number of element of subsequence == 1,
+    for e in sequence:
+        if e == target_sum:
+            target_subsequences_count += 1
+        elif e > target_sum:
+            break
+
+    # when the number of element of subsequence >= 2,
+    while len(control_var_i) + 2 <= n:
+        inner_i = control_var_i[-1] + 1 if control_var_i else 0
+        inner_j = n - 1
+        control_var_sum: int = sum((sequence[i] for i in control_var_i))
+
+        while inner_i < inner_j:
+            temp_sum: int = control_var_sum + sequence[inner_i] + sequence[inner_j]
+            if temp_sum == target_sum:
+                target_subsequences_count += 1
+                # ?? 문제에서 동일한 값이라도 target_subsequences_count 에 추가해줘야 하는듯.
+                inner_i += 1
+                inner_j -= 1
+            elif temp_sum < target_sum:
+                inner_i += 1
+            else:
+                inner_j -= 1
+
+        # modify pointer when <control_var_i>s exist
+        for i in range(len(control_var_i)):
+            control_var_i[i] += 1
+            # if this pointer exceeds valid range
+            if control_var_i[i] == n - 2 - i:
+                # set the pointer as (2 + control pointer above depth 1), and continue loop
+                if i + 1 < len(control_var_i):
+                    control_var_i[i] = control_var_i[i + 1] + 2
+                # else; run for-else statement
+            else:
+                break
+        else:
+            # when combinations that can be made up with the number of <control_var_i> ends.
+            previous_length: int = len(control_var_i)
+            control_var_i.clear()
+            control_var_i.extendleft(deque(range(previous_length + 1)))
+
+    print(target_subsequences_count)
+    return str(target_subsequences_count)
+
+
+def test_sum_subsequences_2() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "5 0",
+                "-7 -3 -2 5 8",
+            ],
+            ["1"],
+        ],
+        [
+            [
+                "5 0",
+                "0 0 0 0 0",
+            ],
+            ["31"],  # 5C1 ~ 5C5  =  5, 10, 10, 5, 1
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(sum_subsequences_2(iter(input_lines)), output_lines[0])
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+test_sum_subsequences_2()
 
 
 def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
@@ -280,4 +332,4 @@ def test_hang_balloons_to_teams() -> None:
         print(f"elapsed time: {time.time() - start_time}")
 
 
-test_hang_balloons_to_teams()
+# test_hang_balloons_to_teams()

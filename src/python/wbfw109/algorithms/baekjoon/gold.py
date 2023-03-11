@@ -329,7 +329,7 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     Implementation
         - even if I implement by using Binary Search
             , since purpose is testing sum of two solution rather than searching one target
-            , Anyway after Binary search it must be tested in condition where fixed one control variable (unchanged) and change another variable.
+            , Anyway after Binary search it must be tested in condition where fixed one control variable (unmodified) and modify another variable.
             so Binary Search useless.
         - if list of solution is sorted state, It can calculate systematically all solution in order.
             if <temp_sum> is less than zero, two selections exist: increase (<left_i> | <right_i>).
