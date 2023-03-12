@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import random
+import time
+import unittest
+from typing import Iterator, Optional
 
 from IPython.core.interactiveshell import InteractiveShell
 from wbfw109.libs.utilities.ipython import (  # type: ignore
@@ -97,6 +100,115 @@ class ThreeSum(VisualizationRoot):
             ["Found combinations", "", algorithm.found_list]
         )
         algorithm.visualize()
+
+
+def three_sum_generalization(input_lines: Optional[Iterator[str]] = None) -> str:
+    import math
+    import sys
+    from collections import deque
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    n, target_sum = map(int, input_().split())
+    sequence: list[int] = list(map(int, input_().split()))
+    target_subsequences_count = 0
+    control_var_i: deque[int] = deque()
+    control_var_sum: int = 0
+    consecutive_elements_sum: int = 0
+
+    # Title: solve
+    sequence.sort()
+
+    # when the number of element of subsequence == 1,
+    for e in sequence:
+        if e == target_sum:
+            target_subsequences_count += 1
+        elif e > target_sum:
+            break
+
+    # when the number of element of subsequence >= 2,
+    while len(control_var_i) + 2 <= n:
+
+        inner_i: int = control_var_i[0] + 1 if control_var_i else 0
+        inner_j: int = n - 1
+
+        while inner_i < inner_j:
+            temp_sum: int = control_var_sum + sequence[inner_i] + sequence[inner_j]
+            if temp_sum == target_sum:
+                # check elements with duplicated value
+                # print([sequence[i] for i in [*control_var_i, inner_i, inner_j]])
+
+                left_count = right_count = 1
+                while inner_i < inner_j and sequence[inner_i] == sequence[inner_i + 1]:
+                    inner_i += 1
+                    left_count += 1
+                while inner_i < inner_j and sequence[inner_j] == sequence[inner_j - 1]:
+                    inner_j -= 1
+                    right_count += 1
+
+                # if elements of inner_i ~ right_i are same.
+                if inner_i == inner_j and right_count == 1:
+                    target_subsequences_count += math.comb(left_count, 2)
+                else:
+                    target_subsequences_count += left_count * right_count
+
+                inner_i += 1
+                inner_j -= 1
+            elif temp_sum < target_sum:
+                inner_i += 1
+            else:
+                inner_j -= 1
+
+        # modify pointer when <control_var_i>s exist (n >= 3)
+        for i in range(len(control_var_i)):
+            control_var_sum -= sequence[control_var_i[i]]
+            # if a pointer not exceeds valid range
+            if control_var_i[i] + 1 != n - 2 - i:
+                control_var_i[i] += 1
+                control_var_sum += sequence[control_var_i[i]]
+                for depth, ii in enumerate(range(i - 1, -1, -1), start=1):
+                    control_var_i[ii] = control_var_i[i] + depth
+                    control_var_sum += sequence[control_var_i[ii]]
+                break
+        else:
+            # when combinations that can be made up with the number of <control_var_i> ends.
+            previous_length: int = len(control_var_i)
+            control_var_i.clear()
+            control_var_i.extendleft(deque(range(previous_length + 1)))
+            consecutive_elements_sum += sequence[len(control_var_i) - 1]
+            control_var_sum = consecutive_elements_sum
+
+    print(target_subsequences_count)
+    return str(target_subsequences_count)
+
+
+def test_three_sum_generalization() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "5 0",
+                "-7 -3 -2 5 8",
+            ],
+            ["1"],
+        ],
+        [
+            [
+                "5 0",
+                "0 0 0 0 0",
+            ],
+            ["31"],  # 5C1 ~ 5C5  =  5, 10, 10, 5, 1
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            three_sum_generalization(iter(input_lines)), output_lines[0]
+        )
+        print(f"elapsed time: {time.time() - start_time}")
 
 
 #%%

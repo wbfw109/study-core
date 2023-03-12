@@ -10,21 +10,16 @@ from typing import Iterator, Optional
 # 주어진 조건에 따라 (정수여야 함) 조화수열은 아니다.
 def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     """https://www.acmicpc.net/problem/1208
-    3SUM 에 대한 일반화? 하지만 조기 종료 가능할듯보이기도..
-    비슷한 문제지만 더해봐야 하는 원소의 개수 제한이 없고, 목표 합이 0 이 아니다.
-    40개 전체를 더해봐야 할수도 있음.
-    합이 0이라면 1개의 원소만 가진 부분수열도 포함해야 함.
-    0 1 2 . . . 3 4 . end (9)
-    ...
-    0 . 1 . . 2 3 4 . end (9)
-    0 . . 1 2 . 3 4 . end (9)
-    2 == n-3 이 되면, 0 을 1로 만들어야함. 즉, 다음 for문 진행.
-        다음 루프 진행 전에 상위 자리수 자릿수 +1 로 초기화.
-    0 == n-4 이 되면 다음에 더할 자릿수 1개 추가필요
-        마지막꺼의 경우 break 를 사용하지 않으니까 else 로. 빼면 될듯.
+    3SUM 에 대한 일반화를 해봤는데 DFS 와 같이 경우의 수가 너무 많이 생겨서 N 이 커지면 처리가 너무 느려진다.
+    square root decomposition
 
+    시간복잡도가 왜 시간복잡도 O(2^n) 왜 지수승..
+    현재 원소가 들어가있는 이전에 만들어진 부분수열을 포함한 부분수열의 수.. 저울 참고..
+
+    Meet-in-the-middle attack
 
     """
+    import math
     import sys
     from collections import deque
 
@@ -37,12 +32,18 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     # condition (1 ≤ N < 40)
     # condition (1 ≤ <target_sum> < 10^6)
     n, target_sum = map(int, input_().split())
+    m = n // 2
+    n = n - m
     sequence: list[int] = list(map(int, input_().split()))
     target_subsequences_count = 0
     control_var_i: deque[int] = deque()
+    control_var_sum: int = 0
+    consecutive_elements_sum: int = 0
 
     # Title: solve
+    ㅜ
     sequence.sort()
+
     # when the number of element of subsequence == 1,
     for e in sequence:
         if e == target_sum:
@@ -52,15 +53,30 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
 
     # when the number of element of subsequence >= 2,
     while len(control_var_i) + 2 <= n:
-        inner_i = control_var_i[-1] + 1 if control_var_i else 0
-        inner_j = n - 1
-        control_var_sum: int = sum((sequence[i] for i in control_var_i))
+
+        inner_i: int = control_var_i[0] + 1 if control_var_i else 0
+        inner_j: int = n - 1
 
         while inner_i < inner_j:
             temp_sum: int = control_var_sum + sequence[inner_i] + sequence[inner_j]
             if temp_sum == target_sum:
-                target_subsequences_count += 1
-                # ?? 문제에서 동일한 값이라도 target_subsequences_count 에 추가해줘야 하는듯.
+                # check elements with duplicated value
+                # print([sequence[i] for i in [*control_var_i, inner_i, inner_j]])
+
+                left_count = right_count = 1
+                while inner_i < inner_j and sequence[inner_i] == sequence[inner_i + 1]:
+                    inner_i += 1
+                    left_count += 1
+                while inner_i < inner_j and sequence[inner_j] == sequence[inner_j - 1]:
+                    inner_j -= 1
+                    right_count += 1
+
+                # if elements of inner_i ~ right_i are same.
+                if inner_i == inner_j and right_count == 1:
+                    target_subsequences_count += math.comb(left_count, 2)
+                else:
+                    target_subsequences_count += left_count * right_count
+
                 inner_i += 1
                 inner_j -= 1
             elif temp_sum < target_sum:
@@ -68,22 +84,24 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
             else:
                 inner_j -= 1
 
-        # modify pointer when <control_var_i>s exist
+        # modify pointer when <control_var_i>s exist (n >= 3)
         for i in range(len(control_var_i)):
-            control_var_i[i] += 1
-            # if this pointer exceeds valid range
-            if control_var_i[i] == n - 2 - i:
-                # set the pointer as (2 + control pointer above depth 1), and continue loop
-                if i + 1 < len(control_var_i):
-                    control_var_i[i] = control_var_i[i + 1] + 2
-                # else; run for-else statement
-            else:
+            control_var_sum -= sequence[control_var_i[i]]
+            # if a pointer not exceeds valid range
+            if control_var_i[i] + 1 != n - 2 - i:
+                control_var_i[i] += 1
+                control_var_sum += sequence[control_var_i[i]]
+                for depth, ii in enumerate(range(i - 1, -1, -1), start=1):
+                    control_var_i[ii] = control_var_i[i] + depth
+                    control_var_sum += sequence[control_var_i[ii]]
                 break
         else:
             # when combinations that can be made up with the number of <control_var_i> ends.
             previous_length: int = len(control_var_i)
             control_var_i.clear()
             control_var_i.extendleft(deque(range(previous_length + 1)))
+            consecutive_elements_sum += sequence[len(control_var_i) - 1]
+            control_var_sum = consecutive_elements_sum
 
     print(target_subsequences_count)
     return str(target_subsequences_count)
@@ -92,6 +110,13 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
 def test_sum_subsequences_2() -> None:
     test_case = unittest.TestCase()
     for input_lines, output_lines in [
+        [
+            [
+                "32 1000",
+                "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100",
+            ],
+            ["129024480"],  # 5C1 ~ 5C5  =  5, 10, 10, 5, 1
+        ],
         [
             [
                 "5 0",
@@ -111,6 +136,8 @@ def test_sum_subsequences_2() -> None:
         test_case.assertEqual(sum_subsequences_2(iter(input_lines)), output_lines[0])
         print(f"elapsed time: {time.time() - start_time}")
 
+
+# sum_subsequences_2()
 
 test_sum_subsequences_2()
 
