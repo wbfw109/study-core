@@ -15,6 +15,128 @@ from typing import Iterator, Optional
 
 
 # week 2-2: sorting
+def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
+    """🔍 get Minimum distance to hang balloons to teams ; https://www.acmicpc.net/problem/4716
+
+    Time Complexity (Worst-case):  O(n(log n)) from Tim sort
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Consideration
+        - key point of this problem is comparing Opportunity costs.
+            If team's balloons that have higher opportunity cost is processed in order
+            , the number of remained (A, B) balloons will not matter.
+            In this problem, opportunity cost is absolute value of difference between distances apart from A room and B room.
+
+    Implementation
+        - 🚣 key point is Memoization of <ab_pointer>.
+            <ab_pointer> represents a pointer to the ballon that the team should prioritize among A, B balloons.
+            <ab_pointer> is used in <distance_ab> and <remained_ab>.
+        - I used <list>.sort() instead of sorted(<list>).
+            - <list>.sort() is in-place operation.
+            - sorted(<list>) returns new sorted object so that it causes overhead as much copy operation.
+        - condition "0 0 0" input can be thought of as a first line input of each test cases.
+    """
+    import dataclasses
+    import sys
+    from typing import Literal
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    @dataclasses.dataclass(init=False, eq=True, order=True)
+    class Team:
+        required_balloons: int
+        distance_ab: list[int]
+        ab_pointer: Literal[0, 1]
+
+        def __init__(self, *args: int):
+            self.required_balloons = args[0]
+            self.distance_ab = [args[1], args[2]]
+            self.ab_pointer = 0 if self.distance_ab[0] <= self.distance_ab[1] else 1
+
+    minimum_sum_of_distance_list: list[str] = []  # for local debugging
+
+    # condition: when "0 0 0" is present, break loop.
+    while (start_line := list(map(int, input_().split()))) != [0, 0, 0]:
+        # Title: input
+        # condition (1 ≤ N < 1000)
+        n: int = start_line[0]
+        # condition (0 ≤  (A, B) balloons  < 10^4)
+        remained_ab: list[int] = start_line[1:]
+
+        # condition (0 ≤  distance apart from (A, B)  ≤ 10^3)
+        teams: list[Team] = [Team(*map(int, input_().split())) for _ in range(n)]
+        teams.sort(key=lambda team: -abs(team.distance_ab[0] - team.distance_ab[1]))
+        minimum_sum_of_distance: int = 0
+
+        # Title: solve
+        for i, team in enumerate(teams):
+            used_balloons: int = (
+                team.required_balloons
+                if team.required_balloons < remained_ab[team.ab_pointer]
+                else remained_ab[team.ab_pointer]
+            )
+
+            minimum_sum_of_distance += used_balloons * team.distance_ab[team.ab_pointer]
+            remained_ab[team.ab_pointer] -= used_balloons
+
+            # if remained A or B balloons are exhausted.
+            if remained_ab[team.ab_pointer] == 0:
+                team.required_balloons -= used_balloons
+                fixed_ab_pointer: int = (team.ab_pointer + 1) % 2
+
+                # 🚣 condition (Σ(required_balloons) ≤ A+B)
+                minimum_sum_of_distance += sum(
+                    (
+                        teams[j].required_balloons
+                        * teams[j].distance_ab[fixed_ab_pointer]
+                        for j in range(i, len(teams))
+                    )
+                )
+                break
+
+        # Title: output
+        print(minimum_sum_of_distance)
+        minimum_sum_of_distance_list.append(str(minimum_sum_of_distance))
+
+    return "\n".join(minimum_sum_of_distance_list)
+
+
+def test_hang_balloons_to_teams() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "1 5 5",  # First case
+                "10 2 1",  #  2*5 + 1*5
+                "3 15 50",  # Second case
+                "10 1 2",  # 2. 1*5 + 2*5
+                "10 2 3",  # 3. 3*10
+                "10 4 1000",  # 1. 4*10
+                "0 0 0",
+            ],
+            ["15", "85"],
+        ],
+        [
+            [
+                "4 25 25",
+                "10 20 10",  # 50+100
+                "10 10 30",  # 100
+                "10 30 15",  # 150
+                "10 40 20",  # 200
+                "0 0 0",
+            ],
+            ["600"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            hang_balloons_to_teams(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
 
 
 def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> str:
@@ -106,7 +228,7 @@ def test_weigh_weights_on_the_scales() -> None:
     ]:
         start_time = time.time()
         test_case.assertEqual(
-            weigh_weights_on_the_scales(iter(input_lines)), output_lines[0]
+            weigh_weights_on_the_scales(iter(input_lines)), "\n".join(output_lines)
         )
         print(f"elapsed time: {time.time() - start_time}")
 
@@ -203,7 +325,9 @@ def test_mix_three_solutions() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(mix_three_solutions(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            mix_three_solutions(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -294,7 +418,9 @@ def test_bundle_up_numbers() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(bundle_up_numbers(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            bundle_up_numbers(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -395,7 +521,9 @@ def test_mix_two_solutions() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(mix_two_solutions(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            mix_two_solutions(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -673,7 +801,9 @@ def test_construct_bridges_2() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(construct_bridges_2(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            construct_bridges_2(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -832,7 +962,9 @@ def test_sort_2d_array_puzzle() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(sort_2d_array_puzzle(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            sort_2d_array_puzzle(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -954,7 +1086,9 @@ def test_go_down_downhill() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(go_down_downhill(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            go_down_downhill(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -1116,7 +1250,9 @@ def test_move_alphabet_piece() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(move_alphabet_piece(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            move_alphabet_piece(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -1254,7 +1390,9 @@ def test_ripen_tomato() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(ripen_tomatoes(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            ripen_tomatoes(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -1550,7 +1688,9 @@ def test_escape_marbles_2() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(escape_marble_2(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            escape_marble_2(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -1746,7 +1886,9 @@ def test_play_2048_easy() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(play_2048_easy(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            play_2048_easy(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2000,7 +2142,9 @@ def test_prey_on_fishes() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(prey_on_fishes(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            prey_on_fishes(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2177,7 +2321,7 @@ def test_block_virus_from_leaking() -> None:
     ]:
         start_time = time.time()
         test_case.assertEqual(
-            block_virus_from_leaking(iter(input_lines)), output_lines[0]
+            block_virus_from_leaking(iter(input_lines)), "\n".join(output_lines)
         )
         print(f"elapsed time: {time.time() - start_time}")
 
@@ -2276,7 +2420,9 @@ def test_deliver_chicken() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(deliver_chicken(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            deliver_chicken(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2413,7 +2559,9 @@ def test_schedule_multi_tap() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(schedule_multi_tap(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            schedule_multi_tap(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2522,7 +2670,7 @@ def test_thieve_jewels() -> None:
         [["4 3", "1 65", "2 99", "5 23", "8 44", "2", "4", "10"], ["208"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(thieve_jewels(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(thieve_jewels(iter(input_lines)), "\n".join(output_lines))
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2634,7 +2782,7 @@ def test_make_bigger() -> None:
         [["10 8", "4177252841"], ["84"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(make_bigger(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(make_bigger(iter(input_lines)), "\n".join(output_lines))
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2705,7 +2853,7 @@ def test_sort_cards() -> None:
         [["4", "120", "40", "100", "20"], ["500"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(sort_cards(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(sort_cards(iter(input_lines)), "\n".join(output_lines))
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2771,5 +2919,7 @@ def test_assign_lecture_room() -> None:
         [["8", "1 8", "9 16", "3 7", "8 10", "10 14", "5 6", "6 11", "11 12"], ["3"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(assign_lecture_room(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            assign_lecture_room(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")

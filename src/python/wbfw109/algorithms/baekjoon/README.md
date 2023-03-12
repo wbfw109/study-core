@@ -10,6 +10,7 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solv
   - [Table of contents (TOC)](#table-of-contents-toc)
   - [1. Link](#1-link)
   - [2. Main Directory Structure](#2-main-directory-structure)
+  - [3. Analysis of problems](#3-analysis-of-problems)
 
 ## 1. Link
 
@@ -26,3 +27,7 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solv
     🛍️ e.g. ```pytest src/python/wbfw109/algorithms/baekjoon/gold.py::test_bundle_up_numbers```
 
 - 📝 [gold.py](gold.py)
+
+## 3. Analysis of problems
+
+...
