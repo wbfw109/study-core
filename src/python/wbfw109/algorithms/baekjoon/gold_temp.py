@@ -6,8 +6,6 @@ from pprint import pprint
 from typing import Iterator, Optional
 
 
-# 부분수열의 합 ; https://www.acmicpc.net/problem/1208
-# 주어진 조건에 따라 (정수여야 함) 조화수열은 아니다.
 def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     """https://www.acmicpc.net/problem/1208
     3SUM 에 대한 일반화를 해봤는데 DFS 와 같이 경우의 수가 너무 많이 생겨서 N 이 커지면 처리가 너무 느려진다.
@@ -17,6 +15,8 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     현재 원소가 들어가있는 이전에 만들어진 부분수열을 포함한 부분수열의 수.. 저울 참고..
 
     Meet-in-the-middle attack
+
+    반으로 나누고,
 
     """
     import math
@@ -41,7 +41,7 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     consecutive_elements_sum: int = 0
 
     # Title: solve
-    ㅜ
+
     sequence.sort()
 
     # when the number of element of subsequence == 1,
@@ -141,13 +141,20 @@ def test_sum_subsequences_2() -> None:
 
 test_sum_subsequences_2()
 
+# 가장 긴 증가하는 부분 수열 2 주어진 조건에 따라 (정수여야 함) 조화수열은 아니다.
+def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
+    """https://www.acmicpc.net/problem/12015
+    수열의 정의..
+    """
+    pass
+
 
 def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
     """https://www.acmicpc.net/problem/1939
     BFS 중량제한...
     넓게 생각하자...
     경로 탐색 = 노드/방향에 따라 움직이면 BFS 고려해보기?
-
+    sorted... than sort
 
 
     """

@@ -56,73 +56,66 @@ InteractiveShell.ast_node_interactivity = "all"
 
 
 #%%
-
 import sys
+from bisect import bisect_left, bisect_right
+from itertools import combinations
 
-# 입력부
-n, s = map(int, sys.stdin.readline().split())
-a = list(map(int, sys.stdin.readline().split()))
+input = sys.stdin.readline
 
-# 이분 분할
-m = n // 2
-n = n - m
 
-# first : 왼쪽 Subset
-first = [0] * (1 << n)
+def getNum(arr, find):
+    # target이 몇개 있는지 나온다
+    return bisect_right(arr, find) - bisect_left(arr, find)
 
-# 비트마스킹을 이용하여 Subset의 합을 담는다
-for i in range(1 << n):
-    for k in range(n):
-        if (i & (1 << k)) > 0:
-            first[i] += a[k]
 
-# second : 오른쪽 Subset
-second = [0] * (1 << m)
-for i in range(1 << m):
-    for k in range(m):
-        if (i & (1 << k)) > 0:
-            second[i] += a[k + n]
+def setSum(arr, sumArr: list[int]):
+    for i in range(1, len(arr) + 1):
+        for a in combinations(arr, i):
+            sumArr.append(sum(a))
+    sumArr.sort()
 
-# first 오름차순 정렬, second 내림차순 정렬
-first.sort()
-second.sort(reverse=True)
 
-# n, m = first의 길이, second의 길이
-n = 1 << n
-m = 1 << m
-i = 0
-j = 0
+n, s = map(int, input().split())
+arr = list(map(int, input().split()))
+
+left, right = arr[: n // 2], arr[n // 2 :]
+leftSum, rightSum = [], []
+
+setSum(left, leftSum)
+setSum(right, rightSum)
 ans = 0
-while i < n and j < m:
+for l in leftSum:
+    find = s - l
+    ans += getNum(rightSum, find)
 
-    # 같은 경우
-    if first[i] + second[j] == s:
-        # i,j를 이동
-        c1 = 1
-        c2 = 1
-        i += 1
-        j += 1
-        # 예외 처리
-        while i < n and first[i] == first[i - 1]:
-            c1 += 1
-            i += 1
-        while j < m and second[j] == second[j - 1]:
-            c2 += 1
-            j += 1
-        # 전체 순서쌍 반영
-        ans += c1 * c2
+ans += getNum(leftSum, s)
+print(getNum(leftSum, s))
+ans += getNum(rightSum, s)
+print(getNum(leftSum, s))
 
-    # 큰 경우 i만 이동
-    elif first[i] + second[j] < s:
-        i += 1
-
-    # 작은 경우 j만 이동
-    else:
-        j += 1
-
-# s가 0인 경우 공집합의 경우를 빼줘야 하므로 1감소
-if s == 0:
-    ans -= 1
-
-# 정답 출력
 print(ans)
+#%%
+
+import bisect
+
+result = []
+result2 = []
+scores = [33, 99, 77, 70, 89, 90, 100]  # 애들이 받은 점수
+grades = [60, 70, 80, 90]  # 기준점수를 등급으로 바꿔주자
+for score in scores:
+    # The return value i is such that all e in a[:i] have e <= x, and all e in
+    # a[i:] have e > x. So if x already appears in the list, a.insert(i, x) will insert just after the rightmost x already there
+    pos2 = bisect.bisect_right(grades, score)
+    # The return value i is such that all e in a[:i] have e < x, and all e in a[i:] have e >= x
+    pos1 = bisect.bisect_left(grades, score)
+    # 경계에 있는 범위를 좌측 또는 우측의 인덱스에 포함시킬건지.
+    # 범위 구분.. 0 A 1 B 2 C 3
+    # 학생들의 점수를 grades = 기준에 넣는다고 가정했을때 어디 들어가면 될까
+    # bisect는 인덱스만 리턴한다.
+    result.append("FDCBA"[pos1])
+    result2.append("FDCBA"[pos2])
+
+print(result)
+print(result2)
+# bisect.insort_right, bisect.insort_left
+# %%

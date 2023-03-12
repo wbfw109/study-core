@@ -5,6 +5,7 @@ import unittest
 from pprint import pprint
 from typing import Iterator, Optional
 
+# week 5-2: bitmask
 # week 5-1: string
 # week 4-2: graph theory
 # week 4-1: shortest path
