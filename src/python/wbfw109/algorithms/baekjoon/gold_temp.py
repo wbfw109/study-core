@@ -16,7 +16,8 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
 
     Meet-in-the-middle attack
 
-    반으로 나누고,
+
+    다하고서 오답노트. + 최적화 코드로 변경
 
     """
     import math
@@ -137,14 +138,18 @@ def test_sum_subsequences_2() -> None:
         print(f"elapsed time: {time.time() - start_time}")
 
 
-# sum_subsequences_2()
-
-test_sum_subsequences_2()
+# test_sum_subsequences_2()
 
 # 가장 긴 증가하는 부분 수열 2 주어진 조건에 따라 (정수여야 함) 조화수열은 아니다.
-def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
+def get_longest_increasing_subsequence_2(
+    input_lines: Optional[Iterator[str]] = None,
+) -> str:
     """https://www.acmicpc.net/problem/12015
     수열의 정의..
+    최장 증가 부분 수열
+    여러 개의 LIS 가 나올 수잇음. nlogn 짜리 알고리즘이 있다.
+    1차원 배열의 그래프 탐색과 비슷한듯.
+
     """
     pass
 
@@ -155,7 +160,6 @@ def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
     넓게 생각하자...
     경로 탐색 = 노드/방향에 따라 움직이면 BFS 고려해보기?
     sorted... than sort
-
 
     """
     pass
@@ -366,4 +370,4 @@ def test_hang_balloons_to_teams() -> None:
         print(f"elapsed time: {time.time() - start_time}")
 
 
-# test_hang_balloons_to_teams()
+test_hang_balloons_to_teams()
