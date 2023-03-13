@@ -14,11 +14,12 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     시간복잡도가 왜 시간복잡도 O(2^n) 왜 지수승..
     현재 원소가 들어가있는 이전에 만들어진 부분수열을 포함한 부분수열의 수.. 저울 참고..
 
-    Meet-in-the-middle attack
+    정렬 범위 나누기.... Meet-in-the-middle attack 과 이어짐
 
-
+    - using bisect is inefficient in this problem because elements once searched is not used in later loop.
     다하고서 오답노트.
     # dataclass 사용하기?.. 객체 중심으로 접근?
+    이전꺼 보고 필요하면 Counter 쓰기
 
     """
     import math
@@ -178,122 +179,7 @@ def set_up_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
     pass
 
 
-def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
-    """https://www.acmicpc.net/problem/3020
-    중앙값에서부터 양방향 탐색
-
-    정렬을 사용하긴 하지만 일정한 규칙을 적용할 수 있도력 정렬의 범위를 나누는 것이 핵심인듯.
-        여기에서는 종유석과 석순을 나눔.
-    5번째 문제 Meet-in-the-middle attack 과 연결됨.
-
-    종유석, 석순 각 정렬하고-- 그 크기보다 큰거는 더 이상 탐색안하고 나머지 길이만 더하면 됨.
-
-
-    정렬해서 해당 높이를 지난 것을 합하여 테이블에 저장해놓자.
-
-    근데 모든 거를 다 봐야하나?
-    조기 종료 시점.
-    해시테이블을 만들 수는 있는데
-    아래에서부터 첫번쨰 구간을 지나는거 구하려면 석순 최소 첫번쨰 길이까지만 찾고
-
-    0-1-2-3 section
-    .1.2.3. stalagmite
-    .3.2.1. stalactites
-
-    구간 (높이) 가 증가할꺠마다 stalagmite 는 감소하는 구조, 반대는 감소하는 흐름.
-    H = 4 라면, 각 통과를 시도해볼 수 있는 구간이 4개가 나옴.
-    앞에서부터 K (자연수) 번쨰 구간
-    if k in [1, H]:
-        the number of obstacles = n // 2
-    else:
-        the number of stalagmite that is >= k
-        + the number of stalactites that is >= H-k+1
-
-    구간 잘 나누고 초기값을 잘 잡아야할듯.... 루프에서 한번에 처리할 수 있도록
-
-    겹치는게 많다면 bisect 가 나을 수 있음.
-    bisect 를 사용해서 풀 수도 있지만, 찾을 구간이 탐색할떄마다 좁아지므로 굳이 필요가 없을 듯 보임.
-    그리고 이 문제는 어차피 최솟값 뿐 아니라 그러한 구간의 수까지 구해야 하기 떄문에 다 돌아야할듯보임.
-
-    2차원 그림에서 컴퓨터로는 구간을 타이핑해서 디버깅하기 어려우니 가로로 배치해서 생각해볼것.
-    짝수 받는게 뭇느 의미지
-
-    h 만큼 루프를 도는게 아니라 마지막 종유석, 석순의 높이를 확인하고 점핑할 수 있게?
-
-    for 은 순차 접근 방식에서 좋다. i 를 2 이상 한번에 점프하는 경우가 없을 때. 속도도 더 빠름.
-    그래서 attempt_section 은 while 로, 종유석 석순에 대한 루프는 for 로 구성함.
-
-    숫자만 세는거 counter
-    """
-    import sys
-    from collections import Counter
-
-    if input_lines:
-        input_ = lambda: next(input_lines)
-    else:
-        input_ = sys.stdin.readline
-
-    # Title: input
-    # condition: (2 ≤  (N, H)  < 2*10^5).
-    # condition: N is always even number.
-    # condition: (1 ≤ size of obstacle < H)
-    stalagmites: list[int] = []
-    stalactites: list[int] = []
-    n, h = map(int, input_().split())
-    half_of_stones: int = n // 2
-    for _ in range(half_of_stones):
-        stalagmites.append(int(input_()))
-        stalactites.append(int(input_()))
-    minimum_collision_section: int = 0
-    minimum_collision_count: int = 0
-
-    # Title: solve
-    # reverse=True so that <stalagmite_i> could indicates cumulated obstacles' count.
-    stalagmites.sort(reverse=True)
-    # reverse=True so that stalactites can be processed with stalagmite together in order.
-    stalactites.sort(reverse=True)
-
-    stalagmite_i: int = half_of_stones - 1
-    stalactite_i: int = 0
-    collision_counter: Counter[int] = Counter()
-    attempt_section: int = 0
-    while True:
-        next_attempt_section: int = h
-        for _ in range(stalagmite_i, -1, -1):
-            if stalagmites[stalagmite_i] == attempt_section:
-                stalagmite_i -= 1
-            else:
-                next_attempt_section = stalagmites[stalagmite_i]
-                break
-
-        for _ in range(stalactite_i, half_of_stones):
-            if (y := h - stalactites[stalactite_i]) == attempt_section:
-                stalactite_i += 1
-            else:
-                if y < next_attempt_section:
-                    next_attempt_section = y
-                break
-
-        # skip sections whose the number of collisions is same.
-        collision_counter[stalagmite_i + 1 + stalactite_i] += (
-            next_attempt_section - attempt_section
-        )
-
-        # early stopping when stalagmites, stalactites are exhausted
-        if next_attempt_section == h:
-            break
-        else:
-            attempt_section = next_attempt_section
-
-    minimum_collision_section = min(collision_counter)
-    minimum_collision_count = collision_counter[minimum_collision_section]
-
-    # Title: output
-    print(minimum_collision_section, minimum_collision_count)
-    return " ".join(map(str, [minimum_collision_section, minimum_collision_count]))
-
-
-def test_move_straight_in_cave() -> None:
+def test_set_up_home_routers() -> None:
     test_case = unittest.TestCase()
     for input_lines, output_lines in [
         [
@@ -308,32 +194,12 @@ def test_move_straight_in_cave() -> None:
             ],
             ["2 3"],
         ],
-        [
-            [
-                "14 5",
-                "1",
-                "3",
-                "4",
-                "2",
-                "2",
-                "4",
-                "3",
-                "4",
-                "3",
-                "3",
-                "3",
-                "2",
-                "3",
-                "3",
-            ],
-            ["7 2"],
-        ],
     ]:
         start_time = time.time()
         test_case.assertEqual(
-            move_straight_in_cave(iter(input_lines)), "\n".join(output_lines)
+            set_up_home_routers(iter(input_lines)), "\n".join(output_lines)
         )
         print(f"elapsed time: {time.time() - start_time}")
 
 
-test_move_straight_in_cave()
+test_set_up_home_routers()

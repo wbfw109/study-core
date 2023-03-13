@@ -38,7 +38,8 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solv
   - can function be terminated early (; **Early stopping**)?
 
 - Sort
-  - **design** loop that have exclusive range by using explicit pointers.
+  - **design** elaborately loop that have exclusive range by using explicit pointers.
+    - divide list into proper range in order to apply some rules.
   
 - Graph
   - variants of BFS

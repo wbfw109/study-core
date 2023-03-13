@@ -14,9 +14,136 @@ from typing import Iterator, Optional
 # week 3-1: binary search
 
 
+def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
+    """get Minimum collision count ; https://www.acmicpc.net/problem/3020
+
+    Time Complexity (Worst-case):  O(n(log n))
+        - O(2 * n/2(log n/2)) from Tim sort on two stalagmites, stalactites list.
+        - O(n) iteration from given stalagmites, stalactites.
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Inductive reasoning
+        =====
+        N = 6, H = 4
+        -----
+        0 | 1 | 2 | 3 section (0-based numbering assuming that section 0 occupies height 0 ~ 1)
+        1   2   3   -  stalagmite heights
+        -   3   2   1  stalactites heights
+        -----
+
+        the number of collision on stalagmite is decreased according to section number.
+            initial value is n // 2 and last value is 0 in H section.
+        the number of collision on stalactites is increased according to section number.
+            initial value is 0 and last value is n // 2 in H section.
+
+        sections whose new a stalagmite or stalactite collided is not appeared can be skipped.
+
+    Implementation
+        - according to given condition "N is always even number."
+            , I distinguished stalagmites and stalactites once when input data.
+        - I used collections.Counter() instead of storing all collision count into list.
+            it will save memory footprint.
+        - using bisect is inefficient in this problem because elements once searched is not used in later loop.
+        - I used <list>.sort() instead of sorted(<list>).
+            - <list>.sort() is in-place operation.
+            - sorted(<list>) returns new sorted object so that it causes overhead as much copy operation.
+        - condition "0 0 0" input can be thought of as a first line input of each test cases.
+    """
+    import sys
+    from collections import Counter
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (2 ≤  (N, H)  < 2*10^5).
+    # condition: N is always even number.
+    # condition: (1 ≤ height of obstacle < H)
+    stalagmites: list[int] = []
+    stalactites: list[int] = []
+    n, h = map(int, input_().split())
+    half_of_stones: int = n // 2
+    for _ in range(half_of_stones):
+        stalagmites.append(int(input_()))
+        stalactites.append(int(input_()))
+    minimum_collision_section: int = 0
+    minimum_collision_count: int = 0
+
+    # Title: solve
+    # reverse=True so that <stalagmite_i> could indicates cumulated obstacles' count.
+    stalagmites.sort(reverse=True)
+    # reverse=True so that stalactites can be processed with stalagmite together in order.
+    stalactites.sort(reverse=True)
+
+    stalagmite_i: int = half_of_stones - 1
+    stalactite_i: int = 0
+    collision_counter: Counter[int] = Counter()
+    attempt_section: int = 0
+    while True:
+        next_attempt_section: int = h
+        for _ in range(stalagmite_i, -1, -1):
+            if stalagmites[stalagmite_i] == attempt_section:
+                stalagmite_i -= 1
+            else:
+                next_attempt_section = stalagmites[stalagmite_i]
+                break
+
+        for _ in range(stalactite_i, half_of_stones):
+            if (y := h - stalactites[stalactite_i]) == attempt_section:
+                stalactite_i += 1
+            else:
+                if y < next_attempt_section:
+                    next_attempt_section = y
+                break
+
+        # skip sections whose the number of collisions is same.
+        collision_counter[stalagmite_i + 1 + stalactite_i] += (
+            next_attempt_section - attempt_section
+        )
+
+        # early stop when stalagmites, stalactites are exhausted
+        if next_attempt_section == h:
+            break
+        else:
+            attempt_section = next_attempt_section
+
+    minimum_collision_section = min(collision_counter)
+    minimum_collision_count = collision_counter[minimum_collision_section]
+
+    # Title: output
+    print(minimum_collision_section, minimum_collision_count)
+    return " ".join(map(str, [minimum_collision_section, minimum_collision_count]))
+
+
+def test_move_straight_in_cave() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "6 7",
+                "1",
+                "5",
+                "3",
+                "3",
+                "5",
+                "1",
+            ],
+            ["2 3"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            move_straight_in_cave(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
 # week 2-2: sorting
 def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🔍 get Minimum distance to hang balloons to teams ; https://www.acmicpc.net/problem/4716
+    """get Minimum distance to hang balloons to teams ; https://www.acmicpc.net/problem/4716
 
     Time Complexity (Worst-case):  O(n(log n)) from Tim sort
         - O(n) loop from given teams.
@@ -24,7 +151,7 @@ def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
     Space Complexity (Worst-case): O(n) from Tim sort
 
     Consideration
-        - key point of this problem is comparing Opportunity costs.
+        - To compare Opportunity costs
             If team's balloons that have higher opportunity cost is processed in order
             , the number of remained (A, B) balloons will not matter.
             In this problem, opportunity cost is absolute value of difference between distances apart from A room and B room.
@@ -148,6 +275,21 @@ def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> 
 
     Space Complexity (Worst-case): O(n) from Tim sort
 
+    Inductive reasoning
+        =====
+        4
+        1 2 4 9
+        -----
+        -> 1        -> 2, 3     -> 4, 5, 6, 7        -> [X] 9
+
+        if Current maximum measurable weight + 1   >=   still not checked a Next weight:
+            Current maximum measurable weight  +=  a Next weight
+        else:
+            Not found weight  =  Current maximum measurable weight +1
+            break
+        and, one exception: loop of all given weights is over,
+            Not found weight  =  Current maximum measurable weight +1
+
     Implementation
         - Things I've done in the implementation which uses hash table as set type.
             In this case, always loop is performed as many length of measurable weights until before for each weight.
@@ -194,22 +336,6 @@ def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> 
 
 
 def test_weigh_weights_on_the_scales() -> None:
-    """Debugging
-    =====
-    4
-    1 2 4 9
-    -----
-    -> 1        -> 2, 3     -> 4, 5, 6, 7        -> [X] 9
-
-    Hypothesis
-        if Current maximum measurable weight + 1   >=   still not checked a Next weight:
-            Current maximum measurable weight  +=  a Next weight
-        else:
-            Not found weight  =  Current maximum measurable weight +1
-            break
-    and, one exception: loop of all given weights is over,
-        Not found weight  =  Current maximum measurable weight +1
-    """
     test_case = unittest.TestCase()
     for input_lines, output_lines in [
         [
