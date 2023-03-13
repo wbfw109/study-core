@@ -54,7 +54,13 @@
             ]
           }
         ]
-      },
+      }
+    ]
+  },
+  {
+    "word_name": ": other Data Type",
+    "description": [],
+    "children": [
       {
         "word_name": ": Opaque Data Type",
         "description": [
@@ -85,6 +91,13 @@
         "description": [
           "프로그램의 제어 상태에 대한 추상적 표현으로, 이를 구체화한 것에는 Exception, Coroutine, Generator 등이 존재.",
           "🔪 First-Class Continuation: 어느 지점의 실행 상태를 저장하고 이후 다시 해당 지점으로 돌아갈 수 있는 기능을 제공하는 구조."
+        ],
+        "children": []
+      },
+      {
+        "word_name": ": Mutual recursion",
+        "description": [
+          "트리와 같이 두 개의 개체가 서로의 관점에서 정의되는 재귀의 한 형태"
         ],
         "children": []
       }
@@ -134,7 +147,8 @@
       {
         "word_name": ": memoization",
         "description": [
-          "비용이 비싼 함수 호출의 결과를 저장하고 동일한 입력이 발생할 때마다 이 캐시된 결과를 반환함으로써, 컴퓨터 프로그램의 속도를 높이는 최적화 기술."
+          "비용이 비싼 함수 호출의 결과를 저장하고 동일한 입력이 발생할 때마다 이 캐시된 결과를 반환함으로써, 컴퓨터 프로그램의 속도를 높이는 최적화 기술.",
+          ""
         ],
         "children": []
       }

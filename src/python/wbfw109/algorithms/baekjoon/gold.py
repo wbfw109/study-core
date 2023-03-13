@@ -19,6 +19,7 @@ def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
     """🔍 get Minimum distance to hang balloons to teams ; https://www.acmicpc.net/problem/4716
 
     Time Complexity (Worst-case):  O(n(log n)) from Tim sort
+        - O(n) loop from given teams.
 
     Space Complexity (Worst-case): O(n) from Tim sort
 
@@ -62,12 +63,12 @@ def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
     # condition: when "0 0 0" is present, break loop.
     while (start_line := list(map(int, input_().split()))) != [0, 0, 0]:
         # Title: input
-        # condition (1 ≤ N < 1000)
+        # condition: (1 ≤ N ≤ 1000)
         n: int = start_line[0]
-        # condition (0 ≤  (A, B) balloons  < 10^4)
+        # condition: (0 ≤  (A, B) balloons  < 10^4)
         remained_ab: list[int] = start_line[1:]
 
-        # condition (0 ≤  distance apart from (A, B)  ≤ 10^3)
+        # condition: (0 ≤  distance apart from (A, B)  ≤ 10^3)
         teams: list[Team] = [Team(*map(int, input_().split())) for _ in range(n)]
         teams.sort(key=lambda team: -abs(team.distance_ab[0] - team.distance_ab[1]))
         minimum_sum_of_distance: int = 0
@@ -88,7 +89,7 @@ def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
                 team.required_balloons -= used_balloons
                 fixed_ab_pointer: int = (team.ab_pointer + 1) % 2
 
-                # 🚣 condition (Σ(required_balloons) ≤ A+B)
+                # 🚣 condition: (Σ(required_balloons) ≤ A+B)
                 minimum_sum_of_distance += sum(
                     (
                         teams[j].required_balloons
@@ -143,7 +144,7 @@ def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> 
     """get Maximum measurable weight by using weights ; https://www.acmicpc.net/problem/2437
 
     Time Complexity (Worst-case):  O(n(log n)) from Tim sort
-        - O(n) in loop from given weights.
+        - O(n) loop from given weights.
 
     Space Complexity (Worst-case): O(n) from Tim sort
 
@@ -168,11 +169,11 @@ def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> 
         input_ = sys.stdin.readline
 
     # Title: input
-    # condition (1 ≤ N < 1000)
+    # condition: (1 ≤ N ≤ 1000)
     n: int = int(input_())
-    # condition (1 ≤ each weight of weights ≤ 10^6)
+    # condition: (1 ≤ each weight of weights ≤ 10^6)
     weights: list[int] = list(map(int, input_().split()))
-    # condition (1 ≤ weights to be measured ≤ n)
+    # condition: (1 ≤ weights to be measured ≤ n)
     not_found_weight: int = 1
     measurable_weight: int = 0
 
@@ -263,9 +264,9 @@ def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
         pass
 
     # Title: input
-    # condition (3 ≤ N < 5000)
+    # condition: (3 ≤ N ≤ 5000)
     n: int = int(input_())
-    # condition (-(10^9) ≤ each number of solution ≤ 10^9)
+    # condition: (-(10^9) ≤ each number of solution ≤ 10^9)
     # negative integer is acid solution, positive integer is alkaline solution.
     solutions: list[int] = list(map(int, input_().split()))
     zero_closest_solutions_i: tuple[int, int, int] = (0, 1, 2)
@@ -357,11 +358,11 @@ def bundle_up_numbers(input_lines: Optional[Iterator[str]] = None) -> str:
         input_ = sys.stdin.readline
 
     # Title: input
-    # condition (1 ≤ N < 50)
+    # condition: (1 ≤ N < 50)
     n: int = int(input_())
-    # condition (-(10^3) ≤ sequence number < 10^3)
+    # condition: (-(10^3) ≤ sequence number < 10^3)
     sequences: list[int] = [int(input_()) for _ in range(n)]
-    # condition (maximum result < 2^31)
+    # condition: (maximum result < 2^31)
     maximum_result: int = 0
 
     # Title: solve
@@ -471,9 +472,9 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
         input_ = sys.stdin.readline
 
     # Title: input
-    # condition (2 ≤ N ≤ 100,000)
+    # condition: (2 ≤ N ≤ 100,000)
     n: int = int(input_())
-    # condition (-(10^9) ≤ each number of solution ≤ 10^9)
+    # condition: (-(10^9) ≤ each number of solution ≤ 10^9)
     # negative integer is acid solution, positive integer is alkaline solution.
     solutions = list(map(int, input_().split()))
     zero_closest_solutions_i: tuple[int, int] = (0, 1)

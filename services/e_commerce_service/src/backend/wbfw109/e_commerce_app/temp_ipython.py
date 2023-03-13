@@ -1,10 +1,9 @@
 # %%
 from __future__ import annotations
 
-from array import array
+import itertools
 from collections.abc import Generator, Sequence
 from enum import Enum
-from heapq import heappop, heappush
 from itertools import zip_longest
 from pathlib import Path
 from typing import (
@@ -39,16 +38,6 @@ InteractiveShell.ast_node_interactivity = "all"
 # print(api_implementation.Type())
 
 
-#%%
-
-
-# [[x for x in map(int, input().split())] for _ in range(2)]  # type:ignore
-# x = [1, 2, 3]
-# automatically conversion to list
-x = map(int, "123")
-a, *b = x
-a
-b
 #%%
 import sys
 from bisect import bisect_left, bisect_right
@@ -113,3 +102,52 @@ print(result)
 print(result2)
 # bisect.insort_right, bisect.insort_left
 # %%
+import bisect
+
+H = 15
+a = [1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 9, 10, 10, 10, 10, 10]
+b = [14, 14, 13, 12, 10, 9, 8, 7, 6, 5, 3, 3, 2, 2, 2, 1]
+n = len(a)
+assert len(a) == len(b)
+a_lo_limit = 0  # search range will be
+b_hi_limit = n  # search range will be
+# i, j 따로 관리해야함. # 굳이 없는거는 bisect 를 할 필요가 없음.
+# 문제는 저거를 할 떄.. 언제 종료해야 하는가이다.
+while True:
+    print(f"-- {i} 번쨰")
+    are_all_found: list[bool] = [False, False]
+    if a_lo_limit != n:
+        target_count = bisect.bisect_right(a, x, lo=a_lo_limit) - bisect.bisect_left(
+            a, x, lo=a_lo_limit
+        )
+        a_lo_limit += target_count
+        print("A:", x, target_count)
+    else:
+        are_all_found[0] = True
+    if b_hi_limit != 0:
+        target_count2 = bisect.bisect_right(b, y, hi=b_hi_limit) - bisect.bisect_left(
+            b, y, hi=b_hi_limit
+        )
+        b_hi_limit -= target_count2
+        print("B:", y, target_count2)
+    else:
+        are_all_found[1] = True
+    if all(are_all_found):
+        # remained elements not exists in array.
+        print("end")
+        break
+
+
+# if target_count:
+#%%
+
+from collections import Counter
+
+c = Counter()
+c
+c[10] += 100
+
+c
+c[2] += 2
+c
+min(c)
