@@ -23,7 +23,7 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
 
     정렬을 사용하면 이 문제에서 어떤 이점을 만들 수 있는지 찾아내기
 
-    binary 트리 문제는 predciate 가 true falsㄷ 에 따라만 달라진다고 하는데.. 잘 이해가 되진 않음.
+    정렬된것의 특징을 문제에서 어떻게 살릴것인지가 포인트
     """
     import math
     import sys
@@ -172,139 +172,25 @@ def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
     pass
 
 
-def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🚤 get Distance that maximizes the distance between all adjacent routers ; https://www.acmicpc.net/problem/2110
-
-    bisect 를 언제사용해야할까? Parametric search with bisection method
-
-    두 공유기 사이의 거리차이가 핵심인데 모든 가능한 거리별로 옮겨볼 순 없다. binary search.
-    선택해야 하는 값이 리스트에 무조건 존재할 떄. (최소 조건을 만족하는 값과는 다름.)
-
-
-    하나씩 끝으로 옮기면서 지금까지의 최대거리를 비교
-    아니면 설치가능한 것 개수만큼 양끝점의 변위 확인 .. zip 햇을때 짝수개일때는 변위합 비교해가면서  최대치나오면 해당 인덱스부터 특저우인덷스까지 변위합 계산하고 변위합이 적은쪽 인덱스부터 반대쪽 끝까지가 정답?
-
-    정렬된것의 특징을 문제에서 어떻게 살릴것인지가 포인트
-
-    이게 start end 보다는 증가가능한 최소 탐색거리, 감소가능한 최대 탐색거리?
-
-    Test algorithm
-        - ❔ can routers be installed with minimum <median> distance between adjacent routers?
-
-
-    A B C
-    0 1 2 3 4  # coordinates. middle coordinate is 2
-    +   *      # "*" is next start point.
-        +   *
-            +
-
-    """
-    import bisect
-    import sys
-
-    if input_lines:
-        input_ = lambda: next(input_lines)
-    else:
-        input_ = sys.stdin.readline
-
-    # Title: input
-    # condition: (2 ≤ N ≤ 2*10^5)
-    # condition: (2 ≤ home routers count ≤ N)
-    # condition: (0 ≤ routers coordinate ≤ 10^9). home's coordinates do not overlap.
-    n, routers_count = map(int, input_().split())
-    routers_coordinates: list[int] = [int(input_()) for _ in range(n)]
-    minimum_shared_adjacent_distance: int = 0
-
-    # Title: solve
-    routers_coordinates.sort()
-    # endpoints are search range of distance to get Installable maximum distance.
-    # endpoints[0] is minimum Installable distance. (given coordinates are 0 and positive integer)
-    # endpoints[1] is maximum distance between two routers.
-    endpoints: list[int] = [1, routers_coordinates[-1] - routers_coordinates[0]]
-
-    # Parametric search with Bisection method
-    while True:
-        # Test algorithm
-        mid_distance = (endpoints[0] + endpoints[1]) // 2
-        start_coord_i: int = 0  # initial coordinate to install router.
-        installed_router_count: int = 0
-        # while if result of bisect.bisect_left() is not last of <start_coord_i>
-        while start_coord_i < len(routers_coordinates):
-            installed_router_count += 1
-
-            # update next start coordinate
-            start_coord_i = bisect.bisect_left(
-                routers_coordinates,
-                routers_coordinates[start_coord_i] + mid_distance,
-                lo=start_coord_i,
-            )
-
-        # Decision algorithm
-        if installed_router_count < routers_count:
-            # update maximum Installable distance.
-            # current <mid_distance> is not valid. so set with "-1".
-            endpoints[1] = mid_distance - 1
-        elif installed_router_count >= routers_count:
-            # update minimum Installable distance.
-            # current <mid_distance> is valid. but test is required for a longer distance. so set with "+1".
-            endpoints[0] = mid_distance + 1
-        if mid_distance == endpoints[1]:  # 더 이상 큰 단위 거리를 구할 수 없을 때
-            minimum_shared_adjacent_distance = mid_distance
-            break
-
-    # Title: output
-    print(minimum_shared_adjacent_distance)
-    return str(minimum_shared_adjacent_distance)
-
-
-def test_install_home_routers() -> None:
-    """Debugging
-    =====
-    5 3
-    0 1 2 3 4   # coordinates. middle coordinate is 2
-    +   *       # "+"; router counts ++
-        +   *   # "*" is next start point.
-            +
-    """
+def test_drive_with_valid_weight() -> None:
     test_case = unittest.TestCase()
     for input_lines, output_lines in [
         [
             [
-                "5 3",
-                "0",
-                "1",
-                "2",
-                "3",
-                "4",
-            ],
-            ["2"],
-        ],
-        [
-            [
-                "5 3",
-                "1",
-                "2",
-                "8",
-                "4",
-                "9",
+                "3 3",
+                "1 2 2",
+                "3 1 3",
+                "2 3 2",
+                "1 3",
             ],
             ["3"],
-        ],
-        [
-            [
-                "3 2",
-                "8",
-                "9",
-                "10",
-            ],
-            ["2"],
-        ],
+        ]
     ]:
         start_time = time.time()
         test_case.assertEqual(
-            install_home_routers(iter(input_lines)), "\n".join(output_lines)
+            drive_with_valid_weight(iter(input_lines)), "\n".join(output_lines)
         )
         print(f"elapsed time: {time.time() - start_time}")
 
 
-test_install_home_routers()
+test_drive_with_valid_weight()

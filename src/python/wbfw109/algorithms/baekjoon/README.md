@@ -41,8 +41,10 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solv
 - Sort
   - **design** elaborately loop that have exclusive range by using explicit pointers.
     - divide list into proper range in order to apply some rules.
-  - Parametric search
-  
+  - Parametric search with Bisection method
+  - 🛍️ e.g.
+    - 3SUM
+
 - Graph
   - variants of BFS
     - exploration with stop **by distance**.

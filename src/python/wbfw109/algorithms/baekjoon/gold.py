@@ -14,6 +14,140 @@ from typing import Iterator, Optional
 # week 3-1: binary search
 
 
+def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
+    """🚤 get Distance that maximizes the distance between all adjacent routers ; https://www.acmicpc.net/problem/2110
+
+    Time Complexity (Worst-case):  O(n(log^2 n))
+        - O(n(log n)) from Tim sort
+        - O(log n) from outer While loop (<mid_distance> is updated logarithmically)
+            * O(n) from inner While loop
+                but efficient since search range is narrower for each iteration from "lo=start_coord_i + 1".
+            * O(log n) in inner loop from binary search
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Consideration
+        - This problems is variant of Parametric search with Bisection method.
+            The structure can be largely divided into two categories: (Test algorithm, Decision algorithm).
+
+    Implementation
+        - It is efficient I uses binary search because target coordinate is always in routers list.
+    """
+    import bisect
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (2 ≤ N ≤ 2*10^5)
+    # condition: (2 ≤ home routers count ≤ N)
+    # condition: (0 ≤ routers coordinate ≤ 10^9). home's coordinates do not overlap.
+    n, routers_count = map(int, input_().split())
+    routers_coordinates: list[int] = [int(input_()) for _ in range(n)]
+    minimum_shared_adjacent_distance: int = 0
+
+    # Title: solve
+    routers_coordinates.sort()
+    # endpoints are search range of distance to get Installable maximum distance.
+    # endpoints[0] is minimum Installable distance. (given coordinates are 0 and positive Integer)
+    # endpoints[1] is maximum distance between two routers.
+    endpoints: list[int] = [1, routers_coordinates[-1] - routers_coordinates[0]]
+
+    # Parametric search with Bisection method
+    while True:
+        # Test algorithm
+        mid_distance = (endpoints[0] + endpoints[1]) // 2
+        start_coord_i: int = 0  # initial coordinate to install router.
+        installed_router_count: int = 0
+        # while if result of bisect.bisect_left() is not last of <start_coord_i>
+        while start_coord_i < len(routers_coordinates):
+            installed_router_count += 1
+
+            # update next start coordinate
+            start_coord_i = bisect.bisect_left(
+                routers_coordinates,
+                routers_coordinates[start_coord_i] + mid_distance,
+                lo=start_coord_i + 1,
+            )
+
+        # Decision algorithm
+        if installed_router_count < routers_count:
+            # update maximum Installable distance.
+            # current <mid_distance> is not valid. so set with "-1".
+            endpoints[1] = mid_distance - 1
+        else:
+            # update minimum Installable distance if installed_router_count >= routers_count
+            # current <mid_distance> is valid. but test is required for a longer distance. so set with "+1".
+            endpoints[0] = mid_distance + 1
+
+            # When root is found.
+            if endpoints[0] > endpoints[1]:  # same: mid_distance == endpoints[1]
+                # It can be in this branch of the condition
+                # , because verification that routers can be installed with <mid_distance> must be processed firstly.
+                minimum_shared_adjacent_distance = mid_distance
+                break
+
+    # Title: output
+    print(minimum_shared_adjacent_distance)
+    return str(minimum_shared_adjacent_distance)
+
+
+def test_install_home_routers() -> None:
+    """Debugging
+    +: router counts ++
+    *: next start point.
+
+    =====
+    5 3
+    0 1 2 3 4   # coordinates. middle coordinate is 2
+    +   *
+        +   *
+            +
+    """
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "5 3",
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+            ],
+            ["2"],
+        ],
+        [
+            [
+                "5 3",
+                "1",
+                "2",
+                "8",
+                "4",
+                "9",
+            ],
+            ["3"],
+        ],
+        [
+            [
+                "3 2",
+                "8",
+                "9",
+                "10",
+            ],
+            ["2"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            install_home_routers(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
 def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
     """get Minimum collision count ; https://www.acmicpc.net/problem/3020
 
