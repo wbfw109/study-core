@@ -27,14 +27,14 @@ def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
         =====
         N = 6, H = 4
         -----
-        0 | 1 | 2 | 3 section (0-based numbering assuming that section 0 occupies height 0 ~ 1)
+        0 | 1 | 2 | 3  section (0-based numbering assuming that section 0 occupies height 0 ~ 1)
         1   2   3   -  stalagmite heights
         -   3   2   1  stalactites heights
         -----
 
-        the number of collision on stalagmite is decreased according to section number.
+        As the section number increases, the number of collisions on stalagmite decreases.
             initial value is n // 2 and last value is 0 in H section.
-        the number of collision on stalactites is increased according to section number.
+        As the section number increases, the number of collisions on stalactites increases.
             initial value is 0 and last value is n // 2 in H section.
 
         sections whose new a stalagmite or stalactite collided is not appeared can be skipped.
@@ -45,10 +45,6 @@ def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
         - I used collections.Counter() instead of storing all collision count into list.
             it will save memory footprint.
         - using bisect is inefficient in this problem because elements once searched is not used in later loop.
-        - I used <list>.sort() instead of sorted(<list>).
-            - <list>.sort() is in-place operation.
-            - sorted(<list>) returns new sorted object so that it causes overhead as much copy operation.
-        - condition "0 0 0" input can be thought of as a first line input of each test cases.
     """
     import sys
     from collections import Counter
@@ -59,9 +55,8 @@ def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
         input_ = sys.stdin.readline
 
     # Title: input
-    # condition: (2 ≤  (N, H)  < 2*10^5).
-    # condition: N is always even number.
-    # condition: (1 ≤ height of obstacle < H)
+    # condition: (2 ≤ N ≤ 2*10^5). N is always even number.
+    # condition: (2 ≤ H ≤ 5*10^5). (1 ≤ height of obstacle < H)
     stalagmites: list[int] = []
     stalactites: list[int] = []
     n, h = map(int, input_().split())

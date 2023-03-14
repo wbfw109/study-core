@@ -1,6 +1,7 @@
 # %%
 from __future__ import annotations
 
+import bisect
 import dataclasses
 import math
 import random
@@ -28,9 +29,7 @@ class SortedDST:
         return SortedDST(target_list=[i for i in range(list_len)])
 
     @staticmethod
-    def verify_sorting(
-        look_up_target: int, target_location: Optional[int]
-    ) -> bool | Any:
+    def verify_found(look_up_target: int, target_location: Optional[int]) -> bool | Any:
         # check whether target found or not found in a array
         if target_location:
             return f"{look_up_target} Found in {target_location} index"
@@ -90,12 +89,44 @@ class SortedListSearch(MixInParentAlgorithmVisualization):
             return
 
         def verify(self) -> bool | Any:
-            return SortedDST.verify_sorting(self.look_up_target, self.target_location)
+            return SortedDST.verify_found(self.look_up_target, self.target_location)
 
         @classmethod
         def test_case(cls, dst: Optional[SortedDST]) -> None:  # type: ignore
             algorithm = SortedListSearch.BinarySearch(dst=dst)
             algorithm.append_line_into_df_in_wrap(algorithm.measure())
+            algorithm.visualize()
+
+    class BinarySearch2(ChildAlgorithmVisualization[SortedDST]):
+        """bisect (built-in modules)"""
+
+        def __init__(self, /, dst: Optional[SortedDST]) -> None:
+            super().__init__(columns=["eval", "print 1", "print 2"], dst=dst)
+            self.target_location: Optional[int] = None
+            self.look_up_target: int = 0
+
+        def __str__(self) -> str:
+            return "🆚 bisect_left(), bisect_right()"
+
+        def solve(self) -> None:
+            a = [0, 1]
+            target_list = [-0.5, 0, 0.5, 1, 1.5]
+            self.append_line_into_df_in_wrap(
+                ["a = [0, 1]", "bisect_left()", "bisect_right()"]
+            )
+            self.append_line_into_df_in_wrap()
+            for x in target_list:
+                self.append_line_into_df_in_wrap(
+                    [f"(a, {x})", bisect.bisect_left(a, x), bisect.bisect_right(a, x)]
+                )
+
+        def verify(self) -> bool | Any:
+            return SortedDST.verify_found(self.look_up_target, self.target_location)
+
+        @classmethod
+        def test_case(cls, dst: Optional[SortedDST]) -> None:  # type: ignore
+            algorithm = SortedListSearch.BinarySearch2(dst=dst)
+            algorithm.solve()
             algorithm.visualize()
 
 
@@ -108,7 +139,7 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         VisualizationManager.call_root_classes()
         only_class_list = []
     else:
-        only_class_list = []
+        only_class_list = [SortedListSearch.BinarySearch2]
     VisualizationManager.call_parent_algorithm_classes(
         dst=SortedDST.get_default_sorting_dst(),
         only_class_list=only_class_list,

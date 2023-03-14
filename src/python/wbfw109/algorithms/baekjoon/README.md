@@ -36,13 +36,16 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solv
       - list, tuple, set  
       - stack, deque, heap
   - can function be terminated early (; **Early stopping**)?
+  - simulation
 
 - Sort
   - **design** elaborately loop that have exclusive range by using explicit pointers.
     - divide list into proper range in order to apply some rules.
+  - Parametric search
   
 - Graph
   - variants of BFS
-    - use queue whose elements are hashable data.
+    - exploration with stop **by distance**.
+    - use queue whose elements are **hashable** data.
     - data structure which represents explored points could be (**container** of boolean type **|** **set** type whose elements are hashable data).
   - Minimum spanning Tree

@@ -136,18 +136,3 @@ while True:
         # remained elements not exists in array.
         print("end")
         break
-
-
-# if target_count:
-#%%
-
-from collections import Counter
-
-c = Counter()
-c
-c[10] += 100
-
-c
-c[2] += 2
-c
-min(c)
