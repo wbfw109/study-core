@@ -26,12 +26,11 @@ def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
 
     Space Complexity (Worst-case): O(n) from Tim sort
 
-    Consideration
-        - This problems is variant of Parametric search with Bisection method.
-            The structure can be largely divided into two categories: (Test algorithm, Decision algorithm).
-
     Implementation
         - It is efficient I uses binary search because target coordinate is always in routers list.
+        - key point is to use Parametric search with Bisection method.
+            - The structure can be largely divided into two categories
+                : (Test algorithm, Decision algorithm (predicate))
     """
     import bisect
     import sys
@@ -47,11 +46,12 @@ def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
     # condition: (0 ≤ routers coordinate ≤ 10^9). home's coordinates do not overlap.
     n, routers_count = map(int, input_().split())
     routers_coordinates: list[int] = [int(input_()) for _ in range(n)]
-    minimum_shared_adjacent_distance: int = 0
+    maximum_distance: int = 0
 
     # Title: solve
     routers_coordinates.sort()
     # endpoints are search range of distance to get Installable maximum distance.
+    # Note that endpoints represent a range that has not yet been tested.
     # endpoints[0] is minimum Installable distance. (given coordinates are 0 and positive Integer)
     # endpoints[1] is maximum distance between two routers.
     endpoints: list[int] = [1, routers_coordinates[-1] - routers_coordinates[0]]
@@ -59,7 +59,7 @@ def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
     # Parametric search with Bisection method
     while True:
         # Test algorithm
-        mid_distance = (endpoints[0] + endpoints[1]) // 2
+        mid_distance: int = (endpoints[0] + endpoints[1]) // 2
         start_coord_i: int = 0  # initial coordinate to install router.
         installed_router_count: int = 0
         # while if result of bisect.bisect_left() is not last of <start_coord_i>
@@ -73,7 +73,7 @@ def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
                 lo=start_coord_i + 1,
             )
 
-        # Decision algorithm
+        # Decision algorithm (predicate)
         if installed_router_count < routers_count:
             # update maximum Installable distance.
             # current <mid_distance> is not valid. so set with "-1".
@@ -86,13 +86,13 @@ def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
             # When root is found.
             if endpoints[0] > endpoints[1]:  # same: mid_distance == endpoints[1]
                 # It can be in this branch of the condition
-                # , because verification that routers can be installed with <mid_distance> must be processed firstly.
-                minimum_shared_adjacent_distance = mid_distance
+                # , because verification that routers can be installed with <mid_distance> is always processed firstly.
+                maximum_distance = mid_distance
                 break
 
     # Title: output
-    print(minimum_shared_adjacent_distance)
-    return str(minimum_shared_adjacent_distance)
+    print(maximum_distance)
+    return str(maximum_distance)
 
 
 def test_install_home_routers() -> None:
@@ -173,8 +173,10 @@ def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
 
         sections whose new a stalagmite or stalactite collided is not appeared can be skipped.
 
+        key point is to use feature of partial sum.
+
     Implementation
-        - according to given condition "N is always even number."
+        - According to given condition "N is always even number."
             , I distinguished stalagmites and stalactites once when input data.
         - I used collections.Counter() instead of storing all collision count into list.
             it will save memory footprint.
@@ -785,7 +787,7 @@ def test_mix_two_solutions() -> None:
 
 # week 2-1: (BFS, DFS)
 def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Length of optimized path through bridges to connect all islands ; https://www.acmicpc.net/problem/17472
+    """🚤 get Length of optimized path through bridges to connect all islands ; https://www.acmicpc.net/problem/17472
 
     Time Complexity (Worst-case): ...
         - O( Number( BFS(islands) ) ) from BFS loop
@@ -1225,7 +1227,7 @@ def test_sort_2d_array_puzzle() -> None:
 
 
 def go_down_downhill(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🚤 get Number of cases where a person can go to the point of destination ; https://www.acmicpc.net/problem/1520
+    """get Number of cases where a person can go to the point of destination ; https://www.acmicpc.net/problem/1520
 
     Time Complexity (Worst-case): ...
         - O( Number( BFS(routes) ) ) from BFS loop
@@ -1349,7 +1351,7 @@ def test_go_down_downhill() -> None:
 
 
 def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🚤 get Maximum movable distance ; https://www.acmicpc.net/problem/1987
+    """get Maximum movable distance ; https://www.acmicpc.net/problem/1987
 
     Time Complexity (Worst-case): O( Number( BFS(routes) ) ) from BFS loop
 
@@ -1357,7 +1359,7 @@ def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
         It is one.
 
     Definition
-        - n, m: size to create space of tomatoes 2D tank (n*m grid).
+        - n, m: size to create alphabet board (n*m grid).
         - Number( BFS(routes) ): |V| + |E|; Time occurred from routes including given start point in given n*m grid
             - movable alphabet cells from start point are vertexes that meet given condition.
             - available adjacent alphabet cells of a alphabet node are edges (up to 4 directions in each the cell)
@@ -1513,7 +1515,7 @@ def test_move_alphabet_piece() -> None:
 
 
 def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🚤 get Elapsed days to all tomatoes to be ripen in conditions ; https://www.acmicpc.net/problem/7576
+    """get Elapsed days to all tomatoes to be ripen in conditions ; https://www.acmicpc.net/problem/7576
 
     Time Complexity (Worst-case): O( Number( BFS(spread_ripened_tomatoes) ) ) from BFS loop
 
@@ -1527,7 +1529,7 @@ def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
             - adjacent tomatoes of a ripened tomato are edges (up to 4 directions in each the cell)
 
     Implementation
-        - Used data structure: Adjacency list in BFS.
+        - Used data structure: deque in BFS.
         - This solution does not require <is_explored> variable in BFS.
             instead code to compare <is_explored> can be replaced by checking for ripened tomatoes
             , so that code will be simple.
@@ -1682,7 +1684,7 @@ def escape_marble_2(input_lines: Optional[Iterator[str]] = None) -> str:
 
     Implementation
         - Used data structure: array for reducing memory usage.
-        - Used data structure: Adjacency list in BFS.
+        - Used data structure: deque in BFS.
             branches (2d array) are created by assemble elements of original 2d array.
             but in this problem, it should trace blue and red marble point to avoid duplicated exploration.
             so I used the way that assemble original 2d array and reassemble to recover original 2d array.
@@ -1988,7 +1990,7 @@ def play_2048_easy(input_lines: Optional[Iterator[str]] = None) -> str:
 
 
     Implementation
-        - Used data structure: Adjacency list in DFS using <dfs_stack_by_turn>
+        - Used data structure: stack in DFS using <dfs_stack_by_turn>
             graph that have all cases can be thought as a directed rooted out-tree.
             but a variable to verify it has been explored is not required.
             If instead it uses BFS or simple Brute-force (itertools.product), space complexity is bigger.
@@ -2181,7 +2183,7 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
         - Baby Shark is only one in the marine space.
 
     Implementation
-        - Used data structure: Adjacency list in BFS
+        - Used data structure: deque in BFS
             It uses BFS every time that baby shark prey on a fish until baby shark can not prey on fish.
             : the number of remained fishes are 0  |  all size of remained fishes is bigger than baby shark.
         - It is divided in main two step.
@@ -2405,7 +2407,7 @@ def test_prey_on_fishes() -> None:
 
 
 def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Maximum the number of secure cells in given situation ; https://www.acmicpc.net/problem/14502
+    """🚤 get Maximum the number of secure cells in given situation ; https://www.acmicpc.net/problem/14502
 
     Time Complexity (Worst-case): ...
         - O( 3 * ( Number(empty_cells) choose 3 ) from combination operation
@@ -2435,7 +2437,7 @@ def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str
         - Virus cell can only spread in directions: (-1, 0), (1, 0), (0, -1), (0, 1)
 
     Implementation
-        - Used data structure: Adjacency list in BFS (It can be also implemented by using DFS.)
+        - Used data structure: deque in BFS (It can be also implemented by using DFS.)
             It uses BFS that visits from right edges to left edge (except initial deque) for each initial virus entry points.
         - If points and cell in given space are represented as NamedTuple and Enum type,
             , it causes considerable delay because this algorithm calculates many operations for each simulated case.

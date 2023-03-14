@@ -250,3 +250,4 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
 
 
 # Dijkstra's algorithm
+# Prim’s algorithm runs faster in dense graphs.	Kruskal’s algorithm runs faster in sparse graphs.

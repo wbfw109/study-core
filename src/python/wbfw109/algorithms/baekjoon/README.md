@@ -35,19 +35,19 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solv
     - according to those rules, use proper **data structures**  
       - list, tuple, set  
       - stack, deque, heap
-  - can function be terminated early (; **Early stopping**)?
-  - simulation
+  - can function be terminated early (; **Early stopping**)?  
+    - class Exception can be used.
 
-- Sort
+- Sorting
   - **design** elaborately loop that have exclusive range by using explicit pointers.
     - divide list into proper range in order to apply some rules.
-  - Parametric search with Bisection method
-  - 🛍️ e.g.
-    - 3SUM
+  - 🛍️ e.g. 3SUM, Partial sum
 
-- Graph
-  - variants of BFS
-    - exploration with stop **by distance**.
-    - use queue whose elements are **hashable** data.
+- Simulations
+  - Combinations
+  - BFS types
+    - exploration stop **by depth**.
+    - to use deque whose elements are **hashable** data
     - data structure which represents explored points could be (**container** of boolean type **|** **set** type whose elements are hashable data).
   - Minimum spanning Tree
+  - Parametric search with (Bisection method | others)
