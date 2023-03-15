@@ -157,10 +157,6 @@ def get_longest_increasing_subsequence_2(
 
     data structure 업데이트.. visualization root 포함되게, README 업데이트
     escape_marble_2 구슬만 움직이도록 해서 다시-
-
-    그래프 탐색 언제사용해야 하는가!
-    경로 탐색 = 노드/방향에 따라 움직이면 BFS 고려해보기?
-
     """
     import sys
     from collections import deque

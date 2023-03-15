@@ -48,12 +48,12 @@ Updated on 📅 2023-03-15 08:51:07
 - Sorting
   - **design** elaborately loop that have exclusive range by using explicit pointers.
     - divide list into proper range in order to apply some rules.
-  - 🛍️ e.g. 3SUM, Partial sum
+  - Named problems: 🛍️ e.g. Knapsack, 3SUM, Partial sum, Longest increasing subsequence
 
 - Simulations
   - Combinations
   - BFS types
-    - exploration stop **by depth**.
+    - exploration pause **by depth** and resume.
     - to use deque whose elements are **hashable** data
     - data structure which represents explored points could be (**container** of boolean type **|** **set** type whose elements are hashable data).
   - Minimum spanning Tree

@@ -30,13 +30,13 @@ def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
             - the number of valid bridges are edges.
 
     Consideration:
-        - ❔ How process "bidirectional edges"?
+        - ❔ How to process "bidirectional edges"?
             - if it is processed in Adjacency matrix (Symmetric matrix)
                 , It is expected to cause memory overflow.
             - 🚣 instead append edges into two vertices.
 
     Implementation:
-        - It can be thought as of a successor of problem <drive_with_valid_weight> (function)
+        - It can be thought as of a successor of problem <install_home_routers> (function)
         - If bridges are sorted based on weight limit in descending order
             , it seems that it would be faster than this implementation.
             , because it can be early stopping by breaking a loop.
@@ -2971,6 +2971,7 @@ def thieve_jewels(input_lines: Optional[Iterator[str]] = None) -> str:
         - To explore <jewel_list> and <bag_list> sorted in ascending order makes that:
             - Once explored jewel's weight will be not important in remained bag's iteration.
                 because any added jewel into Max heap can be put in any remained bags.
+        - This problem is variant of Knapsack problem.
     """
     import heapq
     import sys

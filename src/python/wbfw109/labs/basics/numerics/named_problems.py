@@ -220,3 +220,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
     else:
         only_class_list = [ThreeSum]
     VisualizationManager.call_root_classes(only_class_list)
+
+# Knapsack problem
