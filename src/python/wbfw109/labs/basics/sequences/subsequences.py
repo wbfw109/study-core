@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import random
+from re import A
 from typing import Iterator, Optional
 
 from IPython.core.interactiveshell import InteractiveShell
@@ -97,6 +98,12 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         only_class_list = [LongestIncreasingSubsequence]
     VisualizationManager.call_root_classes(only_class_list)
 
+#%%
+a = [[]] * 5
+# shallow copy
+a[1].append(3)
+a
+
 
 #%%
 import random
@@ -144,21 +151,27 @@ for j in range(found_len - 1, -1, -1):
 arr
 S
 #%%
-N = 10
-X: list[int] = [random.randint(1, 10) for _ in range(N)]
-P = [0] * N
-M = [0] * (N + 1)
-M[0] = -1  # undefined so can be set to any value
+import bisect
 
-L = 0
+N = 10
+arr: list[int] = [random.randint(1, 10) for _ in range(N)]
+
+i_arr = [0] * N
+target_arr = [0] * (N + 1)
+target_arr[0] = -1  # undefined so can be set to any value
+
+target_len = 0
 for i in range(N):
     # Binary search for the smallest positive l ≤ L
     # such that X[M[l]] > X[i]
+
+    # bisect 로 바꿀 수 있나?
+    # lo = bisect.bisect_left(X, X[i] + 1, lo=1, hi=L + 1)
     lo = 1
-    hi = L + 1
+    hi = target_len + 1
     while lo < hi:
         mid = lo + (hi - lo) // 2  # lo <= mid < hi
-        if X[M[mid]] >= X[i]:
+        if arr[target_arr[mid]] >= arr[i]:
             hi = mid
         else:  # if X[M[mid]] < X[i]
             lo = mid + 1
@@ -169,21 +182,26 @@ for i in range(N):
 
     # The predecessor of X[i] is the last index of
     # the subsequence of length newL-1
-    P[i] = M[newL - 1]
-    M[newL] = i
+    i_arr[i] = target_arr[newL - 1]
+    target_arr[newL] = i
 
-    if newL > L:
+    if newL > target_len:
         # If we found a subsequence longer than any we've
         # found yet, update L
-        L = newL
+        target_len = newL
 
 # Reconstruct the longest increasing subsequence
 # It consists of the values of X at the L indices:
 # ...,  P[P[M[L]]], P[M[L]], M[L]
-S = [0] * L
-k = M[L]
-for j in range(L - 1, -1, -1):
-    S[j] = X[k]
-    k = P[k]
-S
+S = [0] * target_len
+k = target_arr[target_len]
+for j in range(target_len - 1, -1, -1):
+    S[j] = arr[k]
+    k = i_arr[k]
+arr
+len(S), S
+
+
 # return S
+
+#%%

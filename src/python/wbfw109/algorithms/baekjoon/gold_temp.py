@@ -18,12 +18,12 @@ def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
 
     - using bisect is inefficient in this problem because elements once searched is not used in later loop.
     다하고서 오답노트.
+    escape_marble_2 구슬만 움직이도록 해서 다시-
     # dataclass 사용하기?.. 객체 중심으로 접근?
     이전꺼 보고 필요하면 Counter 쓰기
 
-    정렬을 사용하면 이 문제에서 어떤 이점을 만들 수 있는지 찾아내기
-    #   data structure 업데이트 필요
     정렬된것의 특징을 문제에서 어떻게 살릴것인지가 포인트
+    #   data structure 업데이트 필요
     """
     import math
     import sys
@@ -151,10 +151,9 @@ def get_longest_increasing_subsequence_2(
 ) -> str:
     """https://www.acmicpc.net/problem/12015
     최장 증가 부분 수열
-    여러 개의 LIS 가 나올 수잇음. nlogn 짜리 알고리즘이 있다.
-    1차원 배열의 그래프 탐색과 비슷한듯.
+    여러 개의 LIS 가 나올 수잇음.
+    1차원 배열의 그래프 탐색과 비슷해보임.
 
-    escape_marble_2 구슬만 움직이도록 해서 다시-
     """
     import sys
     from collections import deque
