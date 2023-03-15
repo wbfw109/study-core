@@ -14,12 +14,127 @@ from typing import Iterator, Optional
 # week 3-1: binary search
 
 
+def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
+    """get Maximum weight limit ; https://www.acmicpc.net/problem/1939
+
+    Time Complexity (Worst-case): ...
+        - O(log <maximum_weight_limit>) from Parametric search loop
+                ; <maximum_weight_limit> was given 10^9
+            * O( Number( BFS(bridges) ) ) from BFS loop
+
+    Space Complexity (Worst-case): O(n) from bidirectional edges
+
+    Definition
+        - Number( BFS(bridges) ): |V| + |E|; Time occurred to find valid paths
+            - the number of valid islands including <start_island> are vertexes.
+            - the number of valid bridges are edges.
+
+    Consideration:
+        - ❔ How process "bidirectional edges"?
+            - if it is processed in Adjacency matrix (Symmetric matrix)
+                , It is expected to cause memory overflow.
+            - 🚣 instead append edges into two vertices.
+
+    Implementation:
+        - It can be thought as of a successor of problem <drive_with_valid_weight> (function)
+        - If bridges are sorted based on weight limit in descending order
+            , it seems that it would be faster than this implementation.
+            , because it can be early stopping by breaking a loop.
+            but it requires to sorting for each islands, and drawback would be a longer time to prepare.
+        - 🚣 It seem that It can be implemented by using Kruscal's algorithm.
+            when disjoint set where <start_island> is root meets <end_island>
+            , weight limit of the lastly merged edge will be answer.
+    """
+    import sys
+    from collections import deque
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    class FoundPath(Exception):
+        pass
+
+    # Title: input
+    # condition: (2 ≤ island count ≤ 10^4), (1 ≤ M ≤ 10^6)
+    island_count, m = map(int, input_().split())
+    map_: list[list[tuple[int, int]]] = [[] for _ in range(island_count + 1)]
+    # condition: (1 ≤ two vertexes ≤ island count), (1 ≤ weight limit ≤ 10^9)
+    for _ in range(m):
+        island_1, island_2, weight_limit = map(int, input_().split())
+        map_[island_1].append((island_2, weight_limit))
+        map_[island_2].append((island_1, weight_limit))
+    start_island, end_island = map(int, input_().split())
+    maximum_weight_limit: int = 1
+
+    # Title: solve
+    # <endpoints>: minimum and maximum weight limits
+    endpoints: list[int] = [1, 10**9]
+
+    while True:
+        ## Test algorithm
+        mid_weight_limit: int = (endpoints[0] + endpoints[1]) // 2
+
+        is_exploration_success: bool = False
+        explored_deque: deque[int] = deque([start_island])
+        is_visited_set: set[int] = set([start_island])
+        try:
+            while explored_deque:
+                explored_island: int = explored_deque.popleft()
+                for dest_island, weight_limit in map_[explored_island]:
+                    if (
+                        dest_island not in is_visited_set
+                        and mid_weight_limit <= weight_limit
+                    ):
+                        if dest_island == end_island:
+                            raise FoundPath
+                        is_visited_set.add(dest_island)
+                        explored_deque.append(dest_island)
+        except FoundPath:
+            is_exploration_success = True
+
+        ## Decision algorithm (predicate)
+        if is_exploration_success:
+            endpoints[0] = mid_weight_limit + 1
+            if endpoints[0] > endpoints[1]:
+                maximum_weight_limit = mid_weight_limit
+                break
+        else:
+            endpoints[1] = mid_weight_limit - 1
+
+    # Title: output
+    print(maximum_weight_limit)
+    return str(maximum_weight_limit)
+
+
+def test_drive_with_valid_weight() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "3 3",
+                "1 2 2",
+                "3 1 3",
+                "2 3 2",
+                "1 3",
+            ],
+            ["3"],
+        ]
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            drive_with_valid_weight(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
 def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
     """🚤 get Distance that maximizes the distance between all adjacent routers ; https://www.acmicpc.net/problem/2110
 
-    Time Complexity (Worst-case):  O(n(log^2 n))
+    Time Complexity (Worst-case): O(n(log^2 n))
         - O(n(log n)) from Tim sort
-        - O(log n) from outer While loop (<mid_distance> is updated logarithmically)
+        - O(log n) from Parametric search loop (<mid_distance> is updated logarithmically)
             * O(n) from inner While loop
                 but efficient since search range is narrower for each iteration from "lo=start_coord_i + 1".
             * O(log n) in inner loop from binary search
@@ -58,7 +173,7 @@ def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
 
     # Parametric search with Bisection method
     while True:
-        # Test algorithm
+        ## Test algorithm
         mid_distance: int = (endpoints[0] + endpoints[1]) // 2
         start_coord_i: int = 0  # initial coordinate to install router.
         installed_router_count: int = 0
@@ -73,7 +188,7 @@ def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
                 lo=start_coord_i + 1,
             )
 
-        # Decision algorithm (predicate)
+        ## Decision algorithm (predicate)
         if installed_router_count < routers_count:
             # update maximum Installable distance.
             # current <mid_distance> is not valid. so set with "-1".
@@ -151,7 +266,7 @@ def test_install_home_routers() -> None:
 def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
     """get Minimum collision count ; https://www.acmicpc.net/problem/3020
 
-    Time Complexity (Worst-case):  O(n(log n))
+    Time Complexity (Worst-case): O(n(log n))
         - O(2 * n/2(log n/2)) from Tim sort on two stalagmites, stalactites list.
         - O(n) iteration from given stalagmites, stalactites.
 
@@ -276,7 +391,7 @@ def test_move_straight_in_cave() -> None:
 def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
     """get Minimum distance to hang balloons to teams ; https://www.acmicpc.net/problem/4716
 
-    Time Complexity (Worst-case):  O(n(log n)) from Tim sort
+    Time Complexity (Worst-case): O(n(log n)) from Tim sort
         - O(n) loop from given teams.
 
     Space Complexity (Worst-case): O(n) from Tim sort
@@ -401,7 +516,7 @@ def test_hang_balloons_to_teams() -> None:
 def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> str:
     """get Maximum measurable weight by using weights ; https://www.acmicpc.net/problem/2437
 
-    Time Complexity (Worst-case):  O(n(log n)) from Tim sort
+    Time Complexity (Worst-case): O(n(log n)) from Tim sort
         - O(n) loop from given weights.
 
     Space Complexity (Worst-case): O(n) from Tim sort

@@ -157,67 +157,9 @@ def get_longest_increasing_subsequence_2(
 
     data structure 업데이트.. visualization root 포함되게, README 업데이트
     escape_marble_2 구슬만 움직이도록 해서 다시-
-    """
-    pass
 
-
-def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
-    """https://www.acmicpc.net/problem/1939
-    BFS 중량제한...
-    넓게 생각하자...
+    그래프 탐색 언제사용해야 하는가!
     경로 탐색 = 노드/방향에 따라 움직이면 BFS 고려해보기?
-    sorted... than sort
-
-    n .. 섬 개수가 너무 커서 set 로 놓기에도 좀..
-
-    A B C
-    BFS.. 인데 시뮬레이션.. combination 이 없는?
-
-    갈수있는 경로탐색부터.. dictionary 로 만들기 다리?
-    순환되는 케이스를 버려야 한다.
-    같은 v1 to v2 다리에 중량제한이 다른게 있으면 최대중량만 저장한다...
-        Adjacency matrix + Symmetric matrix (대칭행렬) 로.. 하려햇는데 100000*100000 행렬이 최대 생성되서 안될듯..
-        양방향 처리 방법이 이거도 잇지만.. 너무 비효율적이다.  두개 리스트 만드는것.. 흠..
-        데이터클래스 딱히 필요없을듯? 무게 하나만 표시하면되서.
-        - Used data structure: deque with Adjacency matrix in BFS.
-
-    근데 단순 BFS 면 메모리초과날거같음.
-    .. 감이 안온다... 이진탐색을 대체 어떻게 사용해야하는건지
-    #  공장이 있는 두 섬을 연결하는 경로는 항상 존재하는 데이터만 입력으로 주어진다.
-        으로부터 크루스칼도 사용가능한듯? 시작하는 다리개수만큼 경우의수가 주어진 경우 + 도착지 만나면 종료
-
-    시작점과 끝점이 정해져있어서 시작점에서 이어진 섬 개수만큼 시뮬레이션하고,
-    (시작점 끝점이 동일한 다리는 최대중량의 다리만 사용.)
-    크루스칼 알고리즘으로 시작점을 루트로 두고 있는 집합에 끝점이 들어오면 마지막 다리의 중량제한이 정답이 될듯 보임.
-
-    하지만 바이너리 서치 문제이므로 매개변수 검색 문제로 풀어봐야겟다..
-
-    양방향이라는거를 어떻게 해석하지
-
-    이분 탐색 + bfs를 이용한 파라메트릭 서치..
-
-    큐에 10000개 정도들어가는거는 상관이 없나..
-    메모리 초과가 안나나보다 흠..
-    BFS 사용하기에.. 날줄알안슨데 안나나보네
-
-    # predicate
-
-    일단 양방향으
-
-    중복된 다리 어떻게 처리할거냐..
-    파라메트릯 ㅓ치에서 문제에서 구하는 값이 BFS 의 가능한 경로의 수가 아니고
-    ★ , mid 값이 가능한지를 보는것이기 떄문에 통과한 다리의 개수가 다르더라도 한번 방문한 곳에 대해서 visited 를 확인하고
-    해당 브릿지는 큐에 넣지 않아도 된다.
-
-    <install_home_routers> 과 다르게
-    출발지에서 이동가능한 다리에 대해 최대중량으로 초기화해줄 수는 있지만, max 를 개수만큼 해야해서
-    최대 10만개만큼 비교해야 한다. 차라리 MAX_WEIGHT 으로 초기화하는 것이 좋음.
-    log_2 로 취해보면 30 이하이기 떄문에 훨씬 빠름.
-
-    BFS할떄 도달가능한 경로의 수를 세는 용도 visit count 누적 + heapq
-
-    정렬 써야할듯. 너무 느리다. break가 필요할듯보임.
-    만약 도달가능한 경로의 개수가 필요없고 도달가능한지만 확인하는 문제라면 is_explored 를 단순 set 구성 가능.
 
     """
     import sys
@@ -228,70 +170,14 @@ def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
     else:
         input_ = sys.stdin.readline
 
-    class FoundPath(Exception):
-        pass
-
     # Title: input
     # condition: (2 ≤ island count ≤ 10^4), (1 ≤ M ≤ 10^6)
-    island_count, m = map(int, input_().split())
-
-    # 0, 1 index are not used.
-    map_: list[list[tuple[int, int]]] = [[]] * (island_count + 1)
-    # condition: (1 ≤ two vertexes ≤ island count), (1 ≤ weight limit ≤ 10^9)
-    for _ in range(m):
-        island_1, island_2, weight_limit = map(int, input_().split())
-        map_[island_1].append((island_2, weight_limit))
-        map_[island_2].append((island_1, weight_limit))
-    start_island, end_island = map(int, input_().split())
-    maximum_weight_limit: int = 1
 
     # Title: solve
-    for i in range(1, island_count + 1):
-        map_[i].sort(key=lambda x: -x[1])
-
-    # <endpoints>: minimum and maximum weight limits
-    endpoints: list[int] = [1, 10**9]
-
-    while True:
-        # Test algorithm
-        mid_weight_limit: int = (endpoints[0] + endpoints[1]) // 2
-
-        is_exploration_success: bool = False
-        explored_deque: deque[int] = deque([start_island])
-
-        are_visited: list[bool] = [False] * (island_count + 1)
-        are_visited[start_island] = True
-        # is_visited_set: set[int] = set([start_island])
-        try:
-            while explored_deque:
-                explored_island: int = explored_deque.popleft()
-                for dest_island, weight_limit in map_[explored_island]:
-                    if mid_weight_limit <= weight_limit:
-                        if not are_visited[dest_island]:
-                            if dest_island == end_island:
-                                raise FoundPath
-                            are_visited[dest_island] = True
-                            explored_deque.append(dest_island)
-                    else:
-                        break
-        except FoundPath:
-            is_exploration_success = True
-
-        # Decision algorithm (predicate)
-        if is_exploration_success:
-            endpoints[0] = mid_weight_limit + 1
-            if endpoints[0] > endpoints[1]:
-                maximum_weight_limit = mid_weight_limit
-                break
-        else:
-            endpoints[1] = mid_weight_limit - 1
-
     # Title: output
-    print(maximum_weight_limit)
-    return str(maximum_weight_limit)
 
 
-def test_drive_with_valid_weight() -> None:
+def test_get_longest_increasing_subsequence_2() -> None:
     test_case = unittest.TestCase()
     for input_lines, output_lines in [
         [
@@ -307,9 +193,10 @@ def test_drive_with_valid_weight() -> None:
     ]:
         start_time = time.time()
         test_case.assertEqual(
-            drive_with_valid_weight(iter(input_lines)), "\n".join(output_lines)
+            get_longest_increasing_subsequence_2(iter(input_lines)),
+            "\n".join(output_lines),
         )
         print(f"elapsed time: {time.time() - start_time}")
 
 
-test_drive_with_valid_weight()
+test_get_longest_increasing_subsequence_2()

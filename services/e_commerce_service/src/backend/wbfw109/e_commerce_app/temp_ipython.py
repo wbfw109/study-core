@@ -126,7 +126,3 @@ if __name__ == "__main__":
             high = mid - 1
 
     print(high)
-
-#%%
-
-[[]] * 10
