@@ -1,73 +1,18 @@
 # %%
 from __future__ import annotations
 
-import collections
-import concurrent.futures
-import dataclasses
-import datetime
-import enum
-import functools
-import inspect
-import itertools
-import json
-import logging
 import math
-import operator
-import os
-import pprint
-import random
-import re
-import selectors
-import shutil
-import socket
-import sys
-import threading
-import time
-import unittest
-import xml.etree.ElementTree as ET
-from abc import ABC, abstractmethod
-from array import array
-from collections.abc import Generator, Sequence
-from enum import Enum
-from pathlib import Path
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
-from urllib.parse import urlparse
 
-import IPython
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from IPython import display
 from IPython.core.interactiveshell import InteractiveShell
-from PIL import Image
-from wbfw109.libs.utilities.ipython import (
+from wbfw109.libs.utilities.ipython import (  # type: ignore
     VisualizationManager,
     VisualizationRoot,
-    display_data_frame_with_my_settings,
 )
 
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
-
-
-#%%
 
 
 class ForStatement(VisualizationRoot):
@@ -102,7 +47,17 @@ class ForStatement(VisualizationRoot):
 
 
 class Operators(VisualizationRoot):
-    """https://docs.python.org/3/reference/expressions.html#comparisons"""
+    """
+    Test environment:
+        - 🆚 Operation (Left Shift, Exponentiation):
+            Average of time occurred from each operations in inner loop range(1000000) of outer loop range(100).
+            - Exponentiation (**):    0.6202
+            - Left Shift (**):        0.6166
+
+    https://docs.python.org/3/reference/expressions.html#comparisons
+    https://stackoverflow.com/a/20970087/15252251
+    https://stackoverflow.com/questions/65445377/python-list-comprehension-performance
+    """
 
     def __init__(self) -> None:
         VisualizationRoot.__init__(
@@ -114,7 +69,14 @@ class Operators(VisualizationRoot):
         self.df_caption.extend(
             [
                 "⚙️ Comparisons can be chained arbitrarily.",
-                "  - a == b == c  equals 'a == b and b == c'",
+                "  'a == b == c' equals 'a == b and b == c'.",
+                "",
+                "⚙️ Left Shift (<<) operation is slightly faster than Exponentiation (**) operation.",
+                "  and Exponentiation (**) operation faster than math.pow().",
+                "",
+                "⚙️ Sequence operation (s*n or n*s) is faster than List comprehension.",
+                "  ⚠️ Note that the List multiplication uses shallow copy.",
+                "  if then, [[dict()] * m for _ in range(n)] will share one dictionary.",
             ]
         )
 
@@ -132,42 +94,24 @@ class Operators(VisualizationRoot):
                 "a == b == c",
             ]
         )
-        operators.visualize()
-
-
-class Operators(VisualizationRoot):
-    """https://docs.python.org/3/reference/expressions.html#comparisons"""
-
-    def __init__(self) -> None:
-        VisualizationRoot.__init__(
-            self,
-            columns=["eval", "print", "note"],
-            has_df_lock=False,
-            should_highlight=True,
-        )
-        self.df_caption.extend(
-            [
-                "⚙️ Comparisons can be chained arbitrarily.",
-                "  - a == b == c  equals 'a == b and b == c'",
-            ]
-        )
-
-    def __str__(self) -> str:
-        return "TODO: ...."
-
-    @classmethod
-    def test_case(cls):
-        operators: Operators = cls()
-        c = b = a = 1
-        operators.append_line_into_df_in_wrap(["", "c = b = a = 1"])
+        operators.append_line_into_df_in_wrap()
         operators.append_line_into_df_in_wrap(
             [
-                a == b == c,
-                "a == b == c",
+                (1 << 4, 2**4, math.pow(2, 4)),
+                "( 1 << 4, 2**4, math.pow(2, 4) )",
+            ]
+        )
+        operators.append_line_into_df_in_wrap()
+        operators.append_line_into_df_in_wrap(
+            [
+                ([0] * 3, [0 for _ in range(3)]),
+                "( [0]*3, [0 for _ in range(3)] )",
             ]
         )
         operators.visualize()
 
+
+#%%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
@@ -176,7 +120,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
     else:
         only_class_list = []
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
-
-#%%
 
 # while else: https://docs.python.org/3/reference/compound_stmts.html#the-while-statement

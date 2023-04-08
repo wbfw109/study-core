@@ -1,76 +1,26 @@
+""": 💻 Complexity Class of the decision problem is P and have strong polynomial time to exact algorithm.
+    decision problem: to ask whether given a set of elements, determine if they are sorted in a specific order (ascending or descending)."""
+
 # %%
 from __future__ import annotations
 
-import collections
-import concurrent.futures
 import dataclasses
-import datetime
-import enum
-import functools
-import inspect
-import itertools
-import json
-import logging
-import math
 import operator
-import os
-import pprint
 import random
-import re
-import selectors
-import shutil
-import socket
-import sys
-import threading
-import time
-import unittest
-import xml.etree.ElementTree as ET
-from abc import ABC, abstractmethod
-from array import array
-from collections.abc import Generator, Sequence
-from enum import Enum
-from pathlib import Path
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Generic,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    MutableMapping,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
-from urllib.parse import urlparse
+from typing import Any, Literal, Optional
 
-import IPython
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from IPython import display
 from IPython.core.interactiveshell import InteractiveShell
-from PIL import Image
-from wbfw109.libs.utilities.ipython import (
+from wbfw109.libs.utilities.ipython import (  # type: ignore
     ChildAlgorithmVisualization,
     MixInParentAlgorithmVisualization,
     VisualizationManager,
     VisualizationRoot,
-    display_data_frame_with_my_settings,
 )
 
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
-#%%
-# TODO: Counting sort, all (ascending, descending) version
 
 
 class Glossary(VisualizationRoot):
@@ -155,7 +105,7 @@ class SortingDST:
 
 
 class ExchangeSorts(MixInParentAlgorithmVisualization):
-    """Bubble sort, Cocktail shaker sort, Odd–even sort, Comb sort, Gnome sort, Proportion extend sort, Quicksort, Slowsort, Stooge sort, Bogosort"""
+    """: 🍡 Bubble sort, Cocktail shaker sort, Odd–even sort, Comb sort, Gnome sort, Proportion extend sort, Quicksort, Slowsort, Stooge sort, Bogosort"""
 
     class BubbleSort(ChildAlgorithmVisualization[SortingDST]):
         def __init__(self, /, dst: Optional[SortingDST]) -> None:
@@ -273,7 +223,7 @@ class ExchangeSorts(MixInParentAlgorithmVisualization):
 
 
 class SelectionSorts(MixInParentAlgorithmVisualization):
-    """Selection sort, Heapsort, Smoothsort, Cartesian tree sort, Tournament sort, Cycle sort, Weak-heap sort"""
+    """: 🍡 Selection sort, Heapsort, Smoothsort, Cartesian tree sort, Tournament sort, Cycle sort, Weak-heap sort"""
 
     class SelectionSort(ChildAlgorithmVisualization[SortingDST]):
         def __init__(self, /, dst: Optional[SortingDST]) -> None:
@@ -436,7 +386,7 @@ class SelectionSorts(MixInParentAlgorithmVisualization):
 
 
 class InsertionSorts(MixInParentAlgorithmVisualization):
-    """Insertion sort, Shellsort, Splaysort, Tree sort, Lsibrary sort, Patience sorting"""
+    """: 🍡 Insertion sort, Shellsort, Splaysort, Tree sort, Lsibrary sort, Patience sorting"""
 
     class InsertionSort(ChildAlgorithmVisualization[SortingDST]):
         def __init__(self, /, dst: Optional[SortingDST]) -> None:
@@ -466,16 +416,14 @@ class InsertionSorts(MixInParentAlgorithmVisualization):
             target_list_len: int = len(self.dst.target_list)
             for i in range(1, target_list_len):
                 # Note: Optimization: actual insertion could only performs one assignment by using <target_value> instead of Swapping like bubble.
-                target_value = self.dst.target_list[i]
+                comparison_value = self.dst.target_list[i]
                 j: int = i - 1
-                while j >= 0:
-                    # in sublist loop, 🔍 for advantage of spatial locality, is start-index of inner loop <i>?
-                    if self.dst.target_list[j] > target_value:
-                        self.dst.target_list[j + 1] = self.dst.target_list[j]
-                    else:
-                        self.dst.target_list[j + 1] = target_value
-                        break
+                # in sublist loop, 🔍 for advantage of spatial locality, is start-index of inner loop <i>?
+                while j >= 0 and self.dst.target_list[j] > comparison_value:
+                    self.dst.target_list[j + 1] = self.dst.target_list[j]
                     j -= 1
+                else:
+                    self.dst.target_list[j + 1] = comparison_value
 
         def verify(self) -> bool | Any:
             return SortingDST.verify_sorting(self.dst)
@@ -487,13 +435,10 @@ class InsertionSorts(MixInParentAlgorithmVisualization):
             algorithm.visualize()
 
 
-# If the running time of merge sort for a list of length n is T(n), then the recurrence relation T(n) = 2T(n/2) + n
-
-
+# TODO: Parallel sort, Quadsort, in-place version after binary searches
 class MergeSorts(MixInParentAlgorithmVisualization):
-    """Merge sort, Cascade merge sort, Oscillating merge sort, Polyphase merge sort"""
+    """: 🍡 Merge sort, Cascade merge sort, Oscillating merge sort, Polyphase merge sort"""
 
-    # TODO: Parallel sort, Quadsort, in-place version after binary searches
     class MergeSort(ChildAlgorithmVisualization[SortingDST]):
         def __init__(self, /, dst: Optional[SortingDST]) -> None:
             super().__init__(columns=["elapsed time", "verification"], dst=dst)
@@ -576,11 +521,11 @@ class MergeSorts(MixInParentAlgorithmVisualization):
 
 
 class DistributionSorts(MixInParentAlgorithmVisualization):
-    """American flag sort, Bead sort, Bucket sort, Burstsort, Counting sort, Interpolation sort, Pigeonhole sort, Proxmap sort, Radix sort, Flashsort"""
+    """: 🍡 American flag sort, Bead sort, Bucket sort, Burstsort, Counting sort, Interpolation sort, Pigeonhole sort, Proxmap sort, Radix sort, Flashsort"""
 
 
 class HybridSorts(MixInParentAlgorithmVisualization):
-    """Block merge sort, Kirkpatrick–Reisch sort, Timsort, Introsort, Spreadsort, Merge-insertion sort"""
+    """: 🍡 Block merge sort, Kirkpatrick–Reisch sort, Timsort, Introsort, Spreadsort, Merge-insertion sort"""
 
     # class TimSort(ChildAlgorithmVisualization[SortingDST]):
     #     def __init__(self, /, dst: Optional[SortingDST]) -> None:
@@ -617,7 +562,8 @@ class HybridSorts(MixInParentAlgorithmVisualization):
 
 
 # Timsort...
-#%%
+# TODO: Counting sort, all (ascending, descending) version
+# %%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
@@ -625,7 +571,7 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         VisualizationManager.call_root_classes()
         only_class_list = []
     else:
-        only_class_list = [MergeSorts.MergeSort]
+        only_class_list = [InsertionSorts.InsertionSort]
     VisualizationManager.call_parent_algorithm_classes(
         dst=SortingDST.get_default_sorting_dst(),
         only_class_list=only_class_list,

@@ -7,40 +7,61 @@
 
 - [study-core-python](#study-core-python)
   - [Table of contents (TOC)](#table-of-contents-toc)
-  - [1. Basic algorithms](#1-basic-algorithms)
-    - [1.1 Specification](#11-specification)
+  - [1. Algorithms](#1-algorithms)
+    - [1.1 Basic](#11-basic)
+    - [1.2 Design patterns](#12-design-patterns)
+    - [1.3 Specification](#13-specification)
   - [2. Libraries](#2-libraries)
-  - [3. Toy program](#3-toy-program)
+  - [3. Snippet](#3-snippet)
+  - [4. Toy program](#4-toy-program)
 
-## 1. Basic algorithms
+## 1. Algorithms
 
-![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [3.3.1. Visualization Manager (Python)](../../README.md#331-visualization-manager-python)
+![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
 
-|Language|Type|Name|location|
-|:---|:---|:---|:---|
-|Python  |Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L157)|
-|Python  |Graph search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L142)|
-|Python  |Graph routing  |(Minimum Spanning Tree) |[class Kruskal](wbfw109/labs/basics/graphs/routing.py#L160)|
+- [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
 
 &nbsp;
 
 ---
 
-![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Algorithm Problems & Solution**
+![#f00](https://placehold.co/15x15/f00/f00.png) &nbsp; Summary : **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)** from [3.3.1. Visualization Manager (Python)](../../README.md#331-visualization-manager-python)
 
-- [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
+### 1.1 Basic
+
+|Type|Name|location|
+|:---|:---|:---|
+|Sequence Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L26)|
+|Sequence Search  |binary |[class BinarySearch](wbfw109/labs/basics/sequences/search.py#L47)|
+|Subsequence  |longest increasing subsequence |[class LongestIncreasingSubsequence](wbfw109/labs/basics/sequences/subsequence.py#L21)|
+|Graph basic  |basics in terms of distance |[class GraphDistance](wbfw109/labs/basics/graphs/basic.py#L104)|
+|Graph Search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L89)|
+|Graph Routing  |Kruskal |[class MinimumSpanningTree](wbfw109/labs/basics/graphs/routing.py#L102)|
+|Named problems  |3SUM, Subset Sum, Travelling Salesman, Knapsack |[class ThreeSumProblem, SubsetSumProblem, TravellingSalesmanProblem, KnapsackProblem](wbfw109/labs/basics/optimizations/named_problems.py#L48)|
+
+&nbsp;
 
 ---
 
-### 1.1 Specification
+### 1.2 Design patterns
+
+|Type|Name|location|
+|:---|:---|:---|
+|Creational pattern  |interning |[class Interning](wbfw109/labs/design_patterns.py#L18)|
+
+&nbsp;
+
+---
+
+### 1.3 Specification
 
 |Name|location|
 |:---|:---|
-Built-ins statements: (for-in loop)  |[class ForStatement, Operators](wbfw109/labs/builtins/statements.py#L74)|
-Built-ins expressions: (lambda)  |[class LambdaExpression](wbfw109/labs/builtins/expressions.py#L74)|
-Built-ins functions: (zip(), min())  |[class ZipFunc, MinFunc](wbfw109/labs/builtins/functions.py#L71)|
-Built-ins system: (Zero Based Numbering)  |[class DataSize, ZeroBasedNumbering](wbfw109/labs/builtins/system.py#L74)|
-Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L74)|
+|Built-ins statements: (for-in loop)  |[class ForStatement, Operators](wbfw109/labs/builtins/statements.py#L18)|
+|Built-ins expressions: (lambda)  |[class LambdaExpression](wbfw109/labs/builtins/expressions.py#L16)|
+|Built-ins functions: (zip(), min())  |[class ZipFunc, MinFunc](wbfw109/labs/builtins/functions.py#L18)|
+|Built-ins system: (data size, zero-bard numbering, masking)  |[class DataSize, ZeroBasedNumbering, Masking](wbfw109/labs/builtins/system.py#L18)|
+|Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L36)|
 
 ---
 
@@ -63,7 +84,15 @@ Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, Dunde
 
 ---
 
-## 3. Toy program
+## 3. [Snippet](wbfw109/template/snippet.py)
+
+- **Transpose iterations**
+  - get_square_iterators_against_gravity()
+  - assemble(), reassemble(), reassemble_i()
+
+---
+
+## 4. Toy program
 
 |Language|Type|Main tech|Name|location|
 |:---|:---|:---|:---|:---|

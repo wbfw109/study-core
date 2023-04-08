@@ -34,10 +34,12 @@ from typing import (
     Any,
     Callable,
     Final,
+    Generic,
     Iterable,
     Iterator,
     Literal,
     LiteralString,
+    MutableMapping,
     NamedTuple,
     Never,
     Optional,
@@ -56,6 +58,8 @@ from IPython import display
 from IPython.core.interactiveshell import InteractiveShell
 from PIL import Image
 from wbfw109.libs.utilities.ipython import (
+    ChildAlgorithmVisualization,
+    MixInParentAlgorithmVisualization,
     VisualizationManager,
     VisualizationRoot,
     display_data_frame_with_my_settings,
@@ -66,5 +70,3 @@ InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
 #%%
-
-# binary search

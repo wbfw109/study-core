@@ -5,18 +5,1633 @@ import unittest
 from pprint import pprint
 from typing import Iterator, Optional
 
-# week 3-1: binary search
+# TODO: remove ❔ in beginning of docstring, create Complexity class
+# TODO: re-solve <escape_maze>, <escape_marble_2>, gold_temp.py
+# week 5-1: bitmask
+# week 4-2: string
 
 
-# week 2-2: sorting
+# week 4-1: graph theory: 5
+def escape_maze(
+    input_lines: Optional[Iterator[str]] = None,
+) -> str:
+    """get Minimum distance to escape maze ; https://www.acmicpc.net/problem/1194
+
+    Time Complexity (Worst-case): O( BFS(maze) ) (but some routes with key subsets are added.)
+
+    Space Complexity (Worst-case): O( BFS(maze) )
+
+    Implementation
+        - It uses Masking.
+        - Things I've done in the implementation.
+            - If I create new n*m boolean table whenever new key is obtained
+                , it occurs "Memory Limit Exceeded".
+            - When I use heapq instead of deque to eliminate some duplicated exploration that it occured because BFS still proceeds one by one
+                , this rather causes "Timeout" because of time complexity of heapq.
+                I had used max heap with bit count of <key_state>.
+
+    중복이 있어도, n, m 범위를 고려해보고 그냥 boolean table 만들어서 사용하기
+    이렇게 해도 중복탐색을 완전히 막지는 못하고, 중복 큐를 막으려고 비교하는 구문의 비용이 더 들어가서 느린듯.
+
+    """
+    import operator
+    import sys
+    from collections import deque
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    class FoundExit(Exception):
+        pass
+
+    DIRECTIONS: list[tuple[int, int]] = [
+        (-1, 0),  # (-row direction)
+        (1, 0),  # (+row direction)
+        (0, -1),  # (-column direction)
+        (0, 1),  # (+column direction)
+    ]
+    RouteState = tuple[int, tuple[int, int]]
+
+    # Title: input
+    # condition: (2 ≤  N, M  ≤ 5*10^1)
+    n, m = map(int, input_().split())
+    # n*m. ".": EMTPY.  "#": WALL.  "[a-f]": KEYS.  "[A-F]": DOORS corresponding KEYS
+    # "0": START POINT. "1": EXIT
+    maze: list[str] = []
+    start_point: tuple[int, int] = (-1, -1)
+    for row in range(n):
+        line: str = input_()
+        if (column := line.find("0")) != -1:
+            start_point = (row, column)
+        maze.append(line)
+
+    # Title: solve
+    # <explored_deque>: deque[<key_state>, point]. max heap about <key_bit_count>.
+    explored_deques: list[deque[RouteState]] = [
+        deque([(0, start_point)]),
+        deque([]),
+    ]
+    # n*m dict[bit_count, list[key_state]]. <key_state> is mask.
+    trace_map: list[list[dict[int, list[int]]]] = [
+        [{} for _ in range(m)] for _ in range(n)
+    ]
+    trace_map[start_point[0]][start_point[1]][0] = [0]
+    distance: int = 1
+    minimum_distance: int = -1
+    try:
+        p: int = 0  # pointer which indicates current and next exploration deque.
+        while explored_deques[p]:
+            key_state, explored_point = explored_deques[p].popleft()
+            key_bit_count = key_state.bit_count()
+
+            for direction in DIRECTIONS:
+                new_point: tuple[int, int] = tuple(
+                    map(operator.add, explored_point, direction)
+                )
+                if (
+                    0 <= new_point[0] < n
+                    and 0 <= new_point[1] < m
+                    and (c := maze[new_point[0]][new_point[1]]) != "#"
+                ):
+                    # is goal?
+                    if c == "1":
+                        raise FoundExit(distance)
+                    elif c.isupper():
+                        # can it go through the door? 97 is ord("A")
+                        if key_state & 1 << ord(c) - 97 == 0:
+                            continue
+
+                    # check duplication in trace
+                    is_valid: bool = True
+                    trace = trace_map[new_point[0]][new_point[1]]
+                    for trace_bit_count, trace_subset in reversed(trace.items()):
+                        if key_bit_count > trace_bit_count:
+                            break
+                        elif (
+                            key_bit_count == trace_bit_count
+                            and key_state in trace_subset
+                        ):
+                            is_valid = False
+                            break
+                        else:
+                            if any(
+                                (
+                                    key_state | subset == subset
+                                    for subset in trace_subset
+                                )
+                            ):
+                                is_valid = False
+                                break
+                    if not is_valid:
+                        continue
+
+                    # update <new_key_state>
+                    if c.islower():
+                        # 65 is ord("a")
+                        new_key_state = key_state | 1 << ord(c) - 65
+                    else:
+                        new_key_state = key_state
+                    new_key_bit_count = new_key_state.bit_count()
+
+                    # apply new trace
+                    if new_key_bit_count in trace:
+                        trace[new_key_bit_count].append(new_key_state)
+                    else:
+                        trace[new_key_bit_count] = [new_key_state]
+
+                    explored_deques[p ^ 1].append((new_key_state, new_point))
+
+            if len(explored_deques[p]) == 0:
+                distance += 1
+                p ^= 1
+    except FoundExit as e:
+        minimum_distance = e.args[0]
+
+    # Title: output
+    result: str = str(minimum_distance)
+    print(result)
+    return result
+
+
+def test_escape_maze() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "1 7",
+                "f0.F..1",
+            ],
+            ["7"],
+        ],
+        [
+            [
+                "5 5",
+                "....1",
+                "#1###",
+                ".1.#0",
+                "....A",
+                ".1.#.",
+            ],
+            ["-1"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            escape_maze(iter(input_lines)),
+            "\n".join(output_lines),
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def get_diameter_in_tree(
+    input_lines: Optional[Iterator[str]] = None,
+) -> str:
+    """get Tree's diameter ; https://www.acmicpc.net/problem/1167
+
+    Time Complexity (Worst-case): O( BFS(1d matrix) ) (two times)
+        - O(x) from max() function to obtain a tip node. x is the number of tips nodes. (leaf or root)
+
+    Space Complexity (Worst-case): O( BFS(1d matrix) )
+
+    Consideration:
+        - 🚣 Do not trust completely sample test case. It not guarantees order of vertices input.
+    """
+    import sys
+    from collections import deque
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (2 ≤ N ≤ 10^5)
+    n: int = int(input_())
+    # condition: (1 ≤ each V ≤ 10^5)
+    # <tree_graph_metric>: vertices[list[to another vertex, distance]]. 0 index is not used.
+    tree_graph_metric: dict[int, list[tuple[int, int]]] = {}
+    for _ in range(n):
+        line: list[int] = list(map(int, input_().split()))
+        edges_iterator: Iterator[int] = iter(line[1:-1])
+        tree_graph_metric[line[0]] = list(zip(edges_iterator, edges_iterator))
+
+    # Title: solve
+    def find_farthest_v(v1: int) -> tuple[int, int]:
+        """
+        Returns:
+            tuple[int, int]: discovered farthest vertex from <v1>, distance from the vertex from <v1>
+        """
+        cumulated_distance: int = 0
+        # <explored_deques>: deque[vertex, cumulated distance]
+        explored_deque: deque[tuple[int, int]] = deque([(v1, cumulated_distance)])
+        trail_map: list[bool] = [False] * (n + 1)
+        trail_map[v1] = True
+        # <tip_vertices>: list[vertex, cumulated distance]
+        tip_vertices: list[tuple[int, int]] = []
+        while explored_deque:
+            explored_v, cumulated_distance = explored_deque.popleft()
+            is_tip: bool = True
+            for v2, distance in tree_graph_metric[explored_v]:
+                if not trail_map[v2]:
+                    is_tip = False
+                    trail_map[v2] = True
+                    explored_deque.append((v2, cumulated_distance + distance))
+
+            if is_tip:
+                tip_vertices.append((explored_v, cumulated_distance))
+
+        # <tip_vertices[i][1]> is cumulated distance of <tip_vertices[i]>.
+        max_distance_i = max(
+            (i for i in range(len(tip_vertices))), key=lambda i: tip_vertices[i][1]
+        )
+        return tip_vertices[max_distance_i]
+
+    # 1. Choose a random vertex
+    v1: int = 1
+    # 2. BFS that finds vertices that are as far from <v1> as possible
+    v2, distance = find_farthest_v(v1)
+    _, distance = find_farthest_v(v2)
+
+    # Title: output
+    result: str = str(distance)
+    print(result)
+    return result
+
+
+def test_get_diameter_in_tree() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "5",
+                "1 3 2 -1",
+                "2 4 4 -1",
+                "3 1 2 4 3 -1",
+                "4 2 4 3 3 5 6 -1",
+                "5 4 6 -1",
+            ],
+            ["11"],
+        ],
+        [
+            [
+                "5",
+                "1 5 1 -1",
+                "5 1 1 4 10 -1",
+                "4 3 10 5 10 -1",
+                "3 2 10 4 10 -1",
+                "2 3 10 -1",
+            ],
+            ["31"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            get_diameter_in_tree(iter(input_lines)),
+            "\n".join(output_lines),
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def move_with_breaking_one_wall(input_lines: Optional[Iterator[str]] = None) -> str:
+    """get Minimum distance to endpoint ; https://www.acmicpc.net/problem/2206
+
+    Time Complexity (Worst-case): O( BFS(number_map) ) (but some routes with <has_broken_wall>=True are added.)
+
+    Space Complexity (Worst-case): O( BFS(number_map) )
+
+    Implementation
+        - In the online test cases
+            , this implementation finished 0.5 seconds faster than the implementation using one deque
+            , and used 9.5MB less memory space.
+    """
+    import operator
+    import sys
+    from collections import deque
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    DIRECTIONS: list[tuple[int, int]] = [
+        (-1, 0),  # (-row direction)
+        (1, 0),  # (+row direction)
+        (0, -1),  # (-column direction)
+        (0, 1),  # (+column direction)
+    ]
+
+    RouteState = tuple[int, bool, tuple[int, int]]
+
+    class FoundEndPoint(Exception):
+        pass
+
+    # Title: input
+    # condition: (1 ≤  N, M  ≤ 10^3)
+    # condition: (1 ≤ weight_limit ≤ 10^5)
+    n, m = map(int, input_().split())
+    # n*m matrix. "0": movable cell.  "1": unmovable cell
+    number_map: list[str] = [input_() for _ in range(n)]
+    # <trace_map>'s elements are masking.
+    # 00 (0): not visited.  01 (1): Normal trace.  10 (2): Another trace.  11 (3): both
+    trace_map: list[list[int]] = [[0] * m for _ in range(n)]
+    minimum_distance: int = -1
+
+    # Title: solve
+    # 0, 1 index will be used alternatively to distinguish verticies at same depth level.
+    # list[deque[distance_from_base, has_broken_wall, point]]
+    explored_deques: list[deque[RouteState]] = [
+        deque([(1, False, (0, 0))]),
+        deque(),
+    ]
+    trace_map[0][0] = 1
+    try:
+        ## check initial queue
+        if (0, 0) == (n - 1, m - 1):
+            raise FoundEndPoint(1)
+
+        # next exploration level pointer: 0 or 1
+        p: int = 0
+        while explored_deques[p]:
+            distance_from_base, has_broken_wall, point = explored_deques[p].popleft()
+
+            for direction in DIRECTIONS:
+                new_point: tuple[int, int] = tuple(map(operator.add, point, direction))
+
+                if 0 <= new_point[0] < n and 0 <= new_point[1] < m:
+                    new_distance_from_base = distance_from_base + 1
+                    new_has_broken_wall = has_broken_wall
+                    new_number = number_map[new_point[0]][new_point[1]]
+                    new_trace = trace_map[new_point[0]][new_point[1]]
+
+                    if new_has_broken_wall:
+                        if new_number == "1" or new_trace != 0:
+                            continue
+                        # case 1: has_broken_wall and trace == 0
+                    else:
+                        if new_number == "1":
+                            if new_trace != 0:
+                                continue
+                            else:
+                                # case 2: not has_broken_wall and number == "1" and trace == 0
+                                new_has_broken_wall = True
+                        else:
+                            if new_trace not in [0, 2]:
+                                continue
+                            # case 3 : not has_broken_wall and number == "0" and if trace in [0, 2]:
+                            # even if route that is <new_has_broken_wall>=True is preceed, this may not pass throguh to goal point.
+
+                    if new_point == (n - 1, m - 1):
+                        raise FoundEndPoint(new_distance_from_base)
+
+                    trace_map[new_point[0]][new_point[1]] = (
+                        trace_map[new_point[0]][new_point[1]] | new_has_broken_wall + 1
+                    )
+
+                    x: RouteState = (
+                        new_distance_from_base,
+                        new_has_broken_wall,
+                        new_point,
+                    )
+                    if new_has_broken_wall:
+                        explored_deques[p ^ 1].append(x)
+                    else:
+                        explored_deques[p ^ 1].appendleft(x)
+            # next exploration queue
+            if not explored_deques[p]:
+                p ^= 1
+    except FoundEndPoint as e:
+        minimum_distance = e.args[0]
+
+    # Title: output
+    result: str = str(minimum_distance)
+    print(result)
+    return result
+
+
+def test_move_with_breaking_one_wall() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "1 1",
+                "0",
+            ],
+            ["1"],
+        ],
+        [
+            [
+                "6 4",
+                "0100",
+                "1110",
+                "1000",
+                "0000",
+                "0111",
+                "0000",
+            ],
+            ["15"],
+        ],
+        [
+            [
+                "4 4",
+                "0111",
+                "1111",
+                "1111",
+                "1110",
+            ],
+            ["-1"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            move_with_breaking_one_wall(iter(input_lines)), output_lines[0]
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def get_minimum_weight_to_all_vertices(
+    input_lines: Optional[Iterator[str]] = None,
+) -> str:
+    """get Minimum weight to all vertiecs ; https://www.acmicpc.net/problem/1753
+
+    Time Complexity (Worst-case): ...
+        - O( N(edges) ) from selecting minimum weight of same edge points
+        - O( BFS(directed_graph_weights) ) (but except for overlapped edges)
+        - O(V * log n) from Hip (pop | push)
+
+    Space Complexity (Worst-case): O( BFS(directed_graph_weights) )
+    """
+    import heapq
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (1 ≤ v_count ≤ 20,000,    1 ≤ e_count ≤ 300,000)
+    v_count, e_count = map(int, input_().split())
+    # condition: (1 ≤ start_v ≤ v_count)
+    start_v: int = int(input_())
+    # condition: (1 ≤ weight ≤ 10)
+    # <directed_graph_weights>: v1[dict[v2, minimum weight]]]
+    directed_graph_weights: list[dict[int, int]] = [{} for _ in range(v_count + 1)]
+    for _ in range(e_count):
+        v1, v2, weight = map(int, input_().split())
+        if v2 in directed_graph_weights[v1].keys():
+            directed_graph_weights[v1][v2] = min(directed_graph_weights[v1][v2], weight)
+        else:
+            directed_graph_weights[v1][v2] = weight
+
+    # <min_weights> also could be used as <is_explored>. <min_weights> from <start point> to a vertex.
+    min_weights: list[int | str] = ["INF"] * (v_count + 1)
+
+    # Title: solve
+    # <explored_heapq>: (cumulated_weight, v)
+    explored_heapq: list[tuple[int, int]] = [(0, start_v)]
+    while explored_heapq:
+        cumulated_weight, explored_v = heapq.heappop(explored_heapq)
+        # if already minimum weight to a vertex is modified by heapq
+        if min_weights[explored_v] != "INF":
+            continue
+        min_weights[explored_v] = cumulated_weight
+
+        for dest, weight in directed_graph_weights[explored_v].items():
+            # if already a vertex is visited
+            if min_weights[dest] == "INF":
+                heapq.heappush(explored_heapq, (cumulated_weight + weight, dest))
+
+    # Title: output
+    result: str = "\n".join(map(str, min_weights[1:]))
+    print(result)
+    return result
+
+
+def test_get_minimum_weight_to_all_vertices() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "5 6",
+                "1",
+                "5 1 1",
+                "1 2 2",
+                "1 3 3",
+                "2 3 4",
+                "2 4 5",
+                "3 4 6",
+            ],
+            ["0", "2", "3", "7", "INF"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            get_minimum_weight_to_all_vertices(iter(input_lines)),
+            "\n".join(output_lines),
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def see_colors_as_red_green_color_blindness(
+    input_lines: Optional[Iterator[str]] = None,
+) -> str:
+    """get Color zone count ; https://www.acmicpc.net/problem/10026
+
+    Time Complexity (Worst-case): O( BFS(color_map) )
+
+    Space Complexity (Worst-case): O( BFS(color_map) )
+    """
+    import operator
+    import sys
+    from collections import deque
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    DIRECTIONS: list[tuple[int, int]] = [
+        (-1, 0),  # (-row direction)
+        (1, 0),  # (+row direction)
+        (0, -1),  # (-column direction)
+        (0, 1),  # (+column direction)
+    ]
+
+    # Title: input
+    # condition: (1 ≤ N ≤ 100)
+    n: int = int(input_())
+    color_map: list[str] = [input_() for _ in range(n)]
+
+    # Title: solve
+    def get_color_zone_count(predicate: str) -> int:
+        is_visited_color_map: list[list[bool]] = [[False] * n for _ in range(n)]
+        count: int = 0
+        for row in range(n):
+            for column in range(n):
+                if not is_visited_color_map[row][column]:
+                    colors: str = color_map[row][column]
+                    if colors in predicate:
+                        colors = predicate
+                    count += 1
+
+                    # BFS
+                    explored_deque: deque[tuple[int, int]] = deque([(row, column)])
+                    is_visited_color_map[row][column] = True
+                    while explored_deque:
+                        explored_point = explored_deque.popleft()
+                        for direction in DIRECTIONS:
+                            new_point: tuple[int, int] = tuple(
+                                map(operator.add, explored_point, direction)
+                            )
+                            if (
+                                0 <= new_point[0] < n
+                                and 0 <= new_point[1] < n
+                                and not is_visited_color_map[new_point[0]][new_point[1]]
+                                and color_map[new_point[0]][new_point[1]] in colors
+                            ):
+                                explored_deque.append(new_point)
+                                is_visited_color_map[new_point[0]][new_point[1]] = True
+        return count
+
+    count_as_normal: int = get_color_zone_count(predicate="")
+    count_as_blidness: int = get_color_zone_count(predicate="RG")
+
+    # Title: output
+    result: str = " ".join(map(str, [count_as_normal, count_as_blidness]))
+    print(result)
+    return result
+
+
+def test_see_colors_as_red_green_color_blindness() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "5",
+                "RRRBB",
+                "GGBBB",
+                "BBBRR",
+                "BBRRR",
+                "RRRRR",
+            ],
+            ["4 3"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            see_colors_as_red_green_color_blindness(iter(input_lines)), output_lines[0]
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+# week 3-2: dynamic programming
+def solve_travelling_salesman_problem(
+    input_lines: Optional[Iterator[str]] = None,
+) -> str:
+    """solve Travelling salesman problem ; https://www.acmicpc.net/problem/2098
+
+    Time Complexity (Worst-case): Θ(2^n * n^2) from "main algorithm" part
+
+    Space Complexity (Worst-case): Θ(2^n * n) from <min_cycle_weights>
+    """
+    import itertools
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (2 ≤ N ≤ 16)
+    n = int(input_())
+    # weight: (0 ≤ weight in edges ≤ 10^6). 0 means INFINITY.
+    edge_weights: list[list[int | float]] = []
+    for _ in range(n):
+        line: list[int | float] = list((map(int, input_().split())))
+        for i, x in enumerate(line):
+            if x == 0:  # given condition
+                line[i] = float("infinity")
+        edge_weights.append(line)
+
+    # Title: solve
+    # 0 ≤  route range  < <route_limit> - 1
+    route_limit: int = 1 << n - 1
+    min_cycle_weights: list[list[int | float]] = [
+        [float("infinity")] * n for _ in range(route_limit)
+    ]
+
+    def set_min_cycle_weights(route: int, dest: int) -> None:
+        for previous_dest in [v for v in range(1, n) if 1 << v - 1 & route != 0]:
+            divided_route = route & ~(1 << previous_dest - 1)
+            new_distance = (
+                min_cycle_weights[divided_route][previous_dest]
+                + edge_weights[previous_dest][dest]
+            )
+            if new_distance < min_cycle_weights[route][dest]:
+                min_cycle_weights[route][dest] = new_distance
+
+    route_dict_by_v_count: dict[int, list[int]] = {
+        v_count: [] for v_count in range(1, n - 1)
+    }
+    for route in range(1, route_limit - 1):
+        route_dict_by_v_count[route.bit_count()].append(route)
+
+    # main algorithm
+    for v in range(1, n):
+        min_cycle_weights[0][v] = edge_weights[0][v]
+    for route in itertools.chain.from_iterable(route_dict_by_v_count.values()):
+        for dest in [v for v in range(1, n) if 1 << v - 1 & route == 0]:
+            set_min_cycle_weights(route=route, dest=dest)
+    set_min_cycle_weights(route=route_limit - 1, dest=0)
+
+    # Title: output
+    result: str = str(min_cycle_weights[route_limit - 1][0])
+    print(result)
+    return result
+
+
+def test_solve_travelling_salesman_problem() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "4",
+                "0 10 15 20",
+                "5 0 9 10",
+                "6 13 0 12",
+                "8 8 9 0",
+            ],
+            ["35"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            solve_travelling_salesman_problem(iter(input_lines)), output_lines[0]
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def get_longest_length_of_bitonic_like_subsequence(
+    input_lines: Optional[Iterator[str]] = None,
+) -> str:
+    """get longest length of bitonic-like subsequence ; https://www.acmicpc.net/problem/11054
+
+    Time Complexity (Worst-case): O(n(log n))
+        - O(n(log n)) from binary search to find suitable length of increasing subsequence for sequence[i]. (and from reversed thing)
+        - O(n) from counting the length of increasing subsequence for each element of sequence. (and from reversed thing)
+
+    Space Complexity (Worst-case): O(n) from auxiliary data structures
+
+    Consideration
+        - Actual bitonic sequence is defined as x_0 ≤ ... ≤ x_k ≥ ... ≥ x_(n-1) for some (k, 0 ≤ k < n).
+            but this problem define that as x_0 < ... < x_k > ... > x_(n-1) for some (k, 0 ≤ k < n).
+            so an algorithm for longest increasing sequences can be applied to this problem.
+    """
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (1 ≤ N ≤ 10^6)
+    n: int = int(input_())
+    # condition: (-(10^9) ≤ element of sequence ≤ 10^9)
+    sequence: list[int] = list(map(int, input_().split()))
+    longest_bitonic_subsequence_l: int = 0
+
+    # Title: solve
+    smallest_indexes_at_l: list[int] = [0] * (n + 1)
+    smallest_indexes_at_l[0] = -1
+    increasing_subsequence_lengths = [0] * n
+    found_subsequence_l: int = 0
+
+    for i in range(len(sequence)):
+        low = 1
+        high = found_subsequence_l + 1
+
+        while low < high:
+            mid = low + (high - low) // 2
+            if sequence[smallest_indexes_at_l[mid]] >= sequence[i]:
+                high = mid
+            else:
+                low = mid + 1
+
+        new_l = low
+        smallest_indexes_at_l[new_l] = i
+        if new_l > found_subsequence_l:
+            found_subsequence_l = new_l
+
+        increasing_subsequence_lengths[i] = new_l
+
+    # iterate in reverse. similar with upper algorithm.
+    smallest_indexes_at_l_2: list[int] = [0] * (n + 1)
+    smallest_indexes_at_l_2[0] = -1
+    increasing_subsequence_lengths_2 = [0] * n
+    found_subsequence_l_2: int = 0
+
+    for i in range(len(sequence) - 1, -1, -1):
+        low = 1
+        high = found_subsequence_l_2 + 1
+
+        while low < high:
+            mid = low + (high - low) // 2
+            if sequence[smallest_indexes_at_l_2[mid]] >= sequence[i]:
+                high = mid
+            else:
+                low = mid + 1
+
+        new_l = low
+        smallest_indexes_at_l_2[new_l] = i
+        if new_l > found_subsequence_l_2:
+            found_subsequence_l_2 = new_l
+
+        increasing_subsequence_lengths_2[i] = new_l
+
+    longest_bitonic_subsequence_l = (
+        max(
+            (
+                a + b
+                for a, b in zip(
+                    increasing_subsequence_lengths, increasing_subsequence_lengths_2
+                )
+            )
+        )
+        - 1
+    )
+
+    # Title: output
+    result: str = str(longest_bitonic_subsequence_l)
+    print(result)
+    return result
+
+
+def test_get_longest_length_of_bitonic_like_subsequence() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "10",
+                "1 5 2 1 4 3 4 5 2 1",
+            ],
+            ["7"],
+        ]
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            get_longest_length_of_bitonic_like_subsequence(iter(input_lines)),
+            "\n".join(output_lines),
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+# week 3-1: binary search: 4
+def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
+    """get Number of cases of subsequences to be able to create target Sum ; https://www.acmicpc.net/problem/1208
+
+    Time Complexity (Worst-case): O( 2^(n/2) * (n/2) )
+        - O(k log_2(k)) from iterating subset and running binary search
+        - O(k log_2(k)) from Tim sort
+
+        As k is 2^(n/2), O(k log k) == O( 2^(n/2) * (n/2) * log_2(2) ) == O( 2^(n/2) * (n/2) )
+
+    Space Complexity (Worst-case): O(2^(n/2)) from auxiliary data structures
+
+    Definition
+        - k := the number of made up all subset from (n // 2). == 2^(n/2)
+    """
+    import bisect
+    import itertools
+    import sys
+    from typing import Callable
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition (1 ≤ N < 40)
+    # condition (1 ≤ <target_sum> < 10^6)
+    n, target_sum = map(int, input_().split())
+    sequence: list[int] = list(map(int, input_().split()))
+    total_count = 0
+
+    # Title: solve
+    n_halves: list[list[int]] = [sequence[: n // 2], sequence[n // 2 :]]
+    sum_halves: list[list[int]] = [[], []]
+    get_target_count: Callable[
+        [list[int], int], int
+    ] = lambda in_, target: bisect.bisect_right(in_, target) - bisect.bisect_left(
+        in_, target
+    )
+
+    for n_half, sum_half in zip(n_halves, sum_halves):
+        for i in range(1, len(n_half) + 1):
+            sum_half.extend((sum(comb) for comb in itertools.combinations(n_half, i)))
+        sum_half.sort()
+
+    for sum_half in sum_halves:
+        total_count += get_target_count(sum_half, target_sum)
+    for s in sum_halves[0]:
+        total_count += get_target_count(sum_halves[1], target_sum - s)
+
+    # Title: output
+    result: str = str(total_count)
+    print(result)
+    return result
+
+
+def test_sum_subsequences_2() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "6 0",
+                "-7 -3 -2 5 8 0",
+            ],
+            ["3"],
+        ],
+        [
+            [
+                "5 0",
+                "0 0 0 0 0",
+            ],
+            ["31"],  # 5C1 ~ 5C5  =  5, 10, 10, 5, 1
+        ],
+        [
+            [
+                "32 1000",  # 21 "100" and 11 "-100"
+                "100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100",
+            ],
+            ["129024480"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(sum_subsequences_2(iter(input_lines)), output_lines[0])
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def drive_with_valid_weight(input_lines: Optional[Iterator[str]] = None) -> str:
+    """❔ get Maximum weight limit ; https://www.acmicpc.net/problem/1939
+
+    Time Complexity (Worst-case): ...
+        - O(log <maximum_weight_limit>) from Parametric search loop
+                ; <maximum_weight_limit> was given 10^9
+            * O( BFS(graph_metric) ) (but except overlapped edges)
+        - O( N(bridges) ) from selecting maximum weight limit of same edge points
+
+    Space Complexity (Worst-case): O( BFS(graph_metric) ) (bidirectional edges)
+
+    Definition
+        - Number( BFS(bridges) ): |V| + |E|; Time occurred to find valid paths
+            - the number of valid islands including <start_island> are vertexes.
+            - the number of valid bridges are edges.
+
+    Consideration:
+        - ❔ How to process "bidirectional edges"?
+            - if it is processed in Adjacency matrix (Symmetric matrix)
+                , It is expected to cause "Memory Limit Exceeded".
+            - 🚣 instead append edges into two vertices as Adjancecy list.
+
+    Implementation:
+        - It can be thought as of a successor of problem <install_home_routers> (function)
+        - Current implmentation is 0.25 seconds slower than without deduplication of bridge (; to select maximum weight_limit).
+        - 🚣 It seem that It can be implemented by using Kruscal's algorithm.
+            when disjoint set where <start_island> is root meets disjoint of <end_island>
+            , weight limit of the lastly merged edge will be answer.
+
+    Time Complexity (Worst-case): ...
+        - O( N(edges) ) from selecting minimum weight of same edge points
+        - O( BFS(graph_metric) ) (but except overlapped edges)
+
+    """
+    import sys
+    from collections import deque
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    class FoundPath(Exception):
+        pass
+
+    # Title: input
+    # condition: (2 ≤ island count ≤ 10^4), (1 ≤ M ≤ 10^6)
+    island_count, m = map(int, input_().split())
+    # <graph_metric>: v1[dict[v2, maximum weight_limit]]]
+    # condition: (1 ≤ island id vertexes ≤ island count), (1 ≤ weight limit ≤ 10^9)
+    graph_metric: list[dict[int, int]] = [{} for _ in range(island_count + 1)]
+
+    def set_maximum_weight(v1: int, v2: int, weight: int) -> None:
+        if v2 in graph_metric[v1].keys():
+            graph_metric[v1][v2] = max(graph_metric[v1][v2], weight)
+        else:
+            graph_metric[v1][v2] = weight
+
+    for _ in range(m):
+        island_1, island_2, weight_limit = map(int, input_().split())
+        set_maximum_weight(island_1, island_2, weight_limit)
+        set_maximum_weight(island_2, island_1, weight_limit)
+
+    start_island, end_island = map(int, input_().split())
+    maximum_weight_limit: int = 1
+
+    # Title: solve
+    # <endpoints>: minimum and maximum weight limits
+    endpoints: list[int] = [1, 10**9]
+
+    while endpoints[0] <= endpoints[1]:
+        ## Test algorithm
+        mid_weight_limit: int = endpoints[0] + (endpoints[1] - endpoints[0]) // 2  # type: ignore
+
+        is_exploration_success: bool = False
+        explored_deque: deque[int] = deque([start_island])
+        is_visited_set: set[int] = set([start_island])
+        try:
+            while explored_deque:
+                explored_island: int = explored_deque.popleft()
+                for dest_island, weight_limit in graph_metric[explored_island].items():
+                    if (
+                        dest_island not in is_visited_set
+                        and mid_weight_limit <= weight_limit
+                    ):
+                        if dest_island == end_island:
+                            raise FoundPath
+                        is_visited_set.add(dest_island)
+                        explored_deque.append(dest_island)
+        except FoundPath:
+            is_exploration_success = True
+
+        ## Decision algorithm (predicate)
+        if is_exploration_success:
+            endpoints[0] = mid_weight_limit + 1  # type: ignore
+        else:
+            endpoints[1] = mid_weight_limit - 1  # type: ignore
+    else:
+        maximum_weight_limit = endpoints[0] - 1
+
+    # Title: output
+    result: str = str(maximum_weight_limit)
+    print(result)
+    return result
+
+
+def test_drive_with_valid_weight() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "3 3",
+                "1 2 2",
+                "3 1 3",
+                "2 3 2",
+                "1 3",
+            ],
+            ["3"],
+        ]
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            drive_with_valid_weight(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def install_home_routers(input_lines: Optional[Iterator[str]] = None) -> str:
+    """🚤 get Distance that maximizes the distance between all adjacent routers ; https://www.acmicpc.net/problem/2110
+
+    Time Complexity (Worst-case): O(n(log^2 n))
+        - O(n(log n)) from Tim sort
+        - O(log n) from Parametric search loop (<mid_distance> is updated logarithmically)
+            * O(n) from inner While loop
+                but efficient since search range is narrower for each iteration from "lo=start_coord_i + 1".
+            * O(log n) in inner loop from binary search
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Implementation
+        - It is efficient I uses binary search because target coordinate is always in routers list.
+        - key point is to use Parametric search with Bisection method.
+            - The structure can be largely divided into two categories
+                : (Test algorithm, Decision algorithm (predicate))
+    """
+    import bisect
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (2 ≤ N ≤ 2*10^5)
+    # condition: (2 ≤ home routers count ≤ N)
+    # condition: (0 ≤ routers coordinate ≤ 10^9). home's coordinates do not overlap.
+    n, routers_count = map(int, input_().split())
+    routers_coordinates: list[int] = [int(input_()) for _ in range(n)]
+    maximum_distance: int = 0
+
+    # Title: solve
+    routers_coordinates.sort()
+    # endpoints are search range of distance to get Installable maximum distance.
+    # Note that endpoints represent a range that has not yet been tested.
+    # endpoints[0] is minimum Installable distance.
+    # endpoints[1] is maximum distance between two routers.
+    endpoints: list[int] = [1, routers_coordinates[-1] - routers_coordinates[0]]
+
+    # Parametric search with Bisection method
+    while endpoints[0] <= endpoints[1]:
+        ## Test algorithm
+        mid_distance: int = endpoints[0] + (endpoints[1] - endpoints[0]) // 2  # type: ignore
+        start_coord_i: int = 0  # initial coordinate to install router.
+        installed_router_count: int = 0
+        # while if result of bisect.bisect_left() is not last of <start_coord_i>
+        while start_coord_i < len(routers_coordinates):
+            installed_router_count += 1
+
+            # update next start coordinate
+            start_coord_i = bisect.bisect_left(
+                routers_coordinates,
+                routers_coordinates[start_coord_i] + mid_distance,  # type: ignore
+                lo=start_coord_i + 1,
+            )
+
+        ## Decision algorithm (predicate)
+        if installed_router_count >= routers_count:
+            # update minimum Installable distance if installed_router_count >= routers_count
+            # current <mid_distance> is valid. but test is required for a longer distance. so set with "+1".
+            endpoints[0] = mid_distance + 1  # type: ignore
+        else:
+            # update maximum Installable distance.
+            # current <mid_distance> is not valid. so set with "-1".
+            endpoints[1] = mid_distance - 1  # type: ignore
+    else:
+        # When root is found.
+        maximum_distance = endpoints[0] - 1
+
+    # Title: output
+    result: str = str(maximum_distance)
+    print(result)
+    return result
+
+
+def test_install_home_routers() -> None:
+    """Debugging
+    +: router counts ++
+    *: next start point.
+
+
+    =====
+    5 3
+    0 1 2 3 4   # coordinates. middle coordinate is 2
+    +   *
+        +   *
+            +
+
+    endpoints
+    1 4
+    3 4  # 2: O
+    3 2  # 3: X
+    3 2  # 2: O   end.
+    """
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "5 3",
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+            ],
+            ["2"],
+        ],
+        [
+            [
+                "5 3",
+                "1",
+                "2",
+                "8",
+                "4",
+                "9",
+            ],
+            ["3"],
+        ],
+        [
+            [
+                "3 2",
+                "8",
+                "9",
+                "10",
+            ],
+            ["2"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            install_home_routers(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def move_straight_in_cave(input_lines: Optional[Iterator[str]] = None) -> str:
+    """❔ get Minimum collision count ; https://www.acmicpc.net/problem/3020
+
+    Time Complexity (Worst-case): O(n(log n))
+        - O(2 * n/2(log n/2)) from Tim sort on two stalagmites, stalactites list.
+        - O(2* n/2) iteration from given stalagmites, stalactites.
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Inductive reasoning
+        =====
+        N = 6, H = 4
+        -----
+        0 | 1 | 2 | 3  section (0-based numbering assuming that section 0 occupies height 0 ~ 1)
+        1   2   3   -  stalagmite heights
+        -   3   2   1  stalactites heights
+        -----
+
+        As the section number increases, the number of collisions on stalagmite decreases.
+            initial value is n / 2 and last value is 0 in H section.
+        As the section number increases, the number of collisions on stalactites increases.
+            initial value is 0 and last value is n / 2 in H section.
+
+        sections whose new a stalagmite or stalactite collided is not appeared can be skipped.
+
+        key point is to use feature of partial sum.
+
+    Implementation
+        - According to given condition "N is always even number."
+            , I distinguished stalagmites and stalactites once when input data.
+        - I used collections.Counter() instead of storing all collision count into list.
+            it will save memory footprint.
+        - using bisect is inefficient in this problem because elements once searched is not used in later loop.
+    """
+    import sys
+    from collections import Counter
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (2 ≤ N ≤ 2*10^5). N is always even number.
+    # condition: (2 ≤ H ≤ 5*10^5). (1 ≤ height of obstacle < H)
+    stalagmites: list[int] = []
+    stalactites: list[int] = []
+    n, h = map(int, input_().split())
+    half_of_stones: int = n // 2
+    for _ in range(half_of_stones):
+        stalagmites.append(int(input_()))
+        stalactites.append(int(input_()))
+    minimum_collision_section: int = 0
+    minimum_collision_count: int = 0
+
+    # Title: solve
+    # reverse=True so that <stalagmite_i> could indicates cumulated obstacles' count.
+    stalagmites.sort(reverse=True)
+    # reverse=True so that stalactites can be processed with stalagmite together in order.
+    stalactites.sort(reverse=True)
+
+    stalagmite_i: int = half_of_stones - 1
+    stalactite_i: int = 0
+    collision_counter: Counter[int] = Counter()
+    attempt_section: int = 0
+    while True:
+        next_attempt_section: int = h
+        for _ in range(stalagmite_i, -1, -1):
+            if stalagmites[stalagmite_i] == attempt_section:
+                stalagmite_i -= 1
+            else:
+                next_attempt_section = stalagmites[stalagmite_i]
+                break
+
+        for _ in range(stalactite_i, half_of_stones):
+            if (y := h - stalactites[stalactite_i]) == attempt_section:
+                stalactite_i += 1
+            else:
+                if y < next_attempt_section:
+                    next_attempt_section = y
+                break
+
+        # skip sections whose the number of collisions is same.
+        collision_counter[stalagmite_i + 1 + stalactite_i] += (
+            next_attempt_section - attempt_section
+        )
+
+        # early stop when stalagmites, stalactites are exhausted
+        if next_attempt_section == h:
+            break
+        else:
+            attempt_section = next_attempt_section
+
+    minimum_collision_section = min(collision_counter)
+    minimum_collision_count = collision_counter[minimum_collision_section]
+
+    # Title: output
+    result: str = " ".join(
+        map(str, [minimum_collision_section, minimum_collision_count])
+    )
+    print(result)
+    return result
+
+
+def test_move_straight_in_cave() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "6 7",
+                "1",
+                "5",
+                "3",
+                "3",
+                "5",
+                "1",
+            ],
+            ["2 3"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            move_straight_in_cave(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+# week 2-2: sorting: 5
+def hang_balloons_to_teams(input_lines: Optional[Iterator[str]] = None) -> str:
+    """❔ get Minimum distance to hang balloons to teams ; https://www.acmicpc.net/problem/4716
+
+    Time Complexity (Worst-case): O(n(log n)) from Tim sort
+        - O(n) loop from given teams.
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Consideration
+        - To compare Opportunity costs
+            If team's balloons that have higher opportunity cost is processed in order
+            , the number of remained (A, B) balloons will not matter.
+            In this problem, opportunity cost is absolute value of difference between distances apart from A room and B room.
+
+    Implementation
+        - 🚣 key point is Memoization of <ab_pointer>.
+            <ab_pointer> represents a pointer to the ballon that the team should prioritize among A, B balloons.
+            <ab_pointer> is used in <distance_ab> and <remained_ab>.
+        - I used <list>.sort() instead of sorted(<list>).
+            - <list>.sort() is in-place operation.
+            - sorted(<list>) returns new sorted object so that it causes overhead as much copy operation.
+        - condition "0 0 0" input can be thought of as a first line input of each test cases.
+    """
+    import dataclasses
+    import sys
+    from typing import Literal
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    @dataclasses.dataclass(init=False, eq=True, order=True)
+    class Team:
+        required_balloons: int
+        distance_ab: list[int]
+        ab_pointer: Literal[0, 1]
+
+        def __init__(self, *args: int):
+            self.required_balloons = args[0]
+            self.distance_ab = [args[1], args[2]]
+            self.ab_pointer = 0 if self.distance_ab[0] <= self.distance_ab[1] else 1
+
+    minimum_sum_of_distance_list: list[str] = []  # for local debugging
+
+    # condition: when "0 0 0" is present, break loop.
+    while (start_line := list(map(int, input_().split()))) != [0, 0, 0]:
+        # Title: input
+        # condition: (1 ≤ N ≤ 1000)
+        n: int = start_line[0]
+        # condition: (0 ≤  (A, B) balloons  < 10^4)
+        remained_ab: list[int] = start_line[1:]
+
+        # condition: (0 ≤  distance apart from (A, B)  ≤ 10^3)
+        teams: list[Team] = [Team(*map(int, input_().split())) for _ in range(n)]
+        teams.sort(key=lambda team: -abs(team.distance_ab[0] - team.distance_ab[1]))
+        minimum_sum_of_distance: int = 0
+
+        # Title: solve
+        for i, team in enumerate(teams):
+            used_balloons: int = (
+                team.required_balloons
+                if team.required_balloons < remained_ab[team.ab_pointer]
+                else remained_ab[team.ab_pointer]
+            )
+
+            minimum_sum_of_distance += used_balloons * team.distance_ab[team.ab_pointer]
+            remained_ab[team.ab_pointer] -= used_balloons
+
+            # if remained A or B balloons are exhausted.
+            if remained_ab[team.ab_pointer] == 0:
+                team.required_balloons -= used_balloons
+                fixed_ab_pointer: int = (team.ab_pointer + 1) % 2
+
+                # 🚣 condition: (Σ(required_balloons) ≤ A+B)
+                minimum_sum_of_distance += sum(
+                    (
+                        teams[j].required_balloons
+                        * teams[j].distance_ab[fixed_ab_pointer]
+                        for j in range(i, len(teams))
+                    )
+                )
+                break
+
+        # Title: output
+        print(minimum_sum_of_distance)
+        minimum_sum_of_distance_list.append(str(minimum_sum_of_distance))
+
+    return "\n".join(minimum_sum_of_distance_list)
+
+
+def test_hang_balloons_to_teams() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "1 5 5",  # First case
+                "10 2 1",  #  2*5 + 1*5
+                "3 15 50",  # Second case
+                "10 1 2",  # 2. 1*5 + 2*5
+                "10 2 3",  # 3. 3*10
+                "10 4 1000",  # 1. 4*10
+                "0 0 0",
+            ],
+            ["15", "85"],
+        ],
+        [
+            [
+                "4 25 25",
+                "10 20 10",  # 50+100
+                "10 10 30",  # 100
+                "10 30 15",  # 150
+                "10 40 20",  # 200
+                "0 0 0",
+            ],
+            ["600"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            hang_balloons_to_teams(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def weigh_weights_on_the_scales(input_lines: Optional[Iterator[str]] = None) -> str:
+    """❔ get Maximum measurable weight by using weights ; https://www.acmicpc.net/problem/2437
+
+    Time Complexity (Worst-case): O(n(log n)) from Tim sort
+        - O(n) loop from given weights.
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Inductive reasoning
+        =====
+        4
+        1 2 4 9
+        -----
+        -> 1        -> 2, 3     -> 4, 5, 6, 7        -> [X] 9
+
+        if Current maximum measurable weight + 1   >=   still not checked a Next weight:
+            Current maximum measurable weight  +=  a Next weight
+        else:
+            Not found weight  =  Current maximum measurable weight +1
+            break
+        and, one exception: loop of all given weights is over,
+            Not found weight  =  Current maximum measurable weight +1
+
+    Implementation
+        - Things I've done in the implementation which uses hash table as set type.
+            In this case, always loop is performed as many length of measurable weights until before for each weight.
+            namely, it's Recurrence Relation will be:
+                when loop count = 1, Sum(1) = 1.
+                when loop count > 1 , Sum(loop_count) = 1 + Sum(loop_count-1)
+            Each loop's length's is 2^(loop_count-1).
+            , and causes "Out of Memory" in the submit site.
+        - 🚣 key point is reasoning with Inductive reasoning.
+            (debug some cases, set temporarily hypothesis, find the rules)
+            refer to Debugging of <test_weigh_weights_on_the_scales>
+    """
+
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (1 ≤ N ≤ 1000)
+    n: int = int(input_())
+    # condition: (1 ≤ each weight of weights ≤ 10^6)
+    weights: list[int] = list(map(int, input_().split()))
+    # condition: (1 ≤ weights to be measured ≤ n)
+    not_found_weight: int = 1
+    measurable_weight: int = 0
+
+    # Title: solve
+    weights.sort()
+    for weight in weights:
+        if measurable_weight + 1 >= weight:
+            measurable_weight += weight
+        else:
+            not_found_weight = measurable_weight + 1
+            break
+    else:
+        not_found_weight = measurable_weight + 1
+
+    # Title: output
+    result: str = str(not_found_weight)
+    print(result)
+    return result
+
+
+def test_weigh_weights_on_the_scales() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "7",
+                "3 1 6 2 7 30 1",
+            ],
+            ["21"],
+        ],
+        [
+            [
+                "5",
+                "1 2 3 4 5",
+            ],
+            ["16"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            weigh_weights_on_the_scales(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
+def mix_three_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
+    """❔ get the Zero-closest sum of three solution ; https://www.acmicpc.net/problem/2473
+
+    Time Complexity (Worst-case): O(n^2) from loop of variant of 3SUM problem
+        - O(n(log n)) from Tim sort
+
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Purpose
+        - to compare absolute sums of two solution by explicitly control two index pointers with exclusive range.
+
+    Consideration
+        - It is almost similar with function <mix_two_solutions> (problem). refer to that.
+
+    Implementation
+        - when get the sum of three values, to use sum() functions is slower than a way of direct indexing access.
+            This appears to be because sum() creates an iterator once every execution.
+            It causes "Timeout" in the submit site.
+    """
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    class TargetFound(Exception):
+        pass
+
+    # Title: input
+    # condition: (3 ≤ N ≤ 5000)
+    n: int = int(input_())
+    # condition: (-(10^9) ≤ each number of solution ≤ 10^9)
+    # negative integer is acid solution, positive integer is alkaline solution.
+    solutions: list[int] = list(map(int, input_().split()))
+    zero_closest_solutions_i: tuple[int, int, int] = (0, 1, 2)
+    zero_closest_abs: int = sys.maxsize
+
+    # Title: solve
+    solutions.sort()
+    try:
+        for i in range(n - 2):
+            j = i + 1
+            k = n - 1
+
+            while j < k:
+                temp_sum: int = solutions[i] + solutions[j] + solutions[k]
+                if (new_abs := abs(temp_sum)) < zero_closest_abs:
+                    zero_closest_solutions_i = (i, j, k)
+                    zero_closest_abs = new_abs
+                    if temp_sum == 0:
+                        raise TargetFound
+
+                # 'if temp_sum == 0' is evaluated in upper expressions.
+                if temp_sum < 0:
+                    j += 1
+                else:
+                    k -= 1
+    except TargetFound:
+        pass
+
+    result_as_str = " ".join(
+        map(
+            str,
+            ((solutions[i] for i in zero_closest_solutions_i)),
+        )
+    )
+
+    # Title: output
+    print(result_as_str)
+    return result_as_str
+
+
+def test_mix_three_solutions() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "4",
+                "1 2 3 -1",
+            ],
+            ["-1 1 2"],
+        ],
+        [
+            [
+                "5",
+                "-99 -100 -100 -105 -100",
+            ],
+            ["-100 -100 -99"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            mix_three_solutions(iter(input_lines)), "\n".join(output_lines)
+        )
+        print(f"elapsed time: {time.time() - start_time}")
 
 
 def bundle_up_numbers(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Maximum sum by optionally bundling up numbers ; https://www.acmicpc.net/problem/1744
+    """❔ get Maximum sum by optionally bundling up numbers ; https://www.acmicpc.net/problem/1744
 
     Time Complexity (Worst-case): O(n(log n)) from Tim sort
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) from Tim sort
 
     Purpose
         - to compare absolute sums of two solution by explicitly control two index pointers with exclusive range.
@@ -37,12 +1652,12 @@ def bundle_up_numbers(input_lines: Optional[Iterator[str]] = None) -> str:
         input_ = sys.stdin.readline
 
     # Title: input
-    # condition (1 ≤ N < 50)
+    # condition: (1 ≤ N < 50)
     n: int = int(input_())
-    # condition (-(10^3) ≤ sequence number < 10^3)
+    # condition: (-(10^3) ≤ sequence number < 10^3)
     sequences: list[int] = [int(input_()) for _ in range(n)]
-    # condition (maximum result < 2^31)
-    maximum_result: int = 0
+    # condition: (maximum result < 2^31)
+    maximum_sum: int = 0
 
     # Title: solve
     sequences.sort()
@@ -52,27 +1667,28 @@ def bundle_up_numbers(input_lines: Optional[Iterator[str]] = None) -> str:
     while left_i < n and sequences[left_i] < 0:
         # could I bundle up two negative integer including the case that next element is zero?
         if left_i + 1 < n and sequences[left_i + 1] <= 0:
-            maximum_result += sequences[left_i] * sequences[left_i + 1]
+            maximum_sum += sequences[left_i] * sequences[left_i + 1]
             left_i += 2
         else:
-            maximum_result += sequences[left_i]
+            maximum_sum += sequences[left_i]
             left_i += 1
     while right_i >= 0 and sequences[right_i] > 0:
         # could I bundle up two positive integer except the case that next element is zero?
         if right_i - 1 >= 0 and sequences[right_i - 1] > 0:
             if sequences[right_i - 1] == 1:
-                maximum_result += sequences[right_i]
+                maximum_sum += sequences[right_i]
                 right_i -= 1
             else:
-                maximum_result += sequences[right_i] * sequences[right_i - 1]
+                maximum_sum += sequences[right_i] * sequences[right_i - 1]
                 right_i -= 2
         else:
-            maximum_result += sequences[right_i]
+            maximum_sum += sequences[right_i]
             right_i -= 1
 
     # Title: output
-    print(maximum_result)
-    return str(maximum_result)
+    result: str = str(maximum_sum)
+    print(result)
+    return result
 
 
 def test_bundle_up_numbers() -> None:
@@ -98,26 +1714,46 @@ def test_bundle_up_numbers() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(bundle_up_numbers(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            bundle_up_numbers(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get the Zero-closest sum of two solution ; https://www.acmicpc.net/problem/2470
+    """❔ get the Zero-closest sum of two solution ; https://www.acmicpc.net/problem/2470
 
     Time Complexity (Worst-case): O(n(log n)) from Tim sort
+        - O(n) from loop of variant of 2SUM problem
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) from Tim sort
+
+    Definition
+        Abs := Absolute value of the sum closest to zero
+        Array := Sorted Array
+        Sum : = sum of two values
+
+        O := Optimized value that make Minimum Abs with one control variable existed
+            - the Optimized value is different for each a independent variable.
+            - the Optimized value may exist or not in given Array
+                Assume that the value is between consecutive two values in the Array.
+                To determine which values minimize Abs
+                🚣, It should test both; each sum of (the control variable, one of consecutive two values)
+
+                if so, even if a pointer (<left_i> | <right_i> moves one by one, it could covers that range.
 
     Purpose
         - to compare absolute sums of two solution by explicitly control two index pointers with exclusive range.
 
     Consideration
         - ❔ How do I compose up inside of the loop?
-            one solution must compare at least other two solution.
-            so in the loop only one of <left_i> or <right_i> pointer must move.
+            chaining one by one in order to test sum of solution, one loop must have one predicate.
 
     Implementation
+        - even if I implement by using Binary Search
+            , since purpose is testing sum of two solution rather than searching one target
+            , Anyway after Binary search it must be tested in condition where fixed one control variable (unmodified) and modify another variable.
+            so Binary Search useless.
         - if list of solution is sorted state, It can calculate systematically all solution in order.
             if <temp_sum> is less than zero, two selections exist: increase (<left_i> | <right_i>).
             but <right_i> starts with end of the list, so it doesn't have to be bothered.
@@ -131,12 +1767,12 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
         input_ = sys.stdin.readline
 
     # Title: input
-    # condition (2 ≤ N ≤ 100,000)
+    # condition: (2 ≤ N ≤ 100,000)
     n: int = int(input_())
-    # condition (-(10^9) ≤ each number of solution ≤ 10^9)
+    # condition: (-(10^9) ≤ each number of solution ≤ 10^9)
     # negative integer is acid solution, positive integer is alkaline solution.
     solutions = list(map(int, input_().split()))
-    zero_closest_solutions_indexes: tuple[int, int] = (-1, -1)
+    zero_closest_solutions_i: tuple[int, int] = (0, 1)
     zero_closest_abs: int = sys.maxsize
 
     # Title: solve
@@ -148,10 +1784,11 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
 
         if (new_abs := abs(temp_sum)) < zero_closest_abs:
             zero_closest_abs = new_abs
-            zero_closest_solutions_indexes = (left_i, right_i)
+            zero_closest_solutions_i = (left_i, right_i)
             if temp_sum == 0:
                 break
 
+        # if temp_sum == 0' is evaluated in upper expressions.
         if temp_sum < 0:
             left_i += 1
         else:
@@ -159,10 +1796,7 @@ def mix_two_solutions(input_lines: Optional[Iterator[str]] = None) -> str:
     result_as_str = " ".join(
         map(
             str,
-            (
-                solutions[zero_closest_solutions_indexes[0]],
-                solutions[zero_closest_solutions_indexes[1]],
-            ),
+            ((solutions[i] for i in zero_closest_solutions_i)),
         )
     )
 
@@ -183,13 +1817,15 @@ def test_mix_two_solutions() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(mix_two_solutions(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            mix_two_solutions(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
-# week 2-1: (BFS, DFS)
+# week 2-1: (BFS, DFS): 5
 def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Length of optimized path through bridges to connect all islands ; https://www.acmicpc.net/problem/17472
+    """🚤 get Length of optimized path through bridges to connect all islands ; https://www.acmicpc.net/problem/17472
 
     Time Complexity (Worst-case): ...
         - O( Number( BFS(islands) ) ) from BFS loop
@@ -202,6 +1838,7 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
         - O( Number( BFS(bridges)) ) from BFS
             = the number of (given islands cells, bridges)
         - O( Number( bridges) ) from Kruscal's algorithm
+            - O(E) from Tim sort
 
     Definition
         - Number( BFS(islands) ): |V| + |E|; Time occurred to distinguish islands in given 10*10 grid
@@ -212,7 +1849,7 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
             - the number of cells identified in order to check constructable bridge are edges (up to 4 directions in each the cell).
         - MST(bridges)
             - O(E(log E)) from Tim sort
-            - O(|E|) from iterating Edges in Kruscal's algorithm
+            - O(E) from iterating Edges in Kruscal's algorithm
             - O(α(n)) from Union-Find in Kruscal's algorithm
 
     Purpose
@@ -235,7 +1872,7 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
     import itertools
     import operator
     import sys
-    from collections import OrderedDict, deque
+    from collections import deque
 
     if input_lines:
         input_ = lambda: next(input_lines)
@@ -298,8 +1935,8 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
     # OCEAN = 0, LAND = 1
     map_: list[list[int]] = [list(map(int, input_().split())) for _ in range(n)]
     island_key_gen = itertools.count(2)
-    island_zones_ordered_dict: OrderedDict[int, list[tuple[int, int]]] = OrderedDict()
-    island_dict: OrderedDict[int, Island] = OrderedDict()
+    island_zones_dict: dict[int, list[tuple[int, int]]] = {}
+    island_dict: dict[int, Island] = {}
     bridge_list: list[Bridge] = []
     minimum_mst_bridges: list[Bridge] = []
     minimum_mst_bridges_length: int = -1
@@ -312,7 +1949,7 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
                 continue
 
             island_key = next(island_key_gen)
-            island_zones_ordered_dict[island_key] = [(row, column)]
+            island_zones_dict[island_key] = [(row, column)]
             island_dict[island_key] = Island(v=island_key)
             # <island_key> can be substitution of <is_explored>.
             map_[row][column] = island_key
@@ -330,13 +1967,13 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
                         and 0 <= new_point[1] < m
                         and map_[new_point[0]][new_point[1]] == 1
                     ):
-                        island_zones_ordered_dict[island_key].append(new_point)
+                        island_zones_dict[island_key].append(new_point)
                         map_[new_point[0]][new_point[1]] = island_key
                         explored_deque.append(new_point)
 
     # create bridges information
     dest_cell_point_vector_set: set[PointVector] = set()
-    for island, zone in island_zones_ordered_dict.items():
+    for island, zone in island_zones_dict.items():
         # check cells in depth 1 from a cell
         start_points_and_vectors: list[PointVector] = []
         for cell_point in zone:
@@ -399,8 +2036,9 @@ def construct_bridges_2(input_lines: Optional[Iterator[str]] = None) -> str:
                 break
 
     # Title: output
-    print(minimum_mst_bridges_length)
-    return str(minimum_mst_bridges_length)
+    result: str = str(minimum_mst_bridges_length)
+    print(result)
+    return result
 
 
 def test_construct_bridges_2() -> None:
@@ -460,12 +2098,14 @@ def test_construct_bridges_2() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(construct_bridges_2(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            construct_bridges_2(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def sort_2d_array_puzzle(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Minimum number of turns to make number map as sorted state ; https://www.acmicpc.net/problem/1525
+    """❔ get Minimum number of turns to make number map as sorted state ; https://www.acmicpc.net/problem/1525
 
     Time Complexity (Worst-case): O( Number( BFS(routes) ) ) from BFS loop
 
@@ -586,8 +2226,9 @@ def sort_2d_array_puzzle(input_lines: Optional[Iterator[str]] = None) -> str:
         turns = -1
 
     # Title: output
-    print(turns)
-    return str(turns)
+    result: str = str(turns)
+    print(result)
+    return result
 
 
 def test_sort_2d_array_puzzle() -> None:
@@ -619,7 +2260,9 @@ def test_sort_2d_array_puzzle() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(sort_2d_array_puzzle(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            sort_2d_array_puzzle(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -684,11 +2327,9 @@ def go_down_downhill(input_lines: Optional[Iterator[str]] = None) -> str:
     end_point: tuple[int, int] = (n - 1, m - 1)
 
     # Title: solve
-    route_heapq: list[RouteState] = []
-    heapq.heappush(
-        route_heapq,
-        RouteState(-number_map[START_POINT[0]][START_POINT[1]], START_POINT),
-    )
+    route_heapq: list[RouteState] = [
+        RouteState(-number_map[START_POINT[0]][START_POINT[1]], START_POINT)
+    ]
     visit_count_map[START_POINT[0]][START_POINT[1]] += 1
     while route_heapq:
         route_state = heapq.heappop(route_heapq)
@@ -712,8 +2353,9 @@ def go_down_downhill(input_lines: Optional[Iterator[str]] = None) -> str:
                     ][route_state.point[1]]
 
     # Title: output
-    print(visit_count_map[end_point[0]][end_point[1]])
-    return str(visit_count_map[end_point[0]][end_point[1]])
+    result: str = str(visit_count_map[end_point[0]][end_point[1]])
+    print(result)
+    return result
 
 
 def test_go_down_downhill() -> None:
@@ -741,12 +2383,14 @@ def test_go_down_downhill() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(go_down_downhill(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            go_down_downhill(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🚤 get Maximum movable distance ; https://www.acmicpc.net/problem/1987
+    """❔ get Maximum movable distance ; https://www.acmicpc.net/problem/1987
 
     Time Complexity (Worst-case): O( Number( BFS(routes) ) ) from BFS loop
 
@@ -754,7 +2398,7 @@ def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
         It is one.
 
     Definition
-        - n, m: size to create space of tomatoes 2D tank (n*m grid).
+        - n, m: size to create alphabet board (n*m grid).
         - Number( BFS(routes) ): |V| + |E|; Time occurred from routes including given start point in given n*m grid
             - movable alphabet cells from start point are vertexes that meet given condition.
             - available adjacent alphabet cells of a alphabet node are edges (up to 4 directions in each the cell)
@@ -773,6 +2417,7 @@ def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
             - to make <passing_distance_list> as set type for membership testing
     """
     import dataclasses
+    import operator
     import sys
     from array import array
     from collections.abc import MutableSequence
@@ -813,9 +2458,8 @@ def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
     while route_state_set:
         route_state = route_state_set.pop()
         for direction in DIRECTIONS:
-            new_point = (
-                route_state.point[0] + direction[0],
-                route_state.point[1] + direction[1],
+            new_point: tuple[int, int] = tuple(
+                map(operator.add, route_state.point, direction)
             )
             if (
                 0 <= new_point[0] < n
@@ -829,11 +2473,12 @@ def move_alphabet_piece(input_lines: Optional[Iterator[str]] = None) -> str:
                     )
                 )
                 passing_distance_list.append(len(route_state.track) + 1)
+    maximum_passing_distance = max(passing_distance_list)
 
     # Title: output
-    maximum_passing_distance = max(passing_distance_list)
-    print(maximum_passing_distance)
-    return str(maximum_passing_distance)
+    result: str = str(maximum_passing_distance)
+    print(result)
+    return result
 
 
 def test_move_alphabet_piece() -> None:
@@ -903,12 +2548,14 @@ def test_move_alphabet_piece() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(move_alphabet_piece(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            move_alphabet_piece(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🚤 get Elapsed days to all tomatoes to be ripen in conditions ; https://www.acmicpc.net/problem/7576
+    """❔ get Elapsed days to all tomatoes to be ripen in conditions ; https://www.acmicpc.net/problem/7576
 
     Time Complexity (Worst-case): O( Number( BFS(spread_ripened_tomatoes) ) ) from BFS loop
 
@@ -922,11 +2569,12 @@ def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
             - adjacent tomatoes of a ripened tomato are edges (up to 4 directions in each the cell)
 
     Implementation
-        - Used data structure: Adjacency list in BFS.
+        - Used data structure: deque in BFS.
         - This solution does not require <is_explored> variable in BFS.
             instead code to compare <is_explored> can be replaced by checking for ripened tomatoes
             , so that code will be simple.
     """
+    import operator
     import sys
     from collections import deque
 
@@ -972,9 +2620,8 @@ def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
         # add some tomatoes to <next_exploration_deque> from <explored_deque>.
         explored_point = explored_deque.popleft()
         for direction in DIRECTIONS:
-            new_point: tuple[int, int] = (
-                explored_point[0] + direction[0],
-                explored_point[1] + direction[1],
+            new_point: tuple[int, int] = tuple(
+                map(operator.add, explored_point, direction)
             )
 
             if (
@@ -1004,8 +2651,9 @@ def ripen_tomatoes(input_lines: Optional[Iterator[str]] = None) -> str:
         elapsed_day = -1
 
     # Title: output
-    print(elapsed_day)
-    return str(elapsed_day)
+    result: str = str(elapsed_day)
+    print(result)
+    return result
 
 
 def test_ripen_tomato() -> None:
@@ -1041,13 +2689,15 @@ def test_ripen_tomato() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(ripen_tomatoes(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            ripen_tomatoes(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
-# week 1-2: Implementation
+# week 1-2: Implementation: 5
 def escape_marble_2(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Minimum turn number where the game win within turns 10 ; https://www.acmicpc.net/problem/13460
+    """❔ get Minimum turn number where the game win within turns 10 ; https://www.acmicpc.net/problem/13460
     >>> BFS 파란구슬, 빨간구슬 탐색해서 문제로 될듯.
 
     Time Complexity (Worst-case): ...
@@ -1075,7 +2725,7 @@ def escape_marble_2(input_lines: Optional[Iterator[str]] = None) -> str:
 
     Implementation
         - Used data structure: array for reducing memory usage.
-        - Used data structure: Adjacency list in BFS.
+        - Used data structure: deque in BFS.
             branches (2d array) are created by assemble elements of original 2d array.
             but in this problem, it should trace blue and red marble point to avoid duplicated exploration.
             so I used the way that assemble original 2d array and reassemble to recover original 2d array.
@@ -1290,8 +2940,9 @@ def escape_marble_2(input_lines: Optional[Iterator[str]] = None) -> str:
         pass_result = -1
 
     # Title: output
-    print(pass_result)
-    return str(pass_result)
+    result: str = str(pass_result)
+    print(result)
+    return result
 
 
 def test_escape_marbles_2() -> None:
@@ -1337,12 +2988,14 @@ def test_escape_marbles_2() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(escape_marble_2(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            escape_marble_2(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def play_2048_easy(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Maximum score within turns 5 ; https://www.acmicpc.net/problem/12100
+    """❔ get Maximum score within turns 5 ; https://www.acmicpc.net/problem/12100
 
     Time Complexity (Worst-case): ...
         - O( Number( DFS(board_2048) ) ) from DFS loop.
@@ -1379,7 +3032,7 @@ def play_2048_easy(input_lines: Optional[Iterator[str]] = None) -> str:
 
 
     Implementation
-        - Used data structure: Adjacency list in DFS using <dfs_stack_by_turn>
+        - Used data structure: stack in DFS using <dfs_stack_by_turn>
             graph that have all cases can be thought as a directed rooted out-tree.
             but a variable to verify it has been explored is not required.
             If instead it uses BFS or simple Brute-force (itertools.product), space complexity is bigger.
@@ -1507,8 +3160,9 @@ def play_2048_easy(input_lines: Optional[Iterator[str]] = None) -> str:
     maximum_score = max(score_list)
 
     # Title: output
-    print(maximum_score)
-    return str(maximum_score)
+    result: str = str(maximum_score)
+    print(result)
+    return result
 
 
 def test_play_2048_easy() -> None:
@@ -1533,12 +3187,14 @@ def test_play_2048_easy() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(play_2048_easy(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            play_2048_easy(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Minimum sum of distances in which baby shark moved ; https://www.acmicpc.net/problem/16236
+    """❔ get Minimum sum of distances in which baby shark moved ; https://www.acmicpc.net/problem/16236
 
     Time Complexity (Worst-case): ...
         - O( Number( BFS(available_cells) ) ) from BFS loop until given condition is not meet.
@@ -1570,7 +3226,7 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
         - Baby Shark is only one in the marine space.
 
     Implementation
-        - Used data structure: Adjacency list in BFS
+        - Used data structure: deque in BFS
             It uses BFS every time that baby shark prey on a fish until baby shark can not prey on fish.
             : the number of remained fishes are 0  |  all size of remained fishes is bigger than baby shark.
         - It is divided in main two step.
@@ -1582,6 +3238,7 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
             2.1. if fishes that baby shark can prey on exist, baby shark preys on one of fishes by the precedence.
             2.2. else, re-run "1" step.
     """
+    import operator
     import sys
     from collections import deque
     from typing import Literal
@@ -1663,11 +3320,9 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
         # add points to <next_exploration_deque> from <explored_deque>
         explored_point: tuple[int, int] = explored_deque.popleft()
         for direction in DIRECTIONS:
-            new_point: tuple[int, int] = (
-                explored_point[0] + direction[0],
-                explored_point[1] + direction[1],
+            new_point: tuple[int, int] = tuple(
+                map(operator.add, explored_point, direction)
             )
-
             # if it is new exploration point,
             if (
                 0 <= new_point[0] < n
@@ -1720,8 +3375,9 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
             next_exploration_size_comparisons.clear()
 
     # Title: output
-    print(travel_distance)
-    return str(travel_distance)
+    result: str = str(travel_distance)
+    print(result)
+    return result
 
 
 def test_prey_on_fishes() -> None:
@@ -1788,12 +3444,14 @@ def test_prey_on_fishes() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(prey_on_fishes(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            prey_on_fishes(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Maximum the number of secure cells in given situation ; https://www.acmicpc.net/problem/14502
+    """🚤 get Maximum the number of secure cells in given situation ; https://www.acmicpc.net/problem/14502
 
     Time Complexity (Worst-case): ...
         - O( 3 * ( Number(empty_cells) choose 3 ) from combination operation
@@ -1823,7 +3481,7 @@ def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str
         - Virus cell can only spread in directions: (-1, 0), (1, 0), (0, -1), (0, 1)
 
     Implementation
-        - Used data structure: Adjacency list in BFS (It can be also implemented by using DFS.)
+        - Used data structure: deque in BFS (It can be also implemented by using DFS.)
             It uses BFS that visits from right edges to left edge (except initial deque) for each initial virus entry points.
         - If points and cell in given space are represented as NamedTuple and Enum type,
             , it causes considerable delay because this algorithm calculates many operations for each simulated case.
@@ -1841,6 +3499,7 @@ def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str
             , and after virus_entry_point.get(), filter some directions of surrounding points toward the entry point.
     """
     import itertools
+    import operator
     import sys
     from collections import deque
 
@@ -1898,24 +3557,23 @@ def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str
 
         # spread virus; Graph search from <virus_points>
         while len(explored_deque) > 0:
-            new_virus_point = explored_deque.popleft()
+            explored_point = explored_deque.popleft()
             for direction in DIRECTIONS:
-                explored_point: tuple[int, int] = (
-                    new_virus_point[0] + direction[0],
-                    new_virus_point[1] + direction[1],
+                new_point: tuple[int, int] = tuple(
+                    map(operator.add, explored_point, direction)
                 )
 
-                # check that <explored_point> can be spread by virus.
+                # check that <new_point> can be spread by virus.
                 if (
-                    0 <= explored_point[0] < n
-                    and 0 <= explored_point[1] < m
-                    and lab_space[explored_point[0]][explored_point[1]] == 0
+                    0 <= new_point[0] < n
+                    and 0 <= new_point[1] < m
+                    and lab_space[new_point[0]][new_point[1]] == 0
                 ):
                     # spread virus cell to empty cell.
-                    lab_space[explored_point[0]][explored_point[1]] = 2
-                    explored_deque.appendleft(explored_point)
+                    lab_space[new_point[0]][new_point[1]] = 2
+                    explored_deque.appendleft(new_point)
                     empty_point_len -= 1
-                    backtracking_to_empty.append(explored_point)
+                    backtracking_to_empty.append(new_point)
         empty_points_len_list.append(empty_point_len)
 
         # post-process. original <lab_space> will be recovered by backtracking.
@@ -1924,8 +3582,9 @@ def block_virus_from_leaking(input_lines: Optional[Iterator[str]] = None) -> str
     maximum_empty_points_count = max(empty_points_len_list)
 
     # Title: output
-    print(maximum_empty_points_count)
-    return str(maximum_empty_points_count)
+    result: str = str(maximum_empty_points_count)
+    print(result)
+    return result
 
 
 def test_block_virus_from_leaking() -> None:
@@ -1965,7 +3624,7 @@ def test_block_virus_from_leaking() -> None:
     ]:
         start_time = time.time()
         test_case.assertEqual(
-            block_virus_from_leaking(iter(input_lines)), output_lines[0]
+            block_virus_from_leaking(iter(input_lines)), "\n".join(output_lines)
         )
         print(f"elapsed time: {time.time() - start_time}")
 
@@ -1973,6 +3632,10 @@ def test_block_virus_from_leaking() -> None:
 def deliver_chicken(input_lines: Optional[Iterator[str]] = None) -> str:
     """get Minimum of sum of distances between houses and chickens places in given space ; https://www.acmicpc.net/problem/15686
 
+    Decision problem
+        ❔ Given a positive integer m, is there a way to choose m chicken places out of the given set of mm places
+        , such that the total distance between the selected chicken places and all the houses in the city is at most d?
+        
     Time Complexity (Worst-case): ...
         - O( m * (mm choose m) ) from combination operation
         - O( Combinations(m) ) from loop
@@ -2039,8 +3702,9 @@ def deliver_chicken(input_lines: Optional[Iterator[str]] = None) -> str:
     minimum_total_chicken_distance = min(total_distance_list, key=None)
 
     # Title: output
-    print(minimum_total_chicken_distance)
-    return str(minimum_total_chicken_distance)
+    result: str = str(minimum_total_chicken_distance)
+    print(result)
+    return result
 
 
 def test_deliver_chicken() -> None:
@@ -2064,17 +3728,19 @@ def test_deliver_chicken() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(deliver_chicken(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            deliver_chicken(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
-# week 1-1: Greedy
+# week 1-1: Greedy: 5
 def schedule_multi_tap(input_lines: Optional[Iterator[str]] = None) -> str:
-    """get Minimum the count to unplug appliance on multi-tap ; https://www.acmicpc.net/problem/1700
+    """❔ get Minimum the count to unplug appliance on multi-tap ; https://www.acmicpc.net/problem/1700
 
-    Time Complexity (Worst-case): O(k*n)
-        - O(n) from appliances loop  *  O(k) from max() function
-            🛍️ e.g. when all appliances is different type.
+    Time Complexity (Worst-case): O(k*n) (pseudo-polynomial time because of k)
+        - O(k) from appliances loop
+            *  O(n) from (<appliances_in_use> loop, max() function)
 
     Space Complexity (Worst-case): O(1)
 
@@ -2098,6 +3764,9 @@ def schedule_multi_tap(input_lines: Optional[Iterator[str]] = None) -> str:
         - Used data structure: Deque for each appliance.
             The algorithm compares appliance to be used and schedules in order of given appliance list.
             To use Deque makes that to set "search range" is unnecessary.
+        - When plug initially all available appliances to <appliances_in_use>
+            , "if x in slicing" in loop is inefficient if <appliances_in_use> was initialized as many the number of sockets
+            , because slicing operator always shallow copy of a list.
     """
     import sys
     from collections import deque
@@ -2111,38 +3780,34 @@ def schedule_multi_tap(input_lines: Optional[Iterator[str]] = None) -> str:
     # condition: (1 ≤ N, K ≤ 100)
     n, k = map(int, input_().split())
     # condition: appliance name is Natural Number equal or less than K.
-    appliance_list: list[int] = list(map(int, input_().split()))
+    appliances: list[int] = list(map(int, input_().split()))
     # -1 index indicates that the multi-tap socket is not currently being used.
-    appliances_in_use: list[int] = [-1 for _ in range(n)]
+    appliances_in_use: list[int] = []
     # 0 index will not be used because K is Natural Number. <appliances_i_queue> will be treated as fixed size.
     appliances_i_queue: list[deque[int]] = [deque() for _ in range(k + 1)]
     minimum_unplugged_count: int = 0
 
     # Title: solve
     # create queues that have index of appliances sorted in ascending order for each appliance
-    for i, appliance in enumerate(appliance_list):
+    for i, appliance in enumerate(appliances):
         appliances_i_queue[appliance].append(i)
 
     # plug electrical appliances into multi-tap until all sockets on the multi-tap are full.
-    i: int = -1
-    j: int = 0
-    for i, appliance in enumerate(appliance_list):
-        if appliance in appliances_in_use[: j + 1]:
-            appliances_i_queue[appliance].popleft()
-        else:
-            appliances_in_use[j] = appliance
-            j += 1
-
-        # if full of sockets on multi-tap
-        if j >= n:
-            break
-
-    # plan to unplug
-    start_i: int = i + 1
-    for appliance in appliance_list[start_i:]:
-        # filter appliances already in sockets on the multi-tap
+    i: int = 0
+    for i, appliance in enumerate(appliances):
         if appliance in appliances_in_use:
             appliances_i_queue[appliance].popleft()
+        else:
+            appliances_in_use.append(appliance)
+            # if full of sockets on multi-tap
+            if len(appliances_in_use) >= n:
+                break
+
+    # plan to unplug
+    for i in range(i + 1, len(appliances)):
+        # filter appliances already in sockets on the multi-tap
+        if appliances[i] in appliances_in_use:
+            appliances_i_queue[appliances[i]].popleft()
             continue
 
         # choose socket to be unplugged
@@ -2162,12 +3827,13 @@ def schedule_multi_tap(input_lines: Optional[Iterator[str]] = None) -> str:
 
         # unplug
         appliances_i_queue[unplug_target].popleft()
-        appliances_in_use[socket_to_be_unplug] = appliance
+        appliances_in_use[socket_to_be_unplug] = appliances[i]
         minimum_unplugged_count += 1
 
     # Title: output
-    print(minimum_unplugged_count)
-    return str(minimum_unplugged_count)
+    result: str = str(minimum_unplugged_count)
+    print(result)
+    return result
 
 
 def test_schedule_multi_tap() -> None:
@@ -2201,12 +3867,14 @@ def test_schedule_multi_tap() -> None:
         ],
     ]:
         start_time = time.time()
-        test_case.assertEqual(schedule_multi_tap(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            schedule_multi_tap(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def thieve_jewels(input_lines: Optional[Iterator[str]] = None) -> str:
-    """🚤 get Maximum sum of value of available jewels ; https://www.acmicpc.net/problem/1202
+    """❔ get Maximum sum of value of available jewels ; https://www.acmicpc.net/problem/1202
 
     Time Complexity (Worst-case): O(n(log n) + O(k log k))
         - O(n(log n)) + O(k(log k)) from Tim sort
@@ -2214,7 +3882,7 @@ def thieve_jewels(input_lines: Optional[Iterator[str]] = None) -> str:
         - O(k) from bag loop  *
             ( O(1) comparison from Jewel consumed iteration  +  O(log k) from Hip (pop | push) )
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) + O(k) from Tim sort
 
     Definition
         - n: the number of jewels.
@@ -2238,6 +3906,7 @@ def thieve_jewels(input_lines: Optional[Iterator[str]] = None) -> str:
         - To explore <jewel_list> and <bag_list> sorted in ascending order makes that:
             - Once explored jewel's weight will be not important in remained bag's iteration.
                 because any added jewel into Max heap can be put in any remained bags.
+        - This problem is variant of Knapsack problem.
     """
     import heapq
     import sys
@@ -2276,8 +3945,9 @@ def thieve_jewels(input_lines: Optional[Iterator[str]] = None) -> str:
             maximum_total_value += -heapq.heappop(checked_jewel_value_heapq)
 
     # Title: output
-    print(maximum_total_value)
-    return str(maximum_total_value)
+    result: str = str(maximum_total_value)
+    print(result)
+    return result
 
 
 def test_thieve_jewels() -> None:
@@ -2310,12 +3980,12 @@ def test_thieve_jewels() -> None:
         [["4 3", "1 65", "2 99", "5 23", "8 44", "2", "4", "10"], ["208"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(thieve_jewels(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(thieve_jewels(iter(input_lines)), "\n".join(output_lines))
         print(f"elapsed time: {time.time() - start_time}")
 
 
 def make_bigger(input_lines: Optional[Iterator[str]] = None) -> str:
-    """❔ get Maximum Integer by deleting digits as many "k" number ; https://www.acmicpc.net/problem/2812
+    """🚤 get Maximum Integer by deleting digits as many "k" number ; https://www.acmicpc.net/problem/2812
 
     Time Complexity (Worst-case): O(n)
         - O(n) from characters loop  *  O(1) from some operations
@@ -2422,7 +4092,7 @@ def test_make_bigger() -> None:
         [["10 8", "4177252841"], ["84"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(make_bigger(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(make_bigger(iter(input_lines)), "\n".join(output_lines))
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2475,12 +4145,13 @@ def sort_cards(input_lines: Optional[Iterator[str]] = None) -> str:
     while len(card_stack_list) > 1:
         a, b = heapq.heappop(card_stack_list), heapq.heappop(card_stack_list)
         merge_value: int = a + b
-        minimum_total_comparison_count = minimum_total_comparison_count + merge_value
+        minimum_total_comparison_count += merge_value
         heapq.heappush(card_stack_list, merge_value)
 
     # Title: output
-    print(minimum_total_comparison_count)
-    return str(minimum_total_comparison_count)
+    result: str = str(minimum_total_comparison_count)
+    print(result)
+    return result
 
 
 def test_sort_cards() -> None:
@@ -2493,7 +4164,7 @@ def test_sort_cards() -> None:
         [["4", "120", "40", "100", "20"], ["500"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(sort_cards(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(sort_cards(iter(input_lines)), "\n".join(output_lines))
         print(f"elapsed time: {time.time() - start_time}")
 
 
@@ -2504,7 +4175,7 @@ def assign_lecture_room(input_lines: Optional[Iterator[str]] = None) -> str:
         - O(n(log n)) from Tim sort
         - O(n-1) from loop  *  ( O(1) comparison  +  O(log n) from Hip (pop | push) at least )
 
-    Space Complexity (Worst-case): O(1)
+    Space Complexity (Worst-case): O(n) from Tim sort
 
     Definition
         - n: the number of lectures.
@@ -2548,8 +4219,9 @@ def assign_lecture_room(input_lines: Optional[Iterator[str]] = None) -> str:
     minimum_total_lecture_room = len(lecture_end_time_heapq)
 
     # Title: output
-    print(minimum_total_lecture_room)
-    return str(minimum_total_lecture_room)
+    result: str = str(minimum_total_lecture_room)
+    print(result)
+    return result
 
 
 def test_assign_lecture_room() -> None:
@@ -2559,5 +4231,7 @@ def test_assign_lecture_room() -> None:
         [["8", "1 8", "9 16", "3 7", "8 10", "10 14", "5 6", "6 11", "11 12"], ["3"]],
     ]:
         start_time = time.time()
-        test_case.assertEqual(assign_lecture_room(iter(input_lines)), output_lines[0])
+        test_case.assertEqual(
+            assign_lecture_room(iter(input_lines)), "\n".join(output_lines)
+        )
         print(f"elapsed time: {time.time() - start_time}")

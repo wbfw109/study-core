@@ -1,71 +1,16 @@
 # %%
 from __future__ import annotations
 
-import collections
-import concurrent.futures
 import dataclasses
-import datetime
-import enum
-import functools
-import inspect
-import itertools
-import json
-import logging
-import math
-import operator
-import os
-import pprint
-import random
-import re
-import selectors
-import shutil
-import socket
-import sys
-import threading
-import time
-import unittest
-import xml.etree.ElementTree as ET
-from abc import ABC, abstractmethod
-from array import array
-from collections import OrderedDict
-from collections.abc import Generator, Sequence
-from enum import Enum
-from pathlib import Path
+from typing import Any, Generic, Optional, TypeVar
 
-# Kruskal's algorithm in Python
-from pprint import pprint
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Generic,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
-from urllib.parse import urlparse
-
-import IPython
 import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-import pandas as pd
-from IPython import display
+import networkx as nx  # type: ignore
 from IPython.core.interactiveshell import InteractiveShell
-from PIL import Image
-from wbfw109.libs.utilities.ipython import (
+from wbfw109.libs.utilities.ipython import (  # type: ignore
     ChildAlgorithmVisualization,
     MixInParentAlgorithmVisualization,
     VisualizationManager,
-    VisualizationRoot,
     display_data_frame_with_my_settings,
 )
 
@@ -74,7 +19,6 @@ InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
 
-#%%
 
 T = TypeVar("T")
 
@@ -109,16 +53,14 @@ class RawEdge(Generic[T]):
 class TreeDST(Generic[T]):
     raw_vertices_list: list[T] = dataclasses.field(default_factory=list)
     raw_edge_list: list[RawEdge[T]] = dataclasses.field(default_factory=list)
-    vertex_dict: OrderedDict[T, Vertex[T]] = dataclasses.field(
-        default_factory=OrderedDict
-    )
+    vertex_dict: dict[T, Vertex[T]] = dataclasses.field(default_factory=dict)
     edge_list: list[Edge[T]] = dataclasses.field(default_factory=list)
     graph: nx.Graph = nx.Graph()
 
     def __post_init__(self) -> None:
-        self.vertex_dict: OrderedDict[T, Vertex[T]] = OrderedDict(
-            {v: Vertex(v) for v in self.raw_vertices_list}
-        )
+        self.vertex_dict: dict[T, Vertex[T]] = {
+            v: Vertex(v) for v in self.raw_vertices_list
+        }
 
         if self.raw_edge_list:
             self.edge_list.extend(
@@ -158,7 +100,9 @@ class TreeDST(Generic[T]):
 
 
 class MinimumSpanningTree(MixInParentAlgorithmVisualization):
-    """Borůvka, Kruskal, Prim, Reverse-delete"""
+    """: 💻 Complexity Class of the decision problem is P and have strong polynomial time to exact algorithm.
+
+    : 🍡 Borůvka, Kruskal, Prim, Reverse-delete"""
 
     class Kruskal(ChildAlgorithmVisualization[TreeDST[T]]):
         """It assumes that input vertices are already disjoint set."""
@@ -199,7 +143,7 @@ class MinimumSpanningTree(MixInParentAlgorithmVisualization):
             )
             self.dst.graph.add_edges_from([(edge.v1.v, edge.v2.v, {"weight": edge.weight}) for edge in self.dst.edge_list])  # type: ignore
 
-        # find() of Union-find functions (used way: Halving; Pointer jumping)
+        # find() of Union-find functions while updating pointers (used way: Path Halving using Pointer jumping)
         def find_root(self, node: Vertex[T]) -> Vertex[T]:
             while node.parent != node:
                 node.parent = node.parent.parent
@@ -247,15 +191,15 @@ class MinimumSpanningTree(MixInParentAlgorithmVisualization):
                 (edge.v1.v, edge.v2.v) for edge in self.dst.edge_list
             }.difference(edges_large)
 
-            pos: dict[Any, Any] = nx.spring_layout(  # type: ignore
+            pos: dict[Any, Any] = nx.drawing.spring_layout(  # type: ignore
                 self.dst.graph, seed=7
             )  # positions for all nodes - seed for reproducibility
 
             # nodes
-            nx.draw_networkx_nodes(self.dst.graph, pos, node_size=700)  # type: ignore
+            nx.drawing.draw_networkx_nodes(self.dst.graph, pos, node_size=700)  # type: ignore
             # edges
-            nx.draw_networkx_edges(self.dst.graph, pos, edgelist=edges_large, width=6)  # type: ignore
-            nx.draw_networkx_edges(  # type: ignore
+            nx.drawing.draw_networkx_edges(self.dst.graph, pos, edgelist=edges_large, width=6)  # type: ignore
+            nx.drawing.draw_networkx_edges(  # type: ignore
                 self.dst.graph,
                 pos,
                 edgelist=edges_small,
@@ -266,12 +210,12 @@ class MinimumSpanningTree(MixInParentAlgorithmVisualization):
             )
 
             # node labels
-            nx.draw_networkx_labels(  # type: ignore
+            nx.drawing.draw_networkx_labels(  # type: ignore
                 self.dst.graph, pos, font_size=20, font_family="sans-serif"
             )
             # edge weight labels
-            edge_labels: dict[Any, Any] = nx.get_edge_attributes(self.dst.graph, "weight")  # type: ignore
-            nx.draw_networkx_edge_labels(self.dst.graph, pos, edge_labels)  # type: ignore
+            edge_labels: dict[Any, Any] = nx.function.get_edge_attributes(self.dst.graph, "weight")  # type: ignore
+            nx.drawing.draw_networkx_edge_labels(self.dst.graph, pos, edge_labels)  # type: ignore
 
             ax: plt.Axes = plt.gca()  # type: ignore
             ax.margins(0.08)  # type: ignore
@@ -286,23 +230,23 @@ class MinimumSpanningTree(MixInParentAlgorithmVisualization):
 
         @classmethod
         def test_case(cls, dst: Optional[TreeDST[T]]) -> None:  # type: ignore
-            algorithm = MinimumSpanningTree.Kruskal(dst=dst)
+            algorithm = MinimumSpanningTree.Kruskal(dst=dst)  # type: ignore
             algorithm.append_line_into_df_in_wrap(algorithm.measure())
             algorithm.visualize()
 
 
-#%%
+# %%
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
         # Do not change this.
-        # VisualizationManager.call_root_classes()
         only_class_list = []
     else:
         only_class_list = [MinimumSpanningTree.Kruskal]  # type: ignore
     VisualizationManager.call_parent_algorithm_classes(
         dst=TreeDST.get_default_tree_dst(),
-        only_class_list=only_class_list,
+        only_class_list=only_class_list,  # type: ignore
     )
 
 
 # Dijkstra's algorithm
+# Prim’s algorithm runs faster in dense graphs.	Kruskal’s algorithm runs faster in sparse graphs.

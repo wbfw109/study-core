@@ -149,10 +149,13 @@ from collections import deque
 
 # heap 이 동적으로 생성되고 삭제되는 데이터에서 이 데이터들끼리 비교가 필요할 때 사용하면 좋다. 그리디 알고리즘에서 자주 사용된다.
 # heapq 는 작업할떄마다 자동으로 힙정렬되므로 사용하기 좋다.
+# sequence: 반복이 가능하고 순서가 중요한 객체의 열거된 모음. -> Subsequence
 
 
 def data_structure():
     """
+    m-ary tree, b tree, B+ tree
+
     single linked list
     https://docs.python.org/3/library/collections.abc.html#collections-abstract-base-classes
     TODO:

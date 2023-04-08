@@ -1,5 +1,5 @@
-#%%
-from wbfw109.libs.utilities.ipython import VisualizationManager
+# %%
+from wbfw109.libs.utilities.ipython import VisualizationManager  # type: ignore
 
 VisualizationManager.call_modules()
 

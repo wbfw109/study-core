@@ -25,7 +25,7 @@
     "python.linting.banditEnabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": [
-      "--disable=C0301,E0015,W0611,W0703,E1133,E1136",
+      "--disable=C0301,E0015,W0611,W0703,W1114,E1133,E1136",
       "--variable-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$",
       "--attr-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$",
       "--argument-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$"

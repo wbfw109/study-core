@@ -1,65 +1,12 @@
 # %%
 from __future__ import annotations
 
-import collections
-import concurrent.futures
-import dataclasses
-import datetime
-import enum
-import functools
-import inspect
 import itertools
-import json
-import logging
-import math
-import operator
-import os
-import pprint
-import random
-import re
-import selectors
-import shutil
-import socket
-import sys
-import threading
-import time
-import unittest
-import xml.etree.ElementTree as ET
-from abc import ABC, abstractmethod
-from array import array
-from collections.abc import Generator, Sequence
-from enum import Enum
-from pathlib import Path
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
-from urllib.parse import urlparse
 
-import IPython
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from IPython import display
 from IPython.core.interactiveshell import InteractiveShell
-from PIL import Image
-from wbfw109.libs.utilities.ipython import (
-    ChildAlgorithmVisualization,
+from wbfw109.libs.utilities.ipython import (  # type: ignore
     VisualizationManager,
     VisualizationRoot,
-    display_data_frame_with_my_settings,
 )
 
 # + allow multiple print
@@ -180,6 +127,7 @@ class MinFunc(VisualizationRoot):
         )
         min_func.visualize()
 
+#%%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
@@ -201,5 +149,8 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
 # input vs sys.stdin.readline speed  https://stackoverflow.com/a/57200421/15252251
 # It checks if it is TTY every time as input() runs by syscall and it works much more slow than sys.stdin.readline()
 
+# a = [ (1, 3),(2, 3),(3, 3),(3, 2),]
+# sorted(a, reverse=True)
+# sorted(a, key=lambda x: (-x[0], x[1]))
 
-#%%
+# 동일한 리스트에 대해 iterator 로 만들고 zip 을 하면 하나의 리스트 안에 있는 원소들을 2개씩 짝지을 수 있다.

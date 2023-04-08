@@ -10,7 +10,6 @@ import threading
 import time
 import unittest
 from abc import ABC, abstractmethod
-from collections import OrderedDict
 from pathlib import Path
 from types import ModuleType
 from typing import Any, ClassVar, Generator, Generic, Iterable, Optional, TypeVar
@@ -213,10 +212,7 @@ class VisualizationRoot:
                 header_string = str(self)
             self.df = get_data_frame_for_test(
                 iterables_for_product=[  # type: ignore
-                    *[
-                        ["🔪 " + "🔪 ".join(x.split(":"))]
-                        for x in header_string.split("\n")
-                    ],
+                    *[["🔪 ".join(x.split(":"))] for x in header_string.split("\n")],
                     columns,
                 ]
             )
@@ -375,6 +371,10 @@ class MixInParentAlgorithmVisualization:
 
         if filtered_list:
             display_header_with_my_settings(columns=[f"🅰️ {cls.__name__}"])
+            if cls.__doc__:
+                display_data_frame_with_my_settings(
+                    pd.DataFrame(), caption=cls.__doc__.split("\n")
+                )
             for child_class in filtered_list:
                 child_class.main(dst=dst)
 
@@ -407,9 +407,7 @@ class VisualizationManager:
     """
 
     central_control_state: ClassVar[bool] = False
-    _previous_loaded_classes_dict: ClassVar[
-        OrderedDict[str, list[type[object]]]
-    ] = OrderedDict()
+    _previous_loaded_classes_dict: ClassVar[dict[str, list[type[object]]]] = {}
 
     @classmethod
     @contextlib.contextmanager
@@ -561,17 +559,17 @@ class VisualizationManager:
             obj_to_be_inspected=obj_to_be_inspected,
             parent_class=MixInParentAlgorithmVisualization,
         )
-        available_classes: Iterable[
-            type[MixInParentAlgorithmVisualizationT_co]
-        ] = VisualizationManager._get_valid_classes(loaded_classes, call_stack_level=1)
-
-        # when the file also have <VisualizationRoot> but not load these
+        # when the file also have <VisualizationRoot> but not load these, ignore these.
         VisualizationManager._get_valid_classes(
             get_child_classes(
                 obj_to_be_inspected=obj_to_be_inspected, parent_class=VisualizationRoot
             ),
             call_stack_level=1,
         )
+
+        available_classes: Iterable[
+            type[MixInParentAlgorithmVisualizationT_co]
+        ] = VisualizationManager._get_valid_classes(loaded_classes, call_stack_level=1)
 
         filtered_dict: dict[
             type[MixInParentAlgorithmVisualizationT_co],

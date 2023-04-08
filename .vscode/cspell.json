@@ -6,6 +6,7 @@
   "language": "en",
   // words - list of words to be always considered correct
   "words": [
+    "Bitonic",
     "Buildah",
     "chromedriver",
     "darkorange",
@@ -37,6 +38,7 @@
     "muxing",
     "ndarray",
     "neoconfetti",
+    "networkx",
     "nlevels",
     "nrwl",
     "nxext",
@@ -53,6 +55,7 @@
     "sveltekit",
     "svgling",
     "tailwindcss",
+    "Travelling",
     "trivago",
     "tsmerge",
     "visualstudio",
