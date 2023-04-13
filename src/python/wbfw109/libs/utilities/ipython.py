@@ -445,31 +445,31 @@ class VisualizationManager:
     def _get_valid_classes(
         cls, loaded_classes: Iterable[type[T]], *, call_stack_level: int
     ) -> list[type[T]]:
-        """It add classes into <_previous_loaded_classes_dict> and returns disjoint classes."""
+        """It add classes into <_previous_loaded_classes_dict> and returns actual called classes."""
         current_call_stack_level: int = call_stack_level + 1
         # It must be loaded in other file because it use inspect.stack()[1] (previous caller file)
         available_classes: list[type[T]] = []
-        ran_code_name: str = inspect.stack()[current_call_stack_level].filename
-        ran_code_hash: str = ""
+        run_code_name: str = inspect.stack()[current_call_stack_level].filename
+        run_code_hash: str = ""
         if match_obj := re.fullmatch(
-            r"<ipython-input-\d+-(?P<cell_hash>.*)>", ran_code_name
+            r"<ipython-input-\d+-(?P<cell_hash>.*)>", run_code_name
         ):
             # when run as cell at Python Interactive shell
-            ran_code_hash = match_obj.group("cell_hash")
-        elif ran_code_name.startswith("/"):
+            run_code_hash = match_obj.group("cell_hash")
+        elif run_code_name.startswith("/"):
             # when run normally
-            ran_code_hash = str(Path(ran_code_name).relative_to(Path.cwd()))
+            run_code_hash = str(Path(run_code_name).relative_to(Path.cwd()))
 
         loaded_classes_set = set(loaded_classes)
         # add new added files to modules.
         available_classes.extend(
             loaded_classes_set.difference(*cls._previous_loaded_classes_dict.values())
         )
-        # even if same <ran_code_hash>, same module could be added to modules.
-        # default value is required in order to avoid KeyError when new <ran_code_hash>
+        # even if same <run_code_hash>, same module could be added to modules.
+        # default value is required in order to avoid KeyError when new <run_code_hash>
         available_classes.extend(
             loaded_classes_set.intersection(
-                cls._previous_loaded_classes_dict.get(ran_code_hash, {})
+                cls._previous_loaded_classes_dict.get(run_code_hash, {})
             )
         )
 
@@ -478,7 +478,7 @@ class VisualizationManager:
         if loaded_classes_set and not available_classes:
             available_classes.extend(loaded_classes)
 
-        cls._previous_loaded_classes_dict.update({ran_code_hash: available_classes})  # type: ignore
+        cls._previous_loaded_classes_dict.update({run_code_hash: available_classes})  # type: ignore
         return available_classes
 
     @classmethod

@@ -190,10 +190,10 @@
       },
       {
         "word_name": ": Decision problem",
-        "description": [],
-        "children": [
+        "description": [
           "어떠한 입력에 대해 '예' | '아니오' 로 대답할 수 있는 문제."
-        ]
+        ],
+        "children": []
       }
     ]
   },

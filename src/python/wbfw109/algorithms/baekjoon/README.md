@@ -12,13 +12,13 @@ Updated on 📅 2023-04-09 03:59:51
 
 - [Algorithms - backjoon](#algorithms---backjoon)
   - [Table of contents (TOC)](#table-of-contents-toc)
-  - [1. Link](#1-link)
+  - [1. External Link](#1-external-link)
   - [2. Main Directory Structure](#2-main-directory-structure)
   - [3. Analysis of problems](#3-analysis-of-problems)
   - [4. Issue tracking](#4-issue-tracking)
   - [5. Common Notation in solution files](#5-common-notation-in-solution-files)
 
-## 1. Link
+## 1. External Link
 
 - [**My Profile - backjoon**](https://www.acmicpc.net/user/gnv112)
 - [Help](https://help.acmicpc.net/)

@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import Any, Generic, Optional, TypeVar
+import random
+from typing import Any, Generator, Generic, Optional, TypeVar
 
 import matplotlib.pyplot as plt
 import networkx as nx  # type: ignore
@@ -77,24 +78,19 @@ class TreeDST(Generic[T]):
 
     @staticmethod
     def get_default_tree_dst() -> TreeDST[int]:
+        weights: Generator[int, None, None] = (random.randint(1, 5) for _ in range(9))
         return TreeDST(
             raw_vertices_list=list(range(6)),
             raw_edge_list=[
-                RawEdge(0, 1, weight=4),
-                RawEdge(0, 2, weight=4),
-                RawEdge(1, 2, weight=2),
-                RawEdge(1, 0, weight=4),
-                RawEdge(2, 0, weight=4),
-                RawEdge(2, 1, weight=2),
-                RawEdge(2, 3, weight=3),
-                RawEdge(2, 5, weight=2),
-                RawEdge(2, 4, weight=4),
-                RawEdge(3, 2, weight=3),
-                RawEdge(3, 4, weight=3),
-                RawEdge(4, 2, weight=4),
-                RawEdge(4, 3, weight=3),
-                RawEdge(5, 2, weight=2),
-                RawEdge(5, 4, weight=3),
+                RawEdge(0, 1, weight=next(weights)),
+                RawEdge(0, 2, weight=next(weights)),
+                RawEdge(0, random.choice([3, 5]), weight=next(weights)),
+                RawEdge(1, 2, weight=next(weights)),
+                RawEdge(2, 3, weight=next(weights)),
+                RawEdge(2, 4, weight=next(weights)),
+                RawEdge(2, 5, weight=next(weights)),
+                RawEdge(3, 4, weight=next(weights)),
+                RawEdge(4, 5, weight=next(weights)),
             ],
         )
 

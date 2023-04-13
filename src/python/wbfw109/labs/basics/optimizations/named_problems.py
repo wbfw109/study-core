@@ -222,7 +222,7 @@ class TravellingSalesmanProblem(MixInParentAlgorithmVisualization):
 
     : 🍡 Held-Karp Algorithm."""
 
-    # TODO: look again proof of complexity after doing Hamiltonian cycle and Binomial coefficient.
+    # TODO: look again proof of complexity after doing Hamiltonian cycle.
     class HeldKarpAlgorithm(ChildAlgorithmVisualization[TravellingSalesmanProblemDST]):
         """
         Assume that:
@@ -245,7 +245,17 @@ class TravellingSalesmanProblem(MixInParentAlgorithmVisualization):
                 ["-", "Θ(n^2 * 2^n)", "-", "Θ(n * 2^n)"]
             )
             self.big_o_visualization.df_caption = [
-                "-",
+                "⚙️ Time complexity",
+                "  Computing one g(S, v)",
+                "    k*(n-k-1) * choose(n-1, k) = (n-1)*(n-2) * choose(n-3, k-1)",
+                "  Computing all subset g(S, v)",
+                "    (n-1)*(n-2) * sum(k=1 to n-2) choose(n-3, k-1) = (n-1)*(n-2) * 2^(n-3) = Θ(n^2 * 2^n)",
+                "",
+                "⚙️ Space complexity",
+                "  Computing one g(S, v)",
+                "    (n-k-1) * choose(n-1, k) = (n-1) * choose(n-2, k)",
+                "  Computing all subset g(S, v)",
+                "    sum(k=0 to n-2) (n-1) * choose(n-2, k) = (n-1) * 2^n - (n-1) = Θ(n * 2^n)",
             ]
 
             n: int = len(self.dst.distance_matrix)
@@ -295,7 +305,8 @@ class TravellingSalesmanProblem(MixInParentAlgorithmVisualization):
             route_dict_by_v_count: dict[int, list[int]] = {
                 v_count: [] for v_count in range(1, n - 1)
             }
-            # Each key have as many Combinations (n-1, k). and total cases count 2^(n-1)-2.
+            # Each key have as many Combinations (n-1, k). and these will be used in ## set g(k, v) when (1 ≤ k ≤ n-2)
+            # total cases count 2^(n-1)-2.
             for route in range(1, self.route_limit - 1):
                 route_dict_by_v_count[route.bit_count()].append(route)
 
@@ -304,10 +315,12 @@ class TravellingSalesmanProblem(MixInParentAlgorithmVisualization):
                 self.min_cycle_weights[0][v] = self.dst.distance_matrix[0][v]
             ## set g(k, v) when (1 ≤ k ≤ n-2)
             for route in itertools.chain.from_iterable(route_dict_by_v_count.values()):
-                # the number of candidates of destination is (n-k-1)
+                # the number of candidates of destination is n-k-1. (remained selectable destination except for selected subset from lower loop)
                 for dest in (v for v in range(1, n) if 1 << v - 1 & route == 0):
-                    # loop of <set_min_cycle_weights> count is k.
+                    # loop of <set_min_cycle_weights> count is k. (cardinality of the subset (possible path))
                     set_min_cycle_weights(route=route, dest=dest)
+
+            # second stage.
             ## set g(k, v) when (k = n-1)
             set_min_cycle_weights(route=self.route_limit - 1, dest=0)
 
@@ -473,7 +486,7 @@ class KnapsackProblem(MixInParentAlgorithmVisualization):
             self.pairs: list[tuple[str, str]] = []
 
         def __str__(self) -> str:
-            return "Limited: volumes of each item and knapsack are 1."
+            return "Limit: volumes of each item and knapsack are 1."
 
         def solve(self) -> None:
             # when sort <items>, item's value key is not important
@@ -528,6 +541,10 @@ class KnapsackProblem(MixInParentAlgorithmVisualization):
             algorithm.solve()
             algorithm.visualize()
 
+    # class ZeroOneKnapsack:
+    # TODO: ZeroOneKnapsack with recursive implementation.
+    # For small input sizes, the recursive implementation may be faster due to the lower overhead and simpler code structure
+
 
 # %%
 if __name__ == "__main__" or VisualizationManager.central_control_state:
@@ -548,7 +565,73 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         )
     else:
         VisualizationManager.call_parent_algorithm_classes(
-            dst=SubsetSumDST.get_default_subset_sum_dst(),
-            only_class_list=[SubsetSumProblem],
+            dst=KnapsackProblemDST.get_default_knapsack_dst(),
+            only_class_list=[KnapsackProblem],
         )
 # Knapsack problem
+
+
+# def pack_in_normal_backpack(input_lines: Optional[Iterator[str]] = None) -> str:
+#     """solve 0-1 knapsack problem ; https://www.acmicpc.net/problem/12865
+
+#     Time Complexity (Worst-case): O(n*W) (pseudo-polynomial time. NP-complete)
+
+#     Space Complexity (Worst-case): O(n*W)
+#     """
+#     import sys
+
+#     if input_lines:
+#         input_ = lambda: next(input_lines)
+#     else:
+#         input_ = sys.stdin.readline
+
+#     # Title: input
+#     # condition: (1 ≤  n; the number of distinct items  ≤ 10^2)
+#     # condition: (1 ≤ knapsack_capacity ≤ 10^5)
+#     n, knapsack_capacity = map(int, input_().split())
+#     # condition: (1 ≤ item weight ≤ 10^5)
+#     # condition: (0 ≤ item value ≤ 10^3)
+#     # items[tuple[weight, value]] are assumed to store all relevant values starting at index 1.
+#     items: list[tuple[int, int]] = [(0, 0)] + [
+#         tuple(map(int, input_().split())) for _ in range(n)
+#     ]
+
+#     # Title: solve
+#     # start with initializing each first line to 0: m[0][x], m[x][0] = 0
+#     m: list[list[int]] = [[0] * (knapsack_capacity + 1) for _ in range(n + 1)]
+#     for i in range(1, n + 1):
+#         for weight_limit in range(1, knapsack_capacity + 1):
+#             if items[i][0] > weight_limit:  # <items[i][0]> is weight of the item
+#                 m[i][weight_limit] = m[i - 1][weight_limit]
+#             else:
+#                 m[i][weight_limit] = max(
+#                     m[i - 1][weight_limit],
+#                     m[i - 1][weight_limit - items[i][0]] + items[i][1],
+#                 )
+#                 # <items[i][0]> is value of the item
+
+#     # Title: output
+#     result: str = str(m[-1][-1])
+#     print(result)
+#     return result
+
+
+# def test_pack_in_normal_backpack() -> None:
+#     test_case = unittest.TestCase()
+#     for input_lines, output_lines in [
+#         [
+#             [
+#                 "4 7",
+#                 "6 13",
+#                 "4 8",
+#                 "3 6",
+#                 "5 12",
+#             ],
+#             ["14"],
+#         ],
+#     ]:
+#         start_time = time.time()
+#         test_case.assertEqual(
+#             pack_in_normal_backpack(iter(input_lines)), output_lines[0]
+#         )
+#         print(f"elapsed time: {time.time() - start_time}")

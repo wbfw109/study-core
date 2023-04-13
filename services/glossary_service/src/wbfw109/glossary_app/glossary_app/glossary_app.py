@@ -87,10 +87,9 @@ def get_emoji_of_number(number: int, /) -> str:
     """
     if number < 0 or number > 9:
         return f"{number}"
-    else:
-        return ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"][
-            number
-        ]
+    return ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"][
+        number
+    ]
 
 
 class WordData(TypedDict):
@@ -182,6 +181,7 @@ class WordDataSerializable:
         """
         word_data_pc_list: list[WordDataPC] = []
         for word_data in word_data_list:
+            # print(type(word_data["word_name"]))
             # Title: pre process
             if not ascendant_indexes:
                 ascendant_indexes = []
@@ -191,6 +191,8 @@ class WordDataSerializable:
             # Title: process
             self.children_indexes_dict[index_id] = []
             self.children_indexes_dict[parent_index_id].append(index_id)
+            if type(word_data) == str:
+                print(word_data)
 
             self.word_name_list_for_id.append(word_data["word_name"])
             self.word_href_list_for_id.append(

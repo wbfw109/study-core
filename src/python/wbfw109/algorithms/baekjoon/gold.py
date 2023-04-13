@@ -829,6 +829,72 @@ def test_get_longest_length_of_bitonic_like_subsequence() -> None:
         print(f"elapsed time: {time.time() - start_time}")
 
 
+def pack_in_normal_backpack(input_lines: Optional[Iterator[str]] = None) -> str:
+    """solve 0-1 knapsack problem ; https://www.acmicpc.net/problem/12865
+
+    Time Complexity (Worst-case): O(n*W) (pseudo-polynomial time. NP-complete)
+
+    Space Complexity (Worst-case): O(n*W)
+    """
+    import sys
+
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = sys.stdin.readline
+
+    # Title: input
+    # condition: (1 ≤  n; the number of distinct items  ≤ 10^2)
+    # condition: (1 ≤ knapsack_capacity ≤ 10^5)
+    n, knapsack_capacity = map(int, input_().split())
+    # condition: (1 ≤ item weight ≤ 10^5)
+    # condition: (0 ≤ item value ≤ 10^3)
+    # items[tuple[weight, value]] are assumed to store all relevant values starting at index 1.
+    items: list[tuple[int, int]] = [(0, 0)] + [
+        tuple(map(int, input_().split())) for _ in range(n)
+    ]
+
+    # Title: solve
+    # start with initializing each first line to 0: m[0][x], m[x][0] = 0
+    m: list[list[int]] = [[0] * (knapsack_capacity + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for weight_limit in range(1, knapsack_capacity + 1):
+            if items[i][0] > weight_limit:  # <items[i][0]> is weight of the item
+                m[i][weight_limit] = m[i - 1][weight_limit]
+            else:
+                m[i][weight_limit] = max(
+                    m[i - 1][weight_limit],
+                    m[i - 1][weight_limit - items[i][0]] + items[i][1],
+                )
+                # <items[i][0]> is value of the item
+
+    # Title: output
+    result: str = str(m[-1][-1])
+    print(result)
+    return result
+
+
+def test_pack_in_normal_backpack() -> None:
+    test_case = unittest.TestCase()
+    for input_lines, output_lines in [
+        [
+            [
+                "4 7",
+                "6 13",
+                "4 8",
+                "3 6",
+                "5 12",
+            ],
+            ["14"],
+        ],
+    ]:
+        start_time = time.time()
+        test_case.assertEqual(
+            pack_in_normal_backpack(iter(input_lines)), output_lines[0]
+        )
+        print(f"elapsed time: {time.time() - start_time}")
+
+
 # week 3-1: binary search: 4
 def sum_subsequences_2(input_lines: Optional[Iterator[str]] = None) -> str:
     """get Number of cases of subsequences to be able to create target Sum ; https://www.acmicpc.net/problem/1208
@@ -4179,7 +4245,10 @@ def assign_lecture_room(input_lines: Optional[Iterator[str]] = None) -> str:
 
     Definition
         - n: the number of lectures.
-
+    
+    Types
+        - varaint of Interval scheduling problem
+        
     Implementation
         - It uses sort for input data in order to compare <end time> of lecture in order.
         - Used data structure: Heap (Python heapq library uses min heap)
