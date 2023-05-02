@@ -24,6 +24,7 @@
     "getattr",
     "Getattr",
     "getipython",
+    "getsizeof",
     "githubusercontent",
     "greenyellow",
     "Hstack",

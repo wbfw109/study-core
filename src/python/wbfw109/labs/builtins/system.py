@@ -155,7 +155,7 @@ class Masking(VisualizationRoot):
         masking.visualize()
 
 
-#%%
+# %%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:

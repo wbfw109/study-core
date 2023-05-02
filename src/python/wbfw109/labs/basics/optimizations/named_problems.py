@@ -1,4 +1,6 @@
-""": 🍡 <Optimization algorithms>"""
+""": 🍡 <Optimization algorithms>
+    - 🔍 Any optimization problem whose decision problem is NP-Complete belongs to NP-hard.
+"""
 
 # %%
 from __future__ import annotations
@@ -46,7 +48,7 @@ class SubsetSumDST:
 
 
 class SubsetSumProblem(MixInParentAlgorithmVisualization):
-    """: 💻 Complexity Class of the decision problem is NP-Hard and weak NP-Complete.
+    """: 💻 Complexity Class of the decision problem is weak NP-Complete.
 
     Time complexity can be thought as O(N*(B-A)).
         - Let A be the sum of the negative values and B the sum of the positive values.
@@ -218,7 +220,7 @@ class TravellingSalesmanProblemDST:
 
 # TODO: Implementations of branch-and-bound and problem-specific cut generation (branch-and-cut)
 class TravellingSalesmanProblem(MixInParentAlgorithmVisualization):
-    """: 💻 Complexity Class of the decision problem is NP-Hard and strong NP-Complete.
+    """: 💻 Complexity Class of the decision problem is strong NP-Complete.
 
     : 🍡 Held-Karp Algorithm."""
 
@@ -437,13 +439,108 @@ class Item(NamedTuple):
 
 
 class Knapsack(NamedTuple):
-    allowance: int
+    capacity: int
 
 
 class KnapsackProblem(MixInParentAlgorithmVisualization):
-    """: 💻 Complexity Class of the decision problem is NP-Hard and weak NP-Complete.
+    """: 💻 Complexity Class of the decision problem is weak NP-Complete.
 
-    : 🍡 0-1 multiple knapsack variant 1."""
+    : 🍡 0-1 knapsack problem, 0-1 multiple knapsack variant 1."""
+
+    # TODO: ZeroOneKnapsack with recursive implementation. and replay with Mathematical definition.
+    # For small input sizes, the recursive implementation may be faster due to the lower overhead and simpler code structure
+    class ZeroOneKnapsackProblem(ChildAlgorithmVisualization[KnapsackProblemDST]):
+        """This implementation solves by using dynamic programming.
+
+        Definition
+            - n: the number of items.
+            - W: knapsack's capacity
+                Assume w_1, w_2 ... w_n, W are strictly positive integers.
+            - m_dp[i][w]
+                the maximum value that can be attained with weight less than or equal to w using items up to i (first i items)
+        """
+
+        def __init__(self, /, dst: Optional[KnapsackProblemDST]) -> None:
+            super().__init__(columns=["var", "print"], dst=dst)
+            self.big_o_visualization.append_line_into_df_in_wrap(
+                ["-", "-", "n*W", "n*W"]
+            )
+            self.big_o_visualization.df_caption = [
+                "⚙️ [Worse-case] Time complexity",
+                "  - It have pseudo-polynomial time (W in n*W is Magnitude (Integer))",
+            ]
+            items_name_iter: Iterator[str] = iter(string.ascii_lowercase)
+            self.items: dict[str, Item] = {
+                next(items_name_iter): Item(
+                    weight=random.randint(2, 7), value=random.randint(1, 5)
+                )
+                for _ in range(random.randint(5, 7))
+            }
+            self.knapsack_capacity: int = random.randint(8, 10)
+            self.maximum_total_value: int = 0
+            self.pairs: list[str] = []
+
+        def __str__(self) -> str:
+            return "-"
+
+        def solve(self) -> None:
+            n: int = len(self.items)
+            # items[weight, value] are assumed to store all relevant values starting at index 1 in <m_dp>, <m_name_dp>.
+            # start with initializing each first line to 0: m_dp[0][i], m_dp[i][0] = 0
+            m_dp: list[list[int]] = [
+                [0] * (self.knapsack_capacity + 1) for _ in range(n + 1)
+            ]
+            m_name_dp: list[list[list[str]]] = [
+                [[] for _ in range(self.knapsack_capacity + 1)] for _ in range(n + 1)
+            ]
+
+            for i, (item_name, item) in enumerate(self.items.items(), start=1):
+                for weight_limit in range(1, self.knapsack_capacity + 1):
+                    if item.weight > weight_limit:
+                        m_dp[i][weight_limit] = m_dp[i - 1][weight_limit]
+                        m_name_dp[i][weight_limit] = m_name_dp[i - 1][weight_limit]
+                    else:
+                        value_to_be_compared: int = (
+                            m_dp[i - 1][weight_limit - item.weight] + item.value
+                        )
+                        if m_dp[i - 1][weight_limit] >= value_to_be_compared:
+                            m_dp[i][weight_limit] = m_dp[i - 1][weight_limit]
+                            m_name_dp[i][weight_limit] = m_name_dp[i - 1][weight_limit]
+                        else:
+                            m_dp[i][weight_limit] = value_to_be_compared
+                            m_name_dp[i][weight_limit] = m_name_dp[i - 1][
+                                weight_limit - item.weight
+                            ] + [item_name]
+            self.maximum_total_value = m_dp[-1][-1]
+            self.pairs = m_name_dp[-1][-1]
+
+        def visualize(self) -> None:
+            self.append_line_into_df_in_wrap(
+                ["Knapsack's capacity", self.knapsack_capacity]
+            )
+            self.append_line_into_df_in_wrap(["Items name", list(self.items)])
+            self.append_line_into_df_in_wrap(
+                ["Items weight", [item.weight for item in self.items.values()]]
+            )
+            self.append_line_into_df_in_wrap(
+                ["Items value", [item.value for item in self.items.values()]]
+            )
+            self.append_line_into_df_in_wrap(
+                ["maximum_total_value", self.maximum_total_value]
+            )
+            self.append_line_into_df_in_wrap(["pairs", self.pairs])
+            display_data_frame_with_my_settings(self.df, caption=self.df_caption)
+            if not self.big_o_visualization.df.empty:
+                display_data_frame_with_my_settings(
+                    self.big_o_visualization.df,
+                    caption=self.big_o_visualization.df_caption,
+                )
+
+        @classmethod
+        def test_case(cls, dst: Optional[KnapsackProblemDST]) -> None:  # type: ignore
+            algorithm = KnapsackProblem.ZeroOneKnapsackProblem(dst=dst)
+            algorithm.solve()
+            algorithm.visualize()
 
     class ZeroOneMultipleKnapsackVariant1(
         ChildAlgorithmVisualization[KnapsackProblemDST]
@@ -479,7 +576,7 @@ class KnapsackProblem(MixInParentAlgorithmVisualization):
                 for _ in range(random.randint(5, 7))
             }
             self.knapsacks: dict[str, Knapsack] = {
-                next(knapsacks_name_iter): Knapsack(allowance=random.randint(1, 9))
+                next(knapsacks_name_iter): Knapsack(capacity=random.randint(1, 9))
                 for _ in range(random.randint(5, 7))
             }
             self.maximum_total_value: int = 0
@@ -490,16 +587,16 @@ class KnapsackProblem(MixInParentAlgorithmVisualization):
 
         def solve(self) -> None:
             # when sort <items>, item's value key is not important
-            # , since <items> will  be checked as possible according to <knapsacks>' allowance
+            # , since <items> will be checked as possible according to <knapsacks>' capacity
             sorted_knapsacks: list[tuple[str, Knapsack]] = sorted(
-                self.knapsacks.items(), key=lambda kv: kv[1].allowance
+                self.knapsacks.items(), key=lambda kv: kv[1].capacity
             )
             sorted_items: list[tuple[str, Item]] = sorted(
                 self.items.items(), key=lambda kv: -kv[1].weight
             )
 
             self.append_line_into_df_in_wrap(
-                ["knapsacks", [(x[0], x[1].allowance) for x in sorted_knapsacks]]
+                ["knapsacks", [(x[0], x[1].capacity) for x in sorted_knapsacks]]
             )
             self.append_line_into_df_in_wrap(
                 ["items' weight", [(x[0], x[1].weight) for x in sorted_items]]
@@ -511,7 +608,7 @@ class KnapsackProblem(MixInParentAlgorithmVisualization):
             checked_items_heapq: list[tuple[int, str]] = []
             for knapsack in sorted_knapsacks:
                 while (
-                    sorted_items and knapsack[1].allowance >= sorted_items[-1][1].weight
+                    sorted_items and knapsack[1].capacity >= sorted_items[-1][1].weight
                 ):
                     heapq.heappush(
                         checked_items_heapq,
@@ -541,10 +638,6 @@ class KnapsackProblem(MixInParentAlgorithmVisualization):
             algorithm.solve()
             algorithm.visualize()
 
-    # class ZeroOneKnapsack:
-    # TODO: ZeroOneKnapsack with recursive implementation.
-    # For small input sizes, the recursive implementation may be faster due to the lower overhead and simpler code structure
-
 
 # %%
 if __name__ == "__main__" or VisualizationManager.central_control_state:
@@ -568,70 +661,3 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
             dst=KnapsackProblemDST.get_default_knapsack_dst(),
             only_class_list=[KnapsackProblem],
         )
-# Knapsack problem
-
-
-# def pack_in_normal_backpack(input_lines: Optional[Iterator[str]] = None) -> str:
-#     """solve 0-1 knapsack problem ; https://www.acmicpc.net/problem/12865
-
-#     Time Complexity (Worst-case): O(n*W) (pseudo-polynomial time. NP-complete)
-
-#     Space Complexity (Worst-case): O(n*W)
-#     """
-#     import sys
-
-#     if input_lines:
-#         input_ = lambda: next(input_lines)
-#     else:
-#         input_ = sys.stdin.readline
-
-#     # Title: input
-#     # condition: (1 ≤  n; the number of distinct items  ≤ 10^2)
-#     # condition: (1 ≤ knapsack_capacity ≤ 10^5)
-#     n, knapsack_capacity = map(int, input_().split())
-#     # condition: (1 ≤ item weight ≤ 10^5)
-#     # condition: (0 ≤ item value ≤ 10^3)
-#     # items[tuple[weight, value]] are assumed to store all relevant values starting at index 1.
-#     items: list[tuple[int, int]] = [(0, 0)] + [
-#         tuple(map(int, input_().split())) for _ in range(n)
-#     ]
-
-#     # Title: solve
-#     # start with initializing each first line to 0: m[0][x], m[x][0] = 0
-#     m: list[list[int]] = [[0] * (knapsack_capacity + 1) for _ in range(n + 1)]
-#     for i in range(1, n + 1):
-#         for weight_limit in range(1, knapsack_capacity + 1):
-#             if items[i][0] > weight_limit:  # <items[i][0]> is weight of the item
-#                 m[i][weight_limit] = m[i - 1][weight_limit]
-#             else:
-#                 m[i][weight_limit] = max(
-#                     m[i - 1][weight_limit],
-#                     m[i - 1][weight_limit - items[i][0]] + items[i][1],
-#                 )
-#                 # <items[i][0]> is value of the item
-
-#     # Title: output
-#     result: str = str(m[-1][-1])
-#     print(result)
-#     return result
-
-
-# def test_pack_in_normal_backpack() -> None:
-#     test_case = unittest.TestCase()
-#     for input_lines, output_lines in [
-#         [
-#             [
-#                 "4 7",
-#                 "6 13",
-#                 "4 8",
-#                 "3 6",
-#                 "5 12",
-#             ],
-#             ["14"],
-#         ],
-#     ]:
-#         start_time = time.time()
-#         test_case.assertEqual(
-#             pack_in_normal_backpack(iter(input_lines)), output_lines[0]
-#         )
-#         print(f"elapsed time: {time.time() - start_time}")

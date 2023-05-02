@@ -1,9 +1,21 @@
 from typing import Any, TypeVar
 
 T = TypeVar("T")
-TwoDIterator = list[list[Any]]
+
+# Title: variables in 2D space
+n, p = 10, [1, 5]
+# (left, right, bottom, top) directions from a point
+for nx, ny in ((p[0] + dx, p[1] + dy) for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))):
+    pass
+# 3*3 adjacent points from a point (i, j)
+for nx, ny in ((p[0] + dx, p[1] + dy) for dx in range(-1, 2) for dy in range(-1, 2)):
+    if 0 <= nx < n and 0 <= ny < n:
+        pass
 
 # Title: transpose iteration ~
+TwoDIterator = list[list[Any]]
+
+
 def get_square_iterators_against_gravity(
     line_len: int,
 ) -> list[TwoDIterator]:
@@ -50,13 +62,13 @@ def assemble(two_d_iterator: list[list[T]], direction_i: int) -> list[list[T]]:
     # direction_i is index in DIRECTIONS
     match direction_i:
         # assemble based on edge of <(-, +) row, (-, +) column> direction
-        case 0:  # against -row (+vertical)
+        case 0:  # against -row axis (+vertical)
             return list(zip(*two_d_iterator))
-        case 1:  # against +row (-vertical)
+        case 1:  # against +row axis (-vertical)
             return list(map(list, map(reversed, zip(*two_d_iterator))))  # type: ignore
-        case 2:  # against -column (-horizontal)
+        case 2:  # against -column axis (-horizontal)
             return two_d_iterator
-        case 3:  # against +column (+horizontal)
+        case 3:  # against +column axis (+horizontal)
             return list(map(list, map(reversed, two_d_iterator)))  # type: ignore
         case _:
             return two_d_iterator
@@ -68,13 +80,13 @@ def reassemble(two_d_iterator: list[list[T]], direction_i: int) -> list[list[T]]
     # direction_i is index in DIRECTIONS
     match direction_i:
         # reassemble based on edge of <(-, +) row, (-, +) column> direction
-        case 0:  # against -row (+vertical)
+        case 0:  # against -row axis (+vertical)
             return list(zip(*two_d_iterator))
-        case 1:  # against +row (-vertical)
+        case 1:  # against +row axis (-vertical)
             return list(zip(*map(reversed, two_d_iterator)))  # type: ignore
-        case 2:  # against -column (-horizontal)
+        case 2:  # against -column axis (-horizontal)
             return two_d_iterator
-        case 3:  # against +column (+horizontal)
+        case 3:  # against +column axis (+horizontal)
             return list(map(list, map(reversed, two_d_iterator)))  # type: ignore
         case _:
             return two_d_iterator

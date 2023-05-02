@@ -1,72 +1,21 @@
+# pylint: disable=C3002,R1721
 # %%
 from __future__ import annotations
 
-import collections
-import concurrent.futures
-import dataclasses
-import datetime
-import enum
-import functools
-import inspect
-import itertools
-import json
-import logging
-import math
-import operator
-import os
-import pprint
-import random
-import re
-import selectors
-import shutil
-import socket
 import sys
-import threading
-import time
-import unittest
-import xml.etree.ElementTree as ET
-from abc import ABC, abstractmethod
 from array import array
-from collections.abc import Generator, Sequence
 from enum import Enum
-from pathlib import Path
 from queue import Queue
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
-from urllib.parse import urlparse
+from typing import Any
 
-import IPython
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from IPython import display
 from IPython.core.interactiveshell import InteractiveShell
-from PIL import Image
-from wbfw109.libs.utilities.ipython import (
-    VisualizationManager,
-    VisualizationRoot,
-    display_data_frame_with_my_settings,
-)
+from wbfw109.libs.utilities.ipython import VisualizationRoot  # type: ignore
 
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
-#%%
+# %%
 
 
 class ObjectTypes:
@@ -128,8 +77,73 @@ class ObjectTypes:
             )
 
 
+class ListDT(VisualizationRoot):
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+
+    def __str__(self) -> str:
+        return "-"
+
+    def profile_list_of_integers_in_step(self) -> None:
+        """
+
+        [Object memory size]
+        -----
+        - 'list(range(1, n+1, 2))'    ; 🪟 Win
+            Since the range object is generated in a lazy manner and range object has a known length, Python can preallocate the 🚣 exact amount of memory required for the list when converting the range object to a list.
+        - '[i for i in range(1, n + 1, 2)]'
+            When using list comprehensions, Python might 🚣 over-allocate memory for the list to improve performance when appending elements.
+            This means that the list comprehension may reserve more memory than actually needed, anticipating that the list might grow in size later.
+            Python might allocate more memory than necessary and then trim the excess capacity when the list comprehension is finished.
+        ➡️ The difference in memory usage is not related to the object's header, as both lists have the same type and the header information will be similar.
+            Instead, the difference is in the payload, which is the actual data stored in the list.
+        """
+        n = 1000000
+        result1 = (lambda n: list(range(1, n + 1, 2)))(n)
+        result2 = (lambda n: [i for i in range(1, n + 1, 2)])(n)
+
+        # output: 4000056 bytes  <  4167352 bytes
+        print(sys.getsizeof(result1) < sys.getsizeof(result2))  # True
+
+    @classmethod
+    def test_case(cls):
+        list_dt: ListDT = cls()
+        list_dt.profile_list_of_integers_in_step()
+
+        # dict_data_type.visualize()
+
+
+class DictDT(VisualizationRoot):
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+
+    def __str__(self) -> str:
+        return "-"
+
+    @classmethod
+    def test_case(cls):
+        dict_dt: DictDT = cls()
+
+        ## Snippet: key update as min value without using not using
+        d: dict[Any, Any] = {}
+        key, new_value = "A", 10
+        if d.get(key, sys.maxsize) > new_value:
+            d[key] = new_value
+
+        # dict_data_type.visualize()
+
+
 # ObjectTypes.AbstractDataTypes().test_queue_operations()
-from collections import deque
 
 # dequeue 랑 토폴로지, https://docs.python.org/3/library/graphlib.html 이거 하고 알고리즘 풀기.
 # https://docs.python.org/3/library/collections.html#collections.deque
@@ -167,4 +181,11 @@ def data_structure():
     """
 
 
-#%%
+# %%
+# if __name__ == "__main__" or VisualizationManager.central_control_state:
+#     if VisualizationManager.central_control_state:
+#         # Do not change this.
+#         only_class_list = []
+#     else:
+#         only_class_list = [DictDT]
+#     VisualizationManager.call_root_classes(only_class_list=only_class_list)

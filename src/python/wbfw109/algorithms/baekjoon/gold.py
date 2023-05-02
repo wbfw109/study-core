@@ -5,7 +5,8 @@ import unittest
 from pprint import pprint
 from typing import Iterator, Optional
 
-# TODO: remove ❔ in beginning of docstring, create Complexity class
+# TODO: remove "❔" in beginning of docstring, create Complexity class
+# TODO: use sys.stdout.write instead of print()
 # TODO: re-solve <escape_maze>, <escape_marble_2>, gold_temp.py
 # week 5-1: bitmask
 # week 4-2: string
@@ -29,10 +30,8 @@ def escape_maze(
             - When I use heapq instead of deque to eliminate some duplicated exploration that it occured because BFS still proceeds one by one
                 , this rather causes "Timeout" because of time complexity of heapq.
                 I had used max heap with bit count of <key_state>.
-
-    중복이 있어도, n, m 범위를 고려해보고 그냥 boolean table 만들어서 사용하기
-    이렇게 해도 중복탐색을 완전히 막지는 못하고, 중복 큐를 막으려고 비교하는 구문의 비용이 더 들어가서 느린듯.
-
+        - ❓ It seems that implementation using 3D trace_map by subset of keys is faster than current implementation to compare subset
+            , because comparsing subsets (latter) is expensive than aloowing some duplicated exploration (former).
     """
     import operator
     import sys
@@ -99,8 +98,8 @@ def escape_maze(
                     if c == "1":
                         raise FoundExit(distance)
                     elif c.isupper():
-                        # can it go through the door? 97 is ord("A")
-                        if key_state & 1 << ord(c) - 97 == 0:
+                        # can it go through the door? 65 is ord("A")
+                        if key_state & 1 << ord(c) - 65 == 0:
                             continue
 
                     # check duplication in trace
@@ -129,8 +128,8 @@ def escape_maze(
 
                     # update <new_key_state>
                     if c.islower():
-                        # 65 is ord("a")
-                        new_key_state = key_state | 1 << ord(c) - 65
+                        # 97 is ord("a")
+                        new_key_state = key_state | 1 << ord(c) - 97
                     else:
                         new_key_state = key_state
                     new_key_bit_count = new_key_state.bit_count()
@@ -228,7 +227,7 @@ def get_diameter_in_tree(
         explored_deque: deque[tuple[int, int]] = deque([(v1, cumulated_distance)])
         trail_map: list[bool] = [False] * (n + 1)
         trail_map[v1] = True
-        # <tip_vertices>: list[vertex, cumulated distance]
+        # <tip_vertices>: list[tuple[vertex, cumulated distance]]
         tip_vertices: list[tuple[int, int]] = []
         while explored_deque:
             explored_v, cumulated_distance = explored_deque.popleft()
@@ -454,7 +453,8 @@ def get_minimum_weight_to_all_vertices(
     input_lines: Optional[Iterator[str]] = None,
 ) -> str:
     """get Minimum weight to all vertiecs ; https://www.acmicpc.net/problem/1753
-
+    🔍 다익스트라로 다시?
+    
     Time Complexity (Worst-case): ...
         - O( N(edges) ) from selecting minimum weight of same edge points
         - O( BFS(directed_graph_weights) ) (but except for overlapped edges)
@@ -2764,7 +2764,7 @@ def test_ripen_tomato() -> None:
 # week 1-2: Implementation: 5
 def escape_marble_2(input_lines: Optional[Iterator[str]] = None) -> str:
     """❔ get Minimum turn number where the game win within turns 10 ; https://www.acmicpc.net/problem/13460
-    >>> BFS 파란구슬, 빨간구슬 탐색해서 문제로 될듯.
+    🔍 다시. iterator를 4개로 잘 나누기.
 
     Time Complexity (Worst-case): ...
         - O( Number( BFS(board_for_marble) ) ) from BFS loop.
@@ -2819,13 +2819,13 @@ def escape_marble_2(input_lines: Optional[Iterator[str]] = None) -> str:
         # direction_i is index in DIRECTIONS
         match direction_i:
             # assemble based on edge of <(-, +) row, (-, +) column> direction
-            case 0:  # against -row (+vertical)
+            case 0:  # against -row axis (+vertical)
                 return list(zip(*two_d_iterator))
-            case 1:  # against +row (-vertical)
+            case 1:  # against +row axis (-vertical)
                 return list(map(list, map(reversed, zip(*two_d_iterator))))  # type: ignore
-            case 2:  # against -column (-horizontal)
+            case 2:  # against -column axis (-horizontal)
                 return two_d_iterator
-            case 3:  # against +column (+horizontal)
+            case 3:  # against +column axis (+horizontal)
                 return list(map(list, map(reversed, two_d_iterator)))  # type: ignore
             case _:
                 return two_d_iterator
@@ -2836,13 +2836,13 @@ def escape_marble_2(input_lines: Optional[Iterator[str]] = None) -> str:
         # direction_i is index in DIRECTIONS
         match direction_i:
             # reassemble based on edge of <(-, +) row, (-, +) column> direction
-            case 0:  # against -row (+vertical)
+            case 0:  # against -row axis (+vertical)
                 return list(zip(*two_d_iterator))
-            case 1:  # against +row (-vertical)
+            case 1:  # against +row axis (-vertical)
                 return list(zip(*map(reversed, two_d_iterator)))  # type: ignore
-            case 2:  # against -column (-horizontal)
+            case 2:  # against -column axis (-horizontal)
                 return two_d_iterator
-            case 3:  # against +column (+horizontal)
+            case 3:  # against +column axis (+horizontal)
                 return list(map(list, map(reversed, two_d_iterator)))  # type: ignore
             case _:
                 return two_d_iterator
@@ -3414,9 +3414,9 @@ def prey_on_fishes(input_lines: Optional[Iterator[str]] = None) -> str:
             ]
             target_fish_point: tuple[int, int]
 
-            # judge that baby shark can prey on fishes
+            # judge whether baby shark can prey on fishes in current distance
             if len(valid_fishes_i) < 1:
-                # if baby shark can not prey on any fish
+                # if baby shark can not prey on any fish in current distance
                 explored_deque = next_exploration_deque.copy()
                 next_exploration_deque.clear()
                 next_exploration_size_comparisons.clear()
@@ -3701,7 +3701,7 @@ def deliver_chicken(input_lines: Optional[Iterator[str]] = None) -> str:
     Decision problem
         ❔ Given a positive integer m, is there a way to choose m chicken places out of the given set of mm places
         , such that the total distance between the selected chicken places and all the houses in the city is at most d?
-        
+
     Time Complexity (Worst-case): ...
         - O( m * (mm choose m) ) from combination operation
         - O( Combinations(m) ) from loop
@@ -4245,10 +4245,10 @@ def assign_lecture_room(input_lines: Optional[Iterator[str]] = None) -> str:
 
     Definition
         - n: the number of lectures.
-    
+
     Types
         - varaint of Interval scheduling problem
-        
+
     Implementation
         - It uses sort for input data in order to compare <end time> of lecture in order.
         - Used data structure: Heap (Python heapq library uses min heap)
@@ -4274,12 +4274,11 @@ def assign_lecture_room(input_lines: Optional[Iterator[str]] = None) -> str:
     lecture_period_list: list[Period] = [
         Period(*map(int, input_().split())) for _ in range(n)
     ]
-    lecture_end_time_heapq: list[int] = []
     minimum_total_lecture_room: int = 0
 
     # Title: solve
     lecture_period_list.sort()
-    heapq.heappush(lecture_end_time_heapq, lecture_period_list[0].end)
+    lecture_end_time_heapq: list[int] = [lecture_period_list[0].end]
     for i in range(1, n):
         if lecture_end_time_heapq[0] <= lecture_period_list[i].start:
             heapq.heapreplace(lecture_end_time_heapq, lecture_period_list[i].end)

@@ -1,7 +1,10 @@
 # %%
 from __future__ import annotations
 
+import functools
 import itertools
+import math
+import timeit
 
 from IPython.core.interactiveshell import InteractiveShell
 from wbfw109.libs.utilities.ipython import (  # type: ignore
@@ -13,55 +16,6 @@ from wbfw109.libs.utilities.ipython import (  # type: ignore
 InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
-
-
-class ZipFunc(VisualizationRoot):
-    def __init__(self) -> None:
-        VisualizationRoot.__init__(
-            self,
-            columns=["eval", "print", "note"],
-            has_df_lock=False,
-            should_highlight=True,
-        )
-
-    def __str__(self) -> str:
-        return "functions: zip(), itertools.zip_longest()"
-
-    @classmethod
-    def test_case(cls):
-        zip_func: ZipFunc = cls()
-        x = range(3)
-        y = range(3, 6)
-        zip_func.append_line_into_df_in_wrap(["", "", "x = range(3), y = range(3, 6)"])
-        zip_func.append_line_into_df_in_wrap(
-            [
-                "list(zip(*zip(x, y))) == [tuple(x), tuple(y)]",
-                list(zip(*zip(x, y))) == [tuple(x), tuple(y)],
-                "Transpose matrix. and one more.",
-            ]
-        )
-        zip_func.append_line_into_df_in_wrap(
-            [
-                "list(zip(list(range(2)), 'abcd'))",
-                list(zip(list(range(2)), "abcd")),
-                "By default <strict>=False. so zip() stops when the shortest iterable is exhausted.",
-            ]
-        )
-        zip_func.append_line_into_df_in_wrap(
-            [
-                "list(itertools.zip_longest(list(range(2)), 'abcd', fillvalue=None))",
-                list(itertools.zip_longest(list(range(2)), "abcd", fillvalue=None)),
-                "Shorter iterables can be padded with a constant value.",
-            ]
-        )
-        zip_func.append_line_into_df_in_wrap(
-            [
-                "list(zip(*[[1, 2, 3]] * 3, strict=True))",
-                list(zip(*[[1, 2, 3]] * 3, strict=True)),
-                "This repeats the same iterator 3 times.",
-            ]
-        )
-        zip_func.visualize()
 
 
 class MinFunc(VisualizationRoot):
@@ -127,14 +81,197 @@ class MinFunc(VisualizationRoot):
         )
         min_func.visualize()
 
-#%%
+
+class SortFunc(VisualizationRoot):
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+
+    def __str__(self) -> str:
+        return "functions: sorted(), MutableSequence.sort()"
+
+    @classmethod
+    def test_case(cls):
+        sort_func: SortFunc = cls()
+        sort_func.append_line_into_df_in_wrap(
+            [
+                "sorted({'a': 1, 'b': 2})",
+                sorted({"a": 1, "b": 2}),
+                "sorted(<dict>) returns types: list[tuple[<key>, <value>]]",
+            ]
+        )
+        sort_func.visualize()
+
+
+class ZipFunc(VisualizationRoot):
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+
+    def __str__(self) -> str:
+        return "functions: zip(), itertools.zip_longest()"
+
+    @classmethod
+    def test_case(cls):
+        zip_func: ZipFunc = cls()
+        x = range(3)
+        y = range(3, 6)
+        zip_func.append_line_into_df_in_wrap(["", "", "x = range(3), y = range(3, 6)"])
+        zip_func.append_line_into_df_in_wrap(
+            [
+                "list(zip(*zip(x, y))) == [tuple(x), tuple(y)]",
+                list(zip(*zip(x, y))) == [tuple(x), tuple(y)],
+                "Transpose matrix. and one more.",
+            ]
+        )
+        zip_func.append_line_into_df_in_wrap(
+            [
+                "list(zip(list(range(2)), 'abcd'))",
+                list(zip(list(range(2)), "abcd")),
+                "By default <strict>=False. so zip() stops when the shortest iterable is exhausted.",
+            ]
+        )
+        zip_func.append_line_into_df_in_wrap(
+            [
+                "list(itertools.zip_longest(list(range(2)), 'abcd', fillvalue=None))",
+                list(itertools.zip_longest(list(range(2)), "abcd", fillvalue=None)),
+                "Shorter iterables can be padded with a constant value.",
+            ]
+        )
+        zip_func.append_line_into_df_in_wrap(
+            [
+                "list(zip(*[[1, 2, 3]] * 3, strict=True))",
+                list(zip(*[[1, 2, 3]] * 3, strict=True)),
+                "This repeats the same iterator 3 times.",
+            ]
+        )
+        zip_func.visualize()
+
+
+class Iterators(VisualizationRoot):
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+
+    def __str__(self) -> str:
+        return "-"
+
+    def profile_list_comprehension_for_flattening(self) -> None:
+        """
+
+        [Speed]
+        -----
+        - List comprehension (with tuple)  ; 🪟 Win
+        - List comprehension (with range object)
+            While this approach can save memory, it introduces overhead due to the creation and management of the range() objects.
+        ➡️ using tuples in the list comprehension is more efficient than using range() objects 🚣 for small, fixed-size sequences.
+            The reduced overhead from iterating through tuples results in better performance.
+            
+            🚣 When slicing a sequence, This is the same reason why there is a speed difference between using slice objects and not using slice objects.
+        """
+        n = 10
+        p = (5, 5)
+
+        def method1():
+            for nx, ny in (
+                (p[0] + dx, p[1] + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+            ):
+                if 0 <= nx < n and 0 <= ny < n:
+                    pass
+
+        def method2():
+            for nx, ny in (
+                (p[0] + dx, p[1] + dy) for dx in range(-1, 2) for dy in range(-1, 2)
+            ):
+                if 0 <= nx < n and 0 <= ny < n:
+                    pass
+
+        result1 = timeit.timeit(method1, number=100000)
+        result2 = timeit.timeit(method2, number=100000)
+        print(f"List comprehension (with tuple): {result1}")  # 0.19769s
+        print(f"List comprehension (with range object): {result2}")  # 0.27276s
+
+    @classmethod
+    def test_case(cls):
+        iterators: Iterators = cls()
+        iterators.append_line_into_df_in_wrap(
+            [
+                "str(reversed('abc'))",
+                str(reversed("abc")),
+                "it converts the object to a string representation of the object itself, not the content of the object.",
+            ]
+        )
+        iterators.append_line_into_df_in_wrap(
+            ["''.join(reversed('abc'))", "".join(reversed("abc"))]
+        )
+
+        # iterators.profile_list_comprehension_for_flattening()
+
+        iterators.visualize()
+
+
+class SumAndProduction(VisualizationRoot):
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["eval", "print", "note"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+
+    def __str__(self) -> str:
+        return "-"
+
+    def profile_functions_that_returns_same_result(self) -> None:
+        """
+
+        [Speed]
+        -----
+        - `sum(num_list)`    ; 🪟 Win
+            The built-in sum() function has a single function call, minimizing this overhead.
+        - `functools.reduce(lambda x, y: x + y, num_list)`
+            There is additional overhead in the execution and creation of the lambda function at runtime.
+            The lambda function is called for each pair of elements in the list
+                , which means there are multiple function calls throughout the process. (🚣 Call chains)
+        ➡️ This comparison also can apply to `math.prod(num_list)` and `functools.reduce(lambda x, y: x* y, num_list)`.
+        """
+        num_list = list(range(1, 101))
+        result1 = timeit.timeit(lambda: sum(num_list), number=1000)
+        result2 = timeit.timeit(
+            lambda: functools.reduce(lambda x, y: x + y, num_list), number=1000
+        )
+        print(f"Sum Method 1 (sum): {result2}")  # 0.00057s
+        print(f"Sum Method 2 (functools.reduce): {result1}")  # 0.00825s
+
+    @classmethod
+    def test_case(cls):
+        sum_and_production: SumAndProduction = cls()
+
+        sum_and_production.profile_functions_that_returns_same_result()
+
+        # sum_and_production.visualize()
+
+
+# %%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:
         # Do not change this.
         only_class_list = []
     else:
-        only_class_list = []
+        only_class_list = [SumAndProduction]
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
 
 

@@ -1,4 +1,3 @@
-
 # study-core-python
 
 📝 about Utilities, see [root README.md](../../README.md#31-python-utilities)
@@ -9,6 +8,7 @@
   - [Table of contents (TOC)](#table-of-contents-toc)
   - [1. Algorithms](#1-algorithms)
     - [1.1 Basic](#11-basic)
+    - [1.1.1 Optimization problems](#111-optimization-problems)
     - [1.2 Design patterns](#12-design-patterns)
     - [1.3 Specification](#13-specification)
   - [2. Libraries](#2-libraries)
@@ -20,6 +20,7 @@
 ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
 
 - [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
+- [**Programmers, Goorm**](wbfw109/algorithms/_pratice/README.md)
 
 &nbsp;
 
@@ -29,15 +30,23 @@
 
 ### 1.1 Basic
 
-|Type|Name|location|
-|:---|:---|:---|
-|Sequence Sorting  |bubble, quick, selection, heap, insertion, merge |[class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L26)|
-|Sequence Search  |binary |[class BinarySearch](wbfw109/labs/basics/sequences/search.py#L47)|
-|Subsequence  |longest increasing subsequence |[class LongestIncreasingSubsequence](wbfw109/labs/basics/sequences/subsequence.py#L21)|
-|Graph basic  |basics in terms of distance |[class GraphDistance](wbfw109/labs/basics/graphs/basic.py#L104)|
-|Graph Search  |DFS, BFS |[class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L89)|
-|Graph Routing  |Kruskal |[class MinimumSpanningTree](wbfw109/labs/basics/graphs/routing.py#L102)|
-|Named problems  |3SUM, Subset Sum, Travelling Salesman, Knapsack |[class ThreeSumProblem, SubsetSumProblem, TravellingSalesmanProblem, KnapsackProblem](wbfw109/labs/basics/optimizations/named_problems.py#L48)|
+| Type                         | Name                                             | location                                                                                                        |
+| :--------------------------- | :----------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| Numerics                     | integer factorization                            | [class IntegerFactorization](wbfw109/labs/basics/numerics/factorization.py#L19)                                 |
+| Numerics - definable numbers | decimal representation                           | [class DecimalRepresentation](wbfw109/labs/basics/numerics/rational_number.py#L19)                              |
+| Sequence Sorting             | bubble, quick, selection, heap, insertion, merge | [class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L26) |
+| Sequence Search              | binary                                           | [class BinarySearch](wbfw109/labs/basics/sequences/search.py#L47)                                               |
+| Subsequence                  | longest increasing subsequence                   | [class LongestIncreasingSubsequence](wbfw109/labs/basics/sequences/subsequence.py#L21)                          |
+| Graph basic                  | basics in terms of distance                      | [class GraphDistance](wbfw109/labs/basics/graphs/basic.py#L104)                                                 |
+| Graph Search                 | DFS, BFS                                         | [class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L89)                                                     |
+| Graph Routing                | Kruskal                                          | [class MinimumSpanningTree](wbfw109/labs/basics/graphs/routing.py#L102)                                         |
+
+### 1.1.1 Optimization problems
+
+| Type               | Name                                            | location                                                                                                                                       |
+| :----------------- | :---------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| Named problems     | 3SUM, Subset Sum, Travelling Salesman, Knapsack | [class ThreeSumProblem, SubsetSumProblem, TravellingSalesmanProblem, KnapsackProblem](wbfw109/labs/basics/optimizations/named_problems.py#L48) |
+| Linear programming | Set cover problem                               | [class SetCoverProblem](wbfw109/labs/basics/optimizations/linear_programming.py#L57)                                                           |
 
 &nbsp;
 
@@ -45,9 +54,9 @@
 
 ### 1.2 Design patterns
 
-|Type|Name|location|
-|:---|:---|:---|
-|Creational pattern  |interning |[class Interning](wbfw109/labs/design_patterns.py#L18)|
+| Type               | Name      | location                                               |
+| :----------------- | :-------- | :----------------------------------------------------- |
+| Creational pattern | interning | [class Interning](wbfw109/labs/design_patterns.py#L18) |
 
 &nbsp;
 
@@ -55,13 +64,17 @@
 
 ### 1.3 Specification
 
-|Name|location|
-|:---|:---|
-|Built-ins statements: (for-in loop)  |[class ForStatement, Operators](wbfw109/labs/builtins/statements.py#L18)|
-|Built-ins expressions: (lambda)  |[class LambdaExpression](wbfw109/labs/builtins/expressions.py#L16)|
-|Built-ins functions: (zip(), min())  |[class ZipFunc, MinFunc](wbfw109/labs/builtins/functions.py#L18)|
-|Built-ins system: (data size, zero-bard numbering, masking)  |[class DataSize, ZeroBasedNumbering, Masking](wbfw109/labs/builtins/system.py#L18)|
-|Dunders names: (Truthy values, getattr, iter)  |[class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L36)|
+| Type                     | Name                                                | location                                                                                                            |
+| :----------------------- | :-------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
+| Built-in code constructs | for-in loop, operators, lambda, unpacking variables | [class ForStatement, Operators, LambdaExpression, UnpackingVariables](wbfw109/labs/builtins/code_constructs.py#L24) |
+| Built-in functions       | min, sort, zip                                      | [class MinFunc, SortFunc, ZipFunc](wbfw109/labs/builtins/functions.py#L18)                                          |
+| Built-in system          | data size, zero-bard numbering, masking             | [class DataSize, ZeroBasedNumbering, Masking](wbfw109/labs/builtins/system.py#L18)                                  |
+| Dunders names            | Truthy values, getattr, iter                        | [class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L36)                          |
+| **Data types**           | dict, list                                          | [class ListDT, DictDT](wbfw109/labs/basics/data_stucture.py#L80)                                                    |
+
+🧊 Some file may have profiling to some pieces. but codes profiling are not run from Visualization Manager.
+
+- **"Data types"** file **not have Visualization**.
 
 ---
 
@@ -94,8 +107,8 @@
 
 ## 4. Toy program
 
-|Language|Type|Main tech|Name|location|
-|:---|:---|:---|:---|:---|
-|Python  |Crawling  |XPath  |Google CodeJam Crawler  |[function crawl_algorithms_code_jam()](wbfw109/libs/utilities/self/algorithms.py#L200)|
-|Python  |Image Processing  |Generator, decorator  |Thumbnail Generator  |[class ThumbGenExample](wbfw109/labs/dunders_names.py#L411)|
-|Python  |Communication  |socket, selector  |Echo: (Stream type, muxing, Non-blocking) |[class SockEchoCommunication](wbfw109/labs/networking.py#L73)|
+| Language | Type             | Main tech            | Name                                      | location                                                                               |
+| :------- | :--------------- | :------------------- | :---------------------------------------- | :------------------------------------------------------------------------------------- |
+| Python   | Crawling         | XPath                | Google CodeJam Crawler                    | [function crawl_algorithms_code_jam()](wbfw109/libs/utilities/self/algorithms.py#L200) |
+| Python   | Image Processing | Generator, decorator | Thumbnail Generator                       | [class ThumbGenExample](wbfw109/labs/dunders_names.py#L411)                            |
+| Python   | Communication    | socket, selector     | Echo: (Stream type, muxing, Non-blocking) | [class SockEchoCommunication](wbfw109/labs/networking.py#L73)                          |

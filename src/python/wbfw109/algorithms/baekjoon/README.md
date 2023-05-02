@@ -1,5 +1,5 @@
 
-# Algorithms - backjoon
+# Algorithms - Baekjoon
 
 [![Solved.ac
 Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gnv112)](https://solved.ac/gnv112)
@@ -10,7 +10,7 @@ Updated on 📅 2023-04-09 03:59:51
 
 ## Table of contents (TOC)
 
-- [Algorithms - backjoon](#algorithms---backjoon)
+- [Algorithms - Baekjoon](#algorithms---baekjoon)
   - [Table of contents (TOC)](#table-of-contents-toc)
   - [1. External Link](#1-external-link)
   - [2. Main Directory Structure](#2-main-directory-structure)
@@ -20,13 +20,14 @@ Updated on 📅 2023-04-09 03:59:51
 
 ## 1. External Link
 
-- [**My Profile - backjoon**](https://www.acmicpc.net/user/gnv112)
+- [**My Profile - Baekjoon**](https://www.acmicpc.net/user/gnv112)
 - [Help](https://help.acmicpc.net/)
   - [Tier Profile](https://github.com/mazassumnida/mazassumnida)
   - [Comparisons Input speed](https://www.acmicpc.net/blog/view/56)
   - [Comparisons output speed](https://www.acmicpc.net/blog/view/57)
 - [Homepage](https://www.acmicpc.net/)
   - [Tags](https://www.acmicpc.net/problem/tags)
+  - **[Class](https://solved.ac/class)**
 
 ## 2. Main Directory Structure
 
@@ -34,12 +35,12 @@ Updated on 📅 2023-04-09 03:59:51
   - unittest: 🧪 pytest src/python/wbfw109/algorithms/baekjoon/gold.py::**\<test_function_name\>**  
     🛍️ e.g. ```pytest src/python/wbfw109/algorithms/baekjoon/gold.py::test_bundle_up_numbers```
 
-- 📝 [gold.py](gold.py)
-- 📝 [platinum.py](platinum.py)
+- 📝 [gold.py](gold.py) : 34 problems
+- 📝 [platinum.py](platinum.py) : 1 problem
 
 ## 3. Analysis of problems
 
-- Greedy (fundament)
+- Greedy (fundament) and **Dynamic programming** with **rolling window approach**
   - find **rules** by debugging inductively.  
     - according to those rules, use proper **data structures**.  
       - list, tuple, set  
@@ -60,7 +61,7 @@ Updated on 📅 2023-04-09 03:59:51
     - to pause exploration **by depth**, and resume.
     - **Adjacency list** is useful when when represent undirected or directed graph.
     - 🛍️ e.g. (spread cells, distinguish zones from cells) in 2D matrix.
-  - Parametric search with other simulations
+  - **Parametric search** with other simulations (This can be largely divided into Test algorithm and Decision algorithm (predicate)).
   - Binary search with custom Predicate
   - combinations
 
