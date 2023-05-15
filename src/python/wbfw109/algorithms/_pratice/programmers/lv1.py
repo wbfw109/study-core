@@ -102,13 +102,38 @@ def solution_133499(babbling: list[str]) -> int:
 
 
 def solution_132267(a: int, b: int, n: int) -> int:
-    """콜라 문제 ; https://school.programmers.co.kr/learn/courses/30/lessons/132267
+    """🧠 콜라 문제 ; https://school.programmers.co.kr/learn/courses/30/lessons/132267
     a 를 가져다주면 b 병을 주는 마트가 있을 때 빈 병 n개를 가져준다면 몇 병 받을 수 있는지?
     while 문 말고 한번에 가능한가?
     10% 단위가 아니라서 어떻게 설계하지
+    Other solutions:
+        answer = 0
+        while n >= a:
+            q, r = divmod(n, a)
+            new_cola = q*b
+            answer+=new_cola
+            n = new_cola+r
+        return answer
+    The purpose: itreation*b;  1 ≤ b < a ≤ n ≤ 1,000,000
+    (a-b) * b
+        - * b; received multiplier for each step
+
+    3 병을 주고 한 병을 받으면, 그룹화...
+    n=6
+    give=3
+    get=1
+    n = 6-3 +1 = 4
+    n = 4-3 +1 = 2
+    한 번의 단위에 a-b 개를 주는 것이라 해석 할 수 있음. 하지만 a 보다 작을 때는 더 이상 진행하지 못하므로,
+
+    한꺼번에 계산하지 않고 a개만 팔고 b개를 받는 과정은 결국 a-b 개씩 병을 소비하는 것으로 생각,
+    첫, 그 조건을 먼저 계산 n-b iteration count (n-b) // (a-b) ; iteration count
+    ???
+
     """
-    answer = 0
-    return answer
+    return (n - b) // (a - b) * b
+
+
 
 
 def solution_131705(number: list[int]) -> int:
