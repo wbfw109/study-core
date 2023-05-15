@@ -1,0 +1,42 @@
+# %shell> poetry install --with web,db,vision
+
+[tool.poetry]
+name = "python-study"
+version = "0.1.0"
+description = ""
+authors = ["wbfw109v2 <wbfw109v2@gmail.com>"]
+packages = [{ include = "python_study" }]
+
+
+[tool.poetry.dependencies]
+python = "~3.12.0"
+opencv-python = "^4.10.0.84"
+tensorflow = "^2.17.0"
+pandas = "^2.2.2"
+pyside6 = "^6.7.2"
+matplotlib = "^3.9.2"
+mediapipe = "^0.10.15"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "*"
+bandit = "*"
+pylint = "*"
+pydocstringformatter = "^0.7.2"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+pytest-bdd = "*"
+# pytest-selenium = "^4.0.0"
+# pytest-factoryboy = "^2.5.1"
+
+
+[tool.pytest.ini_options]
+bdd_features_base_dir = "features/"
+addopts = ["--import-mode=importlib"]
+pythonpath = "src/python"
+
+
+[build-system]
+requires = ["poetry-core>=1.1.0"]
+build-backend = "poetry.core.masonry.api"

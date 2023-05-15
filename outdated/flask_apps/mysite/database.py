@@ -1,5 +1,4 @@
 from sqlalchemy import create_engine
-from sqlalchemy.log import echo_property
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -28,9 +27,7 @@ def init_db():
     # import all modules here that might define models so that
     # they will be registered properly on the metadata.  Otherwise
     # you will have to import them first before calling init_db()
-    from mysite import models
 
     # temporary models for command
-    from mysite.service.command import creating_log
 
     Base.metadata.create_all(bind=engine)

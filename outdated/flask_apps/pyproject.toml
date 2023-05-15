@@ -31,13 +31,10 @@ labelImg = "*"
 
 [tool.poetry.dev-dependencies]
 study-core = {path = "../study-core", extras=["ml"], develop = true}
-black = "*"
 pytest = "*"
-flake8 = "*"
 ipykernel = "*"
 bandit = "*"
 coverage = "*"
-pylint = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -12,24 +12,7 @@ monkey.patch_all()
 from mysite.config import CONFIG_CLASS
 from mysite import create_app
 import multiprocessing
-from logging import debug
-import cv2
-import numpy
-from flask import (
-    Flask,
-    url_for,
-    request,
-    render_template,
-    make_response,
-    abort,
-    redirect,
-    session,
-    flash,
-    send_from_directory,
-    current_app,
-)
 from flask_socketio import SocketIO
-import time
 
 client_count = 0
 message_sum_count = 0

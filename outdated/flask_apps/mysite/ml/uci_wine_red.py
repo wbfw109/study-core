@@ -75,10 +75,8 @@ from pathlib import Path
 # %%
 from typing import Callable
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas
-import seaborn
 import tensorflow as tf
 import tensorflow.keras as keras
 import tensorflow_datasets as tfds

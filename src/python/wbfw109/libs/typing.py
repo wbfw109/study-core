@@ -3,7 +3,6 @@ import dataclasses
 import datetime
 from typing import (
     Any,
-    Callable,
     Generic,
     MutableMapping,
     MutableSequence,

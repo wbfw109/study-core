@@ -1,11 +1,8 @@
 from django.contrib.auth.models import User, AnonymousUser
 from django.core.exceptions import PermissionDenied
-from django.db.models.aggregates import Count
-from django.db.models.expressions import F
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
 from django.http import Http404
-from django.shortcuts import get_list_or_404
 from ml_model.global_object import GlobalDeivceCamera, GlobalResponseMessage
 from ml_model.model.device_cube import DeviceCube
 from ml_model.serializers.device_cube import (
@@ -13,14 +10,13 @@ from ml_model.serializers.device_cube import (
     DeviceCubeSerializer,
     DeviceCubeSetFirmwareSerializer,
 )
-from ml_model.utilities.utils_iterable import bulk_update_objects_from_dicts, validate_iterable_comply_optional_typed_dict
-from rest_framework import serializers, viewsets, status
+from ml_model.utilities.utils_iterable import bulk_update_objects_from_dicts
+from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action, api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
-from typing import Any, Iterable, Optional, Sequence, Union
-import itertools
+from typing import Union
 import logging
 import random
 import string
@@ -234,7 +230,7 @@ class DeviceCubeViewSet(viewsets.ModelViewSet):
         ] = DeviceCube.objects.filter(id__in=request_data_device_cube_id_list, is_deleted=False)
         
         device_cube_owner: set = set([device_cube_in_db.user_id for device_cube_in_db in device_cube_list_in_db])
-        if len(device_cube_owner) > 1 or not request_user.id in device_cube_owner:
+        if len(device_cube_owner) > 1 or request_user.id not in device_cube_owner:
             raise PermissionDenied
 
 

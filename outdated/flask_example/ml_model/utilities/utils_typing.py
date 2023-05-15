@@ -1,5 +1,4 @@
 from typing import Any, Iterable, TypeVar
-import dataclasses
 
 # Object
 O = TypeVar("O")

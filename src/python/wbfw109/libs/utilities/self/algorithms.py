@@ -6,7 +6,6 @@ import dataclasses
 import functools
 import itertools
 import json
-import pprint  # type: ignore
 import time
 import unittest
 from abc import ABC, abstractmethod
@@ -14,7 +13,7 @@ from http import HTTPStatus
 from http.client import HTTPResponse
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Callable, Final, Generator, Generic, Optional, TypeVar
+from typing import Any, Callable, Final, Generator, Generic, Optional
 from urllib.parse import ParseResult, urlparse
 from urllib.request import urlopen
 from zipfile import ZipFile

@@ -1,20 +1,8 @@
 from __future__ import annotations
-import collections
 import dataclasses
-import datetime
-import enum
-import time
-from typing import Union
-import PIL
-import pytz
-import math
-from sqlalchemy.engine import create_engine
-from sqlalchemy.schema import Column, Index, ForeignKey
-from sqlalchemy.sql.sqltypes import Boolean
-from sqlalchemy.types import String, Integer, BigInteger, Float, DateTime, Enum
-from sqlalchemy.orm import backref, relationship
-from mysite.database import Base, db_session
-from PIL import Image
+from sqlalchemy.schema import Column
+from sqlalchemy.types import String, Integer
+from mysite.database import Base
 
 
 @dataclasses.dataclass(init=False)

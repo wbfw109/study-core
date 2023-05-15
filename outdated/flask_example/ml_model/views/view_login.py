@@ -58,7 +58,7 @@ def get_pw(request: Request):
             UserProfile.objects.select_related("user")
             .get(user__username=data["id"])
         )
-    except ObjectDoesNotExist as e:
+    except ObjectDoesNotExist:
         return Response({"pw": "", "err": "id"})
     else:
         cube_list_info = DeviceCube.objects.filter(user_id=user_profile.user_id)

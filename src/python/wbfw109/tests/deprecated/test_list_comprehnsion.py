@@ -1,7 +1,6 @@
 # %%
 import itertools
 
-import IPython
 from IPython.core.interactiveshell import InteractiveShell
 
 # + allow multiple print

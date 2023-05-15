@@ -6,7 +6,6 @@
 # Todo: About shapes ~ ★ Frist
 # %%
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 import logging
 import os
 import tensorflow as tf
@@ -14,7 +13,6 @@ import numpy as np
 import pandas
 import random
 
-from tensorflow.python.keras.backend import dtype
 
 # ** setting
 # allow multiple print

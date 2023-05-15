@@ -9,16 +9,13 @@ it includes commands, raw codes.
 """
 is_ipython_mode = True
 if is_ipython_mode:
-    import IPython
     from IPython.core.interactiveshell import InteractiveShell
-    from IPython.display import clear_output, display
 
     InteractiveShell.ast_node_interactivity = "all"
 
 from starter.config import CONFIG_CLASS
 from pathlib import Path
 import sys
-import os
 import subprocess
 
 TEMP_FILES_PATH: Path = Path.home() / ".local_files"

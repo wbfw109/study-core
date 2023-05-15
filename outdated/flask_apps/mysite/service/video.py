@@ -1,5 +1,5 @@
 from mysite.config import CONFIG_CLASS
-from typing import Generator, Union
+from typing import Union
 from pathlib import Path
 import datetime
 import cv2
@@ -328,7 +328,7 @@ class LocalImages:
                 elif mode == "vstack":
                     self.vstack(mode)
                 else:
-                    print("not supported mode: {mode}".format(mode))
+                    print("not supported mode: {mode}".format())
 
             operations: str = "_".join(modes)
             for index, new_image in enumerate(self.buffered_images):

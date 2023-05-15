@@ -17,10 +17,42 @@
 
 ## 1. Algorithms
 
+🅰️ Plan
+
+1. to solve from lv 2 to lv 5 in Programmers site by Python3
+2. to solve from lv 0 to lv 5 in Programmers site by SQL and Pandas
+3. [goorm level](https://level.goorm.io/)
+4. [Leet code](https://leetcode.com/)
+
 ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
 
 - [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
-- [**Programmers, Goorm**](wbfw109/algorithms/_pratice/README.md)
+- [**Programmers, Goorm**](wbfw109/algorithms/_practice/README.md)
+- [unknown](wbfw109/algorithms/unknown/) ; Problems from Unknown source
+
+  - 📝 [dp.py](wbfw109/algorithms/unknown/dp.py) ; (1) problems
+
+**Main Tags** in use
+
+- Optimization
+  - Masking
+  - Memoization
+- Graph
+  - BFS
+- Dynamic programming
+  - Rolling window approach
+- Math
+- Sequence
+  - Subsequence
+
+**Sub Tags** in use
+
+- Sweep line algorithm
+- Parametric search
+  - Bisection method
+- Backtracking
+- \<Named problems\>
+  - 3SUM variant
 
 &nbsp;
 
@@ -33,10 +65,11 @@
 | Type                         | Name                                             | location                                                                                                        |
 | :--------------------------- | :----------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
 | Numerics                     | integer factorization                            | [class IntegerFactorization](wbfw109/labs/basics/numerics/factorization.py#L19)                                 |
-| Numerics - definable numbers | decimal representation                           | [class DecimalRepresentation](wbfw109/labs/basics/numerics/rational_number.py#L19)                              |
+| Numerics - definable numbers | decimal representation, positional notation      | [class DecimalRepresentation, PositionalNotation](wbfw109/labs/basics/numerics/rational_number.py#L19)          |
 | Sequence Sorting             | bubble, quick, selection, heap, insertion, merge | [class ExchangeSorts, SelectionSorts, InsertionSorts, MergeSorts](wbfw109/labs/basics/sequences/sorting.py#L26) |
 | Sequence Search              | binary                                           | [class BinarySearch](wbfw109/labs/basics/sequences/search.py#L47)                                               |
 | Subsequence                  | longest increasing subsequence                   | [class LongestIncreasingSubsequence](wbfw109/labs/basics/sequences/subsequence.py#L21)                          |
+| Substring                    | palindrome, Repeated substring                   | [class Palindrome, RepeatedSubstring](wbfw109/labs/basics/sequences/substrings.py#L21)                          |
 | Graph basic                  | basics in terms of distance                      | [class GraphDistance](wbfw109/labs/basics/graphs/basic.py#L104)                                                 |
 | Graph Search                 | DFS, BFS                                         | [class DfsAndBfs](wbfw109/labs/basics/graphs/search.py#L89)                                                     |
 | Graph Routing                | Kruskal                                          | [class MinimumSpanningTree](wbfw109/labs/basics/graphs/routing.py#L102)                                         |
@@ -64,17 +97,15 @@
 
 ### 1.3 Specification
 
-| Type                     | Name                                                | location                                                                                                            |
-| :----------------------- | :-------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
-| Built-in code constructs | for-in loop, operators, lambda, unpacking variables | [class ForStatement, Operators, LambdaExpression, UnpackingVariables](wbfw109/labs/builtins/code_constructs.py#L24) |
-| Built-in functions       | min, sort, zip                                      | [class MinFunc, SortFunc, ZipFunc](wbfw109/labs/builtins/functions.py#L18)                                          |
-| Built-in system          | data size, zero-bard numbering, masking             | [class DataSize, ZeroBasedNumbering, Masking](wbfw109/labs/builtins/system.py#L18)                                  |
-| Dunders names            | Truthy values, getattr, iter                        | [class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L36)                          |
-| **Data types**           | dict, list                                          | [class ListDT, DictDT](wbfw109/labs/basics/data_stucture.py#L80)                                                    |
+| Type                     | Name                                                                | location                                                                                                                       |
+| :----------------------- | :------------------------------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------- |
+| Built-in code constructs | unpacking variables, for-in loop, operators, lambda, iterators      | [class UnpackingVariables, ForStatement, Operators, LambdaExpression, Iterators](wbfw109/labs/builtins/code_constructs.py#L24) |
+| Built-in functions       | format, min, range, sort, zip, Sum-prod and min-max                 | [class FormatFunc, MinFunc, RangeFunc, SortFunc, ZinFunc, SumProdAndMinMax](wbfw109/labs/builtins/functions.py#L18)            |
+| Built-in system          | CPython advantage, array in memory, data size, zero-based numbering | [class CPythonAdvantage, ArrayInMemory DataSize, ZeroBasedNumbering](wbfw109/labs/builtins/system.py#L18)                      |
+| Dunders names            | Truthy values, getattr, iter                                        | [class DundersTruthyValue, DundersGetattr, DundersIter](wbfw109/labs/dunders_names.py#L36)                                     |
+| **Data types**           | numerics (int), sequence (list), mapping (dict)                     | [class IntDT, SequenceDT, ListDT, DictDT](wbfw109/labs/basics/data_stucture.py#L28)                                            |
 
-🧊 Some file may have profiling to some pieces. but codes profiling are not run from Visualization Manager.
-
-- **"Data types"** file **not have Visualization**.
+🧊 Some file may have profiling to some pieces. These code are actually not run from Visualization Manager, but will show "**Profile conclusion**".
 
 ---
 

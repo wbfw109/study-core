@@ -3,7 +3,7 @@ import datetime
 import json
 import random
 import time
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 from wbfw109.libs.typing import DatetimeRange, TimeEdgePair, TimeRange
 

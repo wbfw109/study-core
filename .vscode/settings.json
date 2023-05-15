@@ -1,56 +1,47 @@
 {
-  "python.analysis.typeCheckingMode": "strict",
-  "python.linting.ignorePatterns": [
-    "temp_cache/*",
-    "src/python/wbfw109/labs/**/*",
-    "outdated/**/*"
-  ],
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "eslint.nodePath": ".yarn/sdks",
   "plantuml.server": "http://localhost:9999",
   "plantuml.render": "PlantUMLServer",
-  "plantuml.includepaths": ["services/*/diagrams"],
+  "plantuml.includepaths": [
+    "services/*/diagrams"
+  ],
   "plantuml.exportSubFolder": false,
   "plantuml.exportFormat": "svg",
-  // environment variables for tasks.json ~
-  "myGitBranch.dev": "dev",
-  "myGitBranch.main": "main",
-
   // common workplace settings ~
   "editor.tabSize": 2,
-  "python.analysis.autoImportCompletions": true,
-  "python.analysis.autoImportUserSymbols": true,
   "python.analysis.completeFunctionParens": true,
   "[python]": {
     "editor.tabSize": 4,
-    "editor.formatOnPaste": false,
-    "editor.defaultFormatter": "ms-python.python",
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
+      "source.organizeImports": "explicit"
+    },
   },
-  "python.linting.enabled": true,
-  "python.linting.banditEnabled": true,
-  "python.linting.pylintEnabled": true,
-  "python.linting.pylintArgs": [
-    "--disable=C0301,E0015,W0611,W0703,W1114,E1133,E1136",
-    "--variable-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$",
-    "--attr-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$",
-    "--argument-rgx=^[a-z0-9_]+$|^[A-Z0-9_]+$"
-  ],
-  "python.formatting.provider": "black",
-  "python.formatting.blackArgs": ["--target-version", "py311"],
-  "isort.args": ["--profile", "black"],
+  "python.analysis.typeCheckingMode": "strict",
   "jupyter.notebookFileRoot": "${workspaceFolder}",
   "[feature]": {
     "editor.defaultFormatter": "alexkrechik.cucumberautocomplete"
   },
+  "[c]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "[cpp]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "[markdown]": {
+    "editor.formatOnSave": true,
+  },
   "search.exclude": {
+    "**/.git": false,
     // "ref/algorithms_ref.json": true,
     "services/glossary_service/": true,
     "src/python/wbfw109/outdated/**/*": true,
     "src/python/wbfw109/algorithms/baekjoon/*.py": true,
-    "src/python/wbfw109/algorithms/_pratice/**/*.py": true,
+    "src/python/wbfw109/algorithms/_practice/**/*.py": true,
     ".pnp.*": true,
     ".yarn/": true,
     "package-lock.json": true,
@@ -65,27 +56,37 @@
     "Remove Type hint of list in single line": {
       "find": "( ->|:) ?(list\\)?[(list\\[[\\w ]+\\])(\\]?)",
       "replace": "$1 list",
-      "languages": ["python"]
+      "languages": [
+        "python"
+      ]
     },
     "Remove Type hint of list in multiple line": {
       "find": "(:) list\\[(\n.+){2}(?==)",
       "replace": "$1 list",
-      "languages": ["python"]
+      "languages": [
+        "python"
+      ]
     },
     "Remove Type hint of Final": {
       "find": ": Final\\[(.+)\\]",
       "replace": ": $1",
-      "languages": ["python"]
+      "languages": [
+        "python"
+      ]
     },
     "Remove Type hint of Literal": {
       "find": ": Literal\\[.+\\]",
       "replace": "",
-      "languages": ["python"]
+      "languages": [
+        "python"
+      ]
     },
     "Remove Type hint of importing": {
       "find": "(Final, |, Final|Literal, |, Literal)",
       "replace": "",
-      "languages": ["python"]
+      "languages": [
+        "python"
+      ]
     }
   },
   "replacerules.rulesets": {
@@ -99,7 +100,9 @@
       ]
     }
   },
-  "cucumberautocomplete.steps": ["features/*.py"],
+  "cucumberautocomplete.steps": [
+    "features/*.py"
+  ],
   "cucumberautocomplete.customParameters": [
     {
       "parameter": "(u'",
@@ -116,5 +119,24 @@
   "yaml.schemas": {},
   "svelte.enable-ts-plugin": true,
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "files.associations": {
+    "*.txt": "plaintext",
+    "stdio.h": "c",
+    "array": "c"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": true
+  },
+  "terminal.integrated.defaultProfile.linux": "fish",
+  //Title: Config (Settiongs.json) variables in VSCode
+  "myGitBranch.dev": "dev",
+  "myGitBranch.main": "main",
+  "cmake.ignoreCMakeListsMissing": true,
 }

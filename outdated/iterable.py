@@ -3,13 +3,11 @@
 
 todo: generator_with_suffle for_pandas.Dataframe.iterrows() and apply in existing logic
 """
-import collections.abc
 import copy
 import dataclasses
 import datetime
 import inspect
 import itertools
-import math
 import random
 import re
 import shutil
@@ -19,9 +17,7 @@ from pathlib import Path
 from typing import (
     Any,
     Callable,
-    ClassVar,
     Iterable,
-    NamedTuple,
     Sequence,
     TypedDict,
     Union,

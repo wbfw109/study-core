@@ -9,7 +9,8 @@ from mysite.config import CONFIG_CLASS
 import asyncio
 import json
 import time
-import requests, bs4
+import requests
+import bs4
 from functools import partial
 from datetime import datetime
 import queue

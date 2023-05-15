@@ -10,7 +10,6 @@ import logging
 import os
 import tensorflow as tf
 from tensorflow.python.framework.ops import EagerTensor
-import cProfile
 import numpy as np
 
 # ** setting

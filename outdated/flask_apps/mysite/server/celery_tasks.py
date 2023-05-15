@@ -1,11 +1,7 @@
 import socketio
 from mysite.server.celery_worker import celery
 from mysite.server.websocket import create_socketio
-import cv2
 
-from pathlib import Path
-from celery import apps
-import flask_socketio
 
 app, socketio_server = create_socketio()
 socketio_client = socketio.Client()

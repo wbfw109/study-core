@@ -2,15 +2,11 @@
 """
 from django.contrib.auth.models import User, AnonymousUser
 from django.core.exceptions import PermissionDenied
-from django.db.models.aggregates import Count
 from django.db.models.expressions import F
 from django.db.models.query import QuerySet
-from django.db.models.query_utils import Q
 from django.http import Http404
-from django.http.request import HttpRequest
-from io import BytesIO
-from ml_model.global_object import GlobalConfig, GlobalDeivceCamera, GlobalResponseMessage
-from ml_model.model.device_camera import DeviceCamera, DeviceCameraEvent
+from ml_model.global_object import GlobalDeivceCamera, GlobalResponseMessage
+from ml_model.model.device_camera import DeviceCamera
 from ml_model.model.device_cube import DeviceCube
 from ml_model.serializers.device_camera import DeviceCameraSerializer, DeviceCameraUpdateTypedDict
 from ml_model.utilities.utils_iterable import (
@@ -19,22 +15,13 @@ from ml_model.utilities.utils_iterable import (
 )
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view, action
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import (
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-    BasePermission,
-    SAFE_METHODS,
-)
+from rest_framework.decorators import action
 from rest_framework.request import Request
 
 from rest_framework.response import Response
-from typing import Optional, Union
-import dataclasses
+from typing import Union
 import itertools
 import logging
-import inspect
 
 
 logger = logging.getLogger(__name__)
@@ -175,7 +162,7 @@ class DeviceCameraViewSet(viewsets.ModelViewSet):
         device_camera_owner: set = set(
             [device_camera_in_db.cube.user_id for device_camera_in_db in device_camera_list_in_db]
         )
-        if len(device_camera_owner) > 1 or not request_user.id in device_camera_owner:
+        if len(device_camera_owner) > 1 or request_user.id not in device_camera_owner:
             raise PermissionDenied
 
         # process

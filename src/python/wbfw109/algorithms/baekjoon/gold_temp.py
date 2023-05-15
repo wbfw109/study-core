@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 import unittest
-from pprint import pprint
 from typing import Iterator, Optional
 
 

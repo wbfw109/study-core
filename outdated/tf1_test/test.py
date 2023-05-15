@@ -1,15 +1,10 @@
 #%%
 import IPython
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 import logging
 import os
 from pathlib import Path
-import matplotlib.pyplot as plt
 import numpy
-import pandas
-import random
-from pathlib import Path
 import sys
 import subprocess
 import ast
@@ -72,7 +67,6 @@ PROBLEM_PATH.mkdir(exist_ok=True)
 # + setting - tensorfow version
 if tensorflow_version_as_integer == 2:
     import tensorflow as tf
-    import tensorflow.keras as keras
 elif tensorflow_version_as_integer == 1:
     # python <= 3.7
     if environment_location == EnvironmentLocation.GOOGLE_COLAB:

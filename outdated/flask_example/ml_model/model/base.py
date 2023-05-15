@@ -1,10 +1,8 @@
 from __future__ import annotations
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils import timezone
-from typing import ClassVar, Optional
+from typing import Optional
 import dataclasses
-import json
 import time
 
 class UserProfile(models.Model):

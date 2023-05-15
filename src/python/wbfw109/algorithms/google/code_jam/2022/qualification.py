@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import dataclasses
 import itertools
-import pprint  # type: ignore
 import unittest
 from typing import Callable, Final, NamedTuple, Optional
 

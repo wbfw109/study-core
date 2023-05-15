@@ -30,9 +30,7 @@ import logging
 import os
 from pathlib import Path
 
-import numpy as np
 import pandas
-import seaborn
 import tensorflow as tf
 from IPython.core.interactiveshell import InteractiveShell
 from IPython.display import clear_output
@@ -43,7 +41,6 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from tensorflow.python.keras.losses import losses_utils
 from wbfw109.libs.utilities.machine_learning import (
-    get_coefficient_from_linear,
     get_features,
     normalize_using_zscore,
 )

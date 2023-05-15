@@ -2,7 +2,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from django.db import connection
-import logging, datetime
+import logging
+import datetime
 logger = logging.getLogger(__name__)
 
 EVENT_TYPE_NAME = 0
@@ -35,7 +36,7 @@ def event_list(request):
         
         if hours > 0 :
             time_result = str(hours) + '시간 전'
-        elif hours is 0 and minutes > 0 :
+        elif hours == 0 and minutes > 0 :
             time_result = str(minutes) + '분 전'
         else :
             time_result = '조금 전'

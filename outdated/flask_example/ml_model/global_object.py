@@ -4,7 +4,6 @@ from django.core.files.base import ContentFile
 from django.db import transaction
 from django.db.models.aggregates import Max
 from django.db.models.query import QuerySet
-from io import BytesIO
 from ml_model.model.base import ConnectStatus, ThreatEvent
 from ml_model.model.device_camera import (
     DeviceCamera,
@@ -12,8 +11,6 @@ from ml_model.model.device_camera import (
     DeviceCameraConnectStatus,
 )
 from ml_model.model.device_cube import DeviceCube
-from PIL import Image
-from types import SimpleNamespace
 from typing import TypedDict, Union
 import base64
 import dataclasses
@@ -22,7 +19,6 @@ import imghdr
 import logging
 import pytz
 import time
-import json
 
 
 class GlobalConfig:
@@ -191,7 +187,7 @@ class GlobalDeivceCamera:
         for cube_id_key in device_cube_id_key_list:
             try:
                 del cls.connect_status_dict[cube_id_key]
-            except KeyError as e:
+            except KeyError:
                 pass
         
 
@@ -209,7 +205,7 @@ class GlobalDeivceCamera:
         for camera_id_key in device_camera_id_key_list:
             try:
                 del cls.connect_status_dict[device_cube_id][camera_id_key]
-            except KeyError as e:
+            except KeyError:
                 pass
             
     @classmethod

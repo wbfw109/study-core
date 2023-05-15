@@ -1,9 +1,7 @@
 from django.db import transaction
-from django.db import models
 from django.db.utils import DatabaseError
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
-from rest_framework.response import Response
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from ml_model.model.base import User, UserProfile

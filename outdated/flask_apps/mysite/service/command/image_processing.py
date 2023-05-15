@@ -1,11 +1,7 @@
 from mysite.config import CONFIG_CLASS
 from mysite.service.video import LocalImages
-from logging import error
-from datetime import datetime
-from pathlib import PurePath, Path
+from pathlib import Path
 import argparse
-import numpy
-import cv2
 
 if __name__ == "__main__":
     CONFIG_CLASS.ensure_folders_exist()

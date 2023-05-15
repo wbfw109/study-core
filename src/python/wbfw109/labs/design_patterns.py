@@ -44,24 +44,24 @@ class Interning(VisualizationRoot):
         a = (1, 2)
         b = (1, 2)
         interning.append_line_into_df_in_wrap(
-            [f"(a == b, a is b)", (a == b, a is b), "a = (1, 2); b = (1, 2)"]
+            ["(a == b, a is b)", (a == b, a is b), "a = (1, 2); b = (1, 2)"]
         )
         a = "abcd"
         b = "abcd"
         interning.append_line_into_df_in_wrap(
-            [f"(a == b, a is b)", (a == b, a is b), "a = 'abcd'; b = 'abcd'"]
+            ["(a == b, a is b)", (a == b, a is b), "a = 'abcd'; b = 'abcd'"]
         )
 
         a = "ab cd"
         b = "ab cd"
         interning.append_line_into_df_in_wrap(
-            [f"(a == b, a is b)", (a == b, a is b), "a = 'ab cd'; b = 'ab cd'"]
+            ["(a == b, a is b)", (a == b, a is b), "a = 'ab cd'; b = 'ab cd'"]
         )
         a = sys.intern("ab cd")
         b = sys.intern("ab cd")
         interning.append_line_into_df_in_wrap(
             [
-                f"(a == b, a is b)",
+                "(a == b, a is b)",
                 (a == b, a is b),
                 "a = sys.intern('ab cd'); b = sys.intern('ab cd')",
             ]
@@ -70,7 +70,7 @@ class Interning(VisualizationRoot):
         interning.visualize()
 
 
-#%%
+# %%
 
 # class DisposePattern:
 #     """
@@ -80,7 +80,7 @@ class Interning(VisualizationRoot):
 #     """
 
 #     pass
-
+# Singleton, bridge, strategy, builder, factory method, facade pattern
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:

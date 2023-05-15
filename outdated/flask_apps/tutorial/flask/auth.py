@@ -1,5 +1,4 @@
 import functools
-import hashlib
 
 from flask import (
     Blueprint,

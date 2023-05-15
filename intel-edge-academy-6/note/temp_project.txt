@@ -1,0 +1,123 @@
+📰env LANG=ko_KR.UTF-8 wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Kakao/KakaoTalk/KakaoTalk.exe
+  mv ~/.wine/drive_c/users/wbfw109v2/Documents/카카오톡\ 받은\ 파일/KakaoTalk_20240903_164608041.jpg ~/Downloads/
+  sudo mount -t cifs -o -o vers=3.0,username=Guest,password=,uid=$(id -u),gid=$(id -g) //10.10.14.40/class_401 /mnt/windows-share
+
+  
+?? default Interpreter 에 python 이 없으면
+
+c++/Python/ImageDSP/ChatGPT
+조별과제 / 리소스 영상 / 프로그래밍
+주제 선정 / ~ 9/3 까지 개발 + Doc / PPT 준비. 9/4 오전까지 개발. 9/4 2시 ~ 발표
+
+
+
+AI 기반 반려 (동물, 식물, 곤충) 앱 + 커뮤니티/전문가 연결. + 웹 + 앱.
+  수익 모델? 특정 동물/식물/곤충에 따른 추가 관리 기능?으로  
+
+펫 전용 택시, 
+
+
+제가 언급한 ~/.local/share/applications/kakaotalk.desktop 파일은 애플리케이션 메뉴에 KakaoTalk을 추가하거나, 바탕화면에 아이콘을 생성하는 데 사용되는 파일입니다. 이 파일을 생성하면 다음과 같은 기능을 제공합니다:
+  애플리케이션 메뉴:
+      Ubuntu의 애플리케이션 메뉴에서 KakaoTalk을 검색하고 실행할 수 있게 됩니다. 예를 들어, Ubuntu의 좌측 상단에 있는 "활동" 메뉴에서 KakaoTalk을 검색하면 이 아이콘이 나타납니다.
+  바탕화면 아이콘:
+      이 파일을 바탕화면에 복사하면 바탕화면에서 바로 KakaoTalk을 실행할 수 있는 아이콘이 생성됩니다.
+
+  좌측 바(Launcher)에 고정된 아이콘
+    좌측 바(Launcher)에 고정된 아이콘은 애플리케이션을 실행하거나 고정할 때 자동으로 생성됩니다.
+    앱을 실행한 후, 좌측 바에 아이콘 고정:
+        KakaoTalk을 한 번 실행하면, 해당 아이콘이 좌측 바에 나타납니다. 아이콘을 우클릭한 후 "즐겨찾기에 추가" 또는 "바에 고정"을 선택하면 아이콘이 좌측 바에 고정됩니다.
+    .desktop 파일을 통한 고정:
+        .desktop 파일을 사용하여 애플리케이션을 고정할 수도 있습니다. 이 파일을 생성하고 앱을 실행하면, 해당 아이콘이 좌측 바에 자동으로 나타납니다.
+  따라서, 제가 설명한 .desktop 파일은 애플리케이션 메뉴에 아이콘을 추가하거나 바탕화면에 아이콘을 생성하는 방법이며, 이를 통해 KakaoTalk을 실행할 수 있습니다. 좌측 바에 아이콘을 고정하려면 KakaoTalk을 한 번 실행한 후 고정하면 됩니다.
+
+
+미니 프로젝트 아이디어 📅 2024-09-02 11:28:53
+  - 가위 바위 보 인식
+    - 부가 옵션 기능: 목소리 "가위, 바위, 보" 에서 "보" 의 목소리가 출력될 당시의 비전데이터를 처리하여 컴퓨터와 가위바위보 하는 서비스
+  - 비전 인식
+    - 주요 기능
+      카메라에 비친 두 얼굴 합성
+      여성으로 만들기
+    - 부가 옵션 기능: 목소리 인식하여 어떤 기능을 할 지 판단하기
+  
+    
+에이다 부스트 학습; 가능한 모든 커널을 가지고 이미지 전체를 스캔하여 하르 특징을 계산한다?
+
+✅ (how); connect to Windows' shared folder in Ubuntu 📅 2024-09-02 20:27:12
+  ⚓ Server Meessage Block (SMB) ; https://en.wikipedia.org/wiki/Server_Message_Block
+  ⚓ Common Internet File System (CIFS) ; https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-cifs
+    sudo apt install cifs-utils
+    sudo mount -t cifs -o username=<windows_user_name>,password=<windows_user_password>,uid=$(id -u),gid=$(id -g) //<windows_ip>/<shared_folder_name> /mnt/windows-share
+    sudo mount -t cifs -o username=,password=,uid=$(id -u),gid=$(id -g) //10.10.14.40/class_401 /mnt/windows-share
+    # (option) create symbolic link
+
+    🛍️ e.g. 
+      sudo mount -t cifs -o username=Guest,password=,uid=$(id -u),gid=$(id -g) //10.10.14.40/class_401 /mnt/windows-share
+      ln -s /mnt/windows-share/Vision_SangSoo/ ~/Desktop/
+
+❔ Hard link, Soft link
+  https://en.wikipedia.org/wiki/Hard_link
+  https://en.wikipedia.org/wiki/Symbolic_link
+
+
+
+
+
+
+MediaPipe
+  https://github.com/google-ai-edge/mediapipe
+    # Contents
+      🔏 License: Apahce License 2.0
+
+      These libraries and resources provide the core functionality for each MediaPipe Solution:
+        🪱 MediaPipe Tasks: Cross-platform APIs and libraries for deploying solutions. Learn more.
+        🪱 MediaPipe models: Pre-trained, ready-to-run models for use with each solution.
+      These tools let you customize and evaluate solutions:
+        🪱 MediaPipe Model Maker: Customize models for solutions with your data. Learn more.
+        🪱 MediaPipe Studio: Visualize, evaluate, and benchmark solutions in your browser. Learn more.
+
+    Fash Mesh ; https://github.com/google-ai-edge/mediapipe/blob/master/docs/solutions/face_mesh.md
+  
+
+  https://ai.google.dev/edge/mediapipe/solutions/guide
+    https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker
+      # Models
+        Face detection model, Face mesh model, Blendshape prediction model
+
+  https://mediapipe-studio.webapps.google.com/demo/face_landmarker
+  
+https://en.wikipedia.org/wiki/Facial_Action_Coding_System
+  ... blendshape scores (coefficients representing facial expression) from https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker
+  https://mediapipe-studio.webapps.google.com/home
+
+MediaPipe API
+  # Python
+    # mp
+      ⚓ Overview ; https://ai.google.dev/edge/api/mediapipe/python/mp
+
+
+https://stackoverflow.com/questions/59051631/what-is-the-use-of-stub-files-pyi-in-python
+
+❓ 파이썬에서 주로 C++로 구현된 부분을 호출하기 때문일 수 있습...
+  pyi stub pile
+https://pypi.org/project/type-enforced/
+
+❓ 휴대용 책 지지대
+
+
+⚓ GIMP ; 
+  Image - Canvas Size...
+
+  
+
+
+Software Design Specification
+  Software Design Design Method: -
+  Hardware Constraints: -
+  UI: - : pyqt6 로 토글형 스티커 IO 설계
+알고리즘
+  ..함수 간의 동작?
+
+>> 자기 파트
+

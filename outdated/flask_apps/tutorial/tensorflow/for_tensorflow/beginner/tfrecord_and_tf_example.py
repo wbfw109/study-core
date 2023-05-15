@@ -9,15 +9,9 @@
 
 # %%
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 import logging
 import os
 import tensorflow as tf
-from tensorflow.keras import datasets, layers, models
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas
-import random
 
 # ** setting
 # allow multiple print

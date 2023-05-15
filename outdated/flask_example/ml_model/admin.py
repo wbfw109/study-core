@@ -1,6 +1,5 @@
 # Register your models here.
 from django.contrib import admin
-from django.db import models
 from ml_model.model.device_camera import DeviceCamera
 from ml_model.model.device_cube import DeviceCube
 from ml_model.model.base import UserProfile

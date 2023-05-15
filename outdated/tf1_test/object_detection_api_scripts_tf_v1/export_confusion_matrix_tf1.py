@@ -16,12 +16,9 @@ Reference
 is_ipython_mode = False
 
 import math
-import os
-import subprocess
 import sys
 from pathlib import Path
 
-from starter.config import CONFIG_CLASS
 
 TEMP_FILES_PATH: Path = Path.home() / ".local_files"
 NEW_SLIM_PATH: Path = TEMP_FILES_PATH / "tensorflow/models/research/slim"
@@ -233,9 +230,7 @@ def main(argv):
         FLAGS.detections_record = "/mnt/c/Users/wbfw109/MyDrive/shared_resource/training_temp/freeze/test_prediction.record"
         FLAGS.label_map = "/mnt/c/Users/wbfw109/MyDrive/shared_resource/annotations/my_label_map.pbtxt"
         FLAGS.output_path = "/mnt/c/Users/wbfw109/MyDrive/shared_resource/training_temp/freeze/confusion_matrix.csv"
-        import IPython
         from IPython.core.interactiveshell import InteractiveShell
-        from IPython.display import clear_output, display
 
         InteractiveShell.ast_node_interactivity = "all"
     ## added end

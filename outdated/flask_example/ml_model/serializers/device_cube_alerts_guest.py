@@ -1,6 +1,4 @@
-import dataclasses
 import itertools
-from io import BytesIO
 from typing import Optional, Union
 
 from django.contrib.auth.models import User
@@ -12,19 +10,10 @@ from django.http import Http404
 from rest_framework import serializers, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import (
-    SAFE_METHODS,
-    BasePermission,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from ml_model.global_object import GlobalConfig, GlobalDeivceCamera, GlobalResponseMessage
-from ml_model.model.device_camera import DeviceCamera, DeviceCameraEvent
+from ml_model.global_object import GlobalDeivceCamera
 from ml_model.model.device_cube import DeviceCube, DeviceCubeAlertsGuest, Guest
 from ml_model.serializers.device_cube import DeviceCubeMinimalSerializer
 

@@ -16,18 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from django.urls.conf import include
-from ml_model.views import view_cube, view_login, view_camera, view_dashboard, view_history, view_alert, view_websocket
+from ml_model.views import view_cube, view_login, view_camera, view_dashboard, view_history, view_alert
 from rest_framework import routers
 from . import consumers
 
-from ml_model.views import (
-    view_cube,
-    view_login,
-    view_camera,
-    view_dashboard,
-    view_history,
-    view_test,
-)
 
 device_camera_router = routers.DefaultRouter()
 device_camera_router.register(r"cameras", view_camera.DeviceCameraViewSet, basename="camera")

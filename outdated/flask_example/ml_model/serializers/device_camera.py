@@ -1,29 +1,7 @@
-import itertools
-from django.contrib.auth.models import User
-from django.db.models.expressions import F
-from django.db.models.query import QuerySet
-from django.db.models.query_utils import Q
-from django.http import Http404
-from django.core.exceptions import PermissionDenied
-from io import BytesIO
-from ml_model.global_object import GlobalConfig, GlobalDeivceCamera, GlobalResponseMessage
+from ml_model.global_object import GlobalDeivceCamera
 from ml_model.model.device_camera import DeviceCamera, DeviceCameraEvent
 from ml_model.model.device_cube import DeviceCube
-from rest_framework import serializers, viewsets, status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import (
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-    BasePermission,
-    SAFE_METHODS,
-)
-from rest_framework.request import Request
-from rest_framework.response import Response
-from typing import Optional, Union
-import dataclasses
+from rest_framework import serializers
 from typing import TypedDict
 
 

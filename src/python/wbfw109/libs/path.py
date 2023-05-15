@@ -10,6 +10,9 @@ class PathPair(NamedTuple):
     absolute: Path
     relative_parent: Path
 
+def get_project_root() -> Path:
+    return Path(__file__).parent.parent.parent.parent.parent
+
 
 def get_valid_path_pair_from_sys_path(path: Path) -> Optional[PathPair]:
     """

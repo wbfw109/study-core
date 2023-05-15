@@ -1,9 +1,31 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
-  // ??? tasks dependonds
   "version": "2.0.0",
   "tasks": [
+    {
+      "label": "kotlin build",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/src/kotlin/wbfw109/"
+      },
+      "command": "./gradlew build --exclude-task test && ./gradlew run",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+    },
+    {
+      "label": "run",
+      "type": "shell",
+      "command": "./gradlew run",
+      "problemMatcher": []
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "./gradlew test",
+      "problemMatcher": []
+    },
     {
       "label": "[Git] dev: push with '.' commit message",
       "type": "shell",
@@ -11,8 +33,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
-    },
+      },
+    }, 
     {
       "label": "[Git] merge dev to main with rebase and re-initialize dev branch",
       "type": "shell",
@@ -39,12 +61,12 @@
         "reveal": "always",
         "panel": "new"
       }
-    }
+    },
   ],
   "inputs": [
     {
       "type": "command",
-      "id": "prettierBin", // for prettier extension limitation
+      "id": "prettierBin",
       "command": "yarn bin prettier"
     },
     {

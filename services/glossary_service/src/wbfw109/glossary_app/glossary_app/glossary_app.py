@@ -33,12 +33,10 @@ import itertools
 import json
 import time
 from pathlib import Path
-from pprint import pprint
 from typing import Any, ClassVar, Iterator, Optional, Self, TypedDict
 from urllib.parse import quote
 
 import pynecone as pc
-from pcconfig import config
 
 # Title: Load data ~
 global_style: dict[Any, Any] = {"font_family": "Noto Emoji"}

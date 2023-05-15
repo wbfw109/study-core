@@ -6,7 +6,7 @@ class ml_modelConfig(AppConfig):
     name = "ml_model"
 
     def ready(self):
-        from ml_model.global_object import GlobalDeivceCamera, GlobalConfig
+        from ml_model.global_object import GlobalDeivceCamera
 
         GlobalDeivceCamera.initialize_dict()
 

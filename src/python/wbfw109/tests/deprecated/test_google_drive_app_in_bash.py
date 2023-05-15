@@ -1,11 +1,7 @@
 #%%
-import ast
 import subprocess
-import sys
 from pathlib import Path
 
-import IPython
-from IPython import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
 
 # ** setting
@@ -37,7 +33,7 @@ call_root_classes(
 # *** replace all " " character with "\ " of Path string
 # get bytes using subprocess.check_output()
 subprocess.check_output(
-    f"ls /mnt/g/My\ Drive/Colab_Notebooks/tensorflow/models/research/object_detection/protos/*.proto",
+    "ls /mnt/g/My\ Drive/Colab_Notebooks/tensorflow/models/research/object_detection/protos/*.proto",
     shell=True,
 )
 
@@ -68,6 +64,6 @@ result = subprocess.Popen(
 
 # 인수를 함께 사용하는 함수를 사용하면, 띄어쓰기가 된 /mnt/c/Users/wbfw109/MyDrive/Colab_Notebooks/t 부분이 두 개의 경로로 나뉘어 해석되어 오류가 발생한다. 따옴표를 붙여서 묶어주면 이전 오류는 발생하지는 않으나 *.proto" 부분에서 또 다시 오류가 발생한다.
 subprocess.check_output(
-    f'eval "ls /mnt/c/Users/wbfw109/MyDrive/Colab_Notebooks/tensorflow/models/research/object_detection/protos/*.proto"',
+    'eval "ls /mnt/c/Users/wbfw109/MyDrive/Colab_Notebooks/tensorflow/models/research/object_detection/protos/*.proto"',
     shell=True,
 )

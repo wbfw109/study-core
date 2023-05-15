@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from ml_model.model.base import User
-from ml_model.model.device_cube import DeviceCube
-from django.contrib.auth.hashers import make_password
 
 
 class UserSerializer(serializers.ModelSerializer):

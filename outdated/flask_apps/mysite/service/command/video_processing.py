@@ -14,16 +14,11 @@ import socketio
 from mysite.config import CONFIG_CLASS
 from mysite.controller.stream.streaming import LocalVideos
 import multiprocessing
-from logging import error
 from pathlib import Path
 import argparse
-import cv2
 import asyncio
 import socketio
-import functools
 import base64
-import time
-import os
 
 if __name__ == "__main__":
     CONFIG_CLASS.ensure_folders_exist()

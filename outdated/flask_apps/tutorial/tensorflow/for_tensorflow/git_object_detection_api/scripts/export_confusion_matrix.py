@@ -11,11 +11,8 @@ python tutorial/tensorflow/for_tensorflow/git_object_detection_api/scripts/expor
 --output_path /mnt/c/Users/wbfw109/MyDrive/shared_resource/annotations/confusion_matrix2.csv \
 --inference_graph /mnt/c/Users/wbfw109/MyDrive/shared_resource/training_6_map92/freeze/saved_model
 """
-from mysite.config import CONFIG_CLASS
 from pathlib import Path
 import sys
-import os
-import subprocess
 
 TEMP_FILES_PATH: Path = Path.home() / ".local_files"
 NEW_SLIM_PATH: Path = TEMP_FILES_PATH / "tensorflow/models/research/slim"
@@ -26,7 +23,6 @@ sys.path.append(str(TEMP_FILES_PATH / "tensorflow/models/research"))
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import matplotlib.pyplot as plt
 
 from object_detection.core import standard_fields
 from object_detection.metrics import tf_example_parser

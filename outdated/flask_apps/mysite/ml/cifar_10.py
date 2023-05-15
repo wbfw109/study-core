@@ -27,7 +27,6 @@
 
 import IPython
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 from enum import Enum
 from pathlib import Path
 import logging
@@ -39,8 +38,6 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas
-import random
 
 
 # * setting

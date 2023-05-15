@@ -16,6 +16,7 @@ InteractiveShell.ast_node_interactivity = "all"
 # %doctest_mode
 
 
+# TODO: sieve of atkin
 # TODO: (Quadratic sieve, Lenstra elliptic-curve factorization) for large numbers.
 # 🔍 Does decision problem version of this have weakly polynomial time?
 class IntegerFactorization(VisualizationRoot):
@@ -47,10 +48,7 @@ class IntegerFactorization(VisualizationRoot):
         return divisors
 
     def has_composite_number(self, num: int) -> bool:
-        for i in range(2, int(num**0.5) + 1):
-            if num % i == 0:
-                return True
-        return False
+        return any(num % i == 0 for i in range(2, int(num**0.5) + 1))
 
     def decompose_primes(self, num: int) -> Counter[int]:
         prime_factors: Counter[int] = Counter()
@@ -58,16 +56,34 @@ class IntegerFactorization(VisualizationRoot):
         for i in range(2, int(num**0.5) + 1):
             while True:
                 quotient, remainder = divmod(num_temp, i)
-                if remainder != 0:
-                    break
-                else:
+                if remainder == 0:
                     num_temp = quotient
                     prime_factors[i] += 1
+                else:
+                    break
         else:
             if num_temp != 1:
                 prime_factors[num_temp] += 1
 
         return prime_factors
+
+    def get_primes_by_using_sieve_of_eratosthenes(self, max_range: int) -> list[int]:
+        """
+        Time Complexity: O(n log (log n))
+            🔍 proof is complex.
+        Space Complexity: O(n)
+        """
+        # <sieve> denotes i-th index (number) is prime or composite.
+        sieve: list[bool] = [True] * (max_range + 1)
+        sieve[0] = False
+        sieve[1] = False
+        for i in range(2, int(max_range**0.5) + 1):
+            if sieve[i]:
+                # Arithmetic sequence loop with a common difference equal to the prime number
+                # , starting from the square of that prime number and up to the <max_range>.
+                for j in range(i**2, max_range + 1, i):
+                    sieve[j] = False
+        return [i for i in range(max_range + 1) if sieve[i]]
 
     @classmethod
     def test_case(cls):
@@ -102,7 +118,17 @@ class IntegerFactorization(VisualizationRoot):
                 f"{num}, {prime_factors}",
             ]
         )
-
+        num: int = random.randint(10, 100)
+        count_of_primes_to_num: int = len(
+            integer_factorization.get_primes_by_using_sieve_of_eratosthenes(num)
+        )
+        integer_factorization.append_line_into_df_in_wrap(
+            [
+                "Count of primes to num",
+                "num, count_of_primes_to_num",
+                f"{num}, {count_of_primes_to_num}",
+            ]
+        )
         integer_factorization.visualize()
 
 

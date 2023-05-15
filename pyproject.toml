@@ -13,25 +13,29 @@ exclude = ["src/python/wbfw109/libs/utilities/self"]
 
 
 [tool.poetry.dependencies]
-python = "~3.11, <3.12"
+python = "~3.12.0"
 tomlkit = "^0.11.6"
 # visualization ~
 ipykernel = "*"
 jupyter = "^1.0.0"
-numpy = "^1.23.5"
-pandas = "^1.5.2"
+pandas = "^2.2.0"
 matplotlib = "^3.6.2"
 svgling = "^0.3.1"
 networkx = "^3.0"
+openpyxl = "^3.1.2"
+selenium = "^4.18.1"
+pathvalidate = "^3.2.0"
+beautifulsoup4 = "^4.12.3"
+pymupdf = "^1.24.10"
+spacy = "^3.7.6"
 
 [tool.poetry.group.dev.dependencies]
-black = "*"
 bandit = "*"
-pylint = "*"
 pyclean = "^2.2.0"
 autoflake = "^2.0.0"
 pydocstringformatter = "^0.7.2"
 pyupgrade = "^3.3.1"
+ruff = "^0.6.3"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -39,6 +43,7 @@ pytest-cov = "*"
 pytest-bdd = "*"
 # pytest-selenium = "^4.0.0"
 # pytest-factoryboy = "^2.5.1"
+
 
 
 [tool.poetry.group.db]
@@ -52,12 +57,11 @@ optional = true
 [tool.poetry.group.vision.dependencies]
 Pillow = "*"
 opencv-python = "*"
-PyQt6 = "*"
+PySide6 = "*"
 
 [tool.poetry.group.ml]
 optional = true
 [tool.poetry.group.ml.dependencies]
-tensorflow = "*"
 pascal-voc-writer = "*"
 scipy = "*"
 imgaug = "*"

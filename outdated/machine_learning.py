@@ -4,7 +4,6 @@ utility for machine learning (ML)
 """
 import collections
 import dataclasses
-import datetime
 import inspect
 import itertools
 import math
@@ -16,7 +15,7 @@ import sys
 import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Iterable, Optional, Tuple, Type, Union
+from typing import Iterable, Optional, Union
 
 import cv2
 import imgaug.augmenters as iaa

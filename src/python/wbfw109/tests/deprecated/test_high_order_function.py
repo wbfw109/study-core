@@ -4,13 +4,11 @@ from __future__ import annotations
 import logging
 import os
 
-import IPython
 from IPython.core.interactiveshell import InteractiveShell
 
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
 
-import logging
 from collections.abc import Callable
 from typing import Callable, ParamSpec, TypeVar
 

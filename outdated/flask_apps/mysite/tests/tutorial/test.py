@@ -1,48 +1,25 @@
 # %%
 #
-import logging
-import os
 
-import IPython
-from imgaug.augmentables.bbs import BoundingBoxesOnImage
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
 
 import pprint
 from pathlib import Path
-from typing import Iterable, NamedTuple, Optional, Tuple, Type, Union
 
-from mysite.config import CONFIG_CLASS
-from wbfw109.libs.typing import RangeOfTwoPoint
 from wbfw109.libs.utilities import iterable, machine_learning
 
 pp = pprint.PrettyPrinter(compact=False)
 
-import collections
 import copy
-import datetime
-import inspect
 import itertools
-import math
-import random
-import re
-import shutil
-import time
-import xml.etree.ElementTree as ET
 
-import cv2
 
 # import tensorflow as tf
 # import tensorflow.keras as keras
-import imgaug.augmenters as iaa
-import numpy
 import pandas
-import pascal_voc_writer
-from PIL import Image, ImageDraw, ImageFilter, ImageOps
-from scipy import stats
 
 # def get_sample_weight_from_dataset_directory_list_as_custom_ratio(
 #     input_directory_list: list[Union[Path, str]],

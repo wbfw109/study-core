@@ -7,13 +7,9 @@
 
 # %%
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 import logging
 import os
 import tensorflow as tf
-import numpy as np
-import pandas
-import random
 
 # ** setting
 # allow multiple print

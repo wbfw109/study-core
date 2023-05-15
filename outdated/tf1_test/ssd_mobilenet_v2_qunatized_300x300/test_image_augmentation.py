@@ -1,9 +1,7 @@
 #%%
 #
 
-import IPython
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 import requests
 from PIL import Image
 import numpy as np
@@ -42,7 +40,8 @@ if response.status_code == 200:
 
 # This code is mainly from object detection API jupyter notebook and object detection API preprocessor.py
 from object_detection.core import preprocessor
-import functools, os
+import functools
+import os
 from object_detection import inputs
 from object_detection.core import standard_fields as fields
 from matplotlib import pyplot as mp

@@ -1,13 +1,7 @@
 # %%
 #
-import dataclasses
-from ipaddress import ip_address
-import IPython
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
-import logging
 import os
-from django.db.models.expressions import F
 
 from django.db.models.query import QuerySet
 
@@ -15,82 +9,33 @@ from django.db.models.query import QuerySet
 InteractiveShell.ast_node_interactivity = "all"
 
 from typing import (
-    Any,
-    ClassVar,
-    Iterable,
-    NamedTuple,
-    Tuple,
-    Type,
     TypedDict,
     Union,
-    Optional,
 )
-from pathlib import Path
 import pprint
 
 pp = pprint.PrettyPrinter(compact=False)
 
-from backend import development_settings
-import collections, itertools
-import copy
-import datetime, time
 import django
-import inspect
-import math, random
-import os
-import re
-import shutil
-import xml.etree.ElementTree as ET
+import random
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "backend.development_settings"
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 django.setup()
-from ml_model.global_object import GlobalDeivceCamera, GlobalConfig
-from ml_model.model.base import ConnectStatus, ThreatEvent, UserProfile
+from ml_model.global_object import GlobalDeivceCamera
+from ml_model.model.base import ThreatEvent, UserProfile
 from ml_model.model.device_camera import (
     DeviceCamera,
-    DeviceCameraEvent,
-    DeviceCameraConnectStatus,
 )
 import string
 
-from ml_model.model.device_cube import DeviceCube, Guest, DeviceCubeAlertsGuest
-from ml_model.serializers.device_camera import DeviceCameraSerializer
-from rest_framework import views, viewsets
+from ml_model.model.device_cube import DeviceCube, Guest
 from django.contrib.auth.hashers import make_password
 from django.db import DatabaseError, transaction
 from rest_framework.authtoken.models import Token
-import itertools
 from django.contrib.auth.models import User
-from django.db.models.expressions import F
-from django.db.models.query import QuerySet
-from django.db.models.query_utils import Q
-from django.http import Http404
-from django.core.exceptions import PermissionDenied
-from io import BytesIO
-from ml_model.global_object import (
-    GlobalConfig,
-    GlobalDeivceCamera,
-    GlobalResponseMessage,
-)
-from ml_model.model.device_camera import DeviceCamera, DeviceCameraEvent
-from ml_model.model.device_cube import DeviceCube, DeviceCubeAlertsGuest, Guest
-from rest_framework import serializers, viewsets, status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import (
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-    BasePermission,
-    SAFE_METHODS,
-)
-from rest_framework.request import Request
-from rest_framework.response import Response
-from typing import Optional, Union
-import dataclasses
+from rest_framework import serializers
 
 GlobalDeivceCamera.initialize_dict()
 
@@ -131,7 +76,6 @@ UserProfile.objects.bulk_update(objs=[user_profile, user_profile2], fields=["nic
 
 
 #%%
-from typing import TypedDict
 
 
 class ThisData(TypedDict):

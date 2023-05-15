@@ -4,7 +4,6 @@
 This library not includes tensorflow library.
 about library using tensorflow, refer to the machine_learning.py file.
 """
-import re
 from pathlib import Path
 from typing import Union
 

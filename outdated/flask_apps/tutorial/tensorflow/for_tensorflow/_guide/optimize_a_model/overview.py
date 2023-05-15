@@ -18,21 +18,10 @@
 
 # %%
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 import logging
 import os
 from pathlib import Path
 import tensorflow as tf
-import tensorflow.keras as keras
-from keras.preprocessing.image import ImageDataGenerator
-from keras_adabound import AdaBound
-from keras.callbacks import LearningRateScheduler
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas
-import random
-from keras_adabound import AdaBound
 
 # ** setting
 # allow multiple print

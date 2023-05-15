@@ -5,11 +5,9 @@
 # Todo: ~
 # %%
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.display import clear_output
 import logging
 import os
 import tensorflow as tf
-import numpy as np
 
 # ** setting
 # allow multiple print

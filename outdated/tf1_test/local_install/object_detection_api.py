@@ -37,7 +37,6 @@ installed_packages: list = [
 # + setting - tensorfow version
 if tensorflow_version_as_integer == 2:
     import tensorflow as tf
-    import tensorflow.keras as keras
 elif tensorflow_version_as_integer == 1:
     # python <= 3.7
     if environment_location == EnvironmentLocation.GOOGLE_COLAB:

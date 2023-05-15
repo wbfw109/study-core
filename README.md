@@ -1,4 +1,3 @@
-
 # study-core
 
 📝 See each docs about Algorithms, Libraries, Toy program.
@@ -35,10 +34,12 @@
 ## 1. Installation
 
 ### 1.1. Main Directory Structure
-<!-- 
+
+<!--
 - 📁 docs ; sub-docs **_(incomplete...)_**
 - 📁 features ; for BDD **_(incomplete...)_** -->
 
+- 📁 [environment](environment/) ; common settings for OS (WSL 2)
 - 📁 [ref](ref/) ; crawled data, project settings (toml), etc.
 - 📁 [src/bash/wbfw109/utilities](src/bash/wbfw109/utilities/)
   - 📁 [setup](src/bash/wbfw109/utilities/setup/)
@@ -60,31 +61,36 @@
 
 #### 1.2.1. Common settings
 
+- [WSL 2 settings](environment/README.md)
+
 - _IDE_: VS Code  
   🔱 _Main reason why I choose this_: [Lightweight and powerful.](https://code.visualstudio.com/docs/setup/setup-overview)
+
   1. download [VS Code](https://code.visualstudio.com/download)
      1. download [some extensions](.vscode/extensions.json)
 
-- Python  
+- Python
+
   1. download latest [Python directly](https://www.python.org/downloads/) or using [pyenv](https://github.com/pyenv/pyenv#installation) (Recommend)
   2. download latest [poetry](https://python-poetry.org/docs/#installation).  
      🔱 _Main reason why I choose this_: [At that time](https://github.com/wbfw109/crawling_copy#1-select-python-virtual-environment), time in resolving dependencies was faster than Pipenv.
 
 - Typescript  
-  🔱 _Main reason why I choose this_: [Static type-checking](https://www.typescriptlang.org/docs/handbook/2/basic-types.html)  
+  🔱 _Main reason why I choose this_: [Static type-checking](https://www.typescriptlang.org/docs/handbook/2/basic-types.html)
 
   1. download [yarn](https://yarnpkg.com/getting-started/install) (yarn berry PnP).  
-      🔱 _Main reason why I choose this_: [Plug'n'Play](https://yarnpkg.com/features/pnp)  
-      &nbsp;
-      1. download [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) in VS Code Extensions from [Yarn Editor support](https://yarnpkg.com/getting-started/migration#editor-support).
-      2. run command: ```yarn dlx @yarnpkg/sdks vscode```
-      3. select [Use Workspace Version](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript) in VSCode
+     🔱 _Main reason why I choose this_: [Plug'n'Play](https://yarnpkg.com/features/pnp)  
+     &nbsp;
+     1. download [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) in VS Code Extensions from [Yarn Editor support](https://yarnpkg.com/getting-started/migration#editor-support).
+     2. run command: `yarn dlx @yarnpkg/sdks vscode`
+     3. select [Use Workspace Version](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript) in VSCode
 
 - Docker
-    1. download [Docker](https://docs.docker.com/engine/install/).
+
+  1. download [Docker](https://docs.docker.com/engine/install/).
 
 - Protocol Buffers  
-  🔱 _Main reason why I choose this_: [Communication between internal microservices as SsoT](https://cloud.google.com/run/docs/triggering/grpc)  
+  🔱 _Main reason why I choose this_: [Communication between internal microservices as SsoT](https://cloud.google.com/run/docs/triggering/grpc)
 
   1. run file: [Protocol Buffers Compiler (protoc)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh) **(only for linux-x86_64 OS).** or follow [the guide](https://github.com/protocolbuffers/protobuf#protocol-compiler-installation)
 
@@ -94,15 +100,17 @@
 
 - study-core (repository)  
   In root directory of the repository,
+
   - Python
-    1. run command: ```poetry install --with web,db,vision,test,dev && poetry env info```  
-      _**(Optional)**_ packages for development: ... ```--with test,dev```
 
-    2. run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+    1. run command: `poetry install --with web,db,vision,test,dev && poetry env info`  
+       _**(Optional)**_ packages for development: ... `--with test,dev`
 
-  - Typescript: run command: ```yarn install```
+    2. run command (F1) in VSCode: `>Python: Select Interpreter` a path from upper output ("Virtualenv - Executable")
 
-  - _**(Optional)**_ Docker: run command: ```docker compose -f docker/docker-compose.yml up -d```  
+  - Typescript: run command: `yarn install`
+
+  - _**(Optional)**_ Docker: run command: `docker compose -f docker/docker-compose.yml up -d`
     - [docker-comose.yml](docker/docker-compose.yml)
       - **Plant UML** in order to write UML diagram
       - **Mongo DB** (Document based NoSQL) with **Mongo Express**
@@ -115,8 +123,8 @@
   &nbsp;
 
   - Python
-      1. run command: ```poetry install && poetry env info```
-      2. run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+    1. run command: `poetry install && poetry env info`
+    2. run command (F1) in VSCode: `>Python: Select Interpreter` a path from upper output ("Virtualenv - Executable")
 
 ---
 
@@ -127,9 +135,10 @@
   &nbsp;
 
   - Python
-    1. run command: ```poetry install --with test,dev && poetry env info```  
-      _**(Optional)**_ packages for development: ... ```--with test,dev```
-    2. run command (F1) in VSCode: ```>Python: Select Interpreter``` a path from upper output ("Virtualenv - Executable")
+
+    1. run command: `poetry install --with test,dev && poetry env info`  
+       _**(Optional)**_ packages for development: ... `--with test,dev`
+    2. run command (F1) in VSCode: `>Python: Select Interpreter` a path from upper output ("Virtualenv - Executable")
 
   - Protocol Buffers
 
@@ -162,11 +171,12 @@ It is Single contributor project so I set Lock branch in Branch protection rule 
 ### 2.3. Pipeline: GitHub Actions
 
 🔱 _Main reason why I choose this_: [About billing for GitHub Actions](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#about-billing-for-github-actions)
+
 > GitHub Actions usage is free for standard GitHub-hosted runners in public repositories, and for self-hosted runners.
 
 - [Workflow: CD to GitHub Pages](.github/workflows/github_pages-CD.yml)  
   Main tech is **git sparse-checkout**.  
-  This workflow triggered whenever  
+  This workflow triggered whenever
   1. [3.3.1. Visualization Manager (Python)](#331-visualization-manager-python) outputs a .html file (ipython_central_control.html) and modified,
   2. and if push operation is occurred in only main branch.
 
@@ -184,11 +194,12 @@ Currently, one [docker-comose.yml](docker/docker-compose.yml) exists used in dev
 
 #### 3.3.1. [Visualization Manager (Python)](src/python/wbfw109/libs/utilities/ipython.py#L389)
 
-|Language|Type|Main tech|
-|:---|:---|:---|
-|Python  |Visualization  |pandas, IPython, Generic, inspect, Path, contextlib  |
+| Language | Type          | Main tech                                           |
+| :------- | :------------ | :-------------------------------------------------- |
+| Python   | Visualization | pandas, IPython, Generic, inspect, Path, contextlib |
 
 ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Pictures**
+
 <details>
   <summary>🛍️ E.g. (consecutively calling different files)</summary>
   
@@ -198,7 +209,7 @@ Currently, one [docker-comose.yml](docker/docker-compose.yml) exists used in dev
 </details>
 
 ![#f00](https://placehold.co/15x15/f00/f00.png) **[Available all output](https://wbfw109.github.io/visualization_manager/ipython_central_control.html)**
-  ; check all contents that have been implemented in this way so far
+; check all contents that have been implemented in this way so far
 
 It raises readability of contents of classes that inherits \<VisualizationRoot\> | \<MixInParentAlgorithmVisualization\>, \<ChildAlgorithmVisualization\> **in environment using iPython (Python Interactive Windows).**
 
@@ -225,11 +236,11 @@ Moreover you can manipulate through central control by calling class method \<ca
 
 #### 3.2.1. [install Protocol Buffers Compiler (protoc) 3 (Bash)](src/bash/wbfw109/utilities/setup/install_protoc_3.sh)
 
-|Language|Type|Main tech|
-|:---|:---|:---|
-|Bash  |Setup  |Github API, jq, semver  |
+| Language | Type  | Main tech              |
+| :------- | :---- | :--------------------- |
+| Bash     | Setup | Github API, jq, semver |
 
-- 🔎 Usage: ```install_protoc_3.sh [-u | --update]```.
+- 🔎 Usage: `install_protoc_3.sh [-u | --update]`.
 
 Install protoc 3 as linux-x86_64 distribution from [GitHub Releases](https://github.com/protocolbuffers/protobuf).  
 "jq" parses json data received from GitHub API.
@@ -240,15 +251,15 @@ If protoc already installed, it compares current version with latest version and
 
 #### 3.2.2. [Backup Docker volumes (Bash)](src/bash/wbfw109/utilities/docker-backup-volumes.sh)
 
-|Language|Type|Main tech|
-|:---|:---|:---|
-|Bash  |Recovery  |Docker  |
+| Language | Type     | Main tech |
+| :------- | :------- | :-------- |
+| Bash     | Recovery | Docker    |
 
-- 🔎 Usage: ```docker-backup-volumes.sh <volume_name_1> [<volume_name_2> ...]```.
+- 🔎 Usage: `docker-backup-volumes.sh <volume_name_1> [<volume_name_2> ...]`.
 
 If you pass volume names, it filters unknown volumes and backups remainder with suffix in ISO-8601 datetime format in which colons (:) are replaced with "".
 
-Backed up files will be stored in ```docker/volume_backup/```. (hardcoded)
+Backed up files will be stored in `docker/volume_backup/`. (hardcoded)
 
 &nbsp;
 
@@ -260,14 +271,14 @@ Purpose of All Services is **Scaffolding** or **Minimum viable product (MVP)** f
 
 ### 4.1. Glossary service
 
-It provides English words with description in Korean related with Computer Science as **tree structure**, that I learned  .
+It provides English words with description in Korean related with Computer Science as **tree structure**, that I learned .
 
 Main tech is **Pynecone** (Web full stack framework); Set of **_FastAPI, NextJS, React_**
 
 How to run:
 
 - In [glossary_app directory](services/glossary_service/src/wbfw109/glossary_app),  
-  Run command: ```pc init``` (one time) and ```pc run --env prod```
+  Run command: `pc init` (one time) and `pc run --env prod`
 
 [Words Data](ref/computer_science_words_korean.json) and [**Entry point**: glossary_app.py](services/glossary_service/src/wbfw109/glossary_app/glossary_app/glossary_app.py)
 
@@ -286,7 +297,7 @@ How to run:
 
 📰 Currently in development
 
-- [1-Plan (Draft)](services/e_commerce_service/devops/stages/1-plan.md)  
+- [1-Plan (Draft)](services/e_commerce_service/devops/stages/1-plan.md)
   - [Deployment diagram](resources_readme/services/e_commerce_service/diagrams/deployment.svg?raw=1)
 - 3-Verify
   - coverages

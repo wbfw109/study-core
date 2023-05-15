@@ -1,6 +1,5 @@
 """celery function using factory pattern to avoid circular
 """
-from mysite import config
 from celery import Celery
 
 # from celery.app.task import Task

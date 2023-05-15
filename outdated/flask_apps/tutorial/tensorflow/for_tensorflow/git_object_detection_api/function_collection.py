@@ -17,9 +17,7 @@ python tfviewer.py /mnt/c/Users/wbfw109/MyDrive/shared_resource/annotations/test
 
 is_ipython_mode = False
 if is_ipython_mode:
-    import IPython
     from IPython.core.interactiveshell import InteractiveShell
-    from IPython.display import clear_output, display
 
     InteractiveShell.ast_node_interactivity = "all"
 
@@ -27,10 +25,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-import imgaug.augmenters as iaa
 import tensorflow as tf
 from mysite.config import CONFIG_CLASS
-from wbfw109.libs.utilities import iterable, machine_learning
+from wbfw109.libs.utilities import iterable
 
 TEMP_FILES_PATH: Path = Path.home() / ".local_files"
 NEW_SLIM_PATH: Path = TEMP_FILES_PATH / "tensorflow/models/research/slim"
