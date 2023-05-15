@@ -110,7 +110,8 @@ def solution_131705() -> None:
 
 
 def solution_131128() -> None:
-    """숫자 짝꿍 ; https://school.programmers.co.kr/learn/courses/30/lessons/131128"""
+    """숫자 짝꿍 ; https://school.programmers.co.kr/learn/courses/30/lessons/131128
+    새로 시작~"""
 
 
 def solution_118666(survey: list[str], choices: list[int]) -> str:
@@ -415,13 +416,16 @@ def solution_64061(board: list[list[int]], moves: list[int]) -> int:
 
     ## create stacks by line
     has_valid_element: Callable[[int], bool] = lambda x: x > 0
-    lines: list[list[int]] = [list(itertools.takewhile(has_valid_element, reversed(column))) for column in zip(*board)]
+    lines: list[list[int]] = [
+        list(itertools.takewhile(has_valid_element, reversed(column)))
+        for column in zip(*board)
+    ]
 
     # simulate
     stack: list[int] = []
     answer: int = 0
     for move in moves:
-        move -=1
+        move -= 1
         if lines[move]:
             x = lines[move].pop()
             if stack and stack[-1] == x:
