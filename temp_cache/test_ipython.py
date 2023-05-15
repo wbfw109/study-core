@@ -173,3 +173,39 @@ right = 3
 
 result = prefix[right] - prefix[left - 1]
 print(result)
+
+
+# %%
+import math
+
+
+def solution(number):
+    """
+    0, 0, 0
+    """
+    n = len(number)
+    count = 0
+    number.sort()
+    for i in range(1, n - 2):
+        j = i + 1
+        k = n - 1
+        while j < k:
+            total = number[j] + number[k]
+            if total < 0:
+                j += 1
+            elif total > 0:
+                k -= 1
+            else:
+                if number[j] == number[k]:
+                    count += math.comb(k - j + 1, 2)
+                    break
+                else:
+                    left, right = j, k
+                    while left + 1 < k and number[left + 1] == number[j]:
+                        left += 1
+                    while right - 1 > j and number[right - 1] == number[j]:
+                        right -= 1
+                    count += (left - j + 1) * (k - right + 1)
+                    j = left + 1
+                    k = right - 1
+    return count

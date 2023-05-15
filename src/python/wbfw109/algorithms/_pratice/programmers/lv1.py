@@ -101,17 +101,81 @@ def solution_133499(babbling: list[str]) -> int:
     return count
 
 
-def solution_132267() -> None:
-    """콜라 문제 ; https://school.programmers.co.kr/learn/courses/30/lessons/132267"""
+def solution_132267(a: int, b: int, n: int) -> int:
+    """콜라 문제 ; https://school.programmers.co.kr/learn/courses/30/lessons/132267
+    a 를 가져다주면 b 병을 주는 마트가 있을 때 빈 병 n개를 가져준다면 몇 병 받을 수 있는지?
+    while 문 말고 한번에 가능한가?
+    10% 단위가 아니라서 어떻게 설계하지
+    """
+    answer = 0
+    return answer
 
 
-def solution_131705() -> None:
-    """삼총사 ; https://school.programmers.co.kr/learn/courses/30/lessons/131705"""
+def solution_131705(number: list[int]) -> int:
+    """🧠 삼총사 ; https://school.programmers.co.kr/learn/courses/30/lessons/131705
+    Tag: Math (3SUM variant)
+    Other solutions
+        - Brute-force solution (slower than current implementation)
+            from itertools import combinations
+            return sum(1 if sum(comb) == 0 else 0 for comb in combinations(number,3))
+    """
+    import math
+
+    n: int = len(number)
+    count: int = 0
+    number.sort()
+    for i in range(n - 2):
+        j = i + 1
+        k = n - 1
+        while j < k:
+            total = number[i] + number[j] + number[k]
+            if total < 0:
+                j += 1
+            elif total > 0:
+                k -= 1
+            else:
+                if number[j] == number[k]:
+                    count += math.comb(k - j + 1, 2)
+                    break
+                else:
+                    left, right = j, k
+                    while left + 1 < right and number[left + 1] == number[j]:
+                        left += 1
+                    while right - 1 > left and number[right - 1] == number[k]:
+                        right -= 1
+                    count += (left - j + 1) * (k - right + 1)
+                    j = left + 1
+                    k = right - 1
+    return count
 
 
-def solution_131128() -> None:
-    """숫자 짝꿍 ; https://school.programmers.co.kr/learn/courses/30/lessons/131128
-    새로 시작~"""
+def solution_131128(X: str, Y: str) -> str:
+    """🧠 숫자 짝꿍 ; https://school.programmers.co.kr/learn/courses/30/lessons/131128
+    🔍 Why str.count() solution faster than Counter() solution?
+        str.count() solution iterates than 2 times, even if Counter() convert all characters to int()
+        , so I think prior solution is slower than latter solution. but not.
+
+    Counter() solution
+        from collections import Counter
+        counters: list[Counter[str]] = [Counter(X), Counter(Y)]
+        result: str = "".join((
+            num_s * counters[0][num_s]
+            if counters[0][num_s] < counters[1][num_s]
+            else num_s * counters[1][num_s]
+            for num_s in "9876543210"
+        ))
+        if result:
+            return "0" if result[0] == "0" else result
+        else:
+            return "-1"
+    """
+    result: str = "".join(
+        (num_s * min(X.count(num_s), Y.count(num_s))) for num_s in "9876543210"
+    )
+    if result:
+        return "0" if result[0] == "0" else result
+    else:
+        return "-1"
 
 
 def solution_118666(survey: list[str], choices: list[int]) -> str:

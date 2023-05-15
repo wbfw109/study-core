@@ -42,6 +42,8 @@
   - Parametric search
     - Bisection method
   - Backtracking
+  - \<Named problems\>
+    - 3SUM variant
 
 &nbsp;
 
