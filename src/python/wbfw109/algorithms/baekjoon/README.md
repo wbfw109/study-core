@@ -1,4 +1,3 @@
-
 # Algorithms - Baekjoon
 
 [![Solved.ac
@@ -31,9 +30,10 @@ Updated on 📅 2023-04-09 03:59:51
 
 ## 2. Main Directory Structure
 
-- All files can be tested by using command **"pytest \<file_name\>"**  
+- All files can be tested by using command **"pytest \<file_name\>"**
+
   - unittest: 🧪 pytest src/python/wbfw109/algorithms/baekjoon/gold.py::**\<test_function_name\>**  
-    🛍️ e.g. ```pytest src/python/wbfw109/algorithms/baekjoon/gold.py::test_bundle_up_numbers```
+    🛍️ e.g. `pytest src/python/wbfw109/algorithms/baekjoon/gold.py::test_bundle_up_numbers`
 
 - 📝 [gold.py](gold.py) : 34 problems
 - 📝 [platinum.py](platinum.py) : 1 problem
@@ -41,12 +41,13 @@ Updated on 📅 2023-04-09 03:59:51
 ## 3. Analysis of problems
 
 - Greedy (fundament) and **Dynamic programming** with **rolling window approach**
-  - find **rules** by debugging inductively.  
-    - according to those rules, use proper **data structures**.  
-      - list, tuple, set  
+
+  - find **rules** by debugging inductively.
+    - according to those rules, use proper **data structures**.
+      - list, tuple, set
       - stack, deque, heap (min heap, max heap)
     - consider immutable and mutable types.
-  - can function be terminated early (; **Early stopping**)?  
+  - can function be terminated early (; **Early stopping**)?
     - class Exception can be used.
 
 - Sorting
@@ -65,8 +66,9 @@ Updated on 📅 2023-04-09 03:59:51
   - Binary search with custom Predicate
   - combinations
 
-&nbsp; 
+&nbsp;
 ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; **Named problems**
+
 <details>
   <summary>🛍️ E.g.</summary>
 
@@ -89,6 +91,5 @@ Updated on 📅 2023-04-09 03:59:51
     - |E| is the number of edges. if **\<object\>** is 2d array, it may be 4 directions.
 - in context of Space Complexity
   - O( BFS(**\<object\>**) ): Space complexity to iterate **\<object\>** by using BFS; |V|
-
 - in both contexts
   - N(\<object\>): the number of \<object\>

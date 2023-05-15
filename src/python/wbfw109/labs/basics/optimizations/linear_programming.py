@@ -20,7 +20,6 @@ from wbfw109.libs.utilities.ipython import (  # type: ignore
 InteractiveShell.ast_node_interactivity = "all"
 
 # %doctest_mode
-# %%
 
 
 @dataclasses.dataclass
@@ -83,7 +82,7 @@ class SetCoverProblem(MixInParentAlgorithmVisualization):
             self.big_o_visualization.df_caption = [
                 "⚙️ [Worse-case] Space complexity",
                 "  - n: is taken time to compute the union for each case.",
-                "  - 2^m: arises from considering all possible subsets of the given movie sets."
+                "  - 2^m: arises from considering all possible subsets of the given movie sets.",
                 "⚙️ [Worse-case] Space complexity",
                 "  - O(n) union operation",
             ]
@@ -94,6 +93,7 @@ class SetCoverProblem(MixInParentAlgorithmVisualization):
             return "-"
 
         def solve(self) -> None:
+            # Title: input
             n, m, universe, sub_collections = (
                 self.dst.n,
                 self.dst.m,
@@ -101,6 +101,7 @@ class SetCoverProblem(MixInParentAlgorithmVisualization):
                 self.dst.sub_collections,
             )
 
+            # Title: solve
             min_cover_size = m + 1
             is_found_min_cover_set = False
             found_comb: tuple[set[str], ...] = ()
@@ -116,6 +117,7 @@ class SetCoverProblem(MixInParentAlgorithmVisualization):
                         found_comb = combination
                         break
 
+            # Title: output
             self.min_cover_size = min_cover_size
             self.found_comb = found_comb
 

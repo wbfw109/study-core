@@ -190,7 +190,7 @@ def solution_171192() -> None:
 
 def solution_51358() -> None:
     """🧠 재원 넘버 ; https://level.goorm.io/exam/51358/%EC%9E%AC%EC%9B%90-%EB%84%98%EB%B2%84/quiz/1
-    Tag: Geometric sequence
+    Tag: Math (Geometric sequence)
 
     sum( len( itertools.product([2,3,6], repeat=1 to n) ) )
 
@@ -511,6 +511,7 @@ def solution_159694() -> None:
     """🧠 이산수학 과제 ; https://level.goorm.io/exam/159694/%EC%9D%B4%EC%82%B0%EC%88%98%ED%95%99-%EA%B3%BC%EC%A0%9C/quiz/1
     🔍 다시. inner_order = k - (step * (step + 1) // 2 - step)  대신 inner_order = k - (step * (step - 1) // 2)
 
+
     Tag: Parameteric search
 
     step i
@@ -553,7 +554,7 @@ def solution_159693() -> None:
 
 def solution_159692() -> None:
     """🧠 아즈텍 피라미드 ; https://level.goorm.io/exam/159692/%EC%95%84%EC%A6%88%ED%85%8D-%ED%94%BC%EB%9D%BC%EB%AF%B8%EB%93%9C/quiz/1
-    🔍 등차수열 썻었나 그떄 ㅇㅇ..
+    Tag: Math (Arithmetic sequence)
         1
       1 2 1
     1 2 3 2 1

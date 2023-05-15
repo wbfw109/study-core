@@ -31,8 +31,8 @@
 # #     VisualizationManager.call_root_classes(only_class_list)
 # Euclidean algorithm
 # gcm, lcm
-# Collatz conjecture
-    # stack = [n]
-    # while stack[-1] != 1:
-    #     stack.append(3*stack[-1]+1 if stack[-1] & 1 else stack[-1] // 2)
-    # return stack
+## Collatz conjecture
+# stack = [n]
+# while stack[-1] != 1:
+#     stack.append(3*stack[-1]+1 if stack[-1] & 1 else stack[-1] // 2)
+# return stack

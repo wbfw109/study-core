@@ -70,7 +70,7 @@ class Interning(VisualizationRoot):
         interning.visualize()
 
 
-#%%
+# %%
 
 # class DisposePattern:
 #     """
@@ -80,7 +80,7 @@ class Interning(VisualizationRoot):
 #     """
 
 #     pass
-
+# Singleton, bridge, strategy, builder, factory method, facade pattern
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
     if VisualizationManager.central_control_state:

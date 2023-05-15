@@ -24,11 +24,11 @@ class LongestIncreasingSubsequence(VisualizationRoot):
         - <sequence>: X.
         - <predecessor_indexes>: P.
             P stores the index of the predecessor of X[k] in the longest increasing subsequence ending at X[K]
-        - <smallest_indexes_at_l>: M.
+        - <indexes_of_smallest_v_at_l>: M.
             M stores the index k of the smallest value X[k] such that there is an increasing subsequence of length l ending at X[k] in the range k ≤ i.
-            🚣 One of <smallest_indexes_at_l> could be updated whenever evaluate X[K].
+            🚣 One of <indexes_of_smallest_v_at_l> could be updated whenever evaluate X[K].
                 but Note that <longest_increasing_subsequence> is created only from last index of <found_subsequence_l> by tracing <predecessor_indexes>
-                , which means creatable increasing subsequences ending at length l in <smallest_indexes_at_l> are independent.
+                , which means creatable increasing subsequences ending at length l in <indexes_of_smallest_v_at_l> are independent.
             🚣 It uses binary search with custom predicate to find <new_l> for X[K.]
         - <longest_increasing_subsequence>: S (permutation (set)).
         - <found_subsequence_l>: L (length of Longest Increasing Subsequence).
@@ -63,29 +63,32 @@ class LongestIncreasingSubsequence(VisualizationRoot):
             ": 💻 Complexity Class of the decision problem is P and have strong polynomial time to exact algorithm.",
             "  decision problem: to ask whether there exists an increasing subsequence of a given sequence of numbers with at least specified length.",
         ]
-        n: int = 10
-        self.sequence: list[int] = [random.randint(-10, 10) for _ in range(n)]
-        self.predecessor_indexes = [0] * n
-        self.smallest_indexes_at_l: list[int] = [0] * (n + 1)
-        self.smallest_indexes_at_l[0] = -1  # undefined so can be set to any value
-        self.found_subsequence_l: int = 0
-        self.longest_increasing_subsequence: list[int] = []
 
     def __str__(self) -> str:
         return "-"
 
     def solve(self) -> None:
-        for i in range(len(self.sequence)):
+        # Title: input
+        n: int = 10
+        sequence: list[int] = [random.randint(-10, 10) for _ in range(n)]
+        predecessor_indexes = [0] * n
+        indexes_of_smallest_v_at_l: list[int] = [0] * (n + 1)
+        indexes_of_smallest_v_at_l[0] = -1  # undefined so can be set to any value
+        found_subsequence_l: int = 0
+        longest_increasing_subsequence: list[int] = []
+
+        # Title: solve
+        for i in range(len(sequence)):
             ## Binary search to find suitable length of increasing subsequence in 1 ~ <found_subsequence_l> for X[i].
-            # target is smallest positive l such that X[i] < X[M[l]]  (1 ≤ l ≤ L)
+            # 📍 target is smallest positive l such that X[i] < X[M[l]]  (1 ≤ l ≤ L)
 
             # <low> and <high> are (minimum and maximum) length which could be set.
             low = 1
-            high = self.found_subsequence_l + 1
+            high = found_subsequence_l + 1
 
             while low < high:
-                mid = low + (high - low) // 2  # 📍 low <= mid < high
-                if self.sequence[self.smallest_indexes_at_l[mid]] < self.sequence[i]:
+                mid = low + (high - low) // 2  # 💡 low <= mid < high
+                if sequence[i] > sequence[indexes_of_smallest_v_at_l[mid]]:
                     low = mid + 1
                 else:
                     # "high = mid" when high is included in valid range ("equal or less than" operator).
@@ -95,20 +98,31 @@ class LongestIncreasingSubsequence(VisualizationRoot):
             new_l = low
             # Note that minimum <new_l> is 1.
             # if value that could be root, <predecessor_indexes[i]> will be -1.
-            self.predecessor_indexes[i] = self.smallest_indexes_at_l[new_l - 1]
-            self.smallest_indexes_at_l[new_l] = i
-            if new_l > self.found_subsequence_l:
+            predecessor_indexes[i] = indexes_of_smallest_v_at_l[new_l - 1]
+            indexes_of_smallest_v_at_l[new_l] = i
+            if new_l > found_subsequence_l:
                 # If we found a subsequence longer than any we've found yet, update <found_L>.
-                self.found_subsequence_l = new_l
+                found_subsequence_l = new_l
 
         # Reconstruct the longest increasing subsequence.
         # It consists of the values of X at the L indices:
         # ...,  P[P[M[L]]], P[M[L]], M[L]
-        self.longest_increasing_subsequence = [0] * self.found_subsequence_l
-        k: int = self.smallest_indexes_at_l[self.found_subsequence_l]
-        for j in range(self.found_subsequence_l - 1, -1, -1):
-            self.longest_increasing_subsequence[j] = self.sequence[k]
-            k = self.predecessor_indexes[k]  # last k will be -1 (root)
+        longest_increasing_subsequence = [0] * found_subsequence_l
+        k: int = indexes_of_smallest_v_at_l[found_subsequence_l]
+        for j in range(found_subsequence_l - 1, -1, -1):
+            longest_increasing_subsequence[j] = sequence[k]
+            k = predecessor_indexes[k]  # last k will be -1 (root)
+
+        # Title: output
+        self.append_line_into_df_in_wrap(["Target list", sequence])
+        self.append_line_into_df_in_wrap(["predecessor_indexes", predecessor_indexes])
+        self.append_line_into_df_in_wrap(
+            ["indexes_of_smallest_v_at_l", indexes_of_smallest_v_at_l]
+        )
+        self.append_line_into_df_in_wrap(["found_subsequence_l", found_subsequence_l])
+        self.append_line_into_df_in_wrap(
+            ["longest_increasing_subsequence", longest_increasing_subsequence]
+        )
 
     def visualize(self) -> None:
         display_data_frame_with_my_settings(self.df, caption=self.df_caption)
@@ -122,19 +136,7 @@ class LongestIncreasingSubsequence(VisualizationRoot):
         algorithm = LongestIncreasingSubsequence()
         algorithm.solve()
         # Array range is -100 ~ 100, array size is 100.
-        algorithm.append_line_into_df_in_wrap(["Target list", algorithm.sequence])
-        algorithm.append_line_into_df_in_wrap(
-            ["predecessor_indexes", algorithm.predecessor_indexes]
-        )
-        algorithm.append_line_into_df_in_wrap(
-            ["smallest_indexes_at_l", algorithm.smallest_indexes_at_l]
-        )
-        algorithm.append_line_into_df_in_wrap(
-            ["found_subsequence_l", algorithm.found_subsequence_l]
-        )
-        algorithm.append_line_into_df_in_wrap(
-            ["longest_increasing_subsequence", algorithm.longest_increasing_subsequence]
-        )
+
         algorithm.visualize()
 
 

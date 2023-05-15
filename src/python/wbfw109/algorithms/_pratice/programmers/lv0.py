@@ -60,7 +60,7 @@ def solution_181944() -> None:
 
 
 def solution_181943(my_string: str, overwrite_string: str, s: int) -> str:
-    """💤 문자열 겹쳐쓰기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181943"""
+    """🧠 문자열 겹쳐쓰기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181943"""
     return my_string[:s] + overwrite_string + my_string[s + len(overwrite_string) :]
 
 
@@ -474,7 +474,7 @@ def solution_181895(arr: list[int], intervals: list[list[int]]) -> list[int]:
 
 
 def solution_181894(arr: list[int]) -> list[int]:
-    """�💦💤 2의 영역 ; https://school.programmers.co.kr/learn/courses/30/lessons/181894
+    """💦💤 2의 영역 ; https://school.programmers.co.kr/learn/courses/30/lessons/181894
 
     🚣 If "arr_index(2)" does not cause an error, "next(<Generator expression>)" does not causes StopIteration because Generator expression generates at least one element.
     """
@@ -650,7 +650,7 @@ def solution_181873(my_string: str, alp: str) -> str:
 
 
 def solution_181872(my_str: str, pat: str) -> str:
-    """💦 특정 문자열로 끝나는 가장 긴 부분 문자열 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181872
+    """🧠 특정 문자열로 끝나는 가장 긴 부분 문자열 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181872
     the soultion is same:
         return myString[:len(myString)-"".join(reversed(myString)).find("".join(reversed(pat)))]
     """
@@ -703,7 +703,8 @@ def solution_181866(my_str: str) -> list[str]:
 
 
 def solution_181865(binomial: str) -> int:
-    """간단한 식 계산하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181865"""
+    """간단한 식 계산하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181865
+    """
     return eval(binomial)  # pylint: disable=W0123 # nosec
 
 
@@ -1373,7 +1374,9 @@ def solution_120866(board: list[list[int]]) -> int:
         for j in range(n):
             if board[i][j] == 1:
                 board[i][j] = 2
-                for nx, ny in ((i+dx, j+dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+                for nx, ny in (
+                    (i + dx, j + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                ):
                     if 0 <= nx < n and 0 <= ny < n and board[nx][ny] == 0:
                         board[nx][ny] = 2
 
@@ -1475,7 +1478,7 @@ def solution_120852(n: int) -> list[int]:
 
 def solution_120851(my_string: str) -> int:
     """💤 숨어있는 숫자의 덧셈 (1) ; https://school.programmers.co.kr/learn/courses/30/lessons/120851"""
-    return sum((int(s) for s in my_string if s.isdigit()))
+    return sum((int(s) if s.isdigit() else 0 for s in my_string))
 
 
 def solution_120850(my_string: str) -> list[int]:
@@ -1513,13 +1516,12 @@ def solution_120846(n: int) -> int:
     - 1 과 자기 자신으로는 무조건 나누어지기에 이를 제외하고 나누어 지는 하나의 값만 찾으면 된다.
         전체 약수의 개수를 세기 위한 변수를 만들 필요가 없다.
     """
-    count: int = 0
-    for i in range(4, n + 1):
-        for j in range(2, int(i**0.5) + 1):
-            if i % j == 0:
-                count += 1
-                break
-    return count
+    return sum(
+        (
+            any(num % i == 0 for i in range(2, int(num**0.5) + 1))
+            for num in range(4, n + 1)
+        )
+    )
 
 
 def solution_120845(box: list[int], n: int) -> int:

@@ -2,8 +2,8 @@ name: Study Core
 run-name: "Update ${{ github.actor }} GitHub Pages: 🚀 Visualization Manager Output"
 on:
   push:
-    branches: [dev]
-    # branches: [main]
+    # branches: [dev]
+    branches: [main]
     paths:
       - "resources_readme/visualization_manager/ipython_central_control.html"
 # Allow one concurrent deployment

@@ -5,6 +5,8 @@ import itertools
 import random
 import string
 import time
+import timeit
+import unittest
 from collections.abc import Generator, Sequence
 from enum import Enum
 from itertools import permutations, zip_longest
@@ -77,6 +79,7 @@ r
 # %%
 import datetime as dt
 
+# datetime.weekday 기록.
 from dateutil.parser import parse
 
 # string parse time
@@ -123,7 +126,6 @@ for _ in range(int(input_())):
 
 
 # %%
-#
 # 코테 4번과 비슷한듯? https://www.acmicpc.net/problem/17471
 # dictionary (0, 0): 1, (0, 1): 2, (0, 2): 3, (1, 0): 4 ...  마스킹으로
 
@@ -135,93 +137,39 @@ sorted([*map(int, "1 22 3".split()), *map(int, "1 22 3".split())])
 # https://www.acmicpc.net/problem/15713
 # LCA, 이진 검색 트리, 피보나치 트리, 이항 트리, 다익스트라, 세그먼트 트리 하고 다시 알고리즘 재개..
 
-## C 로 구현되잇는지 확인 (모든 Standard library 가 C로 랩핑되어 있음. functools.reduce 포함.)
-type(sum)
-repr(sum)
-
-# %%
-
-# From python 3.7 ast.literal_eval() is now stricter. Addition and subtraction of arbitrary numbers are no longer allowed. link
-# https://stackoverflow.com/a/34904657
+# LIS ; sequence[i] 보다 작은,  길이 l 에서 끝나는 인덱스의 값들 중  가지고 가장 큰 값의 길이 l 구하기
 
 
-# 앞에서부터 읽을 대와 뒤에서부터 읽을 떄 똑같은 단어 팰린드롬.
-# def solution(n, m):
-#     """
-#     홀수, 짝수 구분해서도 더 빠르게 만들 수 있을듯.
-#     짝수개 ->
-#     10*10*9*10
-#     """
-#     answer = 0
-#     for i in range(n, m + 1):
-#         if str(i) == "".join(reversed(str(i))):
-#             answer += 1
-
-#     return answer
-
-a = [0] * 5
-a[-3:-2] = [1] * 1
-a  # [0, 0, 1, 0, 0]
-a[-3:] = [2] * 2
-a  # [0, 0, 2, 2]
-a[-1:] = [3] * 1
-a  # [0, 0, 2, 3]
-a[-1:0] = [4] * 1
-a  # [0, 0, 1, 0, 1, 0]
-
-# When you set the slice a[-1:0], it's actually an empty slice. This is because the start index -1 refers to the last element of the list, and the stop index 0 is the start of the list. Since the slice is set with the start index being after the stop index, it results in an empty slice.
-
-# Now, when you assign [1] * 1 to this empty slice, instead of overwriting any element in the list, Python inserts the new element into the list. As a result, the length of the list increases by 1. The list becomes [0, 0, 1, 0, 1, 0].
-
-
-# %%
-
-list(itertools.product(range(-1, 2), repeat=2))
-i = 0
-j = 0
-list((i + di, j + dj) for di in (-1, 0, 1) for dj in (-1, 0, 1))
-### 추가하기 - https://docs.python.org/3/library/itertools.html#itertools.product same two list comprehension
-# Roughly equivalent to nested for-loops in a generator expression. For example, product(A, B) returns the same as ((x,y) for x in A for y in B).
-
-
-# %%
-
-# 기록하기
-
-a = "0123456789"
-s, e = 0, 7
-a[e:s:-1]  # 7654321
-a[e : None if s == 0 else s - 1 : -1]  # 76543210
-# a[:s] + a[e:s:-1] + a[e + 1 :]
-
-
-# %%
-
-
-list(dict.fromkeys([0, 1, 1, 2, 2, 3]))
+import re
 from datetime import datetime, timedelta
 
-# 팰린드롬 단어
-s[-1 : (len(s) + 1) // 2 - 1 : -1]  # 4 -> 2개 (i=3 to 2), 5 -> 2 (i=5 to 3)
-s[: len(s) // 2]  # 4 -> 2(i=1) 개, 5 -> 2개
-
-# return sum(
-#     (
-#         s[-1 : (len(s) + 1) // 2 - 1 : -1] == s[: len(s) // 2]
-#         for s in (str(i) for i in range(n, m + 1))
-#     )
-# )
-
-
-# 1. How to find the length of a substring of a given string where the frequency of consecutive matches of that string is the maximum?
-# 2. How to use dynamic programming to find the number of ways to select exactly k non-duplicate elements from 1 to n so that their sum is n (in Python)?
-# 3. In Python, in a list with a given positive integer, how to find the minimum number of times that a given element is swapped so that the size between elements is less than or equal to k? (should return -1 if not possible).
-#   E.g. arr = [10, 40, 30, 20], k=10  ->  change arr[2], arr[4]; one time. so answer is 1.
-
 # 프로그래머스 효율성 테스트에서 break 후 return 하는 것보다 바로 return 할떄 효율성 테스트에서 만점 받음.
+pattern = re.compile(r"[a-z]")
+a = " a  b   c"
+a.split(" ")
+
+# https://www.acmicpc.net/problem/1648
+
+# Tessellation
+
 
 # %%
-import re
 
-pattern = re.compile(r"[a-z]")
-# complete Programmers lv 0 problems, add Set cover problem''
+## 구간합 문제; 배열에서 i 부터 j 까지 인덱스에 있는 값을 구할 때 접두사 합 배열 P 사용하자.
+
+n = 5
+data = [10, 20, 30, 40, 50]
+
+prefix = [0]
+sum_value = 0
+
+for d in data:  # O(N)
+    sum_value += d
+    prefix.append(sum_value)
+
+# 쿼리가 주어짐 -> 2~3번째까지 구간의 합 (인덱스가 아님)
+left = 2
+right = 3
+
+result = prefix[right] - prefix[left - 1]
+print(result)

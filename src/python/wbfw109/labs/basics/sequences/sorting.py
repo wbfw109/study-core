@@ -71,7 +71,7 @@ class Glossary(VisualizationRoot):
 
 @dataclasses.dataclass
 class SortingDST:
-    target_list: list[int] = dataclasses.field(default_factory=list)
+    sequence: list[int] = dataclasses.field(default_factory=list)
 
     @staticmethod
     def get_default_sorting_dst(
@@ -79,7 +79,7 @@ class SortingDST:
     ) -> SortingDST:
         """Simple sorts are efficient on small data, due to low overhead, but not efficient on large data."""
         return SortingDST(
-            target_list=[random.randint(1, random_range) for _ in range(list_len)]
+            sequence=[random.randint(1, random_range) for _ in range(list_len)]
         )
 
     @staticmethod
@@ -87,20 +87,17 @@ class SortingDST:
         # check whether ascending or descending
         for compare_operator in [operator.gt, operator.lt]:
             is_verified: bool = True
-            for i in range(len(sorting_dst.target_list) - 1):
+            for i in range(len(sorting_dst.sequence) - 1):
                 if compare_operator(
-                    sorting_dst.target_list[i], sorting_dst.target_list[i + 1]
+                    sorting_dst.sequence[i], sorting_dst.sequence[i + 1]
                 ):
                     is_verified = False
                     break
             if is_verified:
-                match compare_operator:
-                    case operator.gt:
-                        return [is_verified, "ascending"]
-                    case operator.lt:
-                        return [is_verified, "descending"]
-                    case _:
-                        pass
+                if compare_operator == operator.gt:
+                    return [is_verified, "ascending"]
+                else:
+                    return [is_verified, "descending"]
         return False
 
 
@@ -127,17 +124,16 @@ class ExchangeSorts(MixInParentAlgorithmVisualization):
             )
 
         def solve(self) -> None:
-            target_list_len: int = len(self.dst.target_list)
+            sequence = self.dst.sequence
+            n: int = len(sequence)
+
             # Note: Optimization: by using <last_swapped_i>
             while True:
                 last_swapped_i = 0
-                for i in range(target_list_len - 1):
+                for i in range(n - 1):
                     # in sublist loop, Swapping all like bubble
-                    if self.dst.target_list[i] > self.dst.target_list[i + 1]:
-                        self.dst.target_list[i], self.dst.target_list[i + 1] = (
-                            self.dst.target_list[i + 1],
-                            self.dst.target_list[i],
-                        )
+                    if sequence[i] > sequence[i + 1]:
+                        sequence[i], sequence[i + 1] = sequence[i + 1], sequence[i]
                         last_swapped_i = i + 1
                 if last_swapped_i <= 1:
                     break
@@ -166,51 +162,50 @@ class ExchangeSorts(MixInParentAlgorithmVisualization):
             self.big_o_visualization.df_caption = [
                 "⚙️ [Worse-case] Time complexity: O(N^2)",
                 "  - When one of the sublists returned by the partitioning routine is of size n − 1.",
-                "  - This may occur if the pivot happens to be the smallest or largest element in the list, or when all the elements are equal.",
+                "    🛍️ e.g. This may occur if the pivot happens to be the smallest or largest element in the list, or when all the elements are equal.",
             ]
 
         def __str__(self) -> str:
             return "\n".join(
                 [
                     "Properties: comparison-based, In-place",
-                    "methods: Partitioning",
+                    "methods: Partitioning (Hoare partition scheme)",
+                    "pivot selection method: Medium",
                 ]
             )
 
-        def quicksort(self, start_i: int, end_i: int) -> None:
+        def quicksort(self, sequence: list[int], start_i: int, end_i: int) -> None:
             if 0 <= start_i < end_i:
-                next_pivot_i = self.partition(start_i, end_i)
+                next_range = self.partition(sequence, start_i, end_i)
                 # quicksort recursively left side of the pivot. Note that the pivot is included in left side.
-                self.quicksort(start_i, next_pivot_i)
-                self.quicksort(next_pivot_i + 1, end_i)
+                self.quicksort(sequence, start_i, next_range)
+                self.quicksort(sequence, next_range + 1, end_i)
 
-        def partition(self, start_i: int, end_i: int) -> int:
+        def partition(self, sequence: list[int], start_i: int, end_i: int) -> int:
             # select value of middle index
-            pivot: int = self.dst.target_list[(start_i + end_i) // 2]
+            pivot: int = sequence[(start_i + end_i) // 2]
 
             # temp variables in do-while statement
             i = start_i - 1
             j = end_i + 1
             while True:
-                while True:
-                    i = i + 1
-                    if self.dst.target_list[i] >= pivot:
-                        break
-                while True:
-                    j = j - 1
-                    if self.dst.target_list[j] <= pivot:
-                        break
+                while sequence[(i := i + 1)] < pivot:
+                    pass
+                while sequence[(j := j - 1)] > pivot:
+                    pass
                 if i >= j:
-                    # return next index of pivot
+                    # If the indices crossed, return
                     return j
-                self.dst.target_list[i], self.dst.target_list[j] = (
-                    self.dst.target_list[j],
-                    self.dst.target_list[i],
+                sequence[i], sequence[j] = (
+                    sequence[j],
+                    sequence[i],
                 )
 
         def solve(self) -> None:
-            target_list_len: int = len(self.dst.target_list)
-            self.quicksort(0, target_list_len - 1)
+            sequence = self.dst.sequence
+
+            n: int = len(sequence)
+            self.quicksort(sequence, 0, n - 1)
 
         def verify(self) -> bool | Any:
             return SortingDST.verify_sorting(self.dst)
@@ -247,19 +242,20 @@ class SelectionSorts(MixInParentAlgorithmVisualization):
             )
 
         def solve(self) -> None:
-            target_list_len: int = len(self.dst.target_list)
-            for i in range(target_list_len):
+            sequence = self.dst.sequence
+            n: int = len(sequence)
+            for i in range(n):
                 # Find the index that have minimum value in sublist.
                 min_value_i: int = i
-                for j in range(i + 1, target_list_len):
-                    if self.dst.target_list[min_value_i] > self.dst.target_list[j]:
+                for j in range(i + 1, n):
+                    if sequence[min_value_i] > sequence[j]:
                         min_value_i = j
 
                 # Swapping: (found index, start-index(<i>) from sublist)... So N(<LIST_LEN>) Times.
                 if min_value_i != i:
-                    self.dst.target_list[i], self.dst.target_list[min_value_i] = (
-                        self.dst.target_list[min_value_i],
-                        self.dst.target_list[i],
+                    sequence[i], sequence[min_value_i] = (
+                        sequence[min_value_i],
+                        sequence[i],
                     )
 
         def verify(self) -> bool | Any:
@@ -323,57 +319,58 @@ class SelectionSorts(MixInParentAlgorithmVisualization):
             """
             return (i - 1) // 2
 
-        def build_max_heap(self, target_list_len: int) -> None:
+        def build_max_heap(self, sequence: list[int], n: int) -> None:
             # heapify
-            start_i = self.get_heap_parent_i(target_list_len - 1)
+            ni = n - 1
+            start_i = self.get_heap_parent_i(ni)
             while start_i >= 0:
-                self.sift_down(start_i, end_i=target_list_len - 1)
+                self.sift_down(sequence, start_i, end_i=ni)
                 # next parent node
                 start_i = start_i - 1
 
-        def sift_down(self, start_i: int, end_i: int) -> None:
+        def sift_down(self, sequence: list[int], start_i: int, end_i: int) -> None:
             """📝 Repair the heap whose root element is at start-index"""
             root_i: int = start_i
             while (left_child_i := self.get_heap_child_i(root_i, 1)) <= end_i:
                 # find i_to_be_swapped. <left_child_i + 1> is <right_child_i>
                 i_to_be_swapped = root_i
+                right_child_i: int = left_child_i + 1
 
-                if self.dst.target_list[root_i] < self.dst.target_list[left_child_i]:
+                # compare three nodes
+                if sequence[root_i] < sequence[left_child_i]:
                     i_to_be_swapped = left_child_i
                 if (
-                    left_child_i + 1 <= end_i
-                    and self.dst.target_list[i_to_be_swapped]
-                    < self.dst.target_list[left_child_i + 1]
+                    right_child_i <= end_i
+                    and sequence[i_to_be_swapped] < sequence[right_child_i]
                 ):
-                    i_to_be_swapped = left_child_i + 1
+                    i_to_be_swapped = right_child_i
 
                 if i_to_be_swapped == root_i:
                     # return if already valid
                     return
                 else:
                     # else swap and continue sifting down the child.
-                    (
-                        self.dst.target_list[root_i],
-                        self.dst.target_list[i_to_be_swapped],
-                    ) = (
-                        self.dst.target_list[i_to_be_swapped],
-                        self.dst.target_list[root_i],
+                    sequence[root_i], sequence[i_to_be_swapped] = (
+                        sequence[i_to_be_swapped],
+                        sequence[root_i],
                     )
                     root_i = i_to_be_swapped
 
         def solve(self) -> None:
-            # assume that target_list[0] is root node.
-            target_list_len: int = len(self.dst.target_list)
-            self.build_max_heap(target_list_len)
+            # assume that sequence[0] is root node.
+            sequence = self.dst.sequence
+            n: int = len(self.dst.sequence)
 
-            end_i = target_list_len - 1
+            self.build_max_heap(sequence, n)
+
+            end_i = n - 1
             while end_i >= 1:
-                self.dst.target_list[0], self.dst.target_list[end_i] = (
-                    self.dst.target_list[end_i],
-                    self.dst.target_list[0],
+                sequence[0], sequence[end_i] = (
+                    sequence[end_i],
+                    sequence[0],
                 )
                 end_i -= 1
-                self.sift_down(start_i=0, end_i=end_i)
+                self.sift_down(sequence, start_i=0, end_i=end_i)
 
         def verify(self) -> bool | Any:
             return SortingDST.verify_sorting(self.dst)
@@ -413,17 +410,19 @@ class InsertionSorts(MixInParentAlgorithmVisualization):
             )
 
         def solve(self) -> None:
-            target_list_len: int = len(self.dst.target_list)
-            for i in range(1, target_list_len):
+            sequence = self.dst.sequence
+
+            n: int = len(sequence)
+            for i in range(1, n):
                 # Note: Optimization: actual insertion could only performs one assignment by using <target_value> instead of Swapping like bubble.
-                comparison_value = self.dst.target_list[i]
+                comparison_value = sequence[i]
                 j: int = i - 1
                 # in sublist loop, 🔍 for advantage of spatial locality, is start-index of inner loop <i>?
-                while j >= 0 and self.dst.target_list[j] > comparison_value:
-                    self.dst.target_list[j + 1] = self.dst.target_list[j]
+                while j >= 0 and sequence[j] > comparison_value:
+                    sequence[j + 1] = sequence[j]
                     j -= 1
                 else:
-                    self.dst.target_list[j + 1] = comparison_value
+                    sequence[j + 1] = comparison_value
 
         def verify(self) -> bool | Any:
             return SortingDST.verify_sorting(self.dst)
@@ -452,8 +451,8 @@ class MergeSorts(MixInParentAlgorithmVisualization):
             )
             self.big_o_visualization.df_caption = [
                 "⚙️ [Worse-case] Time complexity: ( n*log(n) )",
-                "  - If the running time of merge sort for a list of length n is T(n), then the recurrence relation T(n) = 2T(n/2) + n",
-                "  - (apply the algorithm to two lists of half the size of the original list, and add the n steps taken to merge the resulting two lists (comparison))",
+                "  - If the running time of merge sort for a list of length n is T(n), then the recurrence relation is T(n) = 2T(n/2) + n",
+                "  - '+ n' is taken time to compare elements in a combining step.",
                 "",
                 "⚙️ It is also easily applied to lists, not only arrays, as it only requires sequential access, not random access.",
             ]
@@ -464,27 +463,24 @@ class MergeSorts(MixInParentAlgorithmVisualization):
                     "Properties: comparison-based, Stable, divide-and-conquer, sequential access",
                     "Optional X: In-place",
                     "methods: Merging",
-                    "pivot selection method: Medium",
                 ]
             )
 
-        def merge_sort(self, target_list: list[int]) -> list[int]:
-            target_list_len: int = len(target_list)
-            if target_list_len <= 1:
-                return target_list
-            middle_i: int = target_list_len // 2
+        def merge_sort(self, sequence: list[int]) -> list[int]:
+            nn: int = len(sequence)
+            if nn <= 1:
+                return sequence
+            middle_i: int = nn // 2
             # recursively sort two sublists.
-            left_list: list[int] = self.merge_sort(target_list[0:middle_i])
-            right_list: list[int] = self.merge_sort(
-                target_list[middle_i:target_list_len]
+            return self.merge(
+                left_list=self.merge_sort(sequence[0:middle_i]),
+                right_list=self.merge_sort(sequence[middle_i:nn]),
             )
-
-            return self.merge(left_list, right_list)
 
         def merge(self, left_list: list[int], right_list: list[int]) -> list[int]:
             result_list: list[int] = []
-            left_list_len: int = len(left_list)
-            right_list_len: int = len(right_list)
+            nn: int = len(left_list)
+            mm: int = len(right_list)
             goal_size: int = len(left_list) + len(right_list)
             # compare
             i: int = 0
@@ -492,13 +488,11 @@ class MergeSorts(MixInParentAlgorithmVisualization):
             while True:
                 if left_list[i] <= right_list[j]:
                     result_list.append(left_list[i])
-                    i += 1
-                    if i == left_list_len:
+                    if (i := i + 1) == nn:
                         result_list.extend(right_list[j:])
                 else:
                     result_list.append(right_list[j])
-                    j += 1
-                    if j == right_list_len:
+                    if (j := j + 1) == mm:
                         result_list.extend(left_list[i:])
 
                 if len(result_list) == goal_size:
@@ -508,14 +502,14 @@ class MergeSorts(MixInParentAlgorithmVisualization):
         def solve(self) -> None:
             # Top-down implementation
             # slice operator will copy original list, so the allocation is required.
-            self.dst.target_list = self.merge_sort(self.dst.target_list)
+            self.dst.sequence = self.merge_sort(self.dst.sequence)
 
         def verify(self) -> bool | Any:
             return SortingDST.verify_sorting(self.dst)
 
         @classmethod
         def test_case(cls, dst: Optional[SortingDST]) -> None:  # type: ignore
-            algorithm = ExchangeSorts.QuickSort(dst=dst)
+            algorithm = MergeSorts.MergeSort(dst=dst)
             algorithm.append_line_into_df_in_wrap(algorithm.measure())
             algorithm.visualize()
 
@@ -571,7 +565,7 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         VisualizationManager.call_root_classes()
         only_class_list = []
     else:
-        only_class_list = [InsertionSorts.InsertionSort]
+        only_class_list = [MergeSorts.MergeSort]
     VisualizationManager.call_parent_algorithm_classes(
         dst=SortingDST.get_default_sorting_dst(),
         only_class_list=only_class_list,

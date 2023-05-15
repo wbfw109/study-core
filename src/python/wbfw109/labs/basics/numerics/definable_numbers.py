@@ -1,3 +1,4 @@
+"""This file includes `Positional notation` category."""
 # %%
 from __future__ import annotations
 
@@ -36,7 +37,7 @@ class DecimalRepresentation(VisualizationRoot):
     def __init__(self) -> None:
         VisualizationRoot.__init__(
             self,
-            columns=["name", "eval", "print"],
+            columns=["function", "eval", "print"],
             has_df_lock=False,
             should_highlight=True,
         )
@@ -80,6 +81,63 @@ class DecimalRepresentation(VisualizationRoot):
         decimal_representation.visualize()
 
 
+class PositionalNotation(VisualizationRoot):
+    def __init__(self) -> None:
+        VisualizationRoot.__init__(
+            self,
+            columns=["function", "eval", "print"],
+            has_df_lock=False,
+            should_highlight=True,
+        )
+
+    def __str__(self) -> str:
+        return "-"
+
+    def convert_decimal_to_base(self, num: int, base: int) -> str:
+        BASE_MAP: str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        result: list[str] = []
+        while num > 0:
+            quotient, remainder = divmod(num, base)
+            result.append(BASE_MAP[remainder])
+            num = quotient
+        return "".join(reversed(result))
+
+    def convert_base_to_decimal(self, num_str: str, base: int) -> int:
+        return int(num_str, base)
+
+    def convert_decimal_to_one_based_number(self, num: int, base_map: str) -> str:
+        """🔍"""
+        base: int = len(base_map)
+        result: list[str] = []
+        while num > 0:
+            num -= 1
+            quotient, remainder = divmod(num, base)
+            result.append(base_map[remainder])
+            num = quotient
+        return "".join(reversed(result))
+
+    @classmethod
+    def test_case(cls):
+        positional_notation: PositionalNotation = cls()
+
+        num = 255
+        base = 7
+        converted_num: str = positional_notation.convert_decimal_to_base(num, base)
+        reconverted: int = positional_notation.convert_base_to_decimal(
+            converted_num, base
+        )
+        assert reconverted == num
+        positional_notation.append_line_into_df_in_wrap(
+            [
+                "Decimal to 2, 8, 16 base",
+                "( 11, bin(11), oct(11), hex(11) )",
+                (11, bin(11), oct(11), hex(11)),
+            ]
+        )
+
+        positional_notation.visualize()
+
+
 # %%
 
 if __name__ == "__main__" or VisualizationManager.central_control_state:
@@ -87,5 +145,5 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         # Do not change this.
         only_class_list = []
     else:
-        only_class_list = [DecimalRepresentation]
+        only_class_list = [PositionalNotation]
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
