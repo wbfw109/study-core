@@ -176,4 +176,5 @@ print(result)
 
 
 # %%
-import math
+
+[1, 2, 3].index(3, -1)

@@ -8,7 +8,7 @@
 Almost problems is related with String and Index manipluation.
 Almost solutions of problems have 1 ~ 5 lines.
 """
-# Regex to find problems in which one of upper emojis was used; """[^\uAC00-\uD7A3\d\w]\s
+# Regex to find problems in which one of upper emojis was used; """[^\uAC00-\uD7A3\d\w]+\s
 
 
 def solution_181952() -> None:
@@ -703,8 +703,7 @@ def solution_181866(my_str: str) -> list[str]:
 
 
 def solution_181865(binomial: str) -> int:
-    """간단한 식 계산하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181865
-    """
+    """간단한 식 계산하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181865"""
     return eval(binomial)  # pylint: disable=W0123 # nosec
 
 

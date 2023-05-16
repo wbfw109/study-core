@@ -6,7 +6,7 @@
 - 💦: built-in functions, grammar
 
 """
-# Regex to find problems in which one of upper emojis was used; """[^\uAC00-\uD7A3\d\w]\s
+# Regex to find problems in which one of upper emojis was used; """[^\uAC00-\uD7A3\d\w]+\s
 
 
 def solution_178871() -> None:
@@ -42,7 +42,7 @@ def solution_155652() -> None:
 
 
 def solution_150370() -> None:
-    """개인정보 수집 유효기간 ; https://school.programmers.co.kr/learn/courses/30/lessons/150370"""
+    """개인정보 수집 유효기간 ; https://school.programmers.co.kr/learn/courses/30/lessons/lv150370"""
 
 
 def solution_147355() -> None:
@@ -65,27 +65,56 @@ def solution_136798() -> None:
     """기사단원의 무기 ; https://school.programmers.co.kr/learn/courses/30/lessons/136798"""
 
 
-def solution_135808() -> None:
-    """과일 장수 ; https://school.programmers.co.kr/learn/courses/30/lessons/135808"""
+def solution_135808(k: int, m: int, score: list[int]) -> int:
+    """🧠 과일 장수 ; https://school.programmers.co.kr/learn/courses/30/lessons/135808
+
+    Other solution
+        # 🆚 Current implementation, this solution; These have similar elapsed time in Test cases.
+        # Time complexity: O(n)
+        # Space complexity: O(k)
+        answer: int = 0
+        counts: list[int] = [0] * (k + 1)
+        for score_ in score:
+            counts[score_] += 1
+
+        previous_r: int = 0
+        for i in range(k, 0, -1):
+            q, r = divmod(counts[i] + previous_r, m)
+            answer += i * m * q
+            previous_r = r
+        return answer
+    """
+    # Time Complexity: O(n log n)
+    return sum(sorted(score)[len(score) % m :: m]) * m
 
 
-def solution_134240() -> None:
-    """푸드 파이트 대회 ; https://school.programmers.co.kr/learn/courses/30/lessons/134240"""
+def solution_134240(food: list[int]) -> str:
+    """💤 푸드 파이트 대회 ; https://school.programmers.co.kr/learn/courses/30/lessons/134240
+    - 2 ≤ food의 길이 ≤ 9
+    """
+    left = "".join((str(i) * (food[i] // 2) for i in range(1, len(food))))
+    return "".join((left, "0", "".join(reversed(left))))
 
 
-def solution_133502() -> None:
+# TODO: --
+def solution_133502(ingredient: list[int]) -> None:
     """햄버거 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/133502"""
+    from collections import deque
+
+    dq = [deque() for _ in range(4)]
+    for i, x in enumerate(ingredient):
+        dq[x].append(i)
+    while True:
+        if len(dq[1]) >= 2 and dq[1]:
+            pass
+
+    # return min(counts[1]//2, counts[2], counts[3])
 
 
-# TODO: write additioanl descriptions this problems.
 def solution_133499(babbling: list[str]) -> int:
     """🧠 옹알이 (2) ; https://school.programmers.co.kr/learn/courses/30/lessons/133499
 
     - `len(word.strip())==0` is slightly faster than `if not word.split():`
-    - `for s in valid_str:  word = word.replace(s, " ")` is slightly faster than
-        `if len(functools.reduce(lambda w, s: w.replace(s, " "), valid_str, word).strip()) == 0:   count += 1`
-        , because of function call overhead.
-
     """
     valid_str: list[str] = ["aya", "ye", "woo", "ma"]
     not_valid_str: list[str] = [s * 2 for s in valid_str]
@@ -102,10 +131,12 @@ def solution_133499(babbling: list[str]) -> int:
 
 
 def solution_132267(a: int, b: int, n: int) -> int:
-    """🧠 콜라 문제 ; https://school.programmers.co.kr/learn/courses/30/lessons/132267
-    a 를 가져다주면 b 병을 주는 마트가 있을 때 빈 병 n개를 가져준다면 몇 병 받을 수 있는지?
-    while 문 말고 한번에 가능한가?
-    10% 단위가 아니라서 어떻게 설계하지
+    """🧠🔍 콜라 문제 ; https://school.programmers.co.kr/learn/courses/30/lessons/132267
+
+    Consideration
+        - The payback is not in 10% percent unit unlike "치킨 쿠폰" problem of lv0.
+        - condition: ( 1 ≤ b < a ≤ n ≤ 1,000,000 )
+
     Other solutions:
         answer = 0
         while n >= a:
@@ -114,26 +145,26 @@ def solution_132267(a: int, b: int, n: int) -> int:
             answer+=new_cola
             n = new_cola+r
         return answer
-    The purpose: itreation*b;  1 ≤ b < a ≤ n ≤ 1,000,000
-    (a-b) * b
-        - * b; received multiplier for each step
 
-    3 병을 주고 한 병을 받으면, 그룹화...
-    n=6
-    give=3
-    get=1
-    n = 6-3 +1 = 4
-    n = 4-3 +1 = 2
-    한 번의 단위에 a-b 개를 주는 것이라 해석 할 수 있음. 하지만 a 보다 작을 때는 더 이상 진행하지 못하므로,
+    Implementation
+        give=3, get=1
+        -----
+        n=7
+        n = 7 + (-3+1) = 5
+        n = 5 + (-3+1) = 3
+        n = 3 + (-3+1) = 1
+        7 / 2 == 3.5
+        -----
+        n=6
+        n = 6 + (-3+1) = 4
+        n = 4 + (-3+1) = 2
+        6 / 2 == 3.0
 
-    한꺼번에 계산하지 않고 a개만 팔고 b개를 받는 과정은 결국 a-b 개씩 병을 소비하는 것으로 생각,
-    첫, 그 조건을 먼저 계산 n-b iteration count (n-b) // (a-b) ; iteration count
-    ???
-
+        While repeating n - (a-b) - (a-b) ..., if the result value is less than a, do not proceed further.
+        ❓ to do that, n must be changed in the exchange system. It can be thought as firstly <a> is consumed, but <b> is not received.
+        ; (n - b) // (a - b) * b
     """
     return (n - b) // (a - b) * b
-
-
 
 
 def solution_131705(number: list[int]) -> int:
