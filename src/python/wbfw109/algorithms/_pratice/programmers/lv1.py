@@ -61,8 +61,18 @@ def solution_138477() -> None:
     """명예의 전당 (1) ; https://school.programmers.co.kr/learn/courses/30/lessons/138477"""
 
 
-def solution_136798() -> None:
+# ?? 공통약수는 재귀적으로 참조하여 해결가능할듯 싶은데
+def solution_136798(number: int, limit: int, power: int) -> int:
     """기사단원의 무기 ; https://school.programmers.co.kr/learn/courses/30/lessons/136798"""
+    divisor_counts: list[int] = []
+    for num in range(1, number + 1):
+        count: int = 0
+        for i in range(1, int(num**0.5) + 1):
+            quotient, remainder = divmod(num, i)
+            if remainder == 0:
+                count += 2 if quotient != i else 1
+        divisor_counts.append(count)
+    return sum((power if count > limit else count for count in divisor_counts))
 
 
 def solution_135808(k: int, m: int, score: list[int]) -> int:
@@ -96,21 +106,18 @@ def solution_134240(food: list[int]) -> str:
     return "".join((left, "0", "".join(reversed(left))))
 
 
-# TODO: --
-def solution_133502(ingredient: list[int]) -> None:
-    """햄버거 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/133502
-    Binary search tree?
-    """
-    from collections import deque
-
-    dq = [deque() for _ in range(4)]
-    for i, x in enumerate(ingredient):
-        dq[x].append(i)
-    while True:
-        if len(dq[1]) >= 2 and dq[1]:
-            pass
-
-    # return min(counts[1]//2, counts[2], counts[3])
+def solution_133502(ingredient: list[int]) -> int:
+    """💦 햄버거 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/133502
+    - 😠 `빵 - 야채 - 고기 - 빵` 순서에서 그 사이에 뭐가 들어가는거는 허용이 안되는 조건이었음."""
+    stack: list[int] = []
+    count: int = 0
+    for x in ingredient:
+        if x == 1 and stack[-3::] == [1, 2, 3]:
+            count += 1
+            del stack[-3:]
+        else:
+            stack.append(x)
+    return count
 
 
 def solution_133499(babbling: list[str]) -> int:
