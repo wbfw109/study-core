@@ -98,7 +98,9 @@ def solution_134240(food: list[int]) -> str:
 
 # TODO: --
 def solution_133502(ingredient: list[int]) -> None:
-    """햄버거 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/133502"""
+    """햄버거 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/133502
+    Binary search tree?
+    """
     from collections import deque
 
     dq = [deque() for _ in range(4)]
