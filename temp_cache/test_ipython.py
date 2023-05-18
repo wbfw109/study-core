@@ -205,6 +205,8 @@ timeit.timeit(method2, number=100)
 # https://www.geeksforgeeks.org/merge-two-sorted-arrays-python-using-heapq/
 
 
-a = [1, 2, 3]
+a = [[3, 4], [2, 3]]
 
-a[-4]
+a.sort()
+
+a

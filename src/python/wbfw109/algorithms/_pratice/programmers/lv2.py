@@ -9,6 +9,51 @@
 # Regex to find problems in which one of upper emojis was used; """[^\uAC00-\uD7A3\d\w]\s
 
 
+def solution_181188(targets: list[list[int]]) -> int:
+    """💤 요격 시스템 ; https://school.programmers.co.kr/learn/courses/30/lessons/181188
+    Tag: Greedy, Sweep line algorithm
+
+    Other solution
+        count: int = 0
+        targets.sort()
+        i: int = 0
+        targets_len: int = len(targets)
+        while i < targets_len:
+            maxx = targets[i][1]
+            j = i + 1  # j is next target pointer.
+            while j < targets_len:
+                if targets[j][0] < maxx:
+                    maxx = min(maxx, targets[j][1]) ## it is not required.
+                    j += 1
+                else:
+                    break
+            i = j  # set next pointer
+            count += 1
+        return count
+
+    Consideration
+        요격미사일의 최소개수도 중요하긴 한데, 모든 폭격 미사일을 맞춰야 하기 때문에 그리디 접근방식 필요할듯 보임.
+
+    Debugging
+        1, 4    # 1
+        3, 7    # 1
+        4, 5    # 2
+        4, 8    # 2
+        5, 12   # 2
+        10, 14  # 2
+        11, 13  # 3
+    """
+    count: int = 0
+    targets.sort(key=lambda x: x[0])
+    max_endpoint: int = 0
+    for x1, x2 in targets:
+        if x1 >= max_endpoint:
+            count += 1
+            max_endpoint = x2
+    return count
+
+
+## TODO ~
 def solution_12900(n: int) -> int:
     """2 * n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12900
     Tag: Dynamic programming
