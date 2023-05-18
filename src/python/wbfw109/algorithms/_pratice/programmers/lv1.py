@@ -53,17 +53,41 @@ def solution_142086() -> None:
     """가장 가까운 같은 글자 ; https://school.programmers.co.kr/learn/courses/30/lessons/142086"""
 
 
-def solution_140108() -> None:
-    """문자열 나누기 ; https://school.programmers.co.kr/learn/courses/30/lessons/140108"""
+def solution_140108(s: str) -> int:
+    """💤 문자열 나누기 ; https://school.programmers.co.kr/learn/courses/30/lessons/140108
+    - use For-loop like do-while to proecss edge case.
+    """
+    answer: int = 0
+    base_char: str = ""
+    offset: int = 0
+    for c in s:
+        if offset == 0:
+            answer += 1
+            base_char = c
+        offset += 1 if c == base_char else -1
+    return answer
 
 
-def solution_138477() -> None:
-    """명예의 전당 (1) ; https://school.programmers.co.kr/learn/courses/30/lessons/138477"""
+def solution_138477(k: int, score: list[int]) -> list[int]:
+    """💤 명예의 전당 (1) ; https://school.programmers.co.kr/learn/courses/30/lessons/138477
+    - apply heapq"""
+    import heapq
+
+    hq: list[int] = []
+    result: list[int] = []
+    for i in range(min(k, len(score))):
+        heapq.heappush(hq, score[i])
+        result.append(hq[0])
+    for i in range(k, len(score)):
+        if hq[0] < score[i]:
+            heapq.heapreplace(hq, score[i])
+        result.append(hq[0])
+    return result
 
 
 def solution_136798(number: int, limit: int, power: int) -> int:
     """💤 기사단원의 무기 ; https://school.programmers.co.kr/learn/courses/30/lessons/136798
-    Find solution in one-iteration
+    - Find solution in one-iteration
     """
     total_power: int = 0
     for num in range(1, number + 1):
@@ -103,7 +127,7 @@ def solution_135808(k: int, m: int, score: list[int]) -> int:
 
 
 def solution_134240(food: list[int]) -> str:
-    """💤 푸드 파이트 대회 ; https://school.programmers.co.kr/learn/courses/30/lessons/134240
+    """푸드 파이트 대회 ; https://school.programmers.co.kr/learn/courses/30/lessons/134240
     - 2 ≤ food의 길이 ≤ 9
     """
     left = "".join((str(i) * (food[i] // 2) for i in range(1, len(food))))
@@ -175,7 +199,7 @@ def solution_132267(a: int, b: int, n: int) -> int:
 
         While repeating n - (a-b) - (a-b) ..., if the result value is less than a, do not proceed further.
         ❓ to do that, n must be changed in the exchange system. It can be thought as firstly <a> is consumed, but <b> is not received.
-        ; (n - b) // (a - b) * b
+        ; (n - a + (a-b)) // (a-b) * b  =  (n - b) // (a-b) * b
     """
     return (n - b) // (a - b) * b
 

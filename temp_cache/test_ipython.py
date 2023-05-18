@@ -201,8 +201,5 @@ timeit.timeit(method2, number=100)
 
 
 # %%
-
-can you convert this equal operation statement by using all() and generator?
-# stack = [1,2,3,4,5,6,7 ...]. 
-# stack[-1] == 1, stack[-2] == 3, stack[-3] == 2, stack[-4] == 1
-all((stack[-i] == i for i in (1, 2, 3, 4))):
+## profile required
+# https://www.geeksforgeeks.org/merge-two-sorted-arrays-python-using-heapq/
