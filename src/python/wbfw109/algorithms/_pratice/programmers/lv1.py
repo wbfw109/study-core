@@ -21,12 +21,35 @@ def solution_172928() -> None:
     """공원 산책 ; https://school.programmers.co.kr/learn/courses/30/lessons/172928"""
 
 
-def solution_161990() -> None:
-    """바탕화면 정리 ; https://school.programmers.co.kr/learn/courses/30/lessons/161990"""
+def solution_161990(wallpaper: list[str]) -> list[int]:
+    """💤 바탕화면 정리 ; https://school.programmers.co.kr/learn/courses/30/lessons/161990
+    - `바탕화면에는 적어도 하나의 파일이 있습니다.`"""
+    minj = 50
+    maxj = mini = maxi = -1
+    for i, line in enumerate(wallpaper):
+        if (j1 := line.find("#")) >= 0:
+            if j1 < minj:
+                minj = j1
+            if (j2 := line.rfind("#")) > maxj:
+                maxj = j2
+
+            if mini < 0:
+                mini = i
+            maxi = i
+    return [mini, minj, maxi + 1, maxj + 1]
 
 
-def solution_161989() -> None:
-    """덧칠하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/161989"""
+def solution_161989(n: int, m: int, section: list[int]) -> int:
+    """덧칠하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/161989
+    - `section의 원소는 오름차순으로 정렬되어 있습니다.`"""
+    m_range = m - 1
+    endpoint: int = section[0] + m_range
+    count: int = 1
+    for x in section:
+        if x > endpoint:
+            count += 1
+            endpoint = x + m_range
+    return count
 
 
 def solution_160586(keymap: list[str], targets: list[str]) -> list[int]:
@@ -38,6 +61,7 @@ def solution_160586(keymap: list[str], targets: list[str]) -> list[int]:
         for i, x in enumerate(keymap_, start=1):
             if i < min_key_count_map[x]:
                 min_key_count_map[x] = i
+
     result: list[int] = []
     for target in targets:
         count = 0

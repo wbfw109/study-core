@@ -203,10 +203,52 @@ timeit.timeit(method2, number=100)
 # %%
 ## profile required
 # https://www.geeksforgeeks.org/merge-two-sorted-arrays-python-using-heapq/
+def solution(r1, r2):
+    """
+    # x > 0 경우의 점들 개수 *4
+    # 100만개를 다 테스트해볼 수는 없음.
+    x=1, y=r1 ~ r2-1 까지가 x=1일떄 개수.
+    x=2, y=r2-1
+    4분면 나누고, 4분면 안에서도 절반 나누면.
+    a + b = r2 (a, b >= 0)
 
 
-a = [[3, 4], [2, 3]]
+    count 3 + 5 + 7 ..
+    r1    1   2
+    a = 1
+    a = 3, d = 2
+    ; initial_term a+2*(r1-1)
+    the number of terms = r2-r1
 
-a.sort()
+    등차수열 솔루션은 틀린듯.
+        initial_term = 3+2*(r1-1)
+        n = r2-r1
+        return (n*(2*initial_term+(n-1)*2)//2 - n + 1)*4
 
-a
+    """
+    initial_term = 3 + 2 * (r1 - 1)
+    n = r2 - r1
+    return (n * (2 * initial_term + (n - 1) * 2) // 2 - n + 1) * 4
+
+
+def solution(sequence, k):
+    """- `k는 항상 sequence의 부분 수열로 만들 수 있는 값입니다.`
+    - `이때 수열의 인덱스는 0부터 시작합니다.`
+
+    - `1 ≤ sequence의 원소 ≤ 1,000`
+    - `sequence는 비내림차순으로 정렬되어 있습니다.`
+    n^2 솔루션이 안된다. 각 sequence[i] 부터 뒤에꺼까지 부분합으로 k 보다 크기 바로 전까지 최소 pair 수 를 만들고 합이 안맞으면 패스.
+    """
+    n = len(sequence)
+    pa = [0]  # prefix array
+    for x in sequence:
+        pa.append(x + pa[-1])
+
+    for pair_num in range(1, n + 1):
+        for i in range(n - pair_num + 1):
+            x = pa[i + pair_num] - pa[i]
+            if x == k:
+                return [i, i + pair_num - 1]
+            elif x > k:
+                break
+    return [-1, -1]
