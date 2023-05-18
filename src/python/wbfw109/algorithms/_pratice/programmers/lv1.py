@@ -29,12 +29,46 @@ def solution_161989() -> None:
     """덧칠하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/161989"""
 
 
-def solution_160586() -> None:
+def solution_160586(keymap: list[str], targets: list[str]) -> list[int]:
     """대충 만든 자판 ; https://school.programmers.co.kr/learn/courses/30/lessons/160586"""
+    from collections import defaultdict
+
+    min_key_count_map: dict[str, int] = defaultdict(lambda: 101)
+    for keymap_ in keymap:
+        for i, x in enumerate(keymap_, start=1):
+            if i < min_key_count_map[x]:
+                min_key_count_map[x] = i
+    result: list[int] = []
+    for target in targets:
+        count = 0
+        for t in target:
+            if min_key_count_map[t] == 101:
+                count = -1
+                break
+            else:
+                count += min_key_count_map[t]
+        result.append(count)
+    return result
 
 
-def solution_159994() -> None:
-    """카드 뭉치 ; https://school.programmers.co.kr/learn/courses/30/lessons/159994"""
+def solution_159994(cards1: list[str], cards2: list[str], goal: list[str]) -> str:
+    """카드 뭉치 ; https://school.programmers.co.kr/learn/courses/30/lessons/159994
+    - `cards1과 cards2에는 서로 다른 단어만 존재합니다.`"""
+    cards1_len: int = len(cards1)
+    cards2_len: int = len(cards2)
+    i: int = 0
+    j: int = 0
+    for word in goal:
+        is_not_found: bool = True
+        if i < cards1_len and word == cards1[i]:
+            is_not_found = False
+            i += 1
+        elif j < cards2_len and word == cards2[j]:
+            is_not_found = False
+            j += 1
+        if is_not_found:
+            return "No"
+    return "Yes"
 
 
 def solution_155652(s: str, skip: str, index: int) -> str:
