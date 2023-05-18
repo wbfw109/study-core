@@ -37,18 +37,62 @@ def solution_159994() -> None:
     """카드 뭉치 ; https://school.programmers.co.kr/learn/courses/30/lessons/159994"""
 
 
-def solution_155652() -> None:
-    """둘만의 암호 ; https://school.programmers.co.kr/learn/courses/30/lessons/155652"""
+def solution_155652(s: str, skip: str, index: int) -> str:
+    """💤 둘만의 암호 ; https://school.programmers.co.kr/learn/courses/30/lessons/155652
+    - `skip에 포함되는 알파벳은 s에 포함되지 않습니다.`"""
+    ## solution (version: `skip에 포함되는 알파벳은 s에 포함될 수 있습니다.`)
+    from string import ascii_lowercase
+
+    asciis = ascii_lowercase * 2
+    skip_map = set(skip)
+    candidates = sorted(set(ascii_lowercase) - skip_map)
+    candidates_len = len(candidates)
+
+    # create hash map from a character to other character in +1 <index>
+    start_map: dict[str, int] = {}
+    for i, lowercase in enumerate(ascii_lowercase, start=1):
+        for j in range(i, i + 26):
+            if asciis[j] not in skip_map:
+                start_map[lowercase] = candidates.index(asciis[j])
+                break
+
+    return "".join((candidates[(start_map[c] + index - 1) % candidates_len] for c in s))
 
 
-def solution_150370() -> None:
-    """개인정보 수집 유효기간 ; https://school.programmers.co.kr/learn/courses/30/lessons/150370"""
+def solution_150370(today: str, terms: list[str], privacies: str) -> list[int]:
+    """개인정보 수집 유효기간 ; https://school.programmers.co.kr/learn/courses/30/lessons/150370
+    Tag
+        Base Conversion
+    Clues
+        - `모든 달은 28일까지 있다고 가정합니다.`
+            It not uses datatime module.
+    """
+    # parse today
+    today_p: list[int] = [int(x) for x in today.split(".")]
+
+    answer: list[int] = []
+    # create terms map. # assert ord("A") == 65
+    terms_map = [0] * 26
+    for term in terms:
+        contract, period = term.split()
+        terms_map[ord(contract) - 65] = int(period)
+
+    for num, privacy in enumerate(privacies, start=1):
+        contract_date, contract = privacy.split()
+        contract_date_p = [int(x) for x in contract_date.split(".")]
+        q, r = divmod(contract_date_p[1] + terms_map[ord(contract) - 65] - 1, 12)
+        contract_date_p[0] += q
+        contract_date_p[1] = r + 1
+        if today_p >= contract_date_p:
+            answer.append(num)
+    return answer
 
 
 def solution_147355(t: str, p: str) -> int:
     """💤 크기가 작은 부분 문자열 ; https://school.programmers.co.kr/learn/courses/30/lessons/147355"""
     p_len: int = len(p)
-    return sum((1 if t[i:i+p_len] <= p else 0 for i in range(len(t)-p_len+1)))
+    return sum((1 if t[i : i + p_len] <= p else 0 for i in range(len(t) - p_len + 1)))
+
 
 def solution_142086(s: str) -> list[int]:
     """가장 가까운 같은 글자 ; https://school.programmers.co.kr/learn/courses/30/lessons/142086"""
@@ -207,6 +251,7 @@ def solution_132267(a: int, b: int, n: int) -> int:
 
         While repeating n - (a-b) - (a-b) ..., if the result value is less than a, do not proceed further.
         ❓ to do that, n must be changed in the exchange system. It can be thought as firstly <a> is consumed, but <b> is not received.
+        ;
         ; (n - a + (a-b)) // (a-b) * b  =  (n - b) // (a-b) * b
     """
     return (n - b) // (a - b) * b
