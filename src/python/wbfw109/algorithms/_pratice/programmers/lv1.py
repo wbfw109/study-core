@@ -13,12 +13,51 @@ def solution_178871() -> None:
     """달리기 경주 ; https://school.programmers.co.kr/learn/courses/30/lessons/178871"""
 
 
-def solution_176963() -> None:
-    """추억 점수 ; https://school.programmers.co.kr/learn/courses/30/lessons/176963"""
+def solution_176963(
+    name: list[str], yearning: list[int], photo: list[list[str]]
+) -> list[int]:
+    """추억 점수 ; https://school.programmers.co.kr/learn/courses/30/lessons/176963
+    - `photo[i]의 원소들은 중복된 값이 들어가지 않습니다.`"""
+    from collections import defaultdict
+
+    score_map: dict[str, int] = defaultdict(int, zip(name, yearning))
+    return [sum((score_map[names] for names in p)) for p in photo]
 
 
-def solution_172928() -> None:
-    """공원 산책 ; https://school.programmers.co.kr/learn/courses/30/lessons/172928"""
+def solution_172928(park: list[str], routes: list[str]) -> list[int]:
+    """💤 공원 산책 ; https://school.programmers.co.kr/learn/courses/30/lessons/172928"""
+    n, m = len(park), len(park[0])
+    x, y = 0, 0
+    for i, line in enumerate(park):
+        if (p := line.find("S")) >= 0:
+            x, y = i, p
+            park[i] = line.replace("S", "O")
+            break
+
+    for route in routes:
+        direction, distance = route.split()
+        distance = int(distance)
+        if direction == "N":
+            if (next_x := x - distance) >= 0 and all(
+                (park[i][y] == "O" for i in range(next_x, x))
+            ):
+                x = next_x
+        elif direction == "S":
+            if (next_x := x + distance) < n and all(
+                (park[i][y] == "O" for i in range(x + 1, next_x + 1))
+            ):
+                x = next_x
+        elif direction == "W":
+            if (next_y := y - distance) >= 0 and all(
+                (park[x][j] == "O" for j in range(next_y, y))
+            ):
+                y = next_y
+        else:
+            if (next_y := y + distance) < m and all(
+                (park[x][j] == "O" for j in range(y + 1, next_y + 1))
+            ):
+                y = next_y
+    return [x, y]
 
 
 def solution_161990(wallpaper: list[str]) -> list[int]:
