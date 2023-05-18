@@ -61,18 +61,22 @@ def solution_138477() -> None:
     """명예의 전당 (1) ; https://school.programmers.co.kr/learn/courses/30/lessons/138477"""
 
 
-# ?? 공통약수는 재귀적으로 참조하여 해결가능할듯 싶은데
 def solution_136798(number: int, limit: int, power: int) -> int:
-    """기사단원의 무기 ; https://school.programmers.co.kr/learn/courses/30/lessons/136798"""
-    divisor_counts: list[int] = []
+    """💤 기사단원의 무기 ; https://school.programmers.co.kr/learn/courses/30/lessons/136798
+    Find solution in one-iteration
+    """
+    total_power: int = 0
     for num in range(1, number + 1):
         count: int = 0
         for i in range(1, int(num**0.5) + 1):
-            quotient, remainder = divmod(num, i)
-            if remainder == 0:
-                count += 2 if quotient != i else 1
-        divisor_counts.append(count)
-    return sum((power if count > limit else count for count in divisor_counts))
+            q, r = divmod(num, i)
+            if r == 0:
+                count += 2 if q != i else 1
+                if count > limit:
+                    count = power
+                    break
+        total_power += count
+    return total_power
 
 
 def solution_135808(k: int, m: int, score: list[int]) -> int:
