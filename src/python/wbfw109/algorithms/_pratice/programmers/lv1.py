@@ -42,15 +42,23 @@ def solution_155652() -> None:
 
 
 def solution_150370() -> None:
-    """개인정보 수집 유효기간 ; https://school.programmers.co.kr/learn/courses/30/lessons/lv150370"""
+    """개인정보 수집 유효기간 ; https://school.programmers.co.kr/learn/courses/30/lessons/150370"""
 
 
-def solution_147355() -> None:
-    """크기가 작은 부분 문자열 ; https://school.programmers.co.kr/learn/courses/30/lessons/147355"""
+def solution_147355(t: str, p: str) -> int:
+    """💤 크기가 작은 부분 문자열 ; https://school.programmers.co.kr/learn/courses/30/lessons/147355"""
+    p_len: int = len(p)
+    return sum((1 if t[i:i+p_len] <= p else 0 for i in range(len(t)-p_len+1)))
 
-
-def solution_142086() -> None:
+def solution_142086(s: str) -> list[int]:
     """가장 가까운 같은 글자 ; https://school.programmers.co.kr/learn/courses/30/lessons/142086"""
+    found_indexes: list[int] = [-1] * 26  #  ord("a"), ord("z") == 97, 122
+    result: list[int] = []
+    for i, c in enumerate(s):
+        char_i = ord(c) - 97
+        result.append(i - found_indexes[char_i] if found_indexes[char_i] >= 0 else -1)
+        found_indexes[char_i] = i
+    return result
 
 
 def solution_140108(s: str) -> int:

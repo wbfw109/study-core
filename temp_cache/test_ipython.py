@@ -203,3 +203,5 @@ timeit.timeit(method2, number=100)
 # %%
 ## profile required
 # https://www.geeksforgeeks.org/merge-two-sorted-arrays-python-using-heapq/
+
+a = [0] * 100
