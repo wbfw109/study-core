@@ -201,6 +201,28 @@ timeit.timeit(method2, number=100)
 
 
 # %%
+players = ["mumu", "soe", "poe", "kai", "mine"]
+callings = ["kai", "kai", "mine", "mine"]
+
+
+def method1():
+    ranks = {name: i for i, name in enumerate(players)}
+    for name in callings:
+        rank = ranks[name]
+        pre_rank = rank - 1
+
+
+def method2():
+    ranks = {name: i for i, name in enumerate(players)}
+    for name in callings:
+        pre_rank, rank = ranks[name] - 1, ranks[name]
+
+
+timeit.timeit(method1, number=100000)  # 0.104612 s
+timeit.timeit(method2, number=100000)  # 0.116712 s
+
+
+# %%
 ## profile required
 # https://www.geeksforgeeks.org/merge-two-sorted-arrays-python-using-heapq/
 def solution(r1, r2):
@@ -252,3 +274,22 @@ def solution(sequence, k):
             elif x > k:
                 break
     return [-1, -1]
+
+
+# %%
+def solution_178871(players: list[str], callings: list[str]) -> list[str]:
+    """🧠 달리기 경주 ; https://school.programmers.co.kr/learn/courses/30/lessons/178871"""
+    ranks = {name: i for i, name in enumerate(players)}
+    for name in callings:
+        rank = ranks[name]
+        pre_rank = rank - 1
+
+        # swap two ranks in [name, rank] array
+        ranks[players[pre_rank]] += 1
+        ranks[name] -= 1
+        # swap two ranks in [rank, name] array
+        players[pre_rank], players[rank] = players[rank], players[pre_rank]
+    return players
+
+
+solution_178871(["mumu", "soe", "poe", "kai", "mine"], ["kai", "kai", "mine", "mine"])

@@ -39,8 +39,8 @@ Updated on 📅 2023-05-08 11:22:35
 #### 1.1.2 Main Directory Structure
 
 - 📝 [lv0.py](programmers/lv0.py) ; (224 / 224) problems
-- 📝 [lv1.py](programmers/lv1.py) ; (62 / 77) problems
-- 📝 [lv2.py](programmers/lv2.py) ; (2 / 104) problems
+- 📝 [lv1.py](programmers/lv1.py) ; (77 / 77) problems
+- 📝 [lv2.py](programmers/lv2.py) ; (3 / 104) problems
 
 ### 1.2 [Goorm](goorm/)
 

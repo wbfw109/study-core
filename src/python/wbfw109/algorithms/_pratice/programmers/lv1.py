@@ -9,8 +9,19 @@
 # Regex to find problems in which one of upper emojis was used; """[^\uAC00-\uD7A3\d\w]+\s
 
 
-def solution_178871() -> None:
-    """달리기 경주 ; https://school.programmers.co.kr/learn/courses/30/lessons/178871"""
+def solution_178871(players: list[str], callings: list[str]) -> list[str]:
+    """🧠 달리기 경주 ; https://school.programmers.co.kr/learn/courses/30/lessons/178871"""
+    ranks: dict[str, int] = {name: i for i, name in enumerate(players)}
+    for name in callings:
+        rank = ranks[name]
+        pre_rank = rank - 1
+
+        # swap two ranks in [name, rank] array
+        ranks[players[pre_rank]] += 1
+        ranks[name] -= 1
+        # swap two ranks in [rank, name] array
+        players[pre_rank], players[rank] = players[rank], players[pre_rank]
+    return players
 
 
 def solution_176963(
