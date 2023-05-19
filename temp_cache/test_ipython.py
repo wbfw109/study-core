@@ -252,3 +252,24 @@ def solution(sequence, k):
 
 
 # [1, 2, 3].index(3, -1) #..
+# %%
+n = 2
+
+dp: list[int] = [2, 1]
+for i in range(3, n + 1):
+    dp[i & 1] = dp[0] + dp[1]
+
+dp[n & 1]
+
+
+# %%
+def solution(n):
+    dp: list[int] = [1, 2]  # Corrected initialization
+    for i in range(2, n):
+        dp[i % 2] = (
+            dp[0] + dp[1]
+        ) % 1000000007  # add modulo operation for avoiding overflow
+    return dp[(n - 1) % 2]
+
+
+solution(4)

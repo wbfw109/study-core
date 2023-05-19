@@ -148,12 +148,12 @@ def solve_subset_sum_with_strictly_positive_elements(
             pnn = nn - 1
             # new_remainder := (i + pnn) % n
             dp[kki][nn] = [
-                count + dp[pkki][pnn][new_remainder]
+                (count + dp[pkki][pnn][new_remainder]) % 1000000007
                 for new_remainder, count in enumerate(dp[kki][pnn], start=pnn - n)
             ]
 
     # Title: output
-    result: str = str(dp[k & 1][n][0] % 1000000007)
+    result: str = str(dp[k & 1][n][0])
     print(result)
     return result
 

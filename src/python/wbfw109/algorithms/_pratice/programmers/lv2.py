@@ -449,21 +449,37 @@ def solution_12905() -> None:
     """가장 큰 정사각형 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12905"""
 
 
-def solution_12902() -> None:
-    """3 x n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12902"""
+## TODO: organize thoughts of 2*n and 3*n Tessellation after doing n*m Tessellation ~
+def solution_12902(n: int) -> int:
+    """3 x n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12902
+    Tag: Dynamic programming
+
+    Time Complexity: O(n)
+    Space complexity: O(1)
+        from Sliding Window approach
+    """
+    dp: list[int] = [2, 1]
+    for i in range(3, n + 1):
+        dp[i & 1] = (dp[0] + dp[1]) % 1000000007
+    return dp[n & 1]
 
 
-## TODO ~
 def solution_12900(n: int) -> int:
     """2 * n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12900
     Tag: Dynamic programming
+
+    Time Complexity: O(n)
+    Space complexity: O(1)
+        from Sliding Window approach
     """
-    count: int = 0
-    return count
+    dp: list[int] = [2, 1]
+    for i in range(3, n + 1):
+        dp[i & 1] = (dp[0] + dp[1]) % 1000000007
+    return dp[n & 1]
 
 
 def solution_12899(n: int) -> str:
-    """🧠 124 나라의 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12899
+    """124 나라의 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12899
     Tag: Math (Base Conversion)
 
     - 😠 int 를 반환하는 것이 아니라 str 을 반환하는 것이다.
