@@ -10,7 +10,9 @@
 
 
 def solution_178871(players: list[str], callings: list[str]) -> list[str]:
-    """🧠 달리기 경주 ; https://school.programmers.co.kr/learn/courses/30/lessons/178871"""
+    """🧠 달리기 경주 ; https://school.programmers.co.kr/learn/courses/30/lessons/178871
+    - Simple LinkedList can be replaced with [name, rank] array and [rank, name] array.
+    """
     ranks: dict[str, int] = {name: i for i, name in enumerate(players)}
     for name in callings:
         rank = ranks[name]
@@ -996,12 +998,10 @@ def solution_12943(num: int) -> int:
     """💤 콜라츠 추측 ; https://school.programmers.co.kr/learn/courses/30/lessons/12943
     - 예외 처리
     """
-    if num == 1:
-        return 0
-    for i in range(1, 501):
-        num = num * 3 + 1 if num & 1 else num // 2
+    for i in range(501):
         if num == 1:
             return i
+        num = 3 * num + 1 if num & 1 else num // 2
     else:
         return -1
 
