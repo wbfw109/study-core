@@ -372,19 +372,48 @@ class ListDT(VisualizationRoot):
 
         return ""
 
+    def profile_list_consecutive_pop_and_del_at_end(
+        self, /, *, only_conclusion: bool
+    ) -> str:
+        """
+        [Speed]
+        - List del    ; 🥇 Win
+            - all elements from the end of the list are deleted in one go, without any need for shifting, which makes it faster.
+        - List consecutive pop ; 🥈
+            - pop() in loop deletes the last element one by one.
+
+        """
+        if only_conclusion:
+            return "\n".join(
+                [
+                    "⌛ [Profile conclusion: list consecutive pop and List del at end] 🔪 Speed",
+                    "  List del is faster than list consecutive pop at end.",
+                ]
+            )
+        arr = list(range(100000))
+        unit = 4
+        range_obj = range(unit)
+
+        def method1():
+            arr2 = arr.copy()
+            while arr2:
+                del arr2[-unit:]
+
+        def method2():
+            arr2 = arr.copy()
+            while arr2:
+                for _ in range_obj:
+                    arr2.pop()
+
+        results = [timeit.timeit(x, number=100) for x in (method1, method2)]
+        print(f"List del: {results[0]}")  # 0.23572s
+        print(f"List consecutive pop: {results[1]}")  # 0.40983s
+
+        return ""
+
     @classmethod
     def test_case(cls):
         list_dt: ListDT = cls()
-        print(
-            list_dt.profile_list_whose_elements_are_integers_in_arithmetic_progression(
-                only_conclusion=True
-            )
-        )
-        print(
-            list_dt.profile_list_multiplication_and_list_comprehension(
-                only_conclusion=True
-            )
-        )
         list_dt.append_line_into_df_in_wrap(
             [
                 "s.append(x)",
@@ -424,6 +453,17 @@ class ListDT(VisualizationRoot):
             ]
         )
 
+        print(
+            list_dt.profile_list_whose_elements_are_integers_in_arithmetic_progression(
+                only_conclusion=True
+            )
+        )
+        print(
+            list_dt.profile_list_multiplication_and_list_comprehension(
+                only_conclusion=True
+            )
+        )
+        print(list_dt.profile_list_consecutive_pop_and_del_at_end(only_conclusion=True))
         list_dt.visualize()
 
 
@@ -513,7 +553,7 @@ if __name__ == "__main__" or VisualizationManager.central_control_state:
         # Do not change this.
         only_class_list = []
     else:
-        only_class_list = []
+        only_class_list = [ListDT]
     VisualizationManager.call_root_classes(only_class_list=only_class_list)
 
 

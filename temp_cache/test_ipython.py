@@ -176,31 +176,6 @@ print(result)
 
 
 # %%
-
-# [1, 2, 3].index(3, -1) #..
-## Note that del list[i:j] is faster than multiple list.pop().
-arr = list(range(10000))
-unit = 4
-
-
-def method1():
-    arr2 = arr.copy()
-    while arr2:
-        del arr2[-unit:]
-
-
-def method2():
-    arr2 = arr.copy()
-    while arr2:
-        for _ in range(unit):
-            arr2.pop()
-
-
-timeit.timeit(method1, number=100)
-timeit.timeit(method2, number=100)
-
-
-# %%
 players = ["mumu", "soe", "poe", "kai", "mine"]
 callings = ["kai", "kai", "mine", "mine"]
 
@@ -276,20 +251,4 @@ def solution(sequence, k):
     return [-1, -1]
 
 
-# %%
-def solution_178871(players: list[str], callings: list[str]) -> list[str]:
-    """🧠 달리기 경주 ; https://school.programmers.co.kr/learn/courses/30/lessons/178871"""
-    ranks = {name: i for i, name in enumerate(players)}
-    for name in callings:
-        rank = ranks[name]
-        pre_rank = rank - 1
-
-        # swap two ranks in [name, rank] array
-        ranks[players[pre_rank]] += 1
-        ranks[name] -= 1
-        # swap two ranks in [rank, name] array
-        players[pre_rank], players[rank] = players[rank], players[pre_rank]
-    return players
-
-
-solution_178871(["mumu", "soe", "poe", "kai", "mine"], ["kai", "kai", "mine", "mine"])
+# [1, 2, 3].index(3, -1) #..
