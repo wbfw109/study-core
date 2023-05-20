@@ -437,12 +437,18 @@ def solution_12913() -> None:
     """땅따먹기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12913"""
 
 
-def solution_12911() -> None:
+def solution_12911(n: int) -> int:
     """다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911"""
+    bin_repr: list[str] = ["0", *list(format(n, "b"))]
 
 
-def solution_12909() -> None:
+def solution_12909(s: str) -> bool:
     """올바른 괄호 ; https://school.programmers.co.kr/learn/courses/30/lessons/12909"""
+    offset: int = 0
+    for parenthesis in s:
+        if (offset := offset + 1 if parenthesis == "(" else offset - 1) < 0:
+            return False
+    return offset == 0
 
 
 # TODO: description
@@ -451,7 +457,7 @@ def solution_12905(board: list[list[int]]) -> int:
     Tag: Dynamic programming
 
     Recurrence Relation
-        board[i][j] = maximum side length
+        board[i][j] := side length to create largest square by using from board[0][0] to board[i][j].
 
     Debugging
         0  1  1  0  0
@@ -490,7 +496,7 @@ def solution_12902(n: int) -> int:
     Recurrence Relation
         if <n> is odd, dp[n] == 0,
         if <n> is even, dp[n] = dp[n-2]*3 + 2 + (dp[n-4]*2 + dp[n-6]*2 ... dp[2]*2)
-            dp[n-2]*3 ; previous value multiplied by 3
+            dp[n-2]*3 ; (previous cases)*dp[2]
             +2 ; the new shapes that didn't exist before.
             (dp[n-4]*2 + dp[n-6]*2 ... dp[2]*2) ; permutations with expanded area and the previous new shapes that didn't exist before.
 
