@@ -35,7 +35,7 @@ def solution_181949() -> None:
 
 def solution_181948() -> None:
     """특수문자 출력하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181948"""
-    print("!@#$%^&*(\\'\"<>?:;")
+    print(r"""!@#$%^&*(\'"<>?:;""")
 
 
 def solution_181947() -> None:

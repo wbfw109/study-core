@@ -438,7 +438,14 @@ def solution_12913() -> None:
 
 
 def solution_12911(n: int) -> int:
-    """다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911"""
+    """다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911
+    1001110
+    1010011
+
+    1001101
+    1001110
+
+    """
     bin_repr: list[str] = ["0", *list(format(n, "b"))]
 
 
@@ -451,19 +458,26 @@ def solution_12909(s: str) -> bool:
     return offset == 0
 
 
-# TODO: description
 def solution_12905(board: list[list[int]]) -> int:
     """🧠 가장 큰 정사각형 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12905
     Tag: Dynamic programming
 
-    Recurrence Relation
-        board[i][j] := side length to create largest square by using from board[0][0] to board[i][j].
+    In-place implementation
+        - board[i][j] := side length to create largest square by using from board[0][0] to board[i][j].
+            It uses mechanism that four partially overlapping 2*2 squares are required in order to compose 3*3 square, and so on.
 
     Debugging
+        from
         0  1  1  0  0
         1  1  1  1  1
         1  1  1  1  1
         0  0  1  1  1
+
+        to
+        0  1  1  0  0
+        1  1  2  1  1
+        1  2  2  2  2
+        0  0  1  2  3
     """
     n, m = len(board), len(board[0])
 
