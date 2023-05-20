@@ -449,19 +449,39 @@ def solution_12905() -> None:
     """가장 큰 정사각형 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12905"""
 
 
-## TODO: organize thoughts of 2*n and 3*n Tessellation after doing n*m Tessellation ~
 def solution_12902(n: int) -> int:
-    """3 x n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12902
+    """🧠🔍 3 x n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12902
     Tag: Dynamic programming
 
     Time Complexity: O(n)
     Space complexity: O(1)
         from Sliding Window approach
+
+    Recurrence Relation
+        if <n> is odd, dp[n] == 0,
+        if <n> is even, dp[n] = dp[n-2]*3 + 2 + (dp[n-4]*2 + dp[n-6]*2 ... dp[2]*2)
+            dp[n-2]*3 ; previous value multiplied by 3
+            +2 ; the new shapes that didn't exist before.
+            (dp[n-4]*2 + dp[n-6]*2 ... dp[2]*2) ; permutations with expanded area and the previous new shapes that didn't exist before.
+
+    Other solution
+        if n & 1:
+            return 0
+        dp, new_perm_count = 3, 0
+        for _ in range(4, n + 1, 2):
+            previous_dp = dp
+            dp = dp * 3 + new_perm_count + 2
+            new_perm_count = new_perm_count + previous_dp * 2
+        return dp % 1000000007
+
+    Current implemenation (🔍 proof); https://oeis.org/A001835
     """
-    dp: list[int] = [2, 1]
-    for i in range(3, n + 1):
-        dp[i & 1] = (dp[0] + dp[1]) % 1000000007
-    return dp[n & 1]
+    if n & 1:
+        return 0
+    term = preceding_term = 1
+    for _ in range(0, n, 2):  # condition (1 ≤ nn ≤ 5,000)
+        term, preceding_term = (4 * term - preceding_term) % 1000000007, term
+    return term
 
 
 def solution_12900(n: int) -> int:

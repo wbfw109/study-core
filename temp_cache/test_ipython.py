@@ -198,6 +198,31 @@ timeit.timeit(method2, number=100000)  # 0.116712 s
 
 
 # %%
+n = 5000
+
+
+def method1():
+    """When n is large enough, the accumulated cost of the extra addition operation in method1 could outweigh the one-time cost of the division operation in method2, resulting in method2 being faster overall."""
+    for _ in range(0, n, 2):
+        pass
+
+
+def method2():
+    for _ in range(n // 2):
+        pass
+
+
+# when n = 1000000001, 9.76544s and 10.79032s.
+# when n = 5000, 4.48339e-05s and 4.80699e-05s.
+timeit.timeit(method1, number=1)
+timeit.timeit(method2, number=1)
+
+## profile??
+# for _ in range(0, n, 2):
+# for _ in range(n//2):
+
+
+# %%
 ## profile required
 # https://www.geeksforgeeks.org/merge-two-sorted-arrays-python-using-heapq/
 def solution(r1, r2):
@@ -273,3 +298,4 @@ def solution(n):
 
 
 solution(4)
+# %%
