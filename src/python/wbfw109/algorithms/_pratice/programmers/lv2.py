@@ -445,20 +445,19 @@ def solution_12909() -> None:
     """올바른 괄호 ; https://school.programmers.co.kr/learn/courses/30/lessons/12909"""
 
 
+# TODO: description
 def solution_12905(board: list[list[int]]) -> int:
     """🧠 가장 큰 정사각형 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12905
     Tag: Dynamic programming
 
-    0  1  1  0  0
-    1  1  1  1  1
-    1  1  1  1  1
-    0  0  1  1  1
+    Recurrence Relation
+        board[i][j] = maximum side length
 
-    ingredient;
-        consecutive maximum "1" count by column
-        consecutive "1" count on row
-    trigger; 0 found or end of row.
-
+    Debugging
+        0  1  1  0  0
+        1  1  1  1  1
+        1  1  1  1  1
+        0  0  1  1  1
     """
     n, m = len(board), len(board[0])
 
@@ -467,7 +466,7 @@ def solution_12905(board: list[list[int]]) -> int:
 
         return int(any((True for x in chain.from_iterable(board) if x == 1)))
 
-    answer: int = 0
+    side_len: int = 0
     range_m = range(1, m)
     for i in range(1, n):
         for j in range_m:
@@ -475,9 +474,9 @@ def solution_12905(board: list[list[int]]) -> int:
                 board[i][j] = (
                     min(board[i - 1][j - 1], board[i - 1][j], board[i][j - 1]) + 1
                 )
-                if board[i][j] > answer:
-                    answer = board[i][j]
-    return answer * answer
+                if board[i][j] > side_len:
+                    side_len = board[i][j]
+    return side_len**2
 
 
 def solution_12902(n: int) -> int:
@@ -522,6 +521,11 @@ def solution_12900(n: int) -> int:
     Time Complexity: O(n)
     Space complexity: O(1)
         from Sliding Window approach
+
+    Recurrence Relation
+        f(n) = f(n-1) + f(n-2); number of cases that tiling 2*n rectangle with 2*1 or 1*2 tiles.
+            - `f(n-1)`; number of previous cases adding one 2*1 tile.
+            - `f(n-2)`; number of previous cases adding two 1*2 tile.
     """
     dp: list[int] = [2, 1]
     for i in range(3, n + 1):
