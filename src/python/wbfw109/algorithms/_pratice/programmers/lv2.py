@@ -440,11 +440,20 @@ def solution_12913() -> None:
 def solution_12911(n: int) -> int:
     """다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911
     1001110
+    1010110
     1010011
 
     1001101
     1001110
 
+    01111111
+    11111110
+    11111101
+
+
+    1. 가장 뒷자리의 1을 앞에 0이 나올때까지 한개씩 옮김.
+        스왑할 곳을 찾고,
+    2. 옮긴 위치의 우측에 있는 1의 자리 수를 모두 우측정렬시킨다.
     """
     bin_repr: list[str] = ["0", *list(format(n, "b"))]
 

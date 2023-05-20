@@ -322,6 +322,6 @@ def solution(n):
 
 
 solution(4)
-# %%
 
-any((_ for _ in range(0)))
+## any((_ for _ in range(0)))# valid
+# %%
