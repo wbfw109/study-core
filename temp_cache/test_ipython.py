@@ -195,6 +195,30 @@ def method2():
 
 timeit.timeit(method1, number=100000)  # 0.104612 s
 timeit.timeit(method2, number=100000)  # 0.116712 s
+# %%
+
+range_obj = range(100000)
+
+
+def method1():
+    """The reason method1 is slower than method2 is due to the additional overhead introduced by the generator expression in method1.
+    This overhead includes:
+        Creating the generator object.
+        Entering and exiting the generator context each time it yields a value.
+        Handling the StopIteration exception when the generator is exhausted.
+    """
+    for i in (i for i in range_obj if i & 1 == 1):
+        x = i
+
+
+def method2():
+    for i in range_obj:
+        if i & 1 == 1:
+            x = i
+
+
+timeit.timeit(method1, number=100)  # 0.58332s
+timeit.timeit(method2, number=100)  # 0.38724s
 
 
 # %%
@@ -299,3 +323,5 @@ def solution(n):
 
 solution(4)
 # %%
+
+any((_ for _ in range(0)))

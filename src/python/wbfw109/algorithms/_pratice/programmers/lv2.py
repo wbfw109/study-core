@@ -445,8 +445,39 @@ def solution_12909() -> None:
     """올바른 괄호 ; https://school.programmers.co.kr/learn/courses/30/lessons/12909"""
 
 
-def solution_12905() -> None:
-    """가장 큰 정사각형 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12905"""
+def solution_12905(board: list[list[int]]) -> int:
+    """🧠 가장 큰 정사각형 찾기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12905
+    Tag: Dynamic programming
+
+    0  1  1  0  0
+    1  1  1  1  1
+    1  1  1  1  1
+    0  0  1  1  1
+
+    ingredient;
+        consecutive maximum "1" count by column
+        consecutive "1" count on row
+    trigger; 0 found or end of row.
+
+    """
+    n, m = len(board), len(board[0])
+
+    if n == 1 or m == 1:
+        from itertools import chain
+
+        return int(any((True for x in chain.from_iterable(board) if x == 1)))
+
+    answer: int = 0
+    range_m = range(1, m)
+    for i in range(1, n):
+        for j in range_m:
+            if board[i][j] == 1:
+                board[i][j] = (
+                    min(board[i - 1][j - 1], board[i - 1][j], board[i][j - 1]) + 1
+                )
+                if board[i][j] > answer:
+                    answer = board[i][j]
+    return answer * answer
 
 
 def solution_12902(n: int) -> int:
