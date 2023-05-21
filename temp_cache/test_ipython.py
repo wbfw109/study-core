@@ -359,9 +359,26 @@ s.rfind("2", -1, 3)
 s[:-1]
 
 # %%
-i = 0
-for i in range(i, 5):
-    pass
-i
-for i in range(i, 5):
-    print("ok")
+## i = 0
+# for i in range(i, 5):
+#     pass
+# i
+# for i in range(i, 5):
+#     print("ok")
+
+## list(((i, x) for i, x in enumerate(range(10, 15)) if i != 3))  # [(0, 10), (1, 11), (2, 12), (4, 14)]
+
+## Generator technique
+import itertools
+
+x = [False, False, True, False, True, False, False, True, False, True, False, True]
+nth_true = 3  # Change this to get the nth true value
+
+nth_true_value = next(
+    itertools.islice((i for i, x in enumerate(x) if x), nth_true - 1, None), None
+)
+
+print(nth_true_value)
+
+# %%
+

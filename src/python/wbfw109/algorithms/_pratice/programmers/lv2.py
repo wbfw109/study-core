@@ -417,8 +417,32 @@ def solution_12939() -> None:
     """최댓값과 최솟값 ; https://school.programmers.co.kr/learn/courses/30/lessons/12939"""
 
 
-def solution_12936() -> None:
-    """줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936"""
+def solution_12936(n: int, k: int) -> list[int]:
+    """줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936
+    [TimeOut] itertools.permuations solution
+    Base conversion
+    [1, 2, 3]
+    [1, 3, 2]
+    [2, 1, 3]
+    [2, 3, 1]
+    [3, 1, 2]
+    [3, 2, 1]
+    """
+    import math
+    from itertools import islice
+
+    order_sum = 0
+    is_not_used = [True]*(n+1)
+    is_not_used[0]=False # given condition not includes zero.
+    # for num in range(n, 0, -1):
+    result: list[int] = []
+    for i in range(n, 0, -1):
+        unit = math.factorial(i) // n # order_unit
+        multiplier = math.ceil(k/unit)
+        found_num = next(islice((i for i, x in enumerate(is_not_used) if x), multiplier, None))
+        result.append(found_num)
+        q, r = divmod(k, multiplier)
+    return result
 
 
 def solution_12924(n: int) -> int:
