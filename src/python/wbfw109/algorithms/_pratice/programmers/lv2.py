@@ -433,13 +433,25 @@ def solution_12914() -> None:
     """멀리 뛰기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12914"""
 
 
-def solution_12913() -> None:
-    """땅따먹기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12913"""
+def solution_12913(land: list[list[int]]) -> int:
+    """💤 땅따먹기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12913
+    Tag: Dynamic programming
+    
+    Time complexity: O(n); the number of lines
+    Space complexity: O(1)
+    """
+    # max_score when player stepped on column (0, 1, 2, 3) in a line.
+    max_score: list[int] = [0] * 4
+    for line in land:
+        max_score = [
+            line[i] + max((x for j, x in enumerate(max_score) if j != i))
+            for i in (0, 1, 2, 3)
+        ]
+    return max(max_score)
 
 
 def solution_12911(n: int) -> int:
     """💤 다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911
-
     Time complexity: O(log n)
     Space complexity: O(log n)
 
@@ -452,11 +464,13 @@ def solution_12911(n: int) -> int:
             - `"0" * (len(bin_repr) - p1)`; fill "0"s for next appeared right justified "1"s.
             - `"1" * (p1 - p2 - 1)`; right justify "1"s between p1, p2 (inclusive) except for previously added "1".
     Debugging
+        -----
         1001100
-        * *   ; find p1, p2
-        1010100 ; increase "1" bit at p2+1 index
-        1010001 ; rjustify right bits of p1 (inclusive)
-
+          * *   ; find p1, p2.
+        1010100 ; increase "1" bit at p2+1 index.
+        1010001 ; rjustify right bits of p2.
+        
+        -----
         1111111 (Edge case)
         *
         01111111
