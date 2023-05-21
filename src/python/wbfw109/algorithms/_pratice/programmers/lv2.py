@@ -438,24 +438,52 @@ def solution_12913() -> None:
 
 
 def solution_12911(n: int) -> int:
-    """다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911
+    """💤 다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911
     1001110
     1010110
     1010011
 
-    1001101
-    1001110
+    1001100
+    1011000 ; swap
+    1010001 ; swap
 
     01111111
     11111110
     11111101
 
 
-    1. 가장 뒷자리의 1을 앞에 0이 나올때까지 한개씩 옮김.
-        스왑할 곳을 찾고,
-    2. 옮긴 위치의 우측에 있는 1의 자리 수를 모두 우측정렬시킨다.
+    1001110 (78)
+    10100111 (83)
+
+    1111 (15)
+    11110111 (23)
+
+    Implementation
+        - p1; index of first found "1" from end index to zero index.
+        - p2; index of first found "0" from <p1>-1 to zero index
+        - <result>
+            - `bin_repr[: 0 if p2 <= 0 else p2]`; previous substring before p2.
+            - `"1"`; location of increased "1"
+            - `"0" * (bin_len - p1)`; fill "0"s as many as except next appeared "1"s.
+            - `"1" * (p1 - p2 - 1)`; right justify "1"s between p1, p2 (inclusive) except for previously added "1".
+
     """
-    bin_repr: list[str] = ["0", *list(format(n, "b"))]
+    # condition: 1 ≤ n ≤ 1,000,000
+    bin_repr: str = format(n, "b")
+    bin_len = len(bin_repr)
+    p1 = bin_repr.rindex("1")
+    p2 = bin_repr.rfind("0", 0, p1)
+    return int(
+        "".join(
+            (
+                bin_repr[: 0 if p2 <= 0 else p2],
+                "1",
+                "0" * (bin_len - p1),
+                "1" * (p1 - p2 - 1),
+            )
+        ),
+        2,
+    )
 
 
 def solution_12909(s: str) -> bool:

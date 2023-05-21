@@ -241,9 +241,39 @@ def method2():
 timeit.timeit(method1, number=1)
 timeit.timeit(method2, number=1)
 
-## profile??
-# for _ in range(0, n, 2):
-# for _ in range(n//2):
+
+# %%
+## unpack receives iterable
+s = "1" * 10
+x = [*s]
+x
+from collections import deque
+
+s = "1" * 1000
+
+
+def method1():
+    """Python lists are implemented as dynamic arrays in the backend.
+    This means that they preallocate additional space for new elements.
+    When you add elements to a list using the * operator, Python can take advantage of this preallocated space and insert all elements at once, which is quite efficient.
+
+    The * operator, also known as the unpacking operator, is used in Python to unpack collections into separate elements.
+    When you use this operator within a list, it essentially 'unpacks' the elements of the collection you're referencing and places them individually into the new list.
+    """
+    x: list[str] = ["intercept", "x", *s]
+
+
+def method2():
+    """
+    deque.extend() method will have to individually append each character from s to the deque.
+    Since deques are implemented as doubly-linked lists in Python, this individual addition requires changing pointers for each new element added, which incurs additional overhead, thus taking longer time.
+    """
+    x = deque(["intercept", "x"])
+    x.extend(s)
+
+
+timeit.timeit(method1)  # 5.04185 s
+timeit.timeit(method2)  # 6.69755 s
 
 
 # %%
@@ -325,3 +355,10 @@ solution(4)
 
 ## any((_ for _ in range(0)))# valid
 # %%
+
+
+s = "0123456789"
+s.rindex("4", 3, 9)
+s.rfind("2", -1, 3)
+
+s[:-1]
