@@ -15,7 +15,7 @@ def solution_181188(targets: list[list[int]]) -> int:
 
     Other solution
         count: int = 0
-        targets.sort()
+        targets.sort() # 🚣 to sort with all key is not required.
         i: int = 0
         targets_len: int = len(targets)
         while i < targets_len:
@@ -23,7 +23,7 @@ def solution_181188(targets: list[list[int]]) -> int:
             j = i + 1  # j is next target pointer.
             while j < targets_len:
                 if targets[j][0] < maxx:
-                    maxx = min(maxx, targets[j][1]) ## it is not required.
+                    maxx = min(maxx, targets[j][1]) ## 🚣 it is not required.
                     j += 1
                 else:
                     break
@@ -454,8 +454,24 @@ def solution_12923(begin: int, end: int) -> list[int]:
     return result
 
 
-def solution_12914() -> None:
-    """멀리 뛰기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12914"""
+def solution_12914(n: int) -> int:
+    """멀리 뛰기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12914
+    - It is similiar problem with 2*n domino tiling.
+
+    Time complexity: O(n)
+    Space complexity: O(1)
+        from Sliding Window approach
+
+    Debugging
+        dp[0] = 1.
+        dp[1] = 1
+        dp[2] = 2
+        dp[3] = 1+2
+    """
+    dp = [2, 1]
+    for i in range(3, n + 1):
+        dp[i & 1] = (dp[0] + dp[1]) % 1234567
+    return dp[n & 1]
 
 
 def solution_12913(land: list[list[int]]) -> int:
@@ -464,6 +480,7 @@ def solution_12913(land: list[list[int]]) -> int:
 
     Time complexity: O(n); the number of lines
     Space complexity: O(1)
+        from Sliding Window approach
     """
     # max_score when player stepped on column (0, 1, 2, 3) in a line.
     max_score: list[int] = [0] * 4
@@ -572,6 +589,7 @@ def solution_12905(board: list[list[int]]) -> int:
 def solution_12902(n: int) -> int:
     """🧠🔍 3 x n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12902
     Tag: Dynamic programming
+        - Domino tiling
 
     Time Complexity: O(n)
     Space complexity: O(1)
@@ -607,6 +625,7 @@ def solution_12902(n: int) -> int:
 def solution_12900(n: int) -> int:
     """2 * n 타일링 ; https://school.programmers.co.kr/learn/courses/30/lessons/12900
     Tag: Dynamic programming
+        - Domino tiling
 
     Time Complexity: O(n)
     Space complexity: O(1)
