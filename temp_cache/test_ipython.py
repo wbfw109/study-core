@@ -173,6 +173,7 @@ right = 3
 
 result = prefix[right] - prefix[left - 1]
 print(result)
+10e3  # 10000. not 1000.
 
 
 # %%
@@ -331,14 +332,6 @@ def solution(sequence, k):
 
 
 # [1, 2, 3].index(3, -1) #..
-# %%
-n = 2
-
-dp: list[int] = [2, 1]
-for i in range(3, n + 1):
-    dp[i & 1] = dp[0] + dp[1]
-
-dp[n & 1]
 
 
 # %%
@@ -356,9 +349,13 @@ solution(4)
 ## any((_ for _ in range(0)))# valid
 # %%
 
+## It can be possible. unpacking operator. *
+a: list[int] = [0, *(i for i in range(10))]
 
 s = "0123456789"
 s.rindex("4", 3, 9)
 s.rfind("2", -1, 3)
 
 s[:-1]
+
+# %%

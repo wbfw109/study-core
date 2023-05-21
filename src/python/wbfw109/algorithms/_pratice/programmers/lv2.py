@@ -425,8 +425,33 @@ def solution_12924() -> None:
     """숫자의 표현 ; https://school.programmers.co.kr/learn/courses/30/lessons/12924"""
 
 
-def solution_12923() -> None:
-    """숫자 블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/12923"""
+def solution_12923(begin: int, end: int) -> list[int]:
+    """💤 숫자 블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/12923
+    Tag: Math
+
+    Consideration
+        - `그렙시는 길이가 1,000,000,000인 도로에 1부터 10,000,000까지의 숫자가 적힌 블록들을 이용해 위의 규칙대로 모두 설치 했습니다.`
+        - `1 ≤ begin ≤ end ≤ 1,000,000,000`
+    """
+    result: list[int] = []
+    MAX_BLOCK_NUM_RANGE: float = 10e6
+    for num in range(begin, end + 1):  # condition: end - begin ≤ 5,000
+        last_divisor = 1
+        for i in range(2, int(num**0.5) + 1):
+            q, r = divmod(num, i)
+            if r == 0:
+                if q <= MAX_BLOCK_NUM_RANGE:
+                    result.append(q)
+                    break
+                else:
+                    last_divisor = i
+        else:
+            result.append(last_divisor)
+
+    if begin == 1:  # edge case
+        result[0] = 0
+
+    return result
 
 
 def solution_12914() -> None:
@@ -436,7 +461,7 @@ def solution_12914() -> None:
 def solution_12913(land: list[list[int]]) -> int:
     """💤 땅따먹기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12913
     Tag: Dynamic programming
-    
+
     Time complexity: O(n); the number of lines
     Space complexity: O(1)
     """
@@ -469,7 +494,7 @@ def solution_12911(n: int) -> int:
           * *   ; find p1, p2.
         1010100 ; increase "1" bit at p2+1 index.
         1010001 ; rjustify right bits of p2.
-        
+
         -----
         1111111 (Edge case)
         *
