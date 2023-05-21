@@ -382,3 +382,5 @@ print(nth_true_value)
 
 # %%
 
+
+math.factorial(-1)

@@ -427,21 +427,30 @@ def solution_12936(n: int, k: int) -> list[int]:
     [2, 3, 1]
     [3, 1, 2]
     [3, 2, 1]
+
+    n=3, k=2 or 1 일 때? 예외처리..
     """
     import math
     from itertools import islice
 
-    order_sum = 0
-    is_not_used = [True]*(n+1)
-    is_not_used[0]=False # given condition not includes zero.
+    is_not_used = [True] * (n + 1)  # given condition not includes zero.
     # for num in range(n, 0, -1):
     result: list[int] = []
-    for i in range(n, 0, -1):
-        unit = math.factorial(i) // n # order_unit
-        multiplier = math.ceil(k/unit)
-        found_num = next(islice((i for i, x in enumerate(is_not_used) if x), multiplier, None))
+    for i in range(n - 1, 1, -1):
+        unit = math.factorial(i)  # order_unit
+        multiplier, r = divmod(k, unit)
+        found_num = next(
+            islice(
+                (j for j, x in enumerate(is_not_used) if x), multiplier + (r > 0), None
+            )
+        )
+        is_not_used[found_num] = False
         result.append(found_num)
-        q, r = divmod(k, multiplier)
+        k -= multiplier * unit
+    else:
+        result.append(
+            next(islice((j for j, x in enumerate(is_not_used) if x), 1, None))
+        )
     return result
 
 
