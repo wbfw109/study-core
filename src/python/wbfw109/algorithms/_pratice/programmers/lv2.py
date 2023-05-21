@@ -421,8 +421,32 @@ def solution_12936() -> None:
     """줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936"""
 
 
-def solution_12924() -> None:
-    """숫자의 표현 ; https://school.programmers.co.kr/learn/courses/30/lessons/12924"""
+def solution_12924(n: int) -> int:
+    """💤 숫자의 표현 ; https://school.programmers.co.kr/learn/courses/30/lessons/12924
+    Tag
+        Math (Partition problem)
+    Clues
+        - `연속한 자연수들로 표현 하는 방법`; Partial sum with pointers
+
+    Time complexity: O(n); O(2n)
+    Space complexity: O(1)
+
+    Debugging
+        1 + 2 + 3 + 4 + 5 = 15
+        4 + 5 + 6 = 15
+        7 + 8 = 15
+        15 = 15
+    """
+    i = j = 1  # i is inclusive, j is exclusive in a range.
+    partial_sum = answer = 0
+    for i in range(1, n + 1):
+        while partial_sum < n:
+            partial_sum += j
+            j += 1
+        if partial_sum == n:
+            answer += 1
+        partial_sum -= i
+    return answer
 
 
 def solution_12923(begin: int, end: int) -> list[int]:

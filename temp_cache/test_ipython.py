@@ -359,3 +359,9 @@ s.rfind("2", -1, 3)
 s[:-1]
 
 # %%
+i = 0
+for i in range(i, 5):
+    pass
+i
+for i in range(i, 5):
+    print("ok")
