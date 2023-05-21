@@ -439,24 +439,9 @@ def solution_12913() -> None:
 
 def solution_12911(n: int) -> int:
     """💤 다음 큰 숫자 ; https://school.programmers.co.kr/learn/courses/30/lessons/12911
-    1001110
-    1010110
-    1010011
 
-    1001100
-    1011000 ; swap
-    1010001 ; swap
-
-    01111111
-    11111110
-    11111101
-
-
-    1001110 (78)
-    10100111 (83)
-
-    1111 (15)
-    11110111 (23)
+    Time complexity: O(log n)
+    Space complexity: O(log n)
 
     Implementation
         - p1; index of first found "1" from end index to zero index.
@@ -464,13 +449,22 @@ def solution_12911(n: int) -> int:
         - <result>
             - `bin_repr[: 0 if p2 <= 0 else p2]`; previous substring before p2.
             - `"1"`; location of increased "1"
-            - `"0" * (bin_len - p1)`; fill "0"s as many as except next appeared "1"s.
+            - `"0" * (len(bin_repr) - p1)`; fill "0"s for next appeared right justified "1"s.
             - `"1" * (p1 - p2 - 1)`; right justify "1"s between p1, p2 (inclusive) except for previously added "1".
+    Debugging
+        1001100
+        * *   ; find p1, p2
+        1010100 ; increase "1" bit at p2+1 index
+        1010001 ; rjustify right bits of p1 (inclusive)
+
+        1111111 (Edge case)
+        *
+        01111111
+        10111111
 
     """
     # condition: 1 ≤ n ≤ 1,000,000
     bin_repr: str = format(n, "b")
-    bin_len = len(bin_repr)
     p1 = bin_repr.rindex("1")
     p2 = bin_repr.rfind("0", 0, p1)
     return int(
@@ -478,7 +472,7 @@ def solution_12911(n: int) -> int:
             (
                 bin_repr[: 0 if p2 <= 0 else p2],
                 "1",
-                "0" * (bin_len - p1),
+                "0" * (len(bin_repr) - p1),
                 "1" * (p1 - p2 - 1),
             )
         ),
