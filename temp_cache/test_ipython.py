@@ -399,5 +399,34 @@ def method2():
         unit = math.factorial(i)  # order_unit
 
 
-timeit.timeit(method1, number=100)  # 5.04185 s
-timeit.timeit(method2, number=100)  # 6.69755 s
+timeit.timeit(method1, number=100)  # 5.04185s
+timeit.timeit(method2, number=100)  # 6.69755s
+
+
+# %%
+
+
+import itertools
+import operator
+
+n = 10000
+
+
+def method1():
+    """it is implemented in C: itertools.accumulate, operator.mul."""
+    factorial = list(itertools.accumulate(range(2, n), operator.mul))
+
+
+def method2():
+    factorial = list(range(2, n))
+    for i in range(1, n - 2):
+        factorial[i] *= factorial[i - 1]
+
+
+timeit.timeit(method1, number=100)  # 4.59333s
+timeit.timeit(method2, number=100)  # 5.09988s
+
+# %%
+n = 5
+factorial = list(itertools.accumulate(range(2, n), operator.mul))
+reversed(itertools.accumulate(range(2, n), operator.mul))

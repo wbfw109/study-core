@@ -414,7 +414,10 @@ def solution_12941(A: list[int], B: list[int]) -> int:
     """최솟값 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12941
     A = [1, 2, 5]
     B = [5, 4, 3]
-    5+8+15
+    A = a1 + a2 + a3 ... an (a1 <= a2 ... <= an)
+    B = b1 + b2 + b3 ... bn (b1 >= b2 ... >= bn)
+    a1
+
     """
     A.sort()
     B.sort(reverse=True)
@@ -436,41 +439,47 @@ def solution_12939(s: str) -> str:
     return f"{min_val} {max_val}"
 
 
-# TODO:
 def solution_12936(n: int, k: int) -> list[int]:
     """🧠 줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936
     Tag: Math (Base conversion)
 
     Other solution
-        is_not_used = [True]*(n+1)
-        result: list[int] = []
-        k -= 1
-        unit = math.factorial(n) # order_unit
-        for i in range(n, 1, -1):
-            unit //= i
-            multiplier, r = divmod(k, unit)
-            found_num = next(islice((i for i, x in enumerate(is_not_used) if x), multiplier+1, None))
-            is_not_used[found_num] = False
-            result.append(found_num)
-            k = r
-        else:
-            result.append(next(islice((i for i, x in enumerate(is_not_used) if x), 1, None)))
-        return result
-
-    효율성 테스트 2번 케이스 실패
-        for i in range(n-1, 0, -1):
-            q, k = divmod(k, unit)
-            result.append(nums.pop(q))
-            unit //= i
+        1. itertools.islice() solution
+            is_not_used = [True]*(n+1)
+            result: list[int] = []
+            k -= 1
+            unit = math.factorial(n) # order_unit
+            for i in range(n, 1, -1):
+                unit //= i
+                multiplier, r = divmod(k, unit)
+                found_num = next(islice((i for i, x in enumerate(is_not_used) if x), multiplier+1, None))
+                is_not_used[found_num] = False
+                result.append(found_num)
+                k = r
+            else:
+                result.append(next(islice((i for i, x in enumerate(is_not_used) if x), 1, None)))
+            return result
+        2. <TimeOut>
+            - itertools.permutations
+            - Efficiency test case 2
+                for i in range(n-1, 0, -1):
+                    q, k = divmod(k, unit)
+                    result.append(nums.pop(q))
+                    unit //= i
+                ➡️
+                for i in range(n, 1, -1):
+                    unit //= i
+                    q, k = divmod(k, unit)
+                    result.append(nums.pop(q))
     """
-    import math
+    import itertools
+    import operator
 
     result: list[int] = []
-    unit: int = math.factorial(n)  # order_unit
     nums: list[int] = list(range(1, n + 1))
     k -= 1
-    for i in range(n, 1, -1):
-        unit //= i
+    units = list(itertools.accumulate(range(1, n), operator.mul))  # order_unit
+    for unit in reversed(units):
         q, k = divmod(k, unit)
         result.append(nums.pop(q))
     else:
