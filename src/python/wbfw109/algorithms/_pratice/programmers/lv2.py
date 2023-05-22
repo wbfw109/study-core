@@ -409,15 +409,23 @@ def solution_12945() -> None:
     """피보나치 수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12945"""
 
 
-# TODO: proof
 def solution_12941(A: list[int], B: list[int]) -> int:
-    """최솟값 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12941
-    A = [1, 2, 5]
-    B = [5, 4, 3]
-    A = a1 + a2 + a3 ... an (a1 <= a2 ... <= an)
-    B = b1 + b2 + b3 ... bn (b1 >= b2 ... >= bn)
-    a1
-
+    """🧠 최솟값 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12941
+    Proof (Deduction)
+        Variables
+            A = [1, 2]; set(natural number) [a1, a2] (sorted in ascendant order)
+            B = [4, 5]; set(natural number) [b1, b2] (sorted in ascendant order)
+        Axioms
+            1. a1 <= a2
+            2. b1 <= b2
+        Process
+            If we multiply to each side of a1 <= a2 by (b2-b1), we get:
+                a1*(b2-b1) <= a2*(b2-b1) (Equation 1)
+                ; a1*b2 - a1*b1 <= a2*b2 - a2*b1
+            and if we add to each side of Equation 1 by (a1*b1 + a2*b1), we get:
+                ; a1*b2 + a2*b1 <= a1*b1 + a2*b2
+        Result
+            a1*b2 + a2*b1 <= a1*b1 + a2*b2
     """
     A.sort()
     B.sort(reverse=True)
@@ -441,7 +449,7 @@ def solution_12939(s: str) -> str:
 
 def solution_12936(n: int, k: int) -> list[int]:
     """🧠 줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936
-    Tag: Math (Base conversion)
+    Tag: Math (Base conversion; Top-down flow)
 
     Other solution
         1. itertools.islice() solution
@@ -471,6 +479,7 @@ def solution_12936(n: int, k: int) -> list[int]:
                     unit //= i
                     q, k = divmod(k, unit)
                     result.append(nums.pop(q))
+        3. 🔍 deque rotate, pop solution
     """
     import itertools
     import operator
@@ -738,7 +747,7 @@ def solution_12899(n: int) -> str:
 
     - 😠 int 를 반환하는 것이 아니라 str 을 반환하는 것이다.
     Other Implementation
-        1. [TimeOut] itertools.product
+        1. <TimeOut>: itertools.product
         2. O(n) Solution
             # Purpose: count(k) < n <= count(k+1)
             #     count(max_digit(d))

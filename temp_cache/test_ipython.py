@@ -425,8 +425,3 @@ def method2():
 
 timeit.timeit(method1, number=100)  # 4.59333s
 timeit.timeit(method2, number=100)  # 5.09988s
-
-# %%
-n = 5
-factorial = list(itertools.accumulate(range(2, n), operator.mul))
-reversed(itertools.accumulate(range(2, n), operator.mul))

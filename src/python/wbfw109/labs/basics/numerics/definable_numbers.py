@@ -106,7 +106,14 @@ class PositionalNotation(VisualizationRoot):
         return int(num_str, base)
 
     def convert_decimal_to_one_based_number(self, num: int, base_map: str) -> str:
-        """🔍"""
+        """
+        📍 Description
+            - The conversion process (bottom-up flow) continues as long as <num> is greater than 0
+                , with <num> being updated to the quotient at each step.
+            - Bottom-up flow must be processed only in condition `num > 0` with `num = quotient`
+                , and the range of the remainder from divmod() is 0 to base - 1, representing the indices of <base_map> in a zero-based system.
+            It means <num> is treated as one-based numbering (order), whereas the indices in <base_map> are zero-based numbering (index).
+        """
         base: int = len(base_map)
         result: list[str] = []
         while num > 0:
