@@ -410,7 +410,7 @@ def solution_12945() -> None:
 
 
 # TODO: proof
-def solution_12941(A: list[int],B: list[int]) -> int:
+def solution_12941(A: list[int], B: list[int]) -> int:
     """최솟값 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12941
     A = [1, 2, 5]
     B = [5, 4, 3]
@@ -418,7 +418,8 @@ def solution_12941(A: list[int],B: list[int]) -> int:
     """
     A.sort()
     B.sort(reverse=True)
-    return sum((a*b for a, b in zip(A, B)))
+    return sum((a * b for a, b in zip(A, B)))
+
 
 def solution_12939(s: str) -> str:
     """최댓값과 최솟값 ; https://school.programmers.co.kr/learn/courses/30/lessons/12939"""
@@ -437,39 +438,43 @@ def solution_12939(s: str) -> str:
 
 # TODO:
 def solution_12936(n: int, k: int) -> list[int]:
-    """줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936
-    [TimeOut] itertools.permuations solution
-    Base conversion
-    [1, 2, 3]
-    [1, 3, 2]
-    [2, 1, 3]
-    [2, 3, 1]
-    [3, 1, 2]
-    [3, 2, 1]
+    """🧠 줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936
+    Tag: Math (Base conversion)
 
-    n=3, k=2 or 1 일 때? 예외처리..
+    Other solution
+        is_not_used = [True]*(n+1)
+        result: list[int] = []
+        k -= 1
+        unit = math.factorial(n) # order_unit
+        for i in range(n, 1, -1):
+            unit //= i
+            multiplier, r = divmod(k, unit)
+            found_num = next(islice((i for i, x in enumerate(is_not_used) if x), multiplier+1, None))
+            is_not_used[found_num] = False
+            result.append(found_num)
+            k = r
+        else:
+            result.append(next(islice((i for i, x in enumerate(is_not_used) if x), 1, None)))
+        return result
+
+    효율성 테스트 2번 케이스 실패
+        for i in range(n-1, 0, -1):
+            q, k = divmod(k, unit)
+            result.append(nums.pop(q))
+            unit //= i
     """
     import math
-    from itertools import islice
 
-    is_not_used = [True] * (n + 1)  # given condition not includes zero.
-    # for num in range(n, 0, -1):
     result: list[int] = []
-    for i in range(n - 1, 1, -1):
-        unit = math.factorial(i)  # order_unit
-        multiplier, r = divmod(k, unit)
-        found_num = next(
-            islice(
-                (j for j, x in enumerate(is_not_used) if x), multiplier + (r > 0), None
-            )
-        )
-        is_not_used[found_num] = False
-        result.append(found_num)
-        k -= multiplier * unit
+    unit: int = math.factorial(n)  # order_unit
+    nums: list[int] = list(range(1, n + 1))
+    k -= 1
+    for i in range(n, 1, -1):
+        unit //= i
+        q, k = divmod(k, unit)
+        result.append(nums.pop(q))
     else:
-        result.append(
-            next(islice((j for j, x in enumerate(is_not_used) if x), 1, None))
-        )
+        result.append(nums[0])
     return result
 
 
@@ -512,7 +517,7 @@ def solution_12923(begin: int, end: int) -> list[int]:
     result: list[int] = []
     MAX_BLOCK_NUM_RANGE: float = 10e6
     for num in range(begin, end + 1):  # condition: end - begin ≤ 5,000
-        last_divisor = 1
+        last_divisor: int = 1
         for i in range(2, int(num**0.5) + 1):
             q, r = divmod(num, i)
             if r == 0:

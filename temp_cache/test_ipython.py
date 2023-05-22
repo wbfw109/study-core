@@ -383,4 +383,21 @@ print(nth_true_value)
 # %%
 
 
-math.factorial(-1)
+import math
+
+n = 500
+
+
+def method1():
+    unit = math.factorial(n)  # order_unit
+    for i in range(n, 0, -1):
+        unit //= i
+
+
+def method2():
+    for i in range(n - 1, -1, -1):
+        unit = math.factorial(i)  # order_unit
+
+
+timeit.timeit(method1, number=100)  # 5.04185 s
+timeit.timeit(method2, number=100)  # 6.69755 s
