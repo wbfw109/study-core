@@ -450,3 +450,6 @@ def method2():
 
 timeit.timeit(method1, number=1)  # 0.00224s
 timeit.timeit(method2, number=1)  # 9.55379e-05s
+
+# %%
+# Hadamard product, dot product

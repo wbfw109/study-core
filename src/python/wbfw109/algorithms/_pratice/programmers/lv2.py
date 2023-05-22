@@ -397,12 +397,23 @@ def solution_12951() -> None:
     """JadenCase 문자열 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12951"""
 
 
-def solution_12949() -> None:
+# TODO
+def solution_12949(arr1: list[list[int]], arr2: list[list[int]]) -> list[list[int]]:
     """행렬의 곱셈 ; https://school.programmers.co.kr/learn/courses/30/lessons/12949"""
+    return [[row[i] * column[i] for i, column in enumerate(zip(*arr2))] for row in arr1]
 
 
+# TODO
 def solution_12946() -> None:
-    """하노이의 탑 ; https://school.programmers.co.kr/learn/courses/30/lessons/12946"""
+    """하노이의 탑 ; https://school.programmers.co.kr/learn/courses/30/lessons/12946
+    - pegs: source peg, spare peg, target peg.
+    - number the disks from 1 (smallest, topmost) to n (largest, bottom-most).
+
+    Each step; move legally the bottom disk to third peg.
+        1. Move m − 1 disks from the source to the spare peg.
+
+    홀수짝수일떄 다름.
+    """
 
 
 def solution_12945(n: int) -> int:
@@ -416,7 +427,7 @@ def solution_12945(n: int) -> int:
 
 def solution_12941(A: list[int], B: list[int]) -> int:
     """🧠 최솟값 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12941
-    Proof (Deduction)
+    Proof (Induction)
         Variables
             A = [1, 2]; set(natural number) [a1, a2] (sorted in ascendant order)
             B = [4, 5]; set(natural number) [b1, b2] (sorted in ascendant order)
