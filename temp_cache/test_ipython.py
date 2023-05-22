@@ -425,3 +425,28 @@ def method2():
 
 timeit.timeit(method1, number=100)  # 4.59333s
 timeit.timeit(method2, number=100)  # 5.09988s
+
+# %%
+
+import functools
+
+n = 1000
+
+
+def method1():
+    @functools.lru_cache(maxsize=None)
+    def fibonacci(n: int) -> int:
+        return n if n <= 1 else fibonacci(n - 1) + fibonacci(n - 2)
+
+    return fibonacci(n)
+
+
+def method2():
+    dp: list[int] = [0, 1]
+    for i in range(2, n + 1):
+        dp[i & 1] = dp[0] + dp[1]
+    return dp[n & 1]
+
+
+timeit.timeit(method1, number=1)  # 0.00224s
+timeit.timeit(method2, number=1)  # 9.55379e-05s

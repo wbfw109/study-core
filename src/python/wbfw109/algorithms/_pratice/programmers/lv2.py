@@ -405,8 +405,13 @@ def solution_12946() -> None:
     """하노이의 탑 ; https://school.programmers.co.kr/learn/courses/30/lessons/12946"""
 
 
-def solution_12945() -> None:
-    """피보나치 수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12945"""
+def solution_12945(n: int) -> int:
+    """피보나치 수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12945
+    Tag: Dynamic programming"""
+    dp: list[int] = [0, 1]
+    for i in range(2, n + 1):
+        dp[i & 1] = dp[0] + dp[1]
+    return dp[n & 1]
 
 
 def solution_12941(A: list[int], B: list[int]) -> int:
