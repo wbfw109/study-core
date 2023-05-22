@@ -409,14 +409,33 @@ def solution_12945() -> None:
     """피보나치 수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12945"""
 
 
-def solution_12941() -> None:
-    """최솟값 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12941"""
+# TODO: proof
+def solution_12941(A: list[int],B: list[int]) -> int:
+    """최솟값 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12941
+    A = [1, 2, 5]
+    B = [5, 4, 3]
+    5+8+15
+    """
+    A.sort()
+    B.sort(reverse=True)
+    return sum((a*b for a, b in zip(A, B)))
 
-
-def solution_12939() -> None:
+def solution_12939(s: str) -> str:
     """최댓값과 최솟값 ; https://school.programmers.co.kr/learn/courses/30/lessons/12939"""
+    import sys
+
+    min_val: int = sys.maxsize
+    max_val: int = -sys.maxsize
+    for x in s.split():
+        xx: int = int(x)
+        if xx < min_val:
+            min_val = xx
+        if xx > max_val:
+            max_val = xx
+    return f"{min_val} {max_val}"
 
 
+# TODO:
 def solution_12936(n: int, k: int) -> list[int]:
     """줄 서는 방법 ; https://school.programmers.co.kr/learn/courses/30/lessons/12936
     [TimeOut] itertools.permuations solution
