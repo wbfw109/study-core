@@ -397,10 +397,12 @@ def solution_12951() -> None:
     """JadenCase 문자열 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12951"""
 
 
-# TODO
 def solution_12949(arr1: list[list[int]], arr2: list[list[int]]) -> list[list[int]]:
     """행렬의 곱셈 ; https://school.programmers.co.kr/learn/courses/30/lessons/12949"""
-    return [[row[i] * column[i] for i, column in enumerate(zip(*arr2))] for row in arr1]
+    import operator
+
+    arr2 = list(zip(*arr2))  # 🚣 For cache locality
+    return [[sum(map(operator.mul, row, column)) for column in arr2] for row in arr1]
 
 
 # TODO
