@@ -389,16 +389,22 @@ def solution_12953() -> None:
     """N개의 최소공배수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12953"""
 
 
-def solution_12952() -> None:
-    """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952"""
+def solution_12952(n: int) -> int:
+    """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952
+    deploy n Queen in n*n matrix.
+    """
+    map_: list[list[int]] = [[0] * n for _ in range(n)]
+    # backtracking =
+    # for map_
 
 
-def solution_12951() -> None:
-    """JadenCase 문자열 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12951"""
+def solution_12951(s: str) -> str:
+    """💦 JadenCase 문자열 만들기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12951"""
+    return " ".join((word.capitalize() for word in s.split(" ")))
 
 
 def solution_12949(arr1: list[list[int]], arr2: list[list[int]]) -> list[list[int]]:
-    """행렬의 곱셈 ; https://school.programmers.co.kr/learn/courses/30/lessons/12949"""
+    """💤 행렬의 곱셈 ; https://school.programmers.co.kr/learn/courses/30/lessons/12949"""
     import operator
 
     arr2 = list(zip(*arr2))  # 🚣 For cache locality
@@ -407,7 +413,7 @@ def solution_12949(arr1: list[list[int]], arr2: list[list[int]]) -> list[list[in
 
 # TODO
 def solution_12946() -> None:
-    """하노이의 탑 ; https://school.programmers.co.kr/learn/courses/30/lessons/12946
+    """🧠 하노이의 탑 ; https://school.programmers.co.kr/learn/courses/30/lessons/12946
     - pegs: source peg, spare peg, target peg.
     - number the disks from 1 (smallest, topmost) to n (largest, bottom-most).
 

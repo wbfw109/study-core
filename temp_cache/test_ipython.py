@@ -401,6 +401,21 @@ def method2():
 
 timeit.timeit(method1, number=100)  # 5.04185s
 timeit.timeit(method2, number=100)  # 6.69755s
+# %%
+
+
+def method1():
+    a, b, c = list(range(discs, 0, -1)), [1, 5, 4, 3, 6, 3], [1, 2, 3, 4, 6, 3]
+
+
+def method2():
+    a = list(range(discs, 0, -1))
+    b = [1, 5, 4, 3, 6, 3]
+    c = [1, 2, 3, 4, 6, 3]
+
+
+timeit.timeit(method1)  # 0.66182s
+timeit.timeit(method2)  # 0.63321s
 
 
 # %%
@@ -450,3 +465,77 @@ def method2():
 
 timeit.timeit(method1, number=1)  # 0.00224s
 timeit.timeit(method2, number=1)  # 9.55379e-05s
+
+
+# %%
+
+disks = 4
+move = itertools.count(1)
+
+
+def solve_tower_of_hanoi_recursively(disks: int, source: str, spare: str, target: str):
+    if disks == 1:
+        print(f"[{next(move)}] Move disk 1 from peg {source} to peg {target}.")
+        return
+    # move disks-1 from source to spare.
+    solve_tower_of_hanoi_recursively(disks - 1, source, target, spare)
+    # move the disk from source to target.
+    print(f"[{next(move)}] Move disk {disks} from peg {source} to peg {target}.")
+    # re-move (disks-1 moved to spare from source) to target.
+    solve_tower_of_hanoi_recursively(disks - 1, spare, source, target)
+
+
+# We are referring source as A, spare as B, and target as C
+solve_tower_of_hanoi_recursively(disks, "A", "B", "C")
+
+
+# %%
+
+
+from collections import deque
+
+
+# TODO: Binary solution with non-recursive implementation
+def solve_tower_of_hanoi(disks: int):
+    """
+    Time complexity: O(n^2)
+    Space complexity: O(n)
+
+    Implementation by using regularities
+    when n is odd-th move, (`if move & 1:`)
+        It always moves disk 1 from peg {source} to peg {target} (refer to Recursive solution).
+        - Every odd move involves the smallest disk.
+        - traversed <source>, <target> pegs pattern:
+            - <source> peg pattern: (A->B->C -> <cycle...>)
+            - <target> peg pattern: (B->C->A -> <cycle...>)
+            so, when even-th move end, I ran `peg.rotate(-1)`; Rotate peg for next odd ordering.
+    when n is even-th move,
+
+    """
+
+    minimum_moves: int = 2**disks - 1
+    # For debugging: following two lines
+    a, b, c = list(range(disks, 0, -1)), [], []
+    peg: deque[list[int]] = deque([a, c, b]) if disks & 1 else deque([a, b, c])
+    # peg: deque[list[int]] = deque([list(range(disks, 0, -1)), [], []])
+
+    # same as `while len(c) != discs:`
+    for move in range(1, minimum_moves + 1):
+        if move & 1:
+            peg[1].append(peg[0].pop())  # move. Smallest disc now on peg[1]
+        else:
+            # possible move
+            if peg[0] and (not peg[2] or peg[0][-1] < peg[2][-1]):
+                source, destination = peg[0], peg[2]
+            else:
+                source, destination = peg[2], peg[0]
+            destination.append(source.pop())  # move.
+
+            peg.rotate(-1)
+
+        print(a, b, c, sep="\n", end="\n\n")
+
+    print(f"Minimal moves: {minimum_moves}")
+
+
+solve_tower_of_hanoi(disks=2)
