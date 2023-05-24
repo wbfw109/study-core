@@ -54,19 +54,21 @@ def solution_181188(targets: list[list[int]]) -> int:
 
 
 def solution_181187(r1: int, r2: int) -> int:
-    """두 원 사이의 정수 쌍 ; https://school.programmers.co.kr/learn/courses/30/lessons/181187
+    """🧠 두 원 사이의 정수 쌍 ; https://school.programmers.co.kr/learn/courses/30/lessons/181187
     partial sum?
+
     """
     import math
 
-    return sum(
-        (
-            math.floor((r2**2 - i**2) ** 0.5)
-            - math.ceil((r1**2 - i**2) ** 0.5)
-            + 1
-            for i in range(1, r2 + 1)
-        )
-    )
+    rr2 = r2**2
+    rr1 = r1**2
+    answer: int = 0
+    for x in range(1, r2 + 1):
+        xx: int = x**2
+        y_max = int((rr2 - xx) ** 0.5)
+        y_min = 0 if x >= r1 else math.ceil((rr1 - xx) ** 0.5)
+        answer += y_max - y_min + 1
+    return answer * 4
 
 
 def solution_178870() -> None:
@@ -135,16 +137,64 @@ def solution_148652() -> None:
     """유사 칸토어 비트열 ; https://school.programmers.co.kr/learn/courses/30/lessons/148652"""
 
 
-def solution_147354() -> None:
-    """테이블 해시 함수 ; https://school.programmers.co.kr/learn/courses/30/lessons/147354"""
+def solution_147354(
+    data: list[list[int]], col: int, row_begin: int, row_end: int
+) -> int:
+    """💤 테이블 해시 함수 ; https://school.programmers.co.kr/learn/courses/30/lessons/147354
+    Tag: Math (Base conversion)"""
+    if col > 1:
+        data.sort(key=lambda x: (x[col - 1], -x[0]))
+    else:
+        data.sort(key=lambda x: x[0])
+
+    result: int = 0
+    for i in range(row_begin, row_end + 1):
+        result ^= sum((x % i for x in data[i - 1]))
+    return result
 
 
-def solution_142085() -> None:
-    """디펜스 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/142085"""
+def solution_142085(n: int, k: int, enemy: list[int]) -> int:
+    """💦 디펜스 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/142085
+    - `남은 병사의 수보다 현재 라운드의 적의 수가 더 많으면 게임이 종료됩니다.`
+
+    Other solution
+        [Timeout] Dynamic programming solution
+            dp[round][k]; when used number of free pass ticket is k in round <k>, maximum number of remained soldiers.
+                dp[round][k] := max(dp[round-1][k] - enemey, dp[round-1][k-1])
+            - if max(dp[round]) < 0, game end.
+    """
+    import heapq
+
+    hq: list[int] = enemy[:k]
+    heapq.heapify(hq)
+    for stage in range(k, len(enemy)):
+        n -= (
+            heapq.heapreplace(hq, enemy[stage])
+            if hq[0] < enemy[stage]
+            else enemy[stage]
+        )
+        if n < 0:
+            return stage  # offset value for one-based stage. so not +1.
+    return len(enemy)
 
 
-def solution_140107() -> None:
-    """점 찍기 ; https://school.programmers.co.kr/learn/courses/30/lessons/140107"""
+def solution_140107(k: int, d: int) -> int:
+    """🧠 점 찍기 ; https://school.programmers.co.kr/learn/courses/30/lessons/140107
+    Tag: Math (Partial sum)
+
+    Other Solution
+        # <x> and <maxy> are inclusive range.
+        dd: int = d**2
+        maxy: int = d - d % k
+        answer: int = 0
+        for x in range(0, d + 1, k):
+            while x**2 + maxy**2 > dd:
+                maxy -= k
+            answer += maxy // k + 1
+        return answer
+    """
+    dd: int = d**2
+    return sum(int((dd - x**2) ** 0.5) // k + 1 for x in range(0, d + 1, k))
 
 
 def solution_138476() -> None:

@@ -539,3 +539,36 @@ def solve_tower_of_hanoi(disks: int):
 
 
 solve_tower_of_hanoi(disks=2)
+
+
+# %%
+def solution(n, k, enemy):
+    """
+    - `남은 병사의 수보다 현재 라운드의 적의 수가 더 많으면 게임이 종료됩니다.`
+    dp[round][k]; round 에서, 사용한 무적권의 수가 k 일 때, 최대 남은 병사 수 저장?
+    dp[round][k] := max(dp[round-1][k] - enemey, dp[round-1][k-1])
+
+    max(dp[round]) 값이 0 미만이면 라운드 종료. Sliding Window 가능?
+    """
+    dp = [[n] * (k + 1) for _ in (0, 1)]
+
+    r = 0
+    min_kk = 1
+    for r, e in enumerate(enemy, start=1):
+        ri = r & 1
+        pri = ri ^ 1
+        dp[ri][0] = dp[pri][0] - enemy[r - 1]
+        is_success = False
+        for kk in range(min_kk, k + 1):
+            pkk = kk - 1
+            dp[ri][kk] = (
+                x if (x := dp[pri][kk] - e) > dp[pri][kk - 1] else dp[pri][kk - 1]
+            )
+            if dp[ri][kk] >= 0:
+                is_success = True
+            else:
+                min_kk = kk
+        if not is_success:
+            return r - 1
+    else:
+        return r

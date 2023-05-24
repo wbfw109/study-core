@@ -20,7 +20,7 @@
 - ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
 
   - [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
-  - [**Programmers, Goorm**](wbfw109/algorithms/_pratice/README.md)
+  - [**Programmers, Goorm**](wbfw109/algorithms/_practice/README.md)
   - [unknown](wbfw109/algorithms/unknown/) ; Problems from Unknown source
     - 📝 [dp.py](wbfw109/algorithms/unknown/dp.py) ; (1) problems
 

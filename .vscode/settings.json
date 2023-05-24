@@ -54,7 +54,7 @@
     "services/glossary_service/": true,
     "src/python/wbfw109/outdated/**/*": true,
     "src/python/wbfw109/algorithms/baekjoon/*.py": true,
-    "src/python/wbfw109/algorithms/_pratice/**/*.py": true,
+    "src/python/wbfw109/algorithms/_practice/**/*.py": true,
     ".pnp.*": true,
     ".yarn/": true,
     "package-lock.json": true,
