@@ -53,12 +53,26 @@ def solution_181188(targets: list[list[int]]) -> int:
     return count
 
 
-def solution_181187() -> None:
-    """두 원 사이의 정수 쌍 ; https://school.programmers.co.kr/learn/courses/30/lessons/181187"""
+def solution_181187(r1: int, r2: int) -> int:
+    """두 원 사이의 정수 쌍 ; https://school.programmers.co.kr/learn/courses/30/lessons/181187
+    partial sum?
+    """
+    import math
+
+    return sum(
+        (
+            math.floor((r2**2 - i**2) ** 0.5)
+            - math.ceil((r1**2 - i**2) ** 0.5)
+            + 1
+            for i in range(1, r2 + 1)
+        )
+    )
 
 
 def solution_178870() -> None:
-    """연속된 부분 수열의 합 ; https://school.programmers.co.kr/learn/courses/30/lessons/178870"""
+    """연속된 부분 수열의 합 ; https://school.programmers.co.kr/learn/courses/30/lessons/178870
+    sort+partial sum (two pointer)?
+    """
 
 
 def solution_176962() -> None:
