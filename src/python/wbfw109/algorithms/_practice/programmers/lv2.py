@@ -453,6 +453,7 @@ def solution_12953() -> None:
     """N개의 최소공배수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12953"""
 
 
+# TODO
 def solution_12952(n: int) -> int:
     """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952
     deploy n Queen in n*n matrix.
@@ -471,21 +472,38 @@ def solution_12949(arr1: list[list[int]], arr2: list[list[int]]) -> list[list[in
     """💤 행렬의 곱셈 ; https://school.programmers.co.kr/learn/courses/30/lessons/12949"""
     import operator
 
-    arr2 = list(zip(*arr2))  # 🚣 For cache locality
-    return [[sum(map(operator.mul, row, column)) for column in arr2] for row in arr1]
+    arr2_temp: list[tuple[int]] = list(zip(*arr2))  # 🚣 For cache locality
+    return [[sum(map(operator.mul, row, column)) for column in arr2_temp] for row in arr1]
 
 
-# TODO
-def solution_12946() -> None:
-    """🧠 하노이의 탑 ; https://school.programmers.co.kr/learn/courses/30/lessons/12946
-    - pegs: source peg, spare peg, target peg.
-    - number the disks from 1 (smallest, topmost) to n (largest, bottom-most).
+def solution_12946(n: int) -> list[list[int]]:
+    """🧠 하노이의 탑 ; https://school.programmers.co.kr/learn/courses/30/lessons/12946"""
+    from collections import deque
 
-    Each step; move legally the bottom disk to third peg.
-        1. Move m − 1 disks from the source to the spare peg.
+    moves: int = 2**n - 1
+    a, b, c = list(range(n, 0, -1)), [], []
+    pegs: deque[list[int]] = deque([a, c, b]) if n & 1 else deque([a, b, c])
+    peg_names: deque[int] = deque([1, 3, 2]) if n & 1 else deque([1, 2, 3])
+    result: list[list[int]] = []
+    for move in range(1, moves + 1):
+        if move & 1:
+            pegs[1].append(pegs[0].pop())
+            result.append([peg_names[0], peg_names[1]])
+        else:
+            if pegs[0] and (not pegs[2] or pegs[0][-1] < pegs[2][-1]):
+                src, dest = pegs[0], pegs[2]
+                src_name, dest_name = peg_names[0], peg_names[2]
+            else:
+                src, dest = pegs[2], pegs[0]
+                src_name, dest_name = peg_names[2], peg_names[0]
 
-    홀수짝수일떄 다름.
-    """
+            dest.append(src.pop())
+            result.append([src_name, dest_name])
+
+            pegs.rotate(-1)
+            peg_names.rotate(-1)
+
+    return result
 
 
 def solution_12945(n: int) -> int:

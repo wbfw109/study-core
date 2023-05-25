@@ -469,18 +469,18 @@ timeit.timeit(method2, number=1)  # 9.55379e-05s
 
 # %%
 
-disks = 4
-move = itertools.count(1)
+disks = 2
+move_num = itertools.count(1)
 
 
 def solve_tower_of_hanoi_recursively(disks: int, source: str, spare: str, target: str):
     if disks == 1:
-        print(f"[{next(move)}] Move disk 1 from peg {source} to peg {target}.")
+        print(f"[{next(move_num)}] Move disk 1 from peg {source} to peg {target}.")
         return
     # move disks-1 from source to spare.
     solve_tower_of_hanoi_recursively(disks - 1, source, target, spare)
     # move the disk from source to target.
-    print(f"[{next(move)}] Move disk {disks} from peg {source} to peg {target}.")
+    print(f"[{next(move_num)}] Move disk {disks} from peg {source} to peg {target}.")
     # re-move (disks-1 moved to spare from source) to target.
     solve_tower_of_hanoi_recursively(disks - 1, spare, source, target)
 
@@ -489,16 +489,15 @@ def solve_tower_of_hanoi_recursively(disks: int, source: str, spare: str, target
 solve_tower_of_hanoi_recursively(disks, "A", "B", "C")
 
 
-# %%
-
-
 from collections import deque
+
+move_num = itertools.count(1)
 
 
 # TODO: Binary solution with non-recursive implementation
 def solve_tower_of_hanoi(disks: int):
     """
-    Time complexity: O(n^2)
+    Time complexity: O(2^n)
     Space complexity: O(n)
 
     Implementation by using regularities
@@ -513,62 +512,44 @@ def solve_tower_of_hanoi(disks: int):
 
     """
 
-    minimum_moves: int = 2**disks - 1
-    # For debugging: following two lines
+    moves: int = 2**disks - 1
+    ## For debugging: following two lines
     a, b, c = list(range(disks, 0, -1)), [], []
-    peg: deque[list[int]] = deque([a, c, b]) if disks & 1 else deque([a, b, c])
-    # peg: deque[list[int]] = deque([list(range(disks, 0, -1)), [], []])
+    pegs: deque[list[int]] = deque([a, c, b]) if disks & 1 else deque([a, b, c])
+    peg_names: deque[Any] = (
+        deque(["A", "C", "B"]) if disks & 1 else deque(["A", "B", "C"])
+    )
 
-    # same as `while len(c) != discs:`
-    for move in range(1, minimum_moves + 1):
+    # same as `while len(c) != disks:`
+    for move in range(1, moves + 1):
         if move & 1:
-            peg[1].append(peg[0].pop())  # move. Smallest disc now on peg[1]
+            # move disk from source to spare peg or from spare to target peg
+            pegs[1].append(pegs[0].pop())  # move. Smallest disk now on peg[1]
+            print(
+                f"{next(move_num)}. Move disk {pegs[1][-1]} from {peg_names[0]} to {peg_names[1]}"
+            )
         else:
-            # possible move
-            if peg[0] and (not peg[2] or peg[0][-1] < peg[2][-1]):
-                source, destination = peg[0], peg[2]
+            # move when only possible move
+            if pegs[0] and (not pegs[2] or pegs[0][-1] < pegs[2][-1]):
+                source, destination = pegs[0], pegs[2]
+                source_name, destination_name = peg_names[0], peg_names[2]
             else:
-                source, destination = peg[2], peg[0]
-            destination.append(source.pop())  # move.
+                source, destination = pegs[2], pegs[0]
+                source_name, destination_name = peg_names[2], peg_names[0]
 
-            peg.rotate(-1)
+            destination.append(source.pop())
+            print(
+                f"{next(move_num)}. Move disk {destination[-1]} from {source_name} to {destination_name}"
+            )
+            pegs.rotate(-1)
+            peg_names.rotate(-1)
 
         print(a, b, c, sep="\n", end="\n\n")
 
-    print(f"Minimal moves: {minimum_moves}")
+    print(f"minimum moves: {moves}")
 
 
-solve_tower_of_hanoi(disks=2)
+solve_tower_of_hanoi(disks=3)
 
 
 # %%
-def solution(n, k, enemy):
-    """
-    - `남은 병사의 수보다 현재 라운드의 적의 수가 더 많으면 게임이 종료됩니다.`
-    dp[round][k]; round 에서, 사용한 무적권의 수가 k 일 때, 최대 남은 병사 수 저장?
-    dp[round][k] := max(dp[round-1][k] - enemey, dp[round-1][k-1])
-
-    max(dp[round]) 값이 0 미만이면 라운드 종료. Sliding Window 가능?
-    """
-    dp = [[n] * (k + 1) for _ in (0, 1)]
-
-    r = 0
-    min_kk = 1
-    for r, e in enumerate(enemy, start=1):
-        ri = r & 1
-        pri = ri ^ 1
-        dp[ri][0] = dp[pri][0] - enemy[r - 1]
-        is_success = False
-        for kk in range(min_kk, k + 1):
-            pkk = kk - 1
-            dp[ri][kk] = (
-                x if (x := dp[pri][kk] - e) > dp[pri][kk - 1] else dp[pri][kk - 1]
-            )
-            if dp[ri][kk] >= 0:
-                is_success = True
-            else:
-                min_kk = kk
-        if not is_success:
-            return r - 1
-    else:
-        return r
