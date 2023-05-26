@@ -125,6 +125,17 @@ for _ in range(int(input_())):
     print(min(n // 5, (n + m) // 12))
 
 
+# 직사각형 한 점의 좌표
+from collections import Counter
+
+
+def solution(v):
+    result = []
+    for vv in zip(*v):
+        result.append(next(key for key, value in Counter(vv).items() if value == 1))
+    return result
+
+
 # %%
 # 코테 4번과 비슷한듯? https://www.acmicpc.net/problem/17471
 # dictionary (0, 0): 1, (0, 1): 2, (0, 2): 3, (1, 0): 4 ...  마스킹으로
@@ -469,29 +480,31 @@ timeit.timeit(method2, number=1)  # 9.55379e-05s
 
 # %%
 
-disks = 2
+disks = 3
 move_num = itertools.count(1)
 
 
 def solve_tower_of_hanoi_recursively(disks: int, source: str, spare: str, target: str):
     if disks == 1:
-        print(f"[{next(move_num)}] Move disk 1 from peg {source} to peg {target}.")
+        print(
+            f"[{next(move_num)}] Move disk 1 from peg {source} to peg {target}. not used peg is {spare}."
+        )
         return
     # move disks-1 from source to spare.
     solve_tower_of_hanoi_recursively(disks - 1, source, target, spare)
     # move the disk from source to target.
-    print(f"[{next(move_num)}] Move disk {disks} from peg {source} to peg {target}.")
+    print(
+        f"[{next(move_num)}] Move disk {disks} from peg {source} to peg {target}. not used peg is {spare}."
+    )
     # re-move (disks-1 moved to spare from source) to target.
     solve_tower_of_hanoi_recursively(disks - 1, spare, source, target)
 
 
-# We are referring source as A, spare as B, and target as C
-solve_tower_of_hanoi_recursively(disks, "A", "B", "C")
+# We are referring source as <from>, spare as <r>, and target as <target<
+solve_tower_of_hanoi_recursively(disks, "f", "r", "t")
 
-
+# %%
 from collections import deque
-
-move_num = itertools.count(1)
 
 
 # TODO: Binary solution with non-recursive implementation
@@ -508,16 +521,17 @@ def solve_tower_of_hanoi(disks: int):
             - <source> peg pattern: (A->B->C -> <cycle...>)
             - <target> peg pattern: (B->C->A -> <cycle...>)
             so, when even-th move end, I ran `peg.rotate(-1)`; Rotate peg for next odd ordering.
-    when n is even-th move,
+    when n is even-th move, ...
 
+    Wiki 설명의 "move disk 0." 는 이동하지 않는다. 로 해석하면 될듯.
     """
 
     moves: int = 2**disks - 1
     ## For debugging: following two lines
-    a, b, c = list(range(disks, 0, -1)), [], []
-    pegs: deque[list[int]] = deque([a, c, b]) if disks & 1 else deque([a, b, c])
+    f, r, t = list(range(disks, 0, -1)), [], []
+    pegs: deque[list[int]] = deque([f, t, r]) if disks & 1 else deque([f, r, t])
     peg_names: deque[Any] = (
-        deque(["A", "C", "B"]) if disks & 1 else deque(["A", "B", "C"])
+        deque(["f", "t", "r"]) if disks & 1 else deque(["f", "r", "t"])
     )
 
     # same as `while len(c) != disks:`
@@ -526,7 +540,7 @@ def solve_tower_of_hanoi(disks: int):
             # move disk from source to spare peg or from spare to target peg
             pegs[1].append(pegs[0].pop())  # move. Smallest disk now on peg[1]
             print(
-                f"{next(move_num)}. Move disk {pegs[1][-1]} from {peg_names[0]} to {peg_names[1]}"
+                f"{move}. Move disk {pegs[1][-1]} from {peg_names[0]} to {peg_names[1]}"
             )
         else:
             # move when only possible move
@@ -539,17 +553,28 @@ def solve_tower_of_hanoi(disks: int):
 
             destination.append(source.pop())
             print(
-                f"{next(move_num)}. Move disk {destination[-1]} from {source_name} to {destination_name}"
+                f"{move}. Move disk {destination[-1]} from {source_name} to {destination_name}"
             )
             pegs.rotate(-1)
             peg_names.rotate(-1)
 
-        print(a, b, c, sep="\n", end="\n\n")
+        print(f, r, t, sep="\n", end="\n\n")
 
     print(f"minimum moves: {moves}")
 
 
-solve_tower_of_hanoi(disks=3)
+solve_tower_of_hanoi(disks=4)
 
 
 # %%
+
+
+# TODO
+def solution_12952(n: int) -> int:
+    """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952
+    deploy n Queen in n*n matrix.
+    백트래킹을.. 비재귀적으로 효율적으로 하는 방법이 있나?
+    """
+    map_: list[list[int]] = [[0] * n for _ in range(n)]
+    # backtracking =
+    # for map_
