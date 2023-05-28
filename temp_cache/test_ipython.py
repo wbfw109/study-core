@@ -569,6 +569,7 @@ solve_tower_of_hanoi(disks=4)
 # %%
 
 
+# task 안되는 오류?
 # TODO
 def solution_12952(n: int) -> int:
     """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952
