@@ -449,8 +449,17 @@ def solution_12973() -> None:
     """짝지어 제거하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12973"""
 
 
-def solution_12953() -> None:
-    """N개의 최소공배수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12953"""
+def solution_12953(arr: list[int]) -> int:
+    """N개의 최소공배수 ; https://school.programmers.co.kr/learn/courses/30/lessons/12953
+    Tag: Math (Euclidean algorithm)
+    - `math.gcd(*integers); Changed in version 3.9: Added support for an arbitrary number of arguments. Formerly, only two arguments were supported.`
+    """
+    import math
+
+    lcm: int = arr[0]
+    for i in range(1, len(arr)):
+        lcm = lcm * arr[i] // math.gcd(lcm, arr[i])
+    return lcm
 
 
 # TODO
@@ -459,6 +468,7 @@ def solution_12952(n: int) -> int:
     deploy n Queen in n*n matrix.
     """
     map_: list[list[int]] = [[0] * n for _ in range(n)]
+
     # backtracking =
     # for map_
 
@@ -473,7 +483,9 @@ def solution_12949(arr1: list[list[int]], arr2: list[list[int]]) -> list[list[in
     import operator
 
     arr2_temp: list[tuple[int]] = list(zip(*arr2))  # 🚣 For cache locality
-    return [[sum(map(operator.mul, row, column)) for column in arr2_temp] for row in arr1]
+    return [
+        [sum(map(operator.mul, row, column)) for column in arr2_temp] for row in arr1
+    ]
 
 
 def solution_12946(n: int) -> list[list[int]]:

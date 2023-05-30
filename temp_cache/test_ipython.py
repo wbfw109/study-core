@@ -575,7 +575,27 @@ def solution_12952(n: int) -> int:
     """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952
     deploy n Queen in n*n matrix.
     백트래킹을.. 비재귀적으로 효율적으로 하는 방법이 있나?
+    N queen 겹치는지 확인할때 row major, 탐색이면 매 행마다 한개씩만 등록하고 북, 북동, 북서 방향으로만 체크하면 됨. 근데 북쪽 방향은 이전 행들의 컬럼 위치를 저장하여 같은지 확인하는게 더 빠르다. 
+    ㅡ 평가; 추가했을때 리스트의 길이가 n이면 count +=1. 모든 경우에 대해 헌재 행의 컬럼을 저장하고 (pop), 컬럼인덱스가 7인지 확인하고 7까지에 대해 유효한지 체크. 
+    이후 이를 row i= 0 까지 수행.
+    Row가 0일때 column 7에 도달했으면 break 하고 결과 반환. 그냥 처음 for 문 안에  while (True) 돌리면 될듯?
+    아니다 while 문으로 통일해야할듯.
+    
+    - 연속된 두 행의 퀸의 컬럼 위치는 2 이상 차이난다.
+    - row-major order 에서 각 배치가능한 컬럼 위치 (추가적으로 북동쪽, 북서쪽만 탐색하면 되므로 더 효율적임).
+        각 행에 generator 넣으면 될 듯 한데. backtracking 을 위한 루프는 어떻게 구성?
     """
+    columns: list[int] = [0]
+    answer: int = 0
     map_: list[list[int]] = [[0] * n for _ in range(n)]
+    # <i> is column of first row
+    while columns[0] < n:
+        if columns[-1]
+        while len(columns) <= 7:
+        while columns:
+        
     # backtracking =
     # for map_
+
+
+
