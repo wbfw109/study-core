@@ -587,7 +587,7 @@ solve_tower_of_hanoi(disks=4)
 
 
 # task 안되는 오류?
-# TODO
+# TODO No-three-in-line problem
 def solution_12952(n: int) -> int:
     """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952
     deploy n Queen in n*n matrix.
@@ -650,7 +650,7 @@ def solution_12952(n: int) -> int:
 
     각 라인에서 유효한지 확인하면서 배치해도, 안되는 경우의수가 있음.
 
-        
+
     탐색 개수가 알려져 있음.
 
     Key points
