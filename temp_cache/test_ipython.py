@@ -632,32 +632,37 @@ def solution_12952(n: int) -> int:
 
 
 
-    4*4
-    * - - -
-    . . - -
-    . - . -
-    . - - .
+    4*4 (edge cases)
+    * - - -         * - - -
+    . . - *         . . * -
+    . * . .         . . . .
+    . . . .         . - . .
 
-    * - - -
-    . . - *
-    . * . .
-    . . . .
+    answer (two cases):
+    - * - -         - - * -
+    - - - *         * - - -
+    * - - -         - - - *
+    - - * -         - * - -
+
+    TODO:
+        Symmetry 특징이라서 절만만 계산하면 되는듯 사실?
+
+
     각 라인에서 유효한지 확인하면서 배치해도, 안되는 경우의수가 있음.
-    그래서 backtracking 이 answer +=1 이후 뿐 아니라 다를 떄도 발생 가능.
+
+        
     탐색 개수가 알려져 있음.
 
     Key points
         - propagate trace
-        - the number of valid column of last row is 1.
+            - count to be able to propagate trace is known.
+        - backtracking triggers
+            - StopIteration
+            - i == n-1; answer found
 
     가능하면, 이전에 했던것부터 -1.
     아랫줄만 전파. 데 이렇게하면, 각 리스트에서
     end 시점을 어떻게?
-
-    backtracking 이거 bitmasking 될것같기도.
-    backtracking 할 때 캐시 지역성도 이용하려면 행별로 하는 것이 좋음..
-
-    추가하는 곳이 있어야 하고, n 개를 채웠을 때 answer+=1 을 하고, 제거하는 곳이 있어야 함.
 
     valid_columns_by_row 가 list 가 필요없을거같은데 -
 
@@ -665,62 +670,55 @@ def solution_12952(n: int) -> int:
     """
     from typing import Generator
 
-    if n == 0:
-        return 0
-    elif n in [1, 2]:
-        return 0
-
     def get_valid_columns_gen(i: int) -> Generator[int, None, None]:
         yield from (j for j in range(n) if traces[i][j] == 0)
 
     traces: list[list[int]] = [[0] * n for _ in range(n)]
     backtracking_by_row: list[list[tuple[int, int]]] = []
     valid_columns_by_row: list[Generator[int, None, None]] = [
-        get_valid_columns_gen(i) for i in range(n - 1)
+        get_valid_columns_gen(i) for i in range(n)
     ]
     answer: int = 0
-    # <i> is column of first row
-    next_point = [0, 0]
-    while next_point[1] != -1:
+    i = 0
+    columns = []
+    while True:
         # explore valid Queen points. last row can not propagate trace. so, range(..., n-1)
-        is_first = True
-        for i in range(next_point[0], n - 1):
-            # mutable loop
-            j = next_point[1] if is_first else next(valid_columns_by_row[i])
-            movable_range: list[tuple[int, int]] = []
+        while i < n:
+            try:
+                j = next(valid_columns_by_row[i])
+                columns.append(j)
+                movable_range: list[tuple[int, int]] = []
 
-            ## Search with a direction
-            nmi = n - i  # n minus i
-            valid_count = [nmi - 1, min(nmi, n - j) - 1, min(nmi, j) - 1]
-            for di, d in enumerate([(1, 0), (1, 1), (1, -1)]):
-                p = (i, j)
-                for _ in range(valid_count[di]):
-                    p = p[0] + d[0], p[1] + d[1]
-                    movable_range.append(p)
-                    traces[p[0]][p[1]] += 1
-            pprint(traces)
-            print()
-            backtracking_by_row.append(movable_range)
-            is_first = False
+                ## Search with a direction
+                nmi = n - i  # n minus i
+                valid_count = [nmi - 1, min(nmi, n - j) - 1, min(nmi - 1, j)]
+                for di, d in enumerate([(1, 0), (1, 1), (1, -1)]):
+                    p = (i, j)
+                    for _ in range(valid_count[di]):
+                        p = p[0] + d[0], p[1] + d[1]
+                        movable_range.append(p)
+                        traces[p[0]][p[1]] += 1
+                backtracking_by_row.append(movable_range)
+            except StopIteration:
+                if i == 0:
+                    return answer
+                # backtracking
+                columns.pop()
 
-        answer += 1
-
-        # backtracking
-
-        i = column = -1
-        for i in range(n - 2, -1, -1):
-            column = next(valid_columns_by_row[i], -1)
-            for p in backtracking_by_row[i]:
-                traces[p[0]][p[1]] -= 1
-            backtracking_by_row.pop()
-
-            if column == -1:
+                for p in backtracking_by_row[-1]:
+                    traces[p[0]][p[1]] -= 1
+                backtracking_by_row.pop()
                 valid_columns_by_row[i] = get_valid_columns_gen(i)
+                i -= 1
             else:
-                break
-        next_point = (i, column)
-    return answer
+                i += 1
+        else:
+            answer += 1
+            print(columns)
+            columns.pop()
+            backtracking_by_row.pop()
+            i -= 1
 
 
-solution_12952(4)
+solution_12952(6)
 # %%
