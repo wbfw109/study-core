@@ -24,6 +24,7 @@ Updated on 📅 2023-05-08 11:22:35
     - so codes may be very simple because I have to solve a problem in given time.
     - and I've written **tags** to almost problems.
   - to understand completely problem and **match contents to proper underlying algorithms.**
+  - 📰 I plan to solve problems of SQL and Pandas after solve problems in programmers from lv 2 to lv 5.
 
 ### 1.1 [Programmers](programmers/)
 
@@ -40,7 +41,7 @@ Updated on 📅 2023-05-08 11:22:35
 
 - 📝 [lv0.py](programmers/lv0.py) ; (224 / 224) problems
 - 📝 [lv1.py](programmers/lv1.py) ; (77 / 77) problems
-- 📝 [lv2.py](programmers/lv2.py) ; (22 / 104) problems
+- 📝 [lv2.py](programmers/lv2.py) ; (24 / 104) problems
 
 ### 1.2 [Goorm](goorm/)
 

@@ -741,6 +741,7 @@ def n_queens(
     This seeming contradiction at the top of the board results from the fact that i - j is not a perfect identifier for ↙️ diagonals because it produces the same result for cells on ↘️ diagonals near the top of the board. Despite this, i - j is still used to track ↙️ diagonals because it works for the majority of cells on the board.
 
     to use set() instead of list is faster if only the number of cases are required.
+    b, c 는 set() 가능할 듯? 어차피 a만 반환함ㄴ 되서.
     """
     if i < n:
         for j in range(n):
