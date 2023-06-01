@@ -462,15 +462,19 @@ def solution_12953(arr: list[int]) -> int:
     return lcm
 
 
-# TODO
 def solution_12952(n: int) -> int:
-    """N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952
-    deploy n Queen in n*n matrix.
-    """
-    map_: list[list[int]] = [[0] * n for _ in range(n)]
-
-    # backtracking =
-    # for map_
+    """🧠 N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952"""
+    from typing import Generator
+    def n_queens(
+        n: int, i: int, a: list[int], b: list[int], c: list[int]
+    ) -> Generator[int, None, None]:
+        if i < n:
+            for j in range(n):
+                if j not in a and i + j not in b and i - j not in c:
+                    yield from n_queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
+        else:
+            yield 1
+    return sum(n_queens(n, 0, [], [], []))
 
 
 def solution_12951(s: str) -> str:

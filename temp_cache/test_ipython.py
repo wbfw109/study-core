@@ -726,7 +726,9 @@ solution_12952(4)
 n = 10
 
 
-def n_queen(n: int, i: int, a: set[int], b: set[int], c: set[int]):
+def n_queens(
+    n: int, i: int, a: list[int], b: list[int], c: list[int]
+) -> Generator[list[int], None, None]:
     """
     a := columns' index.
     b := used to check top-right to bottom-left diagonal.
@@ -738,18 +740,16 @@ def n_queen(n: int, i: int, a: set[int], b: set[int], c: set[int]):
     However, for the majority of the board, the c list does indeed track ↙️ diagonals (where the i - j value is constant), and the b list tracks ↘️ diagonals (where the i + j value is constant).
     This seeming contradiction at the top of the board results from the fact that i - j is not a perfect identifier for ↙️ diagonals because it produces the same result for cells on ↘️ diagonals near the top of the board. Despite this, i - j is still used to track ↙️ diagonals because it works for the majority of cells on the board.
 
-
+    to use set() instead of list is faster if only the number of cases are required.
     """
     if i < n:
         for j in range(n):
             if j not in a and i + j not in b and i - j not in c:
-                yield from n_queen(
-                    n, i + 1, a.union([j]), b.union([i + j]), c.union([i - j])
-                )
+                yield from n_queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
     else:
         yield a
 
 
-timeit.timeit(lambda: n_queen(n, 0, set(), set(), set()), number=100)
+timeit.timeit(lambda: n_queens(n, 0, [], [], []), number=100)
 
 # %%
