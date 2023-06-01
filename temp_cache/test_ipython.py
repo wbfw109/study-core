@@ -723,35 +723,33 @@ def solution_12952(n: int) -> int:
 solution_12952(4)
 # %%
 
-n = 12
-# 6.074359968000181s and 3.5660000321513508e-06s
+n = 10
 
 
-def queens(n, i, a, b, c):
+def n_queen(n: int, i: int, a: set[int], b: set[int], c: set[int]):
     """
-    a := top to bottom.
-    b := top-left to bottom-right.
-    c := top-right to bottom-left.
+    a := columns' index.
+    b := used to check top-right to bottom-left diagonal.
+    c := used to check top-left to bottom-right diagonal.
 
     (two positions are on the same diagonal if and only if they have the same i+j or i-j values).
+
+    This happens because when you're considering the cells near the top of the board, the i - j value is negative for cells on the right side of a ↘️ diagonal and positive for those on the left. Therefore, it appears that c is preventing placement on ↘️ diagonals for the top part of the board.
+    However, for the majority of the board, the c list does indeed track ↙️ diagonals (where the i - j value is constant), and the b list tracks ↘️ diagonals (where the i + j value is constant).
+    This seeming contradiction at the top of the board results from the fact that i - j is not a perfect identifier for ↙️ diagonals because it produces the same result for cells on ↘️ diagonals near the top of the board. Despite this, i - j is still used to track ↙️ diagonals because it works for the majority of cells on the board.
+
+
     """
     if i < n:
         for j in range(n):
             if j not in a and i + j not in b and i - j not in c:
-                yield from queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
+                yield from n_queen(
+                    n, i + 1, a.union([j]), b.union([i + j]), c.union([i - j])
+                )
     else:
         yield a
 
 
-# len(list(queens(8, 0, [], [], [])))
-# for solution in queens(8, 0, [], [], []):
-#     print(solution)
+timeit.timeit(lambda: n_queen(n, 0, set(), set(), set()), number=100)
 
-timeit.timeit(lambda: solution_12952(n), number=1)
-timeit.timeit(lambda: queens(n, 0, [], [], []), number=1)
-
-
-#%%
-def foo(n):
-    if n > 10:
-        yield from foo
+# %%
