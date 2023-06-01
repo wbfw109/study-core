@@ -666,8 +666,8 @@ def solution_12952(n: int) -> int:
 
     valid_columns_by_row 가 list 가 필요없을거같은데 -
 
-
     """
+    # Naive solution
     from typing import Generator
 
     def get_valid_columns_gen(i: int) -> Generator[int, None, None]:
@@ -720,5 +720,38 @@ def solution_12952(n: int) -> int:
             i -= 1
 
 
-solution_12952(6)
+solution_12952(4)
 # %%
+
+n = 12
+# 6.074359968000181s and 3.5660000321513508e-06s
+
+
+def queens(n, i, a, b, c):
+    """
+    a := top to bottom.
+    b := top-left to bottom-right.
+    c := top-right to bottom-left.
+
+    (two positions are on the same diagonal if and only if they have the same i+j or i-j values).
+    """
+    if i < n:
+        for j in range(n):
+            if j not in a and i + j not in b and i - j not in c:
+                yield from queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
+    else:
+        yield a
+
+
+# len(list(queens(8, 0, [], [], [])))
+# for solution in queens(8, 0, [], [], []):
+#     print(solution)
+
+timeit.timeit(lambda: solution_12952(n), number=1)
+timeit.timeit(lambda: queens(n, 0, [], [], []), number=1)
+
+
+#%%
+def foo(n):
+    if n > 10:
+        yield from foo
