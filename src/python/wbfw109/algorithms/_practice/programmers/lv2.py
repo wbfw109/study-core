@@ -422,7 +422,13 @@ def solution_17680() -> None:
 
 
 def solution_17679() -> None:
-    """[1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679"""
+    """[1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
+    매 번 스택의 길이를 확인하는 것 괜찮나? array 사용해서 불필요한 메모리를 차지하는 것보다는 날 것 같음.
+        스택 사용 시 중간을 pop 하면 시간이 오래 걸릴 수 있기 때문에 array 사용하는 것이 나을듯 보임.
+    pop 이 아니라 그 위에있는 위치를 아래로 보내고, 캐릭터가 있었던 나머지 위치를 0 으로 채우기.
+    효율적인 계산을 위해, 이를 위해 가장 위에 있던 0 의 위치와 0이 아닌 값이 처음으로 나오는 행을 알고 있어야 함.
+    //// 이거 전까지 하고, 정리한다음 다시 하기.
+    """
 
 
 def solution_17677() -> None:
@@ -465,6 +471,7 @@ def solution_12953(arr: list[int]) -> int:
 def solution_12952(n: int) -> int:
     """🧠 N-Queen ; https://school.programmers.co.kr/learn/courses/30/lessons/12952"""
     from typing import Generator
+
     def n_queens(
         n: int, i: int, a: list[int], b: list[int], c: list[int]
     ) -> Generator[int, None, None]:
@@ -474,6 +481,7 @@ def solution_12952(n: int) -> int:
                     yield from n_queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
         else:
             yield 1
+
     return sum(n_queens(n, 0, [], [], []))
 
 
