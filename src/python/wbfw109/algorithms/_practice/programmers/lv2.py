@@ -448,7 +448,38 @@ def solution_12980() -> None:
 
 
 def solution_12978(N: int, road: list[list[int]], K: int) -> int:
-    """배달 ; https://school.programmers.co.kr/learn/courses/30/lessons/12978"""
+    """💦 배달 ; https://school.programmers.co.kr/learn/courses/30/lessons/12978
+    Tag: Graph search
+
+    - `1번 마을에 있는 음식점이 K 이하의 시간에 배달이 가능한 마을의 개수를 return 하면 됩니다.`
+        - `(1 ≤ a, b ≤ N, a != b)`
+        - `두 마을 a, b를 연결하는 도로는 여러 개가 있을 수 있습니다.`
+        - `임의의 두 마을간에 항상 이동 가능한 경로가 존재합니다.`
+    """
+    import heapq
+
+    # 0 index will not be used.
+    MAX_DISTANCE: int = 500001
+    graph_metric: list[dict[int, int]] = [{} for _ in range(N + 1)]
+    for a, b, distance in road:
+        if distance < graph_metric[a].get(b, MAX_DISTANCE):
+            graph_metric[a][b] = distance
+            graph_metric[b][a] = distance
+
+    # hq: (total_distance, <a>); minimum distance from "1" village to <a> village.
+    hq: list[tuple[int, int]] = [(0, 1)]
+    # 0 index will not be used.
+    traces: list[bool] = [False] * (N + 1)
+    while hq:
+        total_distance, a = heapq.heappop(hq)
+        if traces[a]:
+            continue
+        traces[a] = True
+
+        for b, distance in graph_metric[a].items():
+            if not traces[b] and (new_total_distance := total_distance + distance) <= K:
+                heapq.heappush(hq, (new_total_distance, b))
+    return sum(traces)
 
 
 def solution_12973(s: list[int]) -> int:
