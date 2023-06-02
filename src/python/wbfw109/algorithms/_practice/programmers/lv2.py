@@ -443,18 +443,32 @@ def solution_12981() -> None:
     """영어 끝말잇기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12981"""
 
 
-def solution_12980() -> None:
-    """점프와 순간 이동 ; https://school.programmers.co.kr/learn/courses/30/lessons/12980"""
+def solution_12980(n: int) -> int:
+    """🧠 점프와 순간 이동 ; https://school.programmers.co.kr/learn/courses/30/lessons/12980
+    Clues
+        - `(현재까지 온 거리) x 2 에 해당하는 위치로 순간이동`
+        - `순간이동을 하면 건전지 사용량이 줄지 않지만, 앞으로 K 칸을 점프하면 K 만큼의 건전지 사용량이 듭니다.`
+
+    Other solution
+        answer: int = 0
+        while n > 0:
+            q, r = divmod(n, 2)
+            answer += r
+            n = q
+        return answer
+    """
+    return n.bit_count()
 
 
 def solution_12978(N: int, road: list[list[int]], K: int) -> int:
     """💦 배달 ; https://school.programmers.co.kr/learn/courses/30/lessons/12978
     Tag: Graph search
 
-    - `1번 마을에 있는 음식점이 K 이하의 시간에 배달이 가능한 마을의 개수를 return 하면 됩니다.`
-        - `(1 ≤ a, b ≤ N, a != b)`
-        - `두 마을 a, b를 연결하는 도로는 여러 개가 있을 수 있습니다.`
-        - `임의의 두 마을간에 항상 이동 가능한 경로가 존재합니다.`
+    Consideration
+        - `1번 마을에 있는 음식점이 K 이하의 시간에 배달이 가능한 마을의 개수를 return 하면 됩니다.`
+            - `(1 ≤ a, b ≤ N, a != b)`
+            - `두 마을 a, b를 연결하는 도로는 여러 개가 있을 수 있습니다.`
+            - `임의의 두 마을간에 항상 이동 가능한 경로가 존재합니다.`
     """
     import heapq
 

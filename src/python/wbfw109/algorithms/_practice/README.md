@@ -2,7 +2,7 @@
 
 ---
 
-Updated on 📅 2023-05-08 11:22:35
+Updated on 📅 2023-06-03 08:37:35
 
 ## Table of contents (TOC)
 
@@ -41,7 +41,7 @@ Updated on 📅 2023-05-08 11:22:35
 
 - 📝 [lv0.py](programmers/lv0.py) ; (224 / 224) problems
 - 📝 [lv1.py](programmers/lv1.py) ; (77 / 77) problems
-- 📝 [lv2.py](programmers/lv2.py) ; (24 / 104) problems
+- 📝 [lv2.py](programmers/lv2.py) ; (27 / 104) problems
 
 ### 1.2 [Goorm](goorm/)
 
