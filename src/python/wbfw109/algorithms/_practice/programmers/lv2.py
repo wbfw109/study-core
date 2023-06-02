@@ -447,12 +447,19 @@ def solution_12980() -> None:
     """점프와 순간 이동 ; https://school.programmers.co.kr/learn/courses/30/lessons/12980"""
 
 
-def solution_12978() -> None:
+def solution_12978(N: int, road: list[list[int]], K: int) -> int:
     """배달 ; https://school.programmers.co.kr/learn/courses/30/lessons/12978"""
 
 
-def solution_12973() -> None:
-    """짝지어 제거하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12973"""
+def solution_12973(s: list[int]) -> int:
+    """💤 짝지어 제거하기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12973"""
+    stack: list[int] = []
+    for x in s:
+        if stack and stack[-1] == x:
+            stack.pop()
+        else:
+            stack.append(x)
+    return 0 if stack else 1
 
 
 def solution_12953(arr: list[int]) -> int:
