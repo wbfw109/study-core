@@ -7,27 +7,12 @@ import string
 import time
 import timeit
 import unittest
+from collections import Counter
 from collections.abc import Generator, Sequence
 from enum import Enum
 from itertools import permutations, zip_longest
 from pathlib import Path
 from pprint import pprint
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Iterable,
-    Iterator,
-    Literal,
-    LiteralString,
-    NamedTuple,
-    Never,
-    Optional,
-    ParamSpec,
-    Tuple,
-    TypedDict,
-    TypeVar,
-)
 
 import IPython
 import matplotlib.pyplot as plt
@@ -753,6 +738,18 @@ def n_queens(
 
 timeit.timeit(lambda: n_queens(n, 0, [], [], []), number=100)
 
+(4).bit_length()
+
 # %%
 
-(4).bit_length()
+
+a = Counter([1, 3, 5, 3, 3, 4])
+b = Counter([1, 3, 5, 3])
+a + b
+(a + b)
+min(a, b)
+
+# %%
+# New in version 3.10: Rich comparison operations were added. 자카드 유사도
+
+# %%

@@ -428,11 +428,25 @@ def solution_17679() -> None:
     pop 이 아니라 그 위에있는 위치를 아래로 보내고, 캐릭터가 있었던 나머지 위치를 0 으로 채우기.
     효율적인 계산을 위해, 이를 위해 가장 위에 있던 0 의 위치와 0이 아닌 값이 처음으로 나오는 행을 알고 있어야 함.
     //// 이거 전까지 하고, 정리한다음 다시 하기.
+    캐
+
     """
 
 
-def solution_17677() -> None:
-    """[1차] 뉴스 클러스터링 ; https://school.programmers.co.kr/learn/courses/30/lessons/17677"""
+def solution_17677(str1: str, str2: str) -> int:
+    """[1차] 뉴스 클러스터링 ; https://school.programmers.co.kr/learn/courses/30/lessons/17677
+    - 😠 what is return value when value of A union B is 0 (divisor is 0)?
+    """
+    from collections import Counter
+
+    str1 = str1.lower()
+    str2 = str2.lower()
+
+    a = Counter((x for i in range(len(str1) - 1) if (x := str1[i : i + 2]).isalpha()))
+    b = Counter((x for i in range(len(str2) - 1) if (x := str2[i : i + 2]).isalpha()))
+    x = sum((a & b).values())
+    y = sum((a | b).values())
+    return 65536 if y == 0 else int(x / y * 65536)
 
 
 def solution_12985(n: int, a: int, b: int) -> int:
