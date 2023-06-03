@@ -451,12 +451,18 @@ def solution_12985(n: int, a: int, b: int) -> int:
                     b-=n
                     a-=n
         return 1
+
+    Implementation
+        upper implementation finds a branch in which <a>, <b> are divided as 2^k.
+        This process is equivalent to operate XOR to Most significant bits of zero-based <a> and <b>; the result have <x> value.
+        the answer is value (log_2 x); bit_length.
     """
     return ((a - 1) ^ (b - 1)).bit_length()
 
 
 def solution_12981(n: int, words: list[str]) -> list[int]:
     """💤 영어 끝말잇기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12981
+    Tag: Math (Base Conversion)
 
     Consideration
         - `한 글자인 단어는 인정되지 않습니다.`

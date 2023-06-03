@@ -754,3 +754,5 @@ def n_queens(
 timeit.timeit(lambda: n_queens(n, 0, [], [], []), number=100)
 
 # %%
+
+(4).bit_length()
