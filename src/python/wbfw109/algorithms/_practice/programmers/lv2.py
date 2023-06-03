@@ -435,13 +435,29 @@ def solution_17677() -> None:
     """[1차] 뉴스 클러스터링 ; https://school.programmers.co.kr/learn/courses/30/lessons/17677"""
 
 
-def solution_12985() -> None:
-    """예상 대진표 ; https://school.programmers.co.kr/learn/courses/30/lessons/12985"""
+def solution_12985(n: int, a: int, b: int) -> int:
+    """🧠 예상 대진표 ; https://school.programmers.co.kr/learn/courses/30/lessons/12985
+    Other solution
+        import math
+        if a > b:
+            a, b = b, a
+
+        for i in range(int(math.log2(n)), 0, -1):
+            n >>= 1
+            if b > n:
+                if a <= n:
+                    return i
+                else:
+                    b-=n
+                    a-=n
+        return 1
+    """
+    return ((a - 1) ^ (b - 1)).bit_length()
 
 
 def solution_12981(n: int, words: list[str]) -> list[int]:
     """💤 영어 끝말잇기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12981
-    
+
     Consideration
         - `한 글자인 단어는 인정되지 않습니다.`
             solved by `단어의 길이는 2 이상 50 이하입니다.`
@@ -463,6 +479,7 @@ def solution_12980(n: int) -> int:
     Clues
         - `(현재까지 온 거리) x 2 에 해당하는 위치로 순간이동`, `순간이동을 하면 건전지 사용량이 줄지 않지만, 앞으로 K 칸을 점프하면 K 만큼의 건전지 사용량이 듭니다.`
             ; It can be thought as n is sum of 2^{subset}, which the <subset> is a subset of set of strictly positive integer.
+            It means that values not included in <subset> denotes "0" bit, otherwise "1" bits.
 
     Other solution
         answer: int = 0
