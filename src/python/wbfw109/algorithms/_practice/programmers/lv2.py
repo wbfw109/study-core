@@ -439,15 +439,30 @@ def solution_12985() -> None:
     """예상 대진표 ; https://school.programmers.co.kr/learn/courses/30/lessons/12985"""
 
 
-def solution_12981() -> None:
-    """영어 끝말잇기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12981"""
+def solution_12981(n: int, words: list[str]) -> list[int]:
+    """💤 영어 끝말잇기 ; https://school.programmers.co.kr/learn/courses/30/lessons/12981
+    
+    Consideration
+        - `한 글자인 단어는 인정되지 않습니다.`
+            solved by `단어의 길이는 2 이상 50 이하입니다.`
+        - `앞사람이 말한 단어의 마지막 문자로 시작하는 단어를 말해야 합니다.`
+        - `이전에 등장했던 단어는 사용할 수 없습니다.`
+    """
+    words_set: set[str] = set([words[0]])
+    for i in range(1, len(words)):
+        if words[i][0] != words[i - 1][-1] or words[i] in words_set:
+            q, r = divmod(i, n)
+            return [r + 1, q + 1]
+        else:
+            words_set.add(words[i])
+    return [0, 0]
 
 
 def solution_12980(n: int) -> int:
     """🧠 점프와 순간 이동 ; https://school.programmers.co.kr/learn/courses/30/lessons/12980
     Clues
-        - `(현재까지 온 거리) x 2 에 해당하는 위치로 순간이동`
-        - `순간이동을 하면 건전지 사용량이 줄지 않지만, 앞으로 K 칸을 점프하면 K 만큼의 건전지 사용량이 듭니다.`
+        - `(현재까지 온 거리) x 2 에 해당하는 위치로 순간이동`, `순간이동을 하면 건전지 사용량이 줄지 않지만, 앞으로 K 칸을 점프하면 K 만큼의 건전지 사용량이 듭니다.`
+            ; It can be thought as n is sum of 2^{subset}, which the <subset> is a subset of set of strictly positive integer.
 
     Other solution
         answer: int = 0
