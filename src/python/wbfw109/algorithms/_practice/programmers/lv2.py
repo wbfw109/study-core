@@ -443,52 +443,47 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
 
     """
     stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
-    current_pop_set: set[int] = set()
     is_popped = True
     while is_popped:
         is_popped = False
+        pop_set: set[int] = set()
+        prev_first_pop_j = m
+
         for i in range(n - 1):
-            next_pop_set: set[int] = set()
-            end_j = min(len(stacks[i]), len(stacks[i + 1])) - 1
-            first_pop_j = m
+            ip1 = i + 1  # i plus 1
+            prev_pop_set = pop_set.copy()
+            pop_set.clear()
+            end_j = min(len(stacks[i]), len(stacks[ip1])) - 1
+            first_pop_j = if prev_first_pop_j else m
             not_pop_list: list[str] = []
             for j in range(end_j):
                 jp1: int = j + 1  # j plus 1
-                if (
-                    stacks[i][j]
-                    == stacks[i + 1][j]
-                    == stacks[i][jp1]
-                    == stacks[i + 1][jp1]
-                ):
-                    current_pop_set.add(j)
-                    current_pop_set.add(jp1)
-                    next_pop_set.add(j)
-                    next_pop_set.add(jp1)
+                if stacks[i][j] == stacks[ip1][j] == stacks[i][jp1] == stacks[ip1][jp1]:
+                    pop_set.add(j)
+                    pop_set.add(jp1)
 
                 # move not popped elements to forward of stack.
-                is_present: bool = j in current_pop_set
-                if j < first_pop_j:
-                    if is_present:
-                        first_pop_j = j
-                elif not is_present:
+                will_be_popped: bool = j in pop_set or j in prev_pop_set
+                if will_be_popped and j < first_pop_j:
+                    first_pop_j = j
+                elif not will_be_popped and j > first_pop_j:
                     not_pop_list.append(stacks[i][j])
             else:
-                if end_j > first_pop_j and end_j not in current_pop_set:
-                    not_pop_list.append(stacks[i][end_j])
+                if first_pop_j <= end_j:
+                    if end_j in pop_set:
+                        not_pop_list.extend(stacks[i][end_j + 1 :])
+                    else:
+                        not_pop_list.extend(stacks[i][end_j:])
             # post-process
             stacks[i][first_pop_j:] = not_pop_list
-            if current_pop_set:
+            if pop_set:
                 is_popped = True
-            current_pop_set = next_pop_set
+            prev_first_pop_j = first_pop_j
         else:
-            if current_pop_set:
+            if pop_set:
                 is_popped = True
-                nm1 = n - 1  # n minus 1
-                first_pop_j = min(current_pop_set)
-                stacks[nm1][first_pop_j:] = [
-                    stacks[nm1][j]
-                    for j in range(first_pop_j + 1, len(stacks[nm1]))
-                    if j not in current_pop_set
+                stacks[-1] = [
+                    stacks[-1][j] for j in range(len(stacks[-1])) if j not in pop_set
                 ]
     return n * m - sum((len(stacks[i]) for i in range(n)))
 

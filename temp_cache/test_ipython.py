@@ -753,6 +753,7 @@ min(a, b)
 # New in version 3.10: Rich comparison operations were added. 자카드 유사도
 
 # %%
-board = ["CCBDE", "AAADE", "AAABF", "CCBBF"]
-stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
-stacks
+a = 
+# set 속도 차이.. add 두번과 update 한번.
+    # pop_set.add(j)
+    # pop_set.add(jp1)
