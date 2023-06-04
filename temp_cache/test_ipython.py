@@ -753,3 +753,6 @@ min(a, b)
 # New in version 3.10: Rich comparison operations were added. 자카드 유사도
 
 # %%
+board = ["CCBDE", "AAADE", "AAABF", "CCBBF"]
+stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
+stacks

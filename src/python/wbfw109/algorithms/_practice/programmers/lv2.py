@@ -398,7 +398,9 @@ def solution_42578() -> None:
 
 
 def solution_42577() -> None:
-    """전화번호 목록 ; https://school.programmers.co.kr/learn/courses/30/lessons/42577"""
+    """전화번호 목록 ; https://school.programmers.co.kr/learn/courses/30/lessons/42577
+    //// 이거 전까지만 하고, 정리+필요한 이론 공부하고 다시 진행.
+    """
 
 
 def solution_17687() -> None:
@@ -421,20 +423,78 @@ def solution_17680() -> None:
     """[1차] 캐시 ; https://school.programmers.co.kr/learn/courses/30/lessons/17680"""
 
 
-def solution_17679() -> None:
-    """[1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
+def solution_17679(m: int, n: int, board: list[str]) -> int:
+    """💤 [1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
     매 번 스택의 길이를 확인하는 것 괜찮나? array 사용해서 불필요한 메모리를 차지하는 것보다는 날 것 같음.
         스택 사용 시 중간을 pop 하면 시간이 오래 걸릴 수 있기 때문에 array 사용하는 것이 나을듯 보임.
     pop 이 아니라 그 위에있는 위치를 아래로 보내고, 캐릭터가 있었던 나머지 위치를 0 으로 채우기.
     효율적인 계산을 위해, 이를 위해 가장 위에 있던 0 의 위치와 0이 아닌 값이 처음으로 나오는 행을 알고 있어야 함.
-    //// 이거 전까지 하고, 정리한다음 다시 하기.
     캐
+    한 번의 순환에 위의 값을 내릴 수 있을것같은데?
+    - porperty to top-down falling
+        -> to iterate and pop elemens from top is faster than from bottom.
+    현재 주어진 형태에서 column 의 개수가 줄어드는 방식으로 pop 된다.
+    column 들을 stack 으로 만들고
+    , 현재 stack 과 다음 stack 의 높이에 따라서 비교를 하면서
+    , 삭제할 원소를 정하고 먼저 옮긴 다음에 맨 뒤에거를 pop
+
+    중복검사를 해야 하며, 처음 발견된 pop 쌍 이후의 사라지지 않는 요소 위치를 당겨야 한다.
+    pop 되지 않는 요소와 첫 pop 시작 위치를 저장해놓으면 sort 할 필요 없이 쉽게 가능할듯.
 
     """
+    stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
+    current_pop_set: set[int] = set()
+    is_popped = True
+    while is_popped:
+        is_popped = False
+        for i in range(n - 1):
+            next_pop_set: set[int] = set()
+            end_j = min(len(stacks[i]), len(stacks[i + 1])) - 1
+            first_pop_j = m
+            not_pop_list: list[str] = []
+            for j in range(end_j):
+                jp1: int = j + 1  # j plus 1
+                if (
+                    stacks[i][j]
+                    == stacks[i + 1][j]
+                    == stacks[i][jp1]
+                    == stacks[i + 1][jp1]
+                ):
+                    current_pop_set.add(j)
+                    current_pop_set.add(jp1)
+                    next_pop_set.add(j)
+                    next_pop_set.add(jp1)
+
+                # move not popped elements to forward of stack.
+                is_present: bool = j in current_pop_set
+                if j < first_pop_j:
+                    if is_present:
+                        first_pop_j = j
+                elif not is_present:
+                    not_pop_list.append(stacks[i][j])
+            else:
+                if end_j > first_pop_j and end_j not in current_pop_set:
+                    not_pop_list.append(stacks[i][end_j])
+            # post-process
+            stacks[i][first_pop_j:] = not_pop_list
+            if current_pop_set:
+                is_popped = True
+            current_pop_set = next_pop_set
+        else:
+            if current_pop_set:
+                is_popped = True
+                nm1 = n - 1  # n minus 1
+                first_pop_j = min(current_pop_set)
+                stacks[nm1][first_pop_j:] = [
+                    stacks[nm1][j]
+                    for j in range(first_pop_j + 1, len(stacks[nm1]))
+                    if j not in current_pop_set
+                ]
+    return n * m - sum((len(stacks[i]) for i in range(n)))
 
 
 def solution_17677(str1: str, str2: str) -> int:
-    """[1차] 뉴스 클러스터링 ; https://school.programmers.co.kr/learn/courses/30/lessons/17677
+    """💦 [1차] 뉴스 클러스터링 ; https://school.programmers.co.kr/learn/courses/30/lessons/17677
     - 😠 what is return value when value of A union B is 0 (divisor is 0)?
     """
     from collections import Counter
@@ -524,8 +584,8 @@ def solution_12978(N: int, road: list[list[int]], K: int) -> int:
     """
     import heapq
 
-    # 0 index will not be used.
     MAX_DISTANCE: int = 500001
+    # 0 index will not be used.
     graph_metric: list[dict[int, int]] = [{} for _ in range(N + 1)]
     for a, b, distance in road:
         if distance < graph_metric[a].get(b, MAX_DISTANCE):
