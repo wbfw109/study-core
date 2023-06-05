@@ -400,6 +400,7 @@ def solution_42578() -> None:
 def solution_42577() -> None:
     """전화번호 목록 ; https://school.programmers.co.kr/learn/courses/30/lessons/42577
     //// 이거 전까지만 하고, 정리+필요한 이론 공부하고 다시 진행.
+    // [1차] 프렌즈4블록 질문중.
     """
 
 
@@ -407,10 +408,32 @@ def solution_17687() -> None:
     """[3차] n진수 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/17687"""
 
 
-def solution_17686(files: list[str]) -> None:
-    """[3차] 파일명 정렬 ; https://school.programmers.co.kr/learn/courses/30/lessons/17686
+def solution_17686(files: list[str]) -> list[str]:
+    """💤 [3차] 파일명 정렬 ; https://school.programmers.co.kr/learn/courses/30/lessons/17686
     Tag: Sequence sort (natural sort)
+
+    Consideration
+        - `파일명은 우선 HEAD 부분을 기준으로 사전 순으로 정렬한다. 이때, 문자열 비교 시 대소문자 구분을 하지 않는다. MUZI와 muzi, MuZi는 정렬 시에 같은 순서로 취급된다.`
+            given <files> must not be modified.
+        - `파일명은 영문자로 시작하며, 숫자를 하나 이상 포함하고 있다.`
+        - `파일명을 세 부분으로 나눈 후, 다음 기준에 따라 파일명을 정렬한다.` ...
+            TAIL part is ignored.
     """
+    # comparisons: tuple[head, number]
+    comp: list[tuple[str, int]] = []
+    for file in files:
+        file = file.lower()
+        head: list[str] = []
+        number: list[str] = []
+        for char in file:
+            if char.isdigit():
+                number.append(char)
+            else:
+                if number:
+                    break
+                head.append(char)
+        comp.append(("".join(head), int("".join(number))))
+    return [files[i] for i in sorted(range(len(files)), key=lambda i: comp[i])]
 
 
 def solution_17684(msg: str) -> list[int]:
@@ -443,43 +466,34 @@ def solution_17683(m: str, musicinfos: list[str]) -> str:
     - Consideration
         - `네오가 기억한 멜로디와 악보에 사용되는 음은 C, C#, D, D#, E, F, F#, G, G#, A, A#, B 12개이다.`
         - `조건이 일치하는 음악이 여러 개일 때에는 라디오에서 재생된 시간이 제일 긴 음악 제목을 반환한다. 재생된 시간도 같을 경우 먼저 입력된 음악 제목을 반환한다.`
+            🚣 <comparsions> list is not required, which is auxiliary space.
         - Example: 12:00 ~ 12:14 (exclusive)
     """
     from itertools import cycle
 
-    for sharp, temp in [
+    hash_map: list[tuple[str, str]] = [
         ("C#", "c"),
         ("D#", "d"),
         ("F#", "f"),
         ("G#", "g"),
         ("A#", "a"),
-    ]:
+    ]
+    for sharp, temp in hash_map:
         m = m.replace(sharp, temp)
 
-    # comparisons: tuple[length, title]
-    comparisons: list[tuple[int, str]] = []
+    # tuple[length, title]
+    answer = (0, "(None)")
     for info in musicinfos:
         time1, time2, title, melody = info.split(",")
-        for sharp, temp in [
-            ("C#", "c"),
-            ("D#", "d"),
-            ("F#", "f"),
-            ("G#", "g"),
-            ("A#", "a"),
-        ]:
+        for sharp, temp in hash_map:
             melody = melody.replace(sharp, temp)
 
         delta = (int(time2[:2]) - int(time1[:2])) * 60 + int(time2[3:]) - int(time1[3:])
         x = cycle(melody)
         total_melody = "".join((next(x) for _ in range(delta)))
-        if total_melody.find(m) >= 0:
-            comparisons.append((len(total_melody), title))
-    found_i = max(
-        (i for i in range(len(comparisons))),
-        key=lambda i: comparisons[i][0],
-        default=-1,
-    )
-    return "(None)" if found_i == -1 else comparisons[found_i][1]
+        if total_melody.find(m) >= 0 and answer[0] < (length := len(total_melody)):
+            answer = (length, title)
+    return answer[1]
 
 
 def solution_17680(cacheSize: int, cities: list[str]) -> int:

@@ -886,30 +886,46 @@ msg[1:x]
 
 # %%
 
-import re
 
+a = [["", 123], ["abc", 123, "abc"]]
+a.sort()
+a
 
-def atoi(text: str):
-    return int(text) if text.isdigit() else text
+#%%
 
-
-def natural_keys(text):
+# arr.append("abc"[4:]) # result = ['']
+def solution(files):
     """
-    alist.sort(key=natural_keys) sorts in human order
-    http://nedbatchelder.com/blog/200712/human_sorting.html
-    (See Toothy's implementation in the comments)
+    - `파일명은 영문자로 시작하며, 숫자를 하나 이상 포함하고 있다.`
+    ??? TAIL 에 대한 처리방법?? 그냥 문자열 비교?
     """
-    return [atoi(c) for c in re.split(r"(\d+)", text)]
-
-
-alist = [
-    "something1",
-    "something12",
-    "something17",
-    "something2 32",
-    "something25",
-    "something29",
-]
-
-alist.sort(key=natural_keys)
-print(alist)
+    files = [file.lower() for file in files]
+    comp = [] # comparisons
+    for file in files
+        elements = []
+        word = [file[0]]
+        is_word_digit = False
+        for i in range(1, len(file)):
+            is_char_digit = file[i].isdigit()
+            if is_word_digit:
+                if is_char_digit:
+                    word.append(file[i])
+                else:
+                    elements.append(int("".join(word)))
+                    word = [file[i]]
+                    is_word_digit = False
+            else:
+                if is_char_digit:
+                    elements.append("".join(word))
+                    word = [file[i]]
+                    is_word_digit = True
+                else:
+                    word.append(file[i])
+        else:
+            if word:
+                elements.append(int("".join(word)) if is_word_digit else "".join(word))
+                    
+    answer = []
+    return answer
+#%%
+sorted(range(10))
