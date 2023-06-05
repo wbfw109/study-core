@@ -753,7 +753,100 @@ min(a, b)
 # New in version 3.10: Rich comparison operations were added. 자카드 유사도
 
 # %%
-a = 
 # set 속도 차이.. add 두번과 update 한번.
-    # pop_set.add(j)
-    # pop_set.add(jp1)
+# pop_set.add(j)
+# pop_set.add(jp1)
+
+
+def solution_17679(m: int, n: int, board: list[str]) -> int:
+    """🔍💤 [1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
+    stack 사용해서
+        영향을 미치는 stack[i] 에만 계산
+        영향을 미치는 유효한 stack[i][start_j] ~ stack[i][end_j] 까지만 계산.
+    11번 테스트케이스 실패.
+    """
+    stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
+    is_popped = True
+    nm1 = n - 1
+    i_and_start_j = ((i, 0) for i in range(n))
+
+    while is_popped:
+        is_popped = False
+        pop_set: set[int] = set()
+        next_pop_set: set[int] = set()
+        # <first_popped_j> by i. it is used to to bring not popped elements to the first popped index of the stack, and used to create next <i_and_start_j>.
+        first_popped_j: list[int] = [m] * n
+        i = 0
+        for i, start_j in i_and_start_j:
+            ## another branch
+            if i == nm1:
+                continue
+
+            ## a branch. starts with Memoization
+            ip1 = i + 1  # i plus 1
+            im1 = i - 1
+
+            # if stacks[i-1] is popped, <pop_set> will be inherited from <next_pop_set>.
+            pop_set = next_pop_set if first_popped_j[im1] < m else set()
+            next_pop_set = set()
+            e_to_be_moved: list[str] = []
+
+            # set <end_j>
+            end_j = min(len(stacks[i]), len(stacks[ip1])) - 1
+            is_first_popped = True
+            for j in range(start_j, end_j):
+                jp1: int = j + 1  # j plus 1
+                if stacks[i][j] == stacks[ip1][j] == stacks[i][jp1] == stacks[ip1][jp1]:
+                    x = [j, jp1]
+                    pop_set.update(x)
+                    next_pop_set.update(x)
+                    if is_first_popped:
+                        first_popped_j[ip1] = j
+                        if first_popped_j[i] > j:
+                            first_popped_j[i] = first_popped_j[im1] = j
+                        is_first_popped = False
+
+                # Statement to bring not popped elements to the first popped index of the stack.
+                if j > first_popped_j[i] and j not in pop_set:
+                    e_to_be_moved.append(stacks[i][j])
+            else:
+                # Statement to bring not popped elements to the first popped index of the stack.
+                if end_j > first_popped_j[i]:
+                    if end_j in pop_set:
+                        e_to_be_moved.extend(stacks[i][end_j + 1 :])
+                    else:
+                        e_to_be_moved.extend(stacks[i][end_j:])
+
+            # a <i> iteration ends.
+            if pop_set:
+                is_popped = True
+                # move not popped elements to forward of stack if is_greater_than_first_pop_j
+                stacks[i][first_popped_j[i] :] = e_to_be_moved
+        else:
+            if next_pop_set:
+                last_i = nm1 if i == nm1 else i + 1
+                first_popped_j[last_i] = first_popped_j[last_i - 1]
+                stacks[last_i][first_popped_j[last_i] :] = [
+                    stacks[last_i][j]
+                    for j in range(first_popped_j[last_i] + 2, len(stacks[last_i]))
+                    if j not in next_pop_set
+                ]
+
+        # fix when j is 0 when a <i> iteration ends.
+        if first_popped_j[nm1 - 1] == m:
+            first_popped_j[nm1] = m
+        # create Generator <i_and_start_j>
+        i_and_start_j = (
+            (i, x - 1) if x > 1 else (i, 0)
+            for i, x in enumerate(first_popped_j)
+            if x < m
+        )
+
+    return n * m - sum((len(stacks[i]) for i in range(n)))
+
+
+# %%
+
+x = enumerate(range(5))
+for i, y in enumerate(range(5)):
+    i, y

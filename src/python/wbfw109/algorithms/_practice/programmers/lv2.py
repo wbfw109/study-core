@@ -419,72 +419,96 @@ def solution_17683() -> None:
     """[3차] 방금그곡 ; https://school.programmers.co.kr/learn/courses/30/lessons/17683"""
 
 
-def solution_17680() -> None:
-    """[1차] 캐시 ; https://school.programmers.co.kr/learn/courses/30/lessons/17680"""
+def solution_17680(cacheSize: int, cities: list[str]) -> int:
+    """[1차] 캐시 ; https://school.programmers.co.kr/learn/courses/30/lessons/17680
+    collections Counter 사용해서 해결 할 순 있지만
+    """
 
 
 def solution_17679(m: int, n: int, board: list[str]) -> int:
-    """💤 [1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
-    매 번 스택의 길이를 확인하는 것 괜찮나? array 사용해서 불필요한 메모리를 차지하는 것보다는 날 것 같음.
-        스택 사용 시 중간을 pop 하면 시간이 오래 걸릴 수 있기 때문에 array 사용하는 것이 나을듯 보임.
-    pop 이 아니라 그 위에있는 위치를 아래로 보내고, 캐릭터가 있었던 나머지 위치를 0 으로 채우기.
-    효율적인 계산을 위해, 이를 위해 가장 위에 있던 0 의 위치와 0이 아닌 값이 처음으로 나오는 행을 알고 있어야 함.
-    캐
-    한 번의 순환에 위의 값을 내릴 수 있을것같은데?
-    - porperty to top-down falling
-        -> to iterate and pop elemens from top is faster than from bottom.
-    현재 주어진 형태에서 column 의 개수가 줄어드는 방식으로 pop 된다.
-    column 들을 stack 으로 만들고
-    , 현재 stack 과 다음 stack 의 높이에 따라서 비교를 하면서
-    , 삭제할 원소를 정하고 먼저 옮긴 다음에 맨 뒤에거를 pop
-
-    중복검사를 해야 하며, 처음 발견된 pop 쌍 이후의 사라지지 않는 요소 위치를 당겨야 한다.
-    pop 되지 않는 요소와 첫 pop 시작 위치를 저장해놓으면 sort 할 필요 없이 쉽게 가능할듯.
-
+    """🔍💤 [1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
+    stack 사용해서
+        영향을 미치는 stack[i] 에만 계산
+        영향을 미치는 유효한 stack[i][start_j] ~ stack[i][end_j] 까지만 계산.
+    11번 테스트케이스 실패.
     """
     stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
     is_popped = True
+    nm1 = n - 1
+    i_and_start_j = ((i, 0) for i in range(n))
+
     while is_popped:
         is_popped = False
         pop_set: set[int] = set()
-        prev_first_pop_j = m
+        next_pop_set: set[int] = set()
+        # <first_popped_j> by i. it is used to to bring not popped elements to the first popped index of the stack, and used to create next <i_and_start_j>.
+        first_popped_j: list[int] = [m] * n
+        i = 0
+        for i, start_j in i_and_start_j:
+            ## another branch
+            if i == nm1:
+                continue
 
-        for i in range(n - 1):
+            ## a branch. starts with Memoization
             ip1 = i + 1  # i plus 1
-            prev_pop_set = pop_set.copy()
-            pop_set.clear()
+            im1 = i - 1
+
+            # if stacks[i-1] is popped, <pop_set> will be inherited from <next_pop_set>.
+            pop_set = next_pop_set if first_popped_j[im1] < m else set()
+            next_pop_set = set()
+            e_to_be_moved: list[str] = []
+
+            # set <end_j>
             end_j = min(len(stacks[i]), len(stacks[ip1])) - 1
-            first_pop_j = if prev_first_pop_j else m
-            not_pop_list: list[str] = []
-            for j in range(end_j):
+            is_first_popped = True
+            for j in range(start_j, end_j):
                 jp1: int = j + 1  # j plus 1
                 if stacks[i][j] == stacks[ip1][j] == stacks[i][jp1] == stacks[ip1][jp1]:
-                    pop_set.add(j)
-                    pop_set.add(jp1)
+                    x = [j, jp1]
+                    pop_set.update(x)
+                    next_pop_set.update(x)
+                    if is_first_popped:
+                        first_popped_j[ip1] = j
+                        if first_popped_j[i] > j:
+                            first_popped_j[i] = first_popped_j[im1] = j
+                        is_first_popped = False
 
-                # move not popped elements to forward of stack.
-                will_be_popped: bool = j in pop_set or j in prev_pop_set
-                if will_be_popped and j < first_pop_j:
-                    first_pop_j = j
-                elif not will_be_popped and j > first_pop_j:
-                    not_pop_list.append(stacks[i][j])
+                # Statement to bring not popped elements to the first popped index of the stack.
+                if j > first_popped_j[i] and j not in pop_set:
+                    e_to_be_moved.append(stacks[i][j])
             else:
-                if first_pop_j <= end_j:
+                # Statement to bring not popped elements to the first popped index of the stack.
+                if end_j > first_popped_j[i]:
                     if end_j in pop_set:
-                        not_pop_list.extend(stacks[i][end_j + 1 :])
+                        e_to_be_moved.extend(stacks[i][end_j + 1 :])
                     else:
-                        not_pop_list.extend(stacks[i][end_j:])
-            # post-process
-            stacks[i][first_pop_j:] = not_pop_list
+                        e_to_be_moved.extend(stacks[i][end_j:])
+
+            # a <i> iteration ends.
             if pop_set:
                 is_popped = True
-            prev_first_pop_j = first_pop_j
+                # move not popped elements to forward of stack if is_greater_than_first_pop_j
+                stacks[i][first_popped_j[i] :] = e_to_be_moved
         else:
-            if pop_set:
-                is_popped = True
-                stacks[-1] = [
-                    stacks[-1][j] for j in range(len(stacks[-1])) if j not in pop_set
+            if next_pop_set:
+                last_i = nm1 if i == nm1 else i + 1
+                first_popped_j[last_i] = first_popped_j[last_i - 1]
+                stacks[last_i][first_popped_j[last_i] :] = [
+                    stacks[last_i][j]
+                    for j in range(first_popped_j[last_i] + 2, len(stacks[last_i]))
+                    if j not in next_pop_set
                 ]
+
+        # fix when j is 0 when a <i> iteration ends.
+        if first_popped_j[nm1 - 1] == m:
+            first_popped_j[nm1] = m
+        # create Generator <i_and_start_j>
+        i_and_start_j = (
+            (i, x - 1) if x > 1 else (i, 0)
+            for i, x in enumerate(first_popped_j)
+            if x < m
+        )
+
     return n * m - sum((len(stacks[i]) for i in range(n)))
 
 
