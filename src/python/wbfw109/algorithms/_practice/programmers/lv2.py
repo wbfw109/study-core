@@ -407,40 +407,80 @@ def solution_17687() -> None:
     """[3차] n진수 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/17687"""
 
 
-def solution_17686() -> None:
-    """[3차] 파일명 정렬 ; https://school.programmers.co.kr/learn/courses/30/lessons/17686"""
+def solution_17686(files: list[str]) -> None:
+    """[3차] 파일명 정렬 ; https://school.programmers.co.kr/learn/courses/30/lessons/17686
+    Tag: Sequence sort (natural sort)
+    """
 
 
-def solution_17684() -> None:
+def solution_17684(msg: str) -> list[int]:
     """[3차] 압축 ; https://school.programmers.co.kr/learn/courses/30/lessons/17684"""
+    import itertools
+    import string
+
+    d: dict[str, int] = {c: i for i, c in enumerate(string.ascii_uppercase, start=1)}
+    i: int = 0
+    count_gen = itertools.count(len(string.ascii_uppercase) + 1)
+    length = len(msg)
+    answer: list[int] = []
+    while i < length:
+        x = msg[i]
+        for i in range(i + 1, length):
+            if (y := x + msg[i]) in d:
+                x = y
+            else:
+                i -= 1
+                d[y] = next(count_gen)
+                break
+        answer.append(d[x])
+        i += 1
+    return answer
 
 
 def solution_17683(m: str, musicinfos: list[str]) -> str:
     """[3차] 방금그곡 ; https://school.programmers.co.kr/learn/courses/30/lessons/17683
-    
+
     - Consideration
         - `네오가 기억한 멜로디와 악보에 사용되는 음은 C, C#, D, D#, E, F, F#, G, G#, A, A#, B 12개이다.`
         - `조건이 일치하는 음악이 여러 개일 때에는 라디오에서 재생된 시간이 제일 긴 음악 제목을 반환한다. 재생된 시간도 같을 경우 먼저 입력된 음악 제목을 반환한다.`
         - Example: 12:00 ~ 12:14 (exclusive)
-    """    
+    """
     from itertools import cycle
-    for sharp, temp in [("C#", "c"), ("D#", "d"), ("F#", "f"), ("G#", "g"), ("A#", "a")]:
+
+    for sharp, temp in [
+        ("C#", "c"),
+        ("D#", "d"),
+        ("F#", "f"),
+        ("G#", "g"),
+        ("A#", "a"),
+    ]:
         m = m.replace(sharp, temp)
-        
+
     # comparisons: tuple[length, title]
     comparisons: list[tuple[int, str]] = []
     for info in musicinfos:
         time1, time2, title, melody = info.split(",")
-        for sharp, temp in [("C#", "c"), ("D#", "d"), ("F#", "f"), ("G#", "g"), ("A#", "a")]:
+        for sharp, temp in [
+            ("C#", "c"),
+            ("D#", "d"),
+            ("F#", "f"),
+            ("G#", "g"),
+            ("A#", "a"),
+        ]:
             melody = melody.replace(sharp, temp)
-            
-        delta = (int(time2[:2])-int(time1[:2]))*60+int(time2[3:])-int(time1[3:])
+
+        delta = (int(time2[:2]) - int(time1[:2])) * 60 + int(time2[3:]) - int(time1[3:])
         x = cycle(melody)
         total_melody = "".join((next(x) for _ in range(delta)))
         if total_melody.find(m) >= 0:
             comparisons.append((len(total_melody), title))
-    found_i = max((i for i in range(len(comparisons))), key=lambda i: comparisons[i][0], default=-1)
+    found_i = max(
+        (i for i in range(len(comparisons))),
+        key=lambda i: comparisons[i][0],
+        default=-1,
+    )
     return "(None)" if found_i == -1 else comparisons[found_i][1]
+
 
 def solution_17680(cacheSize: int, cities: list[str]) -> int:
     """💦 [1차] 캐시 ; https://school.programmers.co.kr/learn/courses/30/lessons/17680
@@ -485,6 +525,8 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
         영향을 미치는 stack[i] 에만 계산
         영향을 미치는 유효한 stack[i][start_j] ~ stack[i][end_j] 까지만 계산.
     11번 테스트케이스 실패.
+        마지막 요소에 대한 iteration 문제인듯한데
+    next_pop_set 이 한 번 더 실행되는듯? iterate 를 모두 하지 않았을 떄
     """
     stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
     is_popped = True

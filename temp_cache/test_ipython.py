@@ -879,7 +879,37 @@ def solution(cacheSize, cities):
 
 
 # %%
-from itertools import cycle
 
-x = cycle("ABC")
-[next(x) for _ in range(10)]
+msg = "ABCDE"
+# x+1 .. +2.. 에 대하 ㄴ것과 만든 string 에서 하나씩 추가하는 것 시간차이?
+msg[1:x]
+
+# %%
+
+import re
+
+
+def atoi(text: str):
+    return int(text) if text.isdigit() else text
+
+
+def natural_keys(text):
+    """
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    """
+    return [atoi(c) for c in re.split(r"(\d+)", text)]
+
+
+alist = [
+    "something1",
+    "something12",
+    "something17",
+    "something2 32",
+    "something25",
+    "something29",
+]
+
+alist.sort(key=natural_keys)
+print(alist)
