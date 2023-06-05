@@ -415,14 +415,68 @@ def solution_17684() -> None:
     """[3차] 압축 ; https://school.programmers.co.kr/learn/courses/30/lessons/17684"""
 
 
-def solution_17683() -> None:
-    """[3차] 방금그곡 ; https://school.programmers.co.kr/learn/courses/30/lessons/17683"""
-
+def solution_17683(m: str, musicinfos: list[str]) -> str:
+    """[3차] 방금그곡 ; https://school.programmers.co.kr/learn/courses/30/lessons/17683
+    
+    - Consideration
+        - `네오가 기억한 멜로디와 악보에 사용되는 음은 C, C#, D, D#, E, F, F#, G, G#, A, A#, B 12개이다.`
+        - `조건이 일치하는 음악이 여러 개일 때에는 라디오에서 재생된 시간이 제일 긴 음악 제목을 반환한다. 재생된 시간도 같을 경우 먼저 입력된 음악 제목을 반환한다.`
+        - Example: 12:00 ~ 12:14 (exclusive)
+    """    
+    from itertools import cycle
+    for sharp, temp in [("C#", "c"), ("D#", "d"), ("F#", "f"), ("G#", "g"), ("A#", "a")]:
+        m = m.replace(sharp, temp)
+        
+    # comparisons: tuple[length, title]
+    comparisons: list[tuple[int, str]] = []
+    for info in musicinfos:
+        time1, time2, title, melody = info.split(",")
+        for sharp, temp in [("C#", "c"), ("D#", "d"), ("F#", "f"), ("G#", "g"), ("A#", "a")]:
+            melody = melody.replace(sharp, temp)
+            
+        delta = (int(time2[:2])-int(time1[:2]))*60+int(time2[3:])-int(time1[3:])
+        x = cycle(melody)
+        total_melody = "".join((next(x) for _ in range(delta)))
+        if total_melody.find(m) >= 0:
+            comparisons.append((len(total_melody), title))
+    found_i = max((i for i in range(len(comparisons))), key=lambda i: comparisons[i][0], default=-1)
+    return "(None)" if found_i == -1 else comparisons[found_i][1]
 
 def solution_17680(cacheSize: int, cities: list[str]) -> int:
-    """[1차] 캐시 ; https://school.programmers.co.kr/learn/courses/30/lessons/17680
-    collections Counter 사용해서 해결 할 순 있지만
+    """💦 [1차] 캐시 ; https://school.programmers.co.kr/learn/courses/30/lessons/17680
+    Consideration
+        - `cacheSize는 정수이며, 범위는 0 ≦ cacheSize ≦ 30 이다.`
     """
+    from collections import OrderedDict
+
+    if cacheSize == 0:
+        return 5 * len(cities)
+
+    cities = [city.lower() for city in cities]
+    cache: OrderedDict[str, None] = OrderedDict()
+    cost: int = 0
+    count = i = 0
+    for i, city in enumerate(cities):
+        if city in cache:
+            cost += 1
+            cache.move_to_end(city)
+        else:
+            cost += 5
+            cache[city] = None
+            count += 1
+
+        if count == cacheSize:
+            break
+
+    for i in range(i + 1, len(cities)):
+        if cities[i] in cache:
+            cost += 1
+            cache.move_to_end(cities[i])
+        else:
+            cost += 5
+            cache.popitem(last=False)
+            cache[cities[i]] = None
+    return cost
 
 
 def solution_17679(m: int, n: int, board: list[str]) -> int:

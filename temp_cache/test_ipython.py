@@ -845,8 +845,41 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
     return n * m - sum((len(stacks[i]) for i in range(n)))
 
 
+solution_17679(5, 6, ["AAAAAA", "BBAATB", "BBAATB", "JJJTAA", "JJJTAA"])
+
 # %%
 
-x = enumerate(range(5))
-for i, y in enumerate(range(5)):
-    i, y
+from collections import OrderedDict
+
+x = OrderedDict().fromkeys([1, 2, 3])
+x
+# x.move_to_end(3)
+# x
+# x.popitem()
+# x
+# x.popitem(False)
+# x
+from collections import deque
+
+
+def solution(cacheSize, cities):
+    dq = deque(maxlen=cacheSize)
+    run_time = 0
+    for city in cities:
+        city = city.lower()
+        if city not in dq:  # cache miss
+            dq.append(city)
+            run_time += 5
+        else:  # cache hit
+            dq.remove(city)
+            dq.append(city)
+            run_time += 1
+
+    return run_time
+
+
+# %%
+from itertools import cycle
+
+x = cycle("ABC")
+[next(x) for _ in range(10)]
