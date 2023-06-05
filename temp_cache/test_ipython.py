@@ -928,4 +928,12 @@ def solution(files):
     answer = []
     return answer
 #%%
-sorted(range(10))
+
+def gen():
+    yield from reversed(range(10))
+    
+x = gen()
+next(x)
+next(x)
+next(x)
+next(x)

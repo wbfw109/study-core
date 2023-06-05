@@ -404,8 +404,46 @@ def solution_42577() -> None:
     """
 
 
-def solution_17687() -> None:
-    """[3차] n진수 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/17687"""
+def solution_17687(n: int, t: int, m: int, p: int) -> str:
+    """💤 [3차] n진수 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/17687
+    Tag: Math (Base Conversion)
+    """
+    import itertools
+    from typing import Generator
+
+    def base_char_generator(base: int) -> Generator[str, None, None]:
+        BASE_MAP: str = "0123456789ABCDEF"[:base]
+        INVERTED_BASE_MAP: dict[str, int] = {x: i for i, x in enumerate(BASE_MAP)}
+        MAX_DIGIT: str = BASE_MAP[base - 1]
+        
+        # <num_list> will be returned as reversed.
+        num_list: list[str] = ["0"]
+        yield from num_list
+        
+        # increase <num_str>
+        while True:
+            for i in range(len(num_list)):
+                if num_list[i] == MAX_DIGIT:
+                    num_list[i] = "0"
+                else:
+                    num_list[i] = BASE_MAP[INVERTED_BASE_MAP[num_list[i]] + 1]
+                    break
+            else:
+                num_list.append("1")
+
+            yield from reversed(num_list)
+
+    base_char_gen = base_char_generator(n)
+    order_gen = itertools.cycle(range(1, m + 1))
+    t_count = 0
+    answer: list[str] = []
+    while t_count < t:
+        x = next(base_char_gen)
+        if next(order_gen) == p:
+            answer.append(x)
+            t_count += 1
+
+    return "".join(answer)
 
 
 def solution_17686(files: list[str]) -> list[str]:
