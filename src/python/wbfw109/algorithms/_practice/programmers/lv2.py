@@ -390,18 +390,68 @@ def solution_42584() -> None:
 
 
 def solution_42583() -> None:
-    """다리를 지나는 트럭 ; https://school.programmers.co.kr/learn/courses/30/lessons/42583"""
-
-
-def solution_42578() -> None:
-    """의상 ; https://school.programmers.co.kr/learn/courses/30/lessons/42578"""
-
-
-def solution_42577() -> None:
-    """전화번호 목록 ; https://school.programmers.co.kr/learn/courses/30/lessons/42577
+    """다리를 지나는 트럭 ; https://school.programmers.co.kr/learn/courses/30/lessons/42583
     //// 이거 전까지만 하고, 정리+필요한 이론 공부하고 다시 진행.
     // [1차] 프렌즈4블록 질문중.
     """
+
+
+def solution_42578(clothes: list[list[str]]) -> int:
+    """💤 의상 ; https://school.programmers.co.kr/learn/courses/30/lessons/42578
+    Tag: Dynamic programming
+
+    Time complexity: O(n)
+    Space complexity: O(1)
+        from Sliding Window approach
+
+    Other Solutions
+        1. Dynamic programming with defaultdict or Counter object
+            from collections import Counter
+
+            items: dict[str, int] = Counter((type_ for _, type_ in clothes))
+            dp: int = 0
+            for x in items.values():
+                dp = dp * (x + 1) + x
+            return dp
+        2. <TimeOut>
+            from collections import defaultdict
+            import itertools
+            import math
+            items = defaultdict(list)
+            for cloth, type_ in clothes:
+                items[type_].append(cloth)
+            count_by_type = [len(x) for x in items.values()]
+            return sum((math.prod(comb) for i in range(1, len(items)+1) for comb in itertools.combinations(count_by_type, i) ))
+
+    Implementation
+        dp[i] is the number of cases when considering the first i elements.
+        ; dp[i] := dp[i-1] * (x+1) + x
+            - x := the number of clothes for the cloth type of the current iteration <i>
+        ; dp[0] = 0
+        
+        It is same as to use `math.prod(...) - 1` considering empty set.
+        
+    🔍 Why defaultdict solution is faster than other solutions?
+
+    """
+    from collections import Counter
+
+    items: dict[str, int] = Counter((type_ for _, type_ in clothes))
+    dp: int = 0
+    for x in items.values():
+        dp = dp * (x + 1) + x
+    return dp
+
+
+def solution_42577(phone_book: list[str]) -> bool:
+    """전화번호 목록 ; https://school.programmers.co.kr/learn/courses/30/lessons/42577"""
+    phone_book.sort()
+    return not any(
+        (
+            phone_book[i + 1].startswith(phone_book[i])
+            for i in range(len(phone_book) - 1)
+        )
+    )
 
 
 def solution_17687(n: int, t: int, m: int, p: int) -> str:
@@ -415,11 +465,11 @@ def solution_17687(n: int, t: int, m: int, p: int) -> str:
         BASE_MAP: str = "0123456789ABCDEF"[:base]
         INVERTED_BASE_MAP: dict[str, int] = {x: i for i, x in enumerate(BASE_MAP)}
         MAX_DIGIT: str = BASE_MAP[base - 1]
-        
+
         # <num_list> will be returned as reversed.
         num_list: list[str] = ["0"]
         yield from num_list
-        
+
         # increase <num_str>
         while True:
             for i in range(len(num_list)):

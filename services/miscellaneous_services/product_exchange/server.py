@@ -1,4 +1,5 @@
 # written in Python 3.11.1 environment with only built-in library
+# python -m unittest
 
 from __future__ import annotations
 
@@ -8,6 +9,71 @@ import time
 import unittest
 from pprint import pprint
 from typing import Iterator, Optional
+
+logger = logging.getLogger(__name__)
+formatter = logging.Formatter(
+    "%(asctime)s - %(filename)s - %(levelname)s - %(message)s"
+)
+
+file_handler = logging.FileHandler(filename="exchange_product.log")
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.DEBUG)
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
+
+
+class ExchangeProduct:
+    """음.. 소켓통신은 연결을 유지하는 경우 필요한데
+    단일 서비스로서 실행하기 하려면 어떻게?
+    test 도 연동하려면어떻게? 음.. 아니 하나는 백그라운드, 하나는 클라이언트
+    사용자는 일단 1명
+    fasade 패턴; 입력받는곳.
+    
+    
+    """
+
+    ## PRODUCT CODE
+    PRODUCT_CODE_FORM: str = "0123456789"
+    PRODUCT_CODE_SIZE: int = 9
+    PRODUCT_CODE_COUNT: int = 20
+
+    def __init__(self):
+        ## CUSTOMER CODE
+        CUSTOMER_COUPON_COUNT: int = 10
+        customer_coupon: list[str] = [
+            x for x, _ in zip(product_code_pool, range(CUSTOMER_COUPON_COUNT))
+        ]
+
+    def run(
+        self, input_lines: Optional[Iterator[str]] = None, is_debugging: bool = False
+    ) -> str:
+        if input_lines:
+            input_ = lambda: next(input_lines)
+        else:
+            input_ = input
+        try:
+            while True:
+                command, *arguments = input_().split()
+                command = command.upper()
+                if command == "CHECK":
+                    product_codes = arguments
+                    check_product_codes(customer_coupon, product_codes=product_codes)
+                elif command == "CLAIM":
+                    store_code = arguments[0]
+                    product_codes = arguments[1:]
+                    claim_product(
+                        customer_coupon,
+                        product_codes=product_codes,
+                        store_code=store_code,
+                    )
+                else:
+                    print_help_message()
+        except (KeyboardInterrupt, StopIteration):
+            pass
+        return ""
 
 
 def exchange_product(
@@ -48,18 +114,11 @@ def exchange_product(
 
     TODO: 상점 코드 안내, 코드는 A~Z,a~z 까지의 대,소 영문자만 사용이 가능하며 6문자로 이루어져 있습니다.
         - 고객이 상품 교환을 요구하면 가능한지 여부와 교환 결과를 안내해 주세요.
+
         발생할 수 있는 상황 ? 엣지 케이스가 뭐가 있지 -> 디버깅 모드 시, 상품 코드 랜덤이 아니라 직접 조정.
+        클래스로 변경.
     """
 
-    if input_lines:
-        input_ = lambda: next(input_lines)
-    else:
-        input_ = input
-
-    ## PRODUCT CODE
-    PRODUCT_CODE_FORM: str = "0123456789"
-    PRODUCT_CODE_SIZE: int = 9
-    PRODUCT_CODE_COUNT: int = 20
     # product_code_pool: dict[product_code, store_code in which it used ]
     product_code_pool: dict[str, str] = {}
     while len(product_code_pool) < PRODUCT_CODE_COUNT:
@@ -119,7 +178,7 @@ def exchange_product(
         for product_code in product_codes:
             if product_code not in customer_coupon:
                 # Use lazy % formatting in logging functions Pylint(W1201:logging-not-lazy)
-                logging.warning("[client] ⚠️ 상품 코드 %s 에 대한 접근 권한이 없습니다.", product_code)
+                logger.warning("[client] ⚠️ 상품 코드 %s 에 대한 접근 권한이 없습니다.", product_code)
             else:
                 valid_product_codes.append(product_code)
         return valid_product_codes
@@ -149,34 +208,15 @@ def exchange_product(
                         product_code_pool[product_code] = store_code
                         print("사용되었습니다.")
             else:
-                logging.warning("[client] ⚠️ 유효하지 않은 접근입니다")
+                logger.warning("[client] ⚠️ 유효하지 않은 접근입니다")
 
     def check_product_codes(customer_coupon: list[str], product_codes: list[str]):
         process_product_codes(customer_coupon, product_codes)
 
-    def claim_customer_coupons(
+    def claim_product(
         customer_coupon: list[str], product_codes: list[str], store_code: str
     ):
         process_product_codes(customer_coupon, product_codes, store_code)
-
-    try:
-        while True:
-            command, *arguments = input_().split()
-            command = command.upper()
-            if command == "CHECK":
-                product_codes = arguments
-                check_product_codes(customer_coupon, product_codes=product_codes)
-            elif command == "CLAIM":
-                store_code = arguments[0]
-                product_codes = arguments[1:]
-                claim_customer_coupons(
-                    customer_coupon, product_codes=product_codes, store_code=store_code
-                )
-            else:
-                print_help_message()
-    except (KeyboardInterrupt, StopIteration):
-        pass
-    return ""
 
 
 def test_exchange_product() -> None:
@@ -197,3 +237,5 @@ def test_exchange_product() -> None:
 
 test_exchange_product()
 # exchange_product(is_debugging=True)
+# logging.warning("warn로그입니다.")
+
