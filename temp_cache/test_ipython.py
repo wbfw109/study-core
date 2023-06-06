@@ -891,47 +891,17 @@ a = [["", 123], ["abc", 123, "abc"]]
 a.sort()
 a
 
-#%%
+# %%
 
 # arr.append("abc"[4:]) # result = ['']
-def solution(files):
-    """
-    - `파일명은 영문자로 시작하며, 숫자를 하나 이상 포함하고 있다.`
-    ??? TAIL 에 대한 처리방법?? 그냥 문자열 비교?
-    """
-    files = [file.lower() for file in files]
-    comp = [] # comparisons
-    for file in files
-        elements = []
-        word = [file[0]]
-        is_word_digit = False
-        for i in range(1, len(file)):
-            is_char_digit = file[i].isdigit()
-            if is_word_digit:
-                if is_char_digit:
-                    word.append(file[i])
-                else:
-                    elements.append(int("".join(word)))
-                    word = [file[i]]
-                    is_word_digit = False
-            else:
-                if is_char_digit:
-                    elements.append("".join(word))
-                    word = [file[i]]
-                    is_word_digit = True
-                else:
-                    word.append(file[i])
-        else:
-            if word:
-                elements.append(int("".join(word)) if is_word_digit else "".join(word))
-                    
-    answer = []
-    return answer
-#%%
+
+# %%
+
 
 def gen():
     yield from reversed(range(10))
-    
+
+
 x = gen()
 next(x)
 next(x)
