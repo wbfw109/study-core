@@ -428,19 +428,19 @@ def solution_42578(clothes: list[list[str]]) -> int:
         ; dp[i] := dp[i-1] * (x+1) + x
             - x := the number of clothes for the cloth type of the current iteration <i>
         ; dp[0] = 0
-        
+
         It is same as to use `math.prod(...) - 1` considering empty set.
-        
+
     🔍 Why defaultdict solution is faster than other solutions?
 
     """
+    import math
     from collections import Counter
 
-    items: dict[str, int] = Counter((type_ for _, type_ in clothes))
-    dp: int = 0
-    for x in items.values():
-        dp = dp * (x + 1) + x
-    return dp
+    return (
+        math.prod((x + 1 for x in Counter((type_ for _, type_ in clothes)).values()))
+        - 1
+    )
 
 
 def solution_42577(phone_book: list[str]) -> bool:
@@ -455,8 +455,26 @@ def solution_42577(phone_book: list[str]) -> bool:
 
 
 def solution_17687(n: int, t: int, m: int, p: int) -> str:
-    """💤 [3차] n진수 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/17687
+    """💤💦 [3차] n진수 게임 ; https://school.programmers.co.kr/learn/courses/30/lessons/17687
     Tag: Math (Base Conversion)
+
+    Consideration
+        - `0 ＜ t ≦ 1000`
+
+    Other solution
+        # def base_char_generator() ...
+
+        base_char_gen = base_char_generator(n)
+        order_gen = itertools.cycle(range(1, m + 1))
+        t_count = 0
+        answer: list[str] = []
+        while t_count < t:
+            x = next(base_char_gen)
+            if next(order_gen) == p:
+                answer.append(x)
+                t_count += 1
+
+        return "".join(answer)
     """
     import itertools
     from typing import Generator
@@ -484,15 +502,8 @@ def solution_17687(n: int, t: int, m: int, p: int) -> str:
             yield from reversed(num_list)
 
     base_char_gen = base_char_generator(n)
-    order_gen = itertools.cycle(range(1, m + 1))
-    t_count = 0
-    answer: list[str] = []
-    while t_count < t:
-        x = next(base_char_gen)
-        if next(order_gen) == p:
-            answer.append(x)
-            t_count += 1
-
+    answer: list[str] = [next(itertools.islice(base_char_gen, p - 1, p))]
+    answer.extend(itertools.islice(base_char_gen, m - 1, m * (t - 1), m))
     return "".join(answer)
 
 
@@ -557,7 +568,7 @@ def solution_17683(m: str, musicinfos: list[str]) -> str:
             🚣 <comparsions> list is not required, which is auxiliary space.
         - Example: 12:00 ~ 12:14 (exclusive)
     """
-    from itertools import cycle
+    import itertools
 
     hash_map: list[tuple[str, str]] = [
         ("C#", "c"),
@@ -576,9 +587,8 @@ def solution_17683(m: str, musicinfos: list[str]) -> str:
         for sharp, temp in hash_map:
             melody = melody.replace(sharp, temp)
 
-        delta = (int(time2[:2]) - int(time1[:2])) * 60 + int(time2[3:]) - int(time1[3:])
-        x = cycle(melody)
-        total_melody = "".join((next(x) for _ in range(delta)))
+        delta: int = (int(time2[:2]) - int(time1[:2])) * 60 + int(time2[3:]) - int(time1[3:])
+        total_melody: str = "".join(itertools.islice(itertools.cycle(melody), delta))
         if total_melody.find(m) >= 0 and answer[0] < (length := len(total_melody)):
             answer = (length, title)
     return answer[1]
