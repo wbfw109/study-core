@@ -71,12 +71,6 @@ InteractiveShell.ast_node_interactivity = "all"
 
 
 class SockEchoCommunication(VisualizationRoot):
-    """
-    https://docs.python.org/3/library/socket.html
-    https://docs.python.org/3/library/selectors.html#module-selectors
-    https://docs.python.org/3/howto/sockets.html#socket-howto
-    """
-
     SOCK_BUFFER_SIZE: Final[int] = 4096
     SOCK_TYPE = socket.SOCK_STREAM
 
@@ -86,12 +80,8 @@ class SockEchoCommunication(VisualizationRoot):
         )
 
         self.MAX_TRAFFIC_COUNT: Final[int] = 2
-        self.SERVER_SOCK_NAME: str = "➕ server"
         self._lock_connection_count = threading.Lock()
-        self.is_server_open: bool = False
-        self.selectors: selectors.EpollSelector = selectors.DefaultSelector()  # type: ignore
         self.client_map_to_traffic_count: dict[tuple[str, int], int] = {}
-        self.connection_count: int = 0
 
     def __str__(self) -> str:
         return "(Stream type, muxing, Non-blocking)"
@@ -303,3 +293,33 @@ class TestStringMethods(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+def run(
+    self, input_lines: Optional[Iterator[str]] = None, is_debugging: bool = False
+) -> str:
+    if input_lines:
+        input_ = lambda: next(input_lines)
+    else:
+        input_ = input
+    try:
+        while True:
+            command, *arguments = input_().split()
+            command = command.upper()
+            if command == "CHECK":
+                product_codes = arguments
+                check_product_codes(customer_coupon, product_codes=product_codes)
+            elif command == "CLAIM":
+                store_code = arguments[0]
+                product_codes = arguments[1:]
+                claim_product(
+                    customer_coupon,
+                    product_codes=product_codes,
+                    store_code=store_code,
+                )
+            else:
+                print_help_message()
+    except (KeyboardInterrupt, StopIteration):
+        pass
+    return ""

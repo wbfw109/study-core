@@ -381,8 +381,23 @@ def solution_42587() -> None:
     """프로세스 ; https://school.programmers.co.kr/learn/courses/30/lessons/42587"""
 
 
-def solution_42586() -> None:
-    """기능개발 ; https://school.programmers.co.kr/learn/courses/30/lessons/42586"""
+def solution_42586(progresses: list[int], speeds: list[int]) -> list[int]:
+    """기능개발 ; https://school.programmers.co.kr/learn/courses/30/lessons/42586
+    Tag: Data sturcture
+    """
+    import math
+
+    deployment_days: list[int] = [math.ceil((100 - progresses[0]) / speeds[0])]
+    deployment_nums: list[int] = [1]
+    for i in range(1, len(progresses)):
+        remained_day: int = math.ceil((100 - progresses[i]) / speeds[i])
+        if (x := deployment_days[i - 1]) >= remained_day:
+            deployment_days.append(x)
+            deployment_nums[-1] += 1
+        else:
+            deployment_days.append(remained_day)
+            deployment_nums.append(1)
+    return deployment_nums
 
 
 def solution_42584() -> None:
@@ -587,7 +602,9 @@ def solution_17683(m: str, musicinfos: list[str]) -> str:
         for sharp, temp in hash_map:
             melody = melody.replace(sharp, temp)
 
-        delta: int = (int(time2[:2]) - int(time1[:2])) * 60 + int(time2[3:]) - int(time1[3:])
+        delta: int = (
+            (int(time2[:2]) - int(time1[:2])) * 60 + int(time2[3:]) - int(time1[3:])
+        )
         total_melody: str = "".join(itertools.islice(itertools.cycle(melody), delta))
         if total_melody.find(m) >= 0 and answer[0] < (length := len(total_melody)):
             answer = (length, title)

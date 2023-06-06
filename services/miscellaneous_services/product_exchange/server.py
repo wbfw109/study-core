@@ -1,14 +1,24 @@
-# written in Python 3.11.1 environment with only built-in library
-# python -m unittest
+"""
+Written in Python 3.11.1 environment with only built-in library
+
+
+python -m unittest
+
+"""
 
 from __future__ import annotations
 
 import logging
 import random
+import selectors
+import socket
+import threading
 import time
 import unittest
 from pprint import pprint
-from typing import Iterator, Optional
+from typing import Final, Iterator, LiteralString, Optional
+
+from config import DevConfig
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter(
@@ -25,55 +35,121 @@ stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
 
-class ExchangeProduct:
+class ExchangeProductServer:
     """음.. 소켓통신은 연결을 유지하는 경우 필요한데
     단일 서비스로서 실행하기 하려면 어떻게?
     test 도 연동하려면어떻게? 음.. 아니 하나는 백그라운드, 하나는 클라이언트
     사용자는 일단 1명
     fasade 패턴; 입력받는곳.
-    
-    
+
+
     """
+
+    SOCK_BUFFER_SIZE: Final[int] = DevConfig.SOCK_BUFFER_SIZE
+    SOCK_TYPE = socket.SOCK_STREAM
+    SERVER_SOCK_NAME: str = "➕ server"
 
     ## PRODUCT CODE
     PRODUCT_CODE_FORM: str = "0123456789"
     PRODUCT_CODE_SIZE: int = 9
     PRODUCT_CODE_COUNT: int = 20
 
-    def __init__(self):
+    def __init__(self) -> None:
+        self._lock_connection_count = threading.Lock()
+        self.selectors = selectors.DefaultSelector()
+
         ## CUSTOMER CODE
         CUSTOMER_COUPON_COUNT: int = 10
+
         customer_coupon: list[str] = [
             x for x, _ in zip(product_code_pool, range(CUSTOMER_COUPON_COUNT))
         ]
 
-    def run(
-        self, input_lines: Optional[Iterator[str]] = None, is_debugging: bool = False
-    ) -> str:
-        if input_lines:
-            input_ = lambda: next(input_lines)
-        else:
-            input_ = input
-        try:
-            while True:
-                command, *arguments = input_().split()
-                command = command.upper()
-                if command == "CHECK":
-                    product_codes = arguments
-                    check_product_codes(customer_coupon, product_codes=product_codes)
-                elif command == "CLAIM":
-                    store_code = arguments[0]
-                    product_codes = arguments[1:]
-                    claim_product(
-                        customer_coupon,
-                        product_codes=product_codes,
-                        store_code=store_code,
-                    )
-                else:
-                    print_help_message()
-        except (KeyboardInterrupt, StopIteration):
-            pass
-        return ""
+    def run(self, server_name: str) -> None:
+        # try:
+        #     while True:
+        #         command, *arguments = input_().split()
+        #         command = command.upper()
+        #         if command == "CHECK":
+        #             product_codes = arguments
+        #             check_product_codes(customer_coupon, product_codes=product_codes)
+        #         elif command == "CLAIM":
+        #             store_code = arguments[0]
+        #             product_codes = arguments[1:]
+        #             claim_product(
+        #                 customer_coupon,
+        #                 product_codes=product_codes,
+        #                 store_code=store_code,
+        #             )
+        #         else:
+        #             print_help_message()
+        # except (KeyboardInterrupt, StopIteration):
+        #     pass
+        HOST: Optional[LiteralString] = None
+        PORT: Final[int] = 50007  # Arbitrary non-privileged port
+        LISTEN_BACKLOG: Final[int] = 3
+        SERVER_LIFE_SECONDS: Final[float] = 1.5
+        SERVER_READ_EVENT_TIMEOUT_CYCLE: Final[float] = SERVER_LIFE_SECONDS / 10
+        server_sock: Optional[socket.socket] = None
+
+        for (
+            address_family,
+            sock_type,
+            proto,
+            cname,  # type: ignore
+            sock_address,
+        ) in socket.getaddrinfo(  # type :ignore
+            HOST,
+            PORT,
+            socket.AF_UNSPEC,
+            SockEchoCommunication.SOCK_TYPE,
+            0,
+            socket.AI_PASSIVE,
+        ):
+            try:
+                server_sock = socket.socket(address_family, sock_type, proto)
+            except OSError as msg:  # type: ignore
+                server_sock = None
+                continue
+            try:
+                server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                server_sock.bind(sock_address)
+                server_sock.listen(LISTEN_BACKLOG)
+            except OSError as msg:  # type: ignore
+                server_sock.close()
+                server_sock = None
+                continue
+            break
+        if server_sock is None:
+            self.append_line_into_df_in_wrap(
+                [self.SERVER_SOCK_NAME, "🚨 [Error] Could not open socket"]
+            )
+            return
+        self.is_server_open = True
+        self.append_line_into_df_in_wrap(
+            [
+                self.SERVER_SOCK_NAME,
+                "Waiting for an incoming connection...",
+            ]
+        )
+
+        # Set blocking to false so that program can send and receive messages at the same time
+        server_sock.setblocking(False)
+        self.selectors.register(
+            server_sock, selectors.EVENT_READ, self.accept_client_sock
+        )
+        elapsed_time_in_no_data: float = 0.0
+        while True:
+            start_time = time.time()
+            events = self.selectors.select(SERVER_READ_EVENT_TIMEOUT_CYCLE)
+            for key, mask in events:  # type: ignore
+                elapsed_time_in_no_data = 0.0
+                callback = key.data
+                callback(key.fileobj)
+            elapsed_time_in_no_data += time.time() - start_time
+            if elapsed_time_in_no_data >= SERVER_LIFE_SECONDS:
+                self.selectors.close()
+                break
 
 
 def exchange_product(
@@ -238,4 +314,3 @@ def test_exchange_product() -> None:
 test_exchange_product()
 # exchange_product(is_debugging=True)
 # logging.warning("warn로그입니다.")
-
