@@ -378,7 +378,10 @@ def solution_42626() -> None:
 
 
 def solution_42587() -> None:
-    """프로세스 ; https://school.programmers.co.kr/learn/courses/30/lessons/42587"""
+    """프로세스 ; https://school.programmers.co.kr/learn/courses/30/lessons/42587
+    //// 이거 전까지만 하고, 정리+필요한 이론 공부하고 다시 진행.
+    // [1차] 프렌즈4블록 질문중.
+    """
 
 
 def solution_42586(progresses: list[int], speeds: list[int]) -> list[int]:
@@ -387,28 +390,91 @@ def solution_42586(progresses: list[int], speeds: list[int]) -> list[int]:
     """
     import math
 
-    deployment_days: list[int] = [math.ceil((100 - progresses[0]) / speeds[0])]
+    deployment_day: int = math.ceil((100 - progresses[0]) / speeds[0])
     deployment_nums: list[int] = [1]
     for i in range(1, len(progresses)):
         remained_day: int = math.ceil((100 - progresses[i]) / speeds[i])
-        if (x := deployment_days[i - 1]) >= remained_day:
-            deployment_days.append(x)
+        if deployment_day >= remained_day:
             deployment_nums[-1] += 1
         else:
-            deployment_days.append(remained_day)
+            deployment_day = remained_day
             deployment_nums.append(1)
     return deployment_nums
 
 
-def solution_42584() -> None:
-    """주식가격 ; https://school.programmers.co.kr/learn/courses/30/lessons/42584"""
+def solution_42584(prices: list[int]) -> list[int]:
+    """💤 주식가격 ; https://school.programmers.co.kr/learn/courses/30/lessons/42584
+    Tag: data structures
 
+    Other solution (It is slower than current implementation)
+        import heapq
 
-def solution_42583() -> None:
-    """다리를 지나는 트럭 ; https://school.programmers.co.kr/learn/courses/30/lessons/42583
-    //// 이거 전까지만 하고, 정리+필요한 이론 공부하고 다시 진행.
-    // [1차] 프렌즈4블록 질문중.
+        n: int = len(prices)
+        answer: list[int] = [-1] * n
+        # max heap; hq: tuple[price, index]
+        hq: list[tuple[int, int]] = []
+        nm1: int = n - 1
+        i = 0
+        for i, price in enumerate(prices):
+            if price == 1:
+                for _, j in hq:
+                    answer[j] = i - j
+                answer[i] = nm1 - i
+                hq.clear()
+            else:
+                while hq and price < -hq[0][0]:
+                    j = heapq.heappop(hq)[1]
+                    answer[j] = i - j
+                heapq.heappush(hq, (-price, i))
+        else:
+            for _, j in hq:
+                answer[j] = nm1 - j
+        return answer
     """
+    n: int = len(prices)
+    answer: list[int] = [-1] * n
+    # stack: tuple[price, index]
+    stack: list[tuple[int, int]] = []
+    nm1: int = n - 1
+    for i, price in enumerate(prices):
+        while stack and price < stack[-1][0]:
+            j = stack.pop()[1]
+            answer[j] = i - j
+        stack.append((price, i))
+    else:
+        for _, j in stack:
+            answer[j] = nm1 - j
+    return answer
+
+
+def solution_42583(bridge_length: int, weight: int, truck_weights: list[int]) -> int:
+    """🧠 다리를 지나는 트럭 ; https://school.programmers.co.kr/learn/courses/30/lessons/42583
+
+    event trigger: popleft() truck on bridge.
+    1 1 2 2 ; trucks. weight is 5, length is 5
+      3 2 1 ; -th
+      3 2 - ; seconds += 5 - 1 +1
+        먼저 들어온 truck 의 순서 차이만큼. 기본은 birdge_length?
+    """
+    from collections import deque
+
+    elasped_seconds = 0
+    # dq: tuple[]
+    dq = deque()
+    weight_on_bridge = 0
+    for truck_weight in truck_weights:
+        if weight_on_bridge + truck_weight > weight:
+            weight_on_bridge -= dq.popleft()
+            elasped_seconds += bridge_length - len(dq)
+        else:
+            weight_on_bridge += truck_weight
+            dq.append(truck_weight)
+        elasped_seconds += 1
+    else:
+        weight_on_bridge -= truck_weight
+        bridge_length
+
+    return elasped_seconds
 
 
 def solution_42578(clothes: list[list[str]]) -> int:
@@ -447,7 +513,6 @@ def solution_42578(clothes: list[list[str]]) -> int:
         It is same as to use `math.prod(...) - 1` considering empty set.
 
     🔍 Why defaultdict solution is faster than other solutions?
-
     """
     import math
     from collections import Counter
@@ -633,9 +698,8 @@ def solution_17680(cacheSize: int, cities: list[str]) -> int:
             cost += 5
             cache[city] = None
             count += 1
-
-        if count == cacheSize:
-            break
+            if count == cacheSize:
+                break
 
     for i in range(i + 1, len(cities)):
         if cities[i] in cache:
