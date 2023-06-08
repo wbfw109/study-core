@@ -907,3 +907,140 @@ next(x)
 next(x)
 next(x)
 next(x)
+
+
+# %%
+
+
+def solution(bridge_length, weight, truck_weights):
+    answer = 0
+    bridge = [0 for _ in range(bridge_length)]
+
+    while bridge:
+        answer += 1
+        bridge.pop(0)
+
+        if truck_weights:
+            if sum(bridge) + truck_weights[0] <= weight:
+                t = truck_weights.pop(0)
+                bridge.append(t)
+            else:
+                bridge.append(0)
+
+    return answer
+
+
+solution(5, 3, [1, 2, 1])
+solution(5, 3, [1, 2, 1, 3])
+
+# %%
+
+
+def solution_42583(bridge_length: int, weight: int, truck_weights: list[int]) -> int:
+    """🧠 다리를 지나는 트럭 ; https://school.programmers.co.kr/learn/courses/30/lessons/42583
+    😠 트럭의 속도에 대한 말이 없다. 1초에 한칸 움직일 수 있는듯 보임.
+
+    5, 3, [1, 2, 1, 3]
+    0  [ ,  ,  ,  , ]
+    1  [1,  ,  ,  , ] #  pop 발생하지 않고, 바로 추가할 수 있는 경우
+    2  [2, 1,  ,  , ] #  pop 발생하지 않고, 바로 추가할 수 있는 경우
+    3  [ , 2, 1,  , ]
+    4  [ ,  , 2, 1, ]
+    5  [ ,  ,  , 2, 1]
+    6  [1,  ,  ,  , 2] #  pop 발생 시, 바로 추가할 수 있는 경우
+    7  [ , 1,  ,  , ]  #  pop 발생 시, 바로 추가할 수 없는 경우
+    8  [ ,  , 1,  , ]
+    9  [ ,  ,  , 1, ]
+    10 [ ,  ,  ,  , 1]
+    11 [3,  ,  ,  , ]
+    12 ~ 15
+    16 []
+
+    5, 5, [2, 2, 2, 2, 1, 1, 1, 1, 1]
+    0  [ ,  ,  ,  , ]
+    1  [2,  ,  ,  , ]  * 1 seconds
+    2  [2, 2,  ,  , ]  *
+    3  [ , 2, 2,  , ]
+    4  [ ,  , 2, 2, ]
+    5  [ ,  ,  , 2, 2]
+    6  [2,  ,  ,  , 2] * 6 seconds
+    7  [2, 2,  ,  , ]  * 7 seconds
+    8  [1, 2, 2,  , ]  *
+    9  [ , 1, 2, 2, ]
+    10 [ ,  , 1, 2, 2]
+    11 [1,  ,  , 1, 2] * 11 seconds
+    12 [1, 1,  ,  , 2] * 12 seconds
+    13 [1, 1, 1,  , ]  *
+    14 [1, 1, 1, 1, ]  *
+    14 [1, 1, 1, 1, 1]  *
+    15 ~ 19
+    19 []
+    event trigger: popleft() truck on bridge.
+        - <truck_weights> loop is over.
+        - weight on bridge + current truck weight > weight limit on bridge
+        - the number of trucks on bridge == <bridge_length> (trucks on bridge is full.)
+        - the number of trucks on bridge
+    pop 된 이후, append까지 얼마나 지났는지를 알아야 함.
+
+
+    1이 추가 됫을 때 뒤의 거리 - 2의와 1사이의 거리?
+    이전 트럭의 앞과의 거리만큼 차이가 나게 디는듯
+    맨 앞차를 pop 했을 때 bridge_length - 그 이전까지의 트럭에 대한 상대거리의 합
+    pop 하지 않앗다면, 1
+    deque가 존재하지 않으면, 0
+    len()가 꽉찬 경우가 아니라도,
+    1 - - - 2
+    - 1 - - -
+    2 1 - - -
+
+    이름을 뭐라고 짓지.. 거리단위긴 한데
+    """
+    from collections import deque
+
+    # dq: tuple[truck_weights, distance from the front truck]
+    dq: deque[tuple[int, int]] = deque()
+    weight_on_bridge = 0
+    total_distance_between_trucks = 0
+    seconds = 1 if truck_weights else 0  # elapsed seconds
+    # Memoization
+    bm1 = bridge_length - 1
+
+    for truck_weight in truck_weights:
+        ## pop if a truck can not be added on bridge.
+        is_popped = False
+        # Memoization ~
+        threshold: int = weight - truck_weight
+        nn: int = len(dq)
+        while (
+            weight_on_bridge > threshold
+            or nn == bridge_length
+            or (nn > 1 and total_distance_between_trucks - dq[-1][1] >= bm1)
+        ):
+            is_popped = True
+            popped_weight, distance = dq.pop()
+            nn -= 1
+
+            seconds += distance
+            weight_on_bridge -= popped_weight
+            total_distance_between_trucks -= distance
+
+        ## add truck on bridge
+        weight_on_bridge += truck_weight
+        if is_popped:
+            distance_from_front_truck = bridge_length - total_distance_between_trucks
+        else:
+            distance_from_front_truck = 1 if dq else bridge_length
+        total_distance_between_trucks += distance_from_front_truck
+
+        dq.appendleft((truck_weight, distance_from_front_truck))
+        print(f"seconds: {seconds}, {dq}")
+    else:
+        seconds += sum((distance for _, distance in dq))
+        print(f"seconds: {seconds}, {dq}")
+
+    return seconds
+
+
+solution_42583(5, 3, [1, 2, 1])  # 11
+solution_42583(5, 3, [1, 2, 1, 3])  # 16
+solution_42583(5, 5, [2, 2, 2, 2, 1, 1, 1, 1, 1])  # 19

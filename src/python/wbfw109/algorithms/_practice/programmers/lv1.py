@@ -76,19 +76,19 @@ def solution_172928(park: list[str], routes: list[str]) -> list[int]:
 def solution_161990(wallpaper: list[str]) -> list[int]:
     """💤 바탕화면 정리 ; https://school.programmers.co.kr/learn/courses/30/lessons/161990
     - `바탕화면에는 적어도 하나의 파일이 있습니다.`"""
-    minj = 50
-    maxj = mini = maxi = -1
+    MAX_LEN = min_j = min_i = 50
+    max_j = max_i = -1
     for i, line in enumerate(wallpaper):
         if (j1 := line.find("#")) >= 0:
-            if j1 < minj:
-                minj = j1
-            if (j2 := line.rfind("#")) > maxj:
-                maxj = j2
+            if j1 < min_j:
+                min_j = j1
+            if (j2 := line.rfind("#")) > max_j:
+                max_j = j2
 
-            if mini < 0:
-                mini = i
-            maxi = i
-    return [mini, minj, maxi + 1, maxj + 1]
+            if min_i >= MAX_LEN:
+                min_i = i
+            max_i = i
+    return [min_i, min_j, max_i + 1, max_j + 1]
 
 
 def solution_161989(n: int, m: int, section: list[int]) -> int:

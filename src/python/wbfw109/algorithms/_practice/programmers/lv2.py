@@ -432,10 +432,10 @@ def solution_42584(prices: list[int]) -> list[int]:
         return answer
     """
     n: int = len(prices)
+    nm1: int = n - 1
     answer: list[int] = [-1] * n
     # stack: tuple[price, index]
     stack: list[tuple[int, int]] = []
-    nm1: int = n - 1
     for i, price in enumerate(prices):
         while stack and price < stack[-1][0]:
             j = stack.pop()[1]
@@ -449,32 +449,75 @@ def solution_42584(prices: list[int]) -> list[int]:
 
 def solution_42583(bridge_length: int, weight: int, truck_weights: list[int]) -> int:
     """🧠 다리를 지나는 트럭 ; https://school.programmers.co.kr/learn/courses/30/lessons/42583
-
+    😠 트럭의 속도에 대한 말이 없다. 1초에 한칸 움직일 수 있는듯 보임.
     event trigger: popleft() truck on bridge.
+        - <truck_weights> loop is over.
+        - the number of trucks on bridge == <bridge_length> (trucks on bridge is full.)
+        - weight on bridge + current truck weight > weight limit on bridge
     1 1 2 2 ; trucks. weight is 5, length is 5
       3 2 1 ; -th
       3 2 - ; seconds += 5 - 1 +1
         먼저 들어온 truck 의 순서 차이만큼. 기본은 birdge_length?
+    맨 앞 차를 제외한 뒷차까지의 거리에 대한 합을 가지고 있어야 하나
+    pop 했을 떄 bridge_length - 이 합 하면 pop 된 후 새로 들어오는 차의 앞과의 거리를 알 수 있을듯?
+
+    5, 3, [1, 2, 1, 3]
+    0  [ ,  ,  ,  , ]
+    1  [1,  ,  ,  , ]
+    2  [2, 1,  ,  , ]
+    3  [ , 2, 1,  , ]
+    4  [ ,  , 2, 1, ]
+    5  [ ,  ,  , 2, 1]
+    6  [1,  ,  ,  , 2]
+    7  [ , 1,  ,  , ]
+    8  [ ,  , 1,  , ]
+    9  [ ,  ,  , 1, ]
+    10 [ ,  ,  ,  , 1]
+    11 [3,  ,  ,  , ]
+    12 ~ 15
+    16 []
+
+    이전 트럭의 앞과의 거리만큼 차이가 나게 디는듯
+    맨 앞차를 pop 했을 때 bridge_length - 그 이전까지의 트럭에 대한 상대거리의 합
+    pop 하지 않앗다면, 1
+    deque가 존재하지 않으면, 0
+    len()가 꽉찬 경우가 아니라도,
+    1 - - - 2
+    - 1 - - -
+    2 1 - - -
     """
     from collections import deque
 
-    elasped_seconds = 0
-    # dq: tuple[]
-    dq = deque()
+    seconds = 1 if truck_weights else 0  # elapsed seconds
+    # dq: tuple[truck_weights, distance from the front truck]
+    dq: deque[tuple[int, int]] = deque()
     weight_on_bridge = 0
+    total_distance_between_trucks = 0
     for truck_weight in truck_weights:
-        if weight_on_bridge + truck_weight > weight:
-            weight_on_bridge -= dq.popleft()
-            elasped_seconds += bridge_length - len(dq)
-        else:
-            weight_on_bridge += truck_weight
-            dq.append(truck_weight)
-        elasped_seconds += 1
-    else:
-        weight_on_bridge -= truck_weight
-        bridge_length
+        # pop if a truck can not be added on bridge.
+        while weight_on_bridge + truck_weight > weight or len(dq) == bridge_length:
+            popped_weight, distance = dq.popleft()
 
-    return elasped_seconds
+            weight_on_bridge -= popped_weight
+            seconds += distance
+            total_distance_between_trucks -= distance
+
+        # add truck on bridge
+        weight_on_bridge += truck_weight
+        if total_distance_between_trucks:
+            distance_from_front_truck = bridge_length - total_distance_between_trucks
+        else:
+            distance_from_front_truck = 1
+
+        total_distance_between_trucks += distance_from_front_truck
+
+        dq.append((truck_weight, distance_from_front_truck))
+        print(f"seconds: {seconds}, {dq}")
+    else:
+        seconds += sum((distance for _, distance in dq))
+        print(f"seconds: {seconds}, {dq}")
+
+    return seconds
 
 
 def solution_42578(clothes: list[list[str]]) -> int:
@@ -1274,7 +1317,7 @@ def solution_12905(board: list[list[int]]) -> int:
 
         return int(any((True for x in chain.from_iterable(board) if x == 1)))
 
-    side_len: int = 0
+    maximum_side_len: int = 0
     range_m = range(1, m)
     for i in range(1, n):
         for j in range_m:
@@ -1282,9 +1325,9 @@ def solution_12905(board: list[list[int]]) -> int:
                 board[i][j] = (
                     min(board[i - 1][j - 1], board[i - 1][j], board[i][j - 1]) + 1
                 )
-                if board[i][j] > side_len:
-                    side_len = board[i][j]
-    return side_len**2
+                if board[i][j] > maximum_side_len:
+                    maximum_side_len = board[i][j]
+    return maximum_side_len**2
 
 
 def solution_12902(n: int) -> int:
