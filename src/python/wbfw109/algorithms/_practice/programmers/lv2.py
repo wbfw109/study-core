@@ -449,73 +449,104 @@ def solution_42584(prices: list[int]) -> list[int]:
 
 def solution_42583(bridge_length: int, weight: int, truck_weights: list[int]) -> int:
     """🧠 다리를 지나는 트럭 ; https://school.programmers.co.kr/learn/courses/30/lessons/42583
-    😠 트럭의 속도에 대한 말이 없다. 1초에 한칸 움직일 수 있는듯 보임.
-    event trigger: popleft() truck on bridge.
-        - <truck_weights> loop is over.
-        - the number of trucks on bridge == <bridge_length> (trucks on bridge is full.)
-        - weight on bridge + current truck weight > weight limit on bridge
-    1 1 2 2 ; trucks. weight is 5, length is 5
-      3 2 1 ; -th
-      3 2 - ; seconds += 5 - 1 +1
-        먼저 들어온 truck 의 순서 차이만큼. 기본은 birdge_length?
-    맨 앞 차를 제외한 뒷차까지의 거리에 대한 합을 가지고 있어야 하나
-    pop 했을 떄 bridge_length - 이 합 하면 pop 된 후 새로 들어오는 차의 앞과의 거리를 알 수 있을듯?
+    - 😠 트럭의 속도에 대한 언급이 없다. 1초에 한 칸씩 움직일 수 있는 듯 보임.
 
+    Tag: Data Structures
+
+    Definition
+        - n := the number of given trucks
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+
+    Debugging
+    =====
+    -----
     5, 3, [1, 2, 1, 3]
-    0  [ ,  ,  ,  , ]
-    1  [1,  ,  ,  , ]
-    2  [2, 1,  ,  , ]
-    3  [ , 2, 1,  , ]
-    4  [ ,  , 2, 1, ]
-    5  [ ,  ,  , 2, 1]
-    6  [1,  ,  ,  , 2]
-    7  [ , 1,  ,  , ]
-    8  [ ,  , 1,  , ]
-    9  [ ,  ,  , 1, ]
-    10 [ ,  ,  ,  , 1]
-    11 [3,  ,  ,  , ]
-    12 ~ 15
-    16 []
+        0  [ ,  ,  ,  , ]
+        1  [1,  ,  ,  , ] #  no pop, but append()
+        2  [2, 1,  ,  , ] #  no pop, but append()
+        3  [ , 2, 1,  , ]
+        4  [ ,  , 2, 1, ]
+        5  [ ,  ,  , 2, 1]
+        6  [1,  ,  ,  , 2] # pop, and append()
+        7  [ , 1,  ,  , ]  # pop, but not append()
+        8  [ ,  , 1,  , ]
+        9  [ ,  ,  , 1, ]
+        10 [ ,  ,  ,  , 1]
+        11 [3,  ,  ,  , ]
+        12 ~ 15
+        16 []
+    -----
+    5, 5, [2, 2, 2, 2, 1, 1, 1, 1, 1]
+        0  [ ,  ,  ,  , ]
+        1  [2,  ,  ,  , ]  * 1 seconds
+        2  [2, 2,  ,  , ]  *
+        3  [ , 2, 2,  , ]
+        4  [ ,  , 2, 2, ]
+        5  [ ,  ,  , 2, 2]
+        6  [2,  ,  ,  , 2] * 6 seconds
+        7  [2, 2,  ,  , ]  * 7 seconds
+        8  [1, 2, 2,  , ]  *
+        9  [ , 1, 2, 2, ]
+        10 [ ,  , 1, 2, 2]
+        11 [1,  ,  , 1, 2] * 11 seconds
+        12 [1, 1,  ,  , 2] *🚣 12 seconds
+        13 [1, 1, 1,  , ]  *
+        14 [1, 1, 1, 1, ]  *
+        14 [1, 1, 1, 1, 1]  *
+        15 ~ 19
+        19 []
 
-    이전 트럭의 앞과의 거리만큼 차이가 나게 디는듯
-    맨 앞차를 pop 했을 때 bridge_length - 그 이전까지의 트럭에 대한 상대거리의 합
-    pop 하지 않앗다면, 1
-    deque가 존재하지 않으면, 0
-    len()가 꽉찬 경우가 아니라도,
-    1 - - - 2
-    - 1 - - -
-    2 1 - - -
+    Implementation (Event-driven)
+        In order to to trigger append(truck on bridge) event, popleft(truck on bridge) event must be in advance.
+        Triggers of popleft(truck on bridge):
+            - <truck_weights> loop is over.
+            - weight on bridge + current truck weight > weight limit on bridge
+            - trucks of endpoints on bridge is full
+                - the number of trucks on bridge == <bridge_length>
+                - (the number of trucks on bridge  >  1
+                    and <total_distance_to_front_trucks> - distance to last popped truck from the first truck on bridge     >=    <bridge_length>-1
+                )
+                    assume that if when a truck is added on bridge and the number of trucks on bridge is 0, distance is <bridge_length>.
     """
     from collections import deque
 
-    seconds = 1 if truck_weights else 0  # elapsed seconds
     # dq: tuple[truck_weights, distance from the front truck]
     dq: deque[tuple[int, int]] = deque()
     weight_on_bridge = 0
-    total_distance_between_trucks = 0
+    total_distance_to_front_trucks = 0
+    seconds = 1 if truck_weights else 0  # elapsed seconds
+    # Memoization
+    bm1 = bridge_length - 1
+
     for truck_weight in truck_weights:
-        # pop if a truck can not be added on bridge.
-        while weight_on_bridge + truck_weight > weight or len(dq) == bridge_length:
-            popped_weight, distance = dq.popleft()
+        ## pop if a truck can not be added on bridge.
+        is_popped = False
+        # Memoization ~
+        threshold: int = weight - truck_weight
 
-            weight_on_bridge -= popped_weight
+        while weight_on_bridge > threshold or (
+            dq and total_distance_to_front_trucks - dq[-1][1] >= bm1
+        ):
+            is_popped = True
+            popped_weight, distance = dq.pop()
+
             seconds += distance
-            total_distance_between_trucks -= distance
+            weight_on_bridge -= popped_weight
+            total_distance_to_front_trucks -= distance
 
-        # add truck on bridge
+        ## add truck on bridge
         weight_on_bridge += truck_weight
-        if total_distance_between_trucks:
-            distance_from_front_truck = bridge_length - total_distance_between_trucks
+        if is_popped:
+            distance_from_front_truck = bridge_length - total_distance_to_front_trucks
         else:
-            distance_from_front_truck = 1
-
-        total_distance_between_trucks += distance_from_front_truck
-
-        dq.append((truck_weight, distance_from_front_truck))
-        print(f"seconds: {seconds}, {dq}")
+            distance_from_front_truck = 1 if dq else bridge_length
+        total_distance_to_front_trucks += distance_from_front_truck
+        dq.appendleft((truck_weight, distance_from_front_truck))
+        # print(f"seconds: {seconds}, {dq}")
     else:
         seconds += sum((distance for _, distance in dq))
-        print(f"seconds: {seconds}, {dq}")
+        # print(f"seconds: {seconds}, {dq}")
 
     return seconds
 
@@ -761,7 +792,7 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
         영향을 미치는 stack[i] 에만 계산
         영향을 미치는 유효한 stack[i][start_j] ~ stack[i][end_j] 까지만 계산.
     11번 테스트케이스 실패.
-        마지막 요소에 대한 iteration 문제인듯한데
+
     next_pop_set 이 한 번 더 실행되는듯? iterate 를 모두 하지 않았을 떄
     """
     stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
@@ -846,7 +877,7 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
 
 def solution_17677(str1: str, str2: str) -> int:
     """💦 [1차] 뉴스 클러스터링 ; https://school.programmers.co.kr/learn/courses/30/lessons/17677
-    - 😠 what is return value when value of A union B is 0 (divisor is 0)?
+    - 😠 what is the return value when value of A union B is 0 (divisor is 0)?
     """
     from collections import Counter
 
