@@ -502,7 +502,7 @@ def solution_42583(bridge_length: int, weight: int, truck_weights: list[int]) ->
         Triggers of popleft(truck on bridge):
             - <truck_weights> loop is over.
             - weight on bridge + current truck weight > weight limit on bridge
-            - trucks of endpoints on bridge is full
+            - endpoints of trucks on bridge are full
                 - the number of trucks on bridge == <bridge_length>
                 - (the number of trucks on bridge  >  1
                     and <total_distance_to_front_trucks> - distance to last popped truck from the first truck on bridge     >=    <bridge_length>-1
@@ -516,14 +516,12 @@ def solution_42583(bridge_length: int, weight: int, truck_weights: list[int]) ->
     weight_on_bridge = 0
     total_distance_to_front_trucks = 0
     seconds = 1 if truck_weights else 0  # elapsed seconds
-    # Memoization
-    bm1 = bridge_length - 1
+    bm1 = bridge_length - 1  # Memoization
 
     for truck_weight in truck_weights:
         ## pop if a truck can not be added on bridge.
         is_popped = False
-        # Memoization ~
-        threshold: int = weight - truck_weight
+        threshold: int = weight - truck_weight  # Memoization
 
         while weight_on_bridge > threshold or (
             dq and total_distance_to_front_trucks - dq[-1][1] >= bm1
@@ -787,21 +785,36 @@ def solution_17680(cacheSize: int, cities: list[str]) -> int:
 
 
 def solution_17679(m: int, n: int, board: list[str]) -> int:
-    """🔍💤 [1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
-    stack 사용해서
-        영향을 미치는 stack[i] 에만 계산
-        영향을 미치는 유효한 stack[i][start_j] ~ stack[i][end_j] 까지만 계산.
+    """🔍🧠 [1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
     11번 테스트케이스 실패.
+    2 ≦ n, m ≦ 30
+    j .. imi j 도 건드리는데 len() 보다 작아서 문제가 발생할 수도 있나? 혹인 for else 문으로 인한?
 
-    next_pop_set 이 한 번 더 실행되는듯? iterate 를 모두 하지 않았을 떄
+    Tag: Data structures
+
+    Time Complexity: O(n^2 * m^2)
+        but, it explores only vicinity of index in which event occurs in previous while-loop.
+        so it is faster than other pessimistic scenario.
+
+    Space Complexity: O(n*m)
+        - n*m from <stacks>
+        - n*m from <pop_set> and <next_pop_set>
+        - n from <first_popped_j>
+
+    Implementation
+        - pop event in current while-loop can be triggered only in some <i>s in stack
+            popped i-1 in previous while-loop    <=    event range    <=    popped i+1 in previous while-loop
+        - pop event in current while-loop can be triggered only in some <j>s in stacks[i].
+            start_j is popped j-1 (j-1 >= 0) in previous while-loop.
+            end_j is min(len(stacks[i]), len(stacks[ip1])) - 1 in current while-loop.
     """
     stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
-    is_popped = True
+    can_continue: bool = True
     nm1 = n - 1
     i_and_start_j = ((i, 0) for i in range(n))
 
-    while is_popped:
-        is_popped = False
+    while can_continue:
+        can_continue = False
         pop_set: set[int] = set()
         next_pop_set: set[int] = set()
         # <first_popped_j> by i. it is used to to bring not popped elements to the first popped index of the stack, and used to create next <i_and_start_j>.
@@ -823,18 +836,22 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
 
             # set <end_j>
             end_j = min(len(stacks[i]), len(stacks[ip1])) - 1
-            is_first_popped = True
+            is_not_found_same_block = True
             for j in range(start_j, end_j):
                 jp1: int = j + 1  # j plus 1
                 if stacks[i][j] == stacks[ip1][j] == stacks[i][jp1] == stacks[ip1][jp1]:
                     x = [j, jp1]
                     pop_set.update(x)
                     next_pop_set.update(x)
-                    if is_first_popped:
+                    if is_not_found_same_block:
                         first_popped_j[ip1] = j
                         if first_popped_j[i] > j:
-                            first_popped_j[i] = first_popped_j[im1] = j
-                        is_first_popped = False
+                            if i == 0:
+                                first_popped_j[i] = j
+                            else:
+                                first_popped_j[i] = first_popped_j[im1] = j
+
+                        is_not_found_same_block = False
 
                 # Statement to bring not popped elements to the first popped index of the stack.
                 if j > first_popped_j[i] and j not in pop_set:
@@ -849,7 +866,7 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
 
             # a <i> iteration ends.
             if pop_set:
-                is_popped = True
+                can_continue = True
                 # move not popped elements to forward of stack if is_greater_than_first_pop_j
                 stacks[i][first_popped_j[i] :] = e_to_be_moved
         else:
@@ -862,9 +879,6 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
                     if j not in next_pop_set
                 ]
 
-        # fix when j is 0 when a <i> iteration ends.
-        if first_popped_j[nm1 - 1] == m:
-            first_popped_j[nm1] = m
         # create Generator <i_and_start_j>
         i_and_start_j = (
             (i, x - 1) if x > 1 else (i, 0)

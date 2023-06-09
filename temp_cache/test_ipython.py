@@ -910,25 +910,133 @@ next(x)
 
 
 # %%
+x = [True] * 5
+x_gen = ((i, y) for i, y in enumerate(x))
+x[2] = False
+next(x_gen)
+next(x_gen)
+next(x_gen)
+next(x_gen)
+next(x_gen)
+
+# >>> a = [1,2,3]
+# >>> a[5:] = [2,3]
+# >>> a
+# [1, 2, 3, 2, 3]
+
+# %%
 
 
-def solution(bridge_length, weight, truck_weights):
-    answer = 0
-    bridge = [0 for _ in range(bridge_length)]
+def solution_17679(m: int, n: int, board: list[str]) -> int:
+    """🔍🧠 [1차] 프렌즈4블록 ; https://school.programmers.co.kr/learn/courses/30/lessons/17679
+    11번 테스트케이스 실패.
 
-    while bridge:
-        answer += 1
-        bridge.pop(0)
+    Tag: Data structures
 
-        if truck_weights:
-            if sum(bridge) + truck_weights[0] <= weight:
-                t = truck_weights.pop(0)
-                bridge.append(t)
+    Time Complexity: O(n^2 * m^2)
+        but, it explores only vicinity of index in which event occurs in previous while-loop.
+        so it is faster than other pessimistic scenario.
+
+    Space Complexity: O(n*m)
+        - n*m from <stacks>
+        - n*m from <pop_set> and <next_pop_set>
+        - n from <first_popped_j>
+
+    Implementation
+        - pop event in current while-loop can be triggered only in some <i>s in stack
+            popped i-1 in previous while-loop    <=    event range    <=    popped i+1 in previous while-loop
+        - pop event in current while-loop can be triggered only in some <j>s in stacks[i].
+            start_j is popped j-1 (j-1 >= 0) in previous while-loop.
+            end_j is min(len(stacks[i]), len(stacks[ip1])) - 1 in current while-loop.
+    """
+    stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
+    is_not_found_same_block = True
+    nm1 = n - 1
+    i_and_start_j = ((i, 0) for i in range(n))
+
+    while is_not_found_same_block:
+        is_not_found_same_block = False
+        pop_set: set[int] = set()
+        next_pop_set: set[int] = set()
+        # <first_popped_j> by i. it is used to to bring not popped elements to the first popped index of the stack, and used to create next <i_and_start_j>.
+        first_popped_j: list[int] = [m] * n
+        i = 0
+        for i, start_j in i_and_start_j:
+            ## another branch
+            if i == nm1:
+                continue
+
+            ## a branch. starts with Memoization
+            ip1 = i + 1  # i plus 1
+            im1 = i - 1
+
+            # if stacks[i-1] is popped, <pop_set> will be inherited from <next_pop_set>.
+            pop_set = next_pop_set if first_popped_j[im1] < m else set()
+            next_pop_set = set()
+            e_to_be_moved: list[str] = []
+
+            # set <end_j>
+            end_j = min(len(stacks[i]), len(stacks[ip1])) - 1
+            is_not_found_same_block = True
+            for j in range(start_j, end_j):
+                jp1: int = j + 1  # j plus 1
+                if stacks[i][j] == stacks[ip1][j] == stacks[i][jp1] == stacks[ip1][jp1]:
+                    x = [j, jp1]
+                    pop_set.update(x)
+                    next_pop_set.update(x)
+                    if is_not_found_same_block:
+                        first_popped_j[ip1] = j
+                        if first_popped_j[i] > j:
+                            first_popped_j[i] = j
+                        if first_popped_j[im1] > j:
+                            first_popped_j[im1] = j
+                        is_not_found_same_block = False
+
+                # Statement to bring not popped elements to the first popped index of the stack.
+                if j > first_popped_j[i] and j not in pop_set:
+                    e_to_be_moved.append(stacks[i][j])
             else:
-                bridge.append(0)
+                # Statement to bring not popped elements to the first popped index of the stack.
+                if end_j > first_popped_j[i]:
+                    if end_j in pop_set:
+                        e_to_be_moved.extend(stacks[i][end_j + 1 :])
+                    else:
+                        e_to_be_moved.extend(stacks[i][end_j:])
 
-    return answer
+            # a <i> iteration ends.
+            if pop_set:
+                is_not_found_same_block = True
+                # move not popped elements to forward of stack if is_greater_than_first_pop_j
+                stacks[i][first_popped_j[i] :] = e_to_be_moved
+        else:
+            if next_pop_set:
+                last_i = nm1 if i == nm1 else i + 1
+                first_popped_j[last_i] = first_popped_j[last_i - 1]
+                stacks[last_i][first_popped_j[last_i] :] = [
+                    stacks[last_i][j]
+                    for j in range(first_popped_j[last_i] + 2, len(stacks[last_i]))
+                    if j not in next_pop_set
+                ]
+
+        # fix when j is 0 when a <i> iteration ends.
+        if first_popped_j[nm1 - 1] == m:
+            first_popped_j[nm1] = m
+        # create Generator <i_and_start_j>
+        i_and_start_j = (
+            (i, x - 1) if x > 1 else (i, 0)
+            for i, x in enumerate(first_popped_j)
+            if x < m
+        )
+
+    return n * m - sum((len(stacks[i]) for i in range(n)))
 
 
-solution(5, 3, [1, 2, 1])
-solution(5, 3, [1, 2, 1, 3])
+for x in [
+    [4, 5, ["CCBDE", "AAADE", "AAABF", "CCBBF"]],  # 14
+    [6, 6, ["TTTANT", "RRFACC", "RRRFCC", "TRRRAA", "TTMMMF", "TMMTTJ"]],  # 15
+    [8, 5, ["HGNHU", "CRSHV", "UKHVL", "MJHQB", "GSHOT", "MQMJJ", "AGJKK", "QULKK"]],  #
+    [5, 6, ["AAAAAA", "BBAATB", "BBAATB", "JJJTAA", "JJJTAA"]],  # 24
+    [6, 6, ["IIIIOO", "IIIOOO", "IIIOOI", "IOOIII", "OOOIII", "OOIIII"]],  # 32
+]:
+    solution_17679(*x)
+
