@@ -789,7 +789,7 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
     11번 테스트케이스 실패.
     2 ≦ n, m ≦ 30
     j .. imi j 도 건드리는데 len() 보다 작아서 문제가 발생할 수도 있나? 혹인 for else 문으로 인한?
-
+    다음에 할 i+1 일 추가해도 nextpopset 에 포함이
     Tag: Data structures
 
     Time Complexity: O(n^2 * m^2)
@@ -799,7 +799,7 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
     Space Complexity: O(n*m)
         - n*m from <stacks>
         - n*m from <pop_set> and <next_pop_set>
-        - n from <first_popped_j>
+        - 2*n from <first_popped_j> and <next_first_popped_j>
 
     Implementation
         - pop event in current while-loop can be triggered only in some <i>s in stack
@@ -811,14 +811,17 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
     stacks: list[list[str]] = [list(reversed(x)) for x in zip(*board)]
     can_continue: bool = True
     nm1 = n - 1
-    i_and_start_j = ((i, 0) for i in range(n))
+    first_popped_j = [0] * n
+    i_and_start_j = (
+        (i, x - 1) if x > 1 else (i, 0) for i, x in enumerate(first_popped_j)
+    )
 
     while can_continue:
         can_continue = False
         pop_set: set[int] = set()
         next_pop_set: set[int] = set()
         # <first_popped_j> by i. it is used to to bring not popped elements to the first popped index of the stack, and used to create next <i_and_start_j>.
-        first_popped_j: list[int] = [m] * n
+        next_first_popped_j: list[int] = [m] * n
         i = 0
         for i, start_j in i_and_start_j:
             ## another branch
@@ -830,13 +833,15 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
             im1 = i - 1
 
             # if stacks[i-1] is popped, <pop_set> will be inherited from <next_pop_set>.
-            pop_set = next_pop_set if first_popped_j[im1] < m else set()
+            pop_set = next_pop_set if next_first_popped_j[im1] < m else set()
             next_pop_set = set()
             e_to_be_moved: list[str] = []
 
             # set <end_j>
             end_j = min(len(stacks[i]), len(stacks[ip1])) - 1
             is_not_found_same_block = True
+            if end_j <= start_j:
+                continue
             for j in range(start_j, end_j):
                 jp1: int = j + 1  # j plus 1
                 if stacks[i][j] == stacks[ip1][j] == stacks[i][jp1] == stacks[ip1][jp1]:
@@ -844,21 +849,22 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
                     pop_set.update(x)
                     next_pop_set.update(x)
                     if is_not_found_same_block:
-                        first_popped_j[ip1] = j
-                        if first_popped_j[i] > j:
-                            if i == 0:
-                                first_popped_j[i] = j
-                            else:
-                                first_popped_j[i] = first_popped_j[im1] = j
-
                         is_not_found_same_block = False
+                        next_first_popped_j[ip1] = j
+                        if j < next_first_popped_j[i]:
+                            if i == 0:
+                                next_first_popped_j[i] = j
+                            else:
+                                next_first_popped_j[i] = next_first_popped_j[im1] = j
+                        if j < first_popped_j[ip1]:
+                            first_popped_j[ip1] = j
 
                 # Statement to bring not popped elements to the first popped index of the stack.
-                if j > first_popped_j[i] and j not in pop_set:
+                if j > next_first_popped_j[i] and j not in pop_set:
                     e_to_be_moved.append(stacks[i][j])
             else:
                 # Statement to bring not popped elements to the first popped index of the stack.
-                if end_j > first_popped_j[i]:
+                if end_j > next_first_popped_j[i]:
                     if end_j in pop_set:
                         e_to_be_moved.extend(stacks[i][end_j + 1 :])
                     else:
@@ -868,18 +874,19 @@ def solution_17679(m: int, n: int, board: list[str]) -> int:
             if pop_set:
                 can_continue = True
                 # move not popped elements to forward of stack if is_greater_than_first_pop_j
-                stacks[i][first_popped_j[i] :] = e_to_be_moved
+                stacks[i][next_first_popped_j[i] :] = e_to_be_moved
         else:
             if next_pop_set:
                 last_i = nm1 if i == nm1 else i + 1
-                first_popped_j[last_i] = first_popped_j[last_i - 1]
-                stacks[last_i][first_popped_j[last_i] :] = [
+                next_first_popped_j[last_i] = next_first_popped_j[last_i - 1]
+                stacks[last_i][next_first_popped_j[last_i] :] = [
                     stacks[last_i][j]
-                    for j in range(first_popped_j[last_i] + 2, len(stacks[last_i]))
+                    for j in range(next_first_popped_j[last_i] + 2, len(stacks[last_i]))
                     if j not in next_pop_set
                 ]
 
         # create Generator <i_and_start_j>
+        first_popped_j = next_first_popped_j
         i_and_start_j = (
             (i, x - 1) if x > 1 else (i, 0)
             for i, x in enumerate(first_popped_j)
