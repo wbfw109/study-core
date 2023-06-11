@@ -838,3 +838,7 @@ next(x_gen)
 # >>> a[-1:] = [1]
 # >>> a
 # [1, 2, 1]
+# %
+# %%
+
+[(i, j) for i in range(3) for j in range(4, 5)]

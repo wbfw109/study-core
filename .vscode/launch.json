@@ -2,6 +2,32 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "kotlin",
+      "request": "launch",
+      "name": "Kotlin Launch",
+      "projectRoot": "${workspaceFolder}/src/kotlin/wbfw109/app",
+      "mainClass": "demo.AppKt",
+      "preLaunchTask": "kotlin build"
+    },
+    // {
+    //   "label": "build",
+    //   "type": "shell",
+    //   "command": "./gradlew build -x test",
+    //   "problemMatcher": [],
+    //   "group": {
+    //       "kind": "build",
+    //       "isDefault": true
+    //   }
+    // },
+    // {
+    //   "type": "kotlin",
+    //   "request": "launch",
+    //   "name": "Kotlin Launch",
+    //   "projectRoot": "${workspaceFolder}/src/kotlin/wbfw109",
+    //   "mainClass": "lib/src/main/kotlin/wbfw109/Basic.kt",
+    //   "preLaunchTask": "gradlew build"
+    // },
+    {
       "type": "bashdb",
       "request": "launch",
       "name": "Bash-Debug (${file})",

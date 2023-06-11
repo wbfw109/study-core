@@ -4,6 +4,33 @@
   // ??? tasks dependonds
   "version": "2.0.0",
   "tasks": [
+    // Kotlin ~
+    {
+      "label": "kotlin build",
+      "type": "shell",
+      "command": "./gradlew build --exclude-task test && ./gradlew run",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/src/kotlin/wbfw109/"
+    },
+    },
+    {
+      "label": "run",
+      "type": "shell",
+      "command": "./gradlew run",
+      "problemMatcher": []
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "./gradlew test",
+      "problemMatcher": []
+    },
+    // Git ~
     {
       "label": "[Git] dev: push with '.' commit message",
       "type": "shell",
@@ -22,6 +49,8 @@
         "panel": "new"
       }
     },
+    // Python ~
+
     {
       "label": "[Web] [Tutorials] Run Uvicorn dev server",
       "type": "shell",
