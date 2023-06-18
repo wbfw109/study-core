@@ -17,33 +17,42 @@
 
 ## 1. Algorithms
 
-- ![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
+🅰️ Plan
 
-  - [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
-  - [**Programmers, Goorm**](wbfw109/algorithms/_practice/README.md)
-  - [unknown](wbfw109/algorithms/unknown/) ; Problems from Unknown source
-    - 📝 [dp.py](wbfw109/algorithms/unknown/dp.py) ; (1) problems
+1. to solve from lv 2 to lv 5 in Programmers site by Python3
+2. to solve from lv 0 to lv 5 in Programmers site by SQL and Pandas
+3. [goorm level](https://level.goorm.io/)
+4. [Leet code](https://leetcode.com/)
 
-- **Main Tags in use**
+![#008000](https://placehold.co/15x15/008000/008000.png) &nbsp; other **Problems & Solution**
 
-  - Optimization
-    - Masking
-    - Memoization
-  - Graph
-    - BFS
-  - Dynamic programming
-    - Rolling window approach
-  - Math
-  - Sequence
-    - Subsequence
+- [**baekjoon**](wbfw109/algorithms/baekjoon/README.md)
+- [**Programmers, Goorm**](wbfw109/algorithms/_practice/README.md)
+- [unknown](wbfw109/algorithms/unknown/) ; Problems from Unknown source
 
-- **Sub Tags in use**
-  - Sweep line algorithm
-  - Parametric search
-    - Bisection method
-  - Backtracking
-  - \<Named problems\>
-    - 3SUM variant
+  - 📝 [dp.py](wbfw109/algorithms/unknown/dp.py) ; (1) problems
+
+**Main Tags** in use
+
+- Optimization
+  - Masking
+  - Memoization
+- Graph
+  - BFS
+- Dynamic programming
+  - Rolling window approach
+- Math
+- Sequence
+  - Subsequence
+
+**Sub Tags** in use
+
+- Sweep line algorithm
+- Parametric search
+  - Bisection method
+- Backtracking
+- \<Named problems\>
+  - 3SUM variant
 
 &nbsp;
 

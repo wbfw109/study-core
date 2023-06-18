@@ -370,7 +370,9 @@ def solution_42747() -> None:
 
 
 def solution_42746() -> None:
-    """가장 큰 수 ; https://school.programmers.co.kr/learn/courses/30/lessons/42746"""
+    """가장 큰 수 ; https://school.programmers.co.kr/learn/courses/30/lessons/42746
+    iterable 개수 통일 방법 -> islice+cycle len(3) 으로 통일. 네 자릿수는 1000이 끝이라 맞출 필요 없음.
+    """
 
 
 def solution_42626() -> None:
