@@ -2,8 +2,9 @@
 It create <nara_market_place-drone_station>/** for documents.
 
 - <notice_num>s which start with have "EA" few information.
-- 📝 .csv file must be loaded by process "Data - From Text/CSV" in Excel to prevent from Encoding corruption.
 - ❓ the download can be stuck according to time. (by the www.data.go.kr OpenAPI policy?)
+- 📝 <one_data_frame.to_excel> requires <openpyxl> package. (It is not required to import this. install only.)
+    - .csv file must be loaded by process "Data - From Text/CSV" in Excel to prevent from Encoding corruption.
 
 Background
     - 나라장터의 검색 시스템이 "통합검색"인 경우와 "입찰공고검색" 인 경우의 결과가 다르게 나온다.
@@ -31,7 +32,6 @@ from http.client import HTTPResponse
 from pathlib import Path
 from typing import Any
 
-import openpyxl
 import pandas as pd
 from IPython.core.interactiveshell import InteractiveShell
 
@@ -128,7 +128,6 @@ for notice_nums, method_name in [
         ## add to list <data_frames>
         data_frames.append(pd.DataFrame(json_obj["response"]["body"]["items"]))
 
-# %%
 ## create one data_frame from multiple data_frame
 # one_data_frame = pd.concat(data_frames)  # type: ignore
 one_data_frame = pd.DataFrame()
