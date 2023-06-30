@@ -9,7 +9,7 @@ RUN mkdir -p installation
 COPY ./* installation/
 RUN chmod +x installation/setting_unitree_go_1.sh
 
-# instsall
+# install
 RUN installation/setting_unitree_go_1.sh
 
 
