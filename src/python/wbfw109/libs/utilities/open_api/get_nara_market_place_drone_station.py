@@ -20,6 +20,23 @@ Background
         20230130553  >  [20230117566, 20230110878]
         20220436567  >  [20220402053]
         20210811154  >  [20210727302]
+
+OpenAPI columns
+    bidNtceNo: 입찰공고번호
+    rgstTyNm: 입찰공고 등록이름
+    rgstDt: 입찰공고 게시 날짜
+    dminsttNm: 수요 기관
+    presmptPrce: 추정 가격 (사업금액 - 부가세)
+    bidNtceDtlUrl: 공고 hyperlink
+    srvceDivNm: 용역 구분 (["일반용역", "기술용역", ""])
+    purchsObjPrdctList: 구매대상 물품ㅣ스트
+    (optional)
+        prearngPrceDcsnMthdNm: 예가 방법
+        sucsfbidMthdNm? cntrctCnclsMthdNm?: 계약 방법
+Note
+    - prdctSpecNm: 구매대상물품 세부품명 규격은 대상물품은 세트 중 첫번째 제품의 규격만 보내주는 듯 함.
+        😠 규격서.hwp 에 나오지 않는 경우, 공고에 수동으로 들어가서 개별적으로 확인 필요.
+    - 한국전자통신연구원 공고는 정보가 없음.
 """
 
 # %%
@@ -136,4 +153,3 @@ one_data_frame.to_excel(
 )
 
 print("===== End Open API calls =====")
-

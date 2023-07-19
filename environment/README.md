@@ -17,7 +17,9 @@ It is the Guide of Development environment to prevent from some errors.
   nameserver 1.1.1.1
   nameserver <your WSL2 IPv4 Address>
   ```
+
   - Google public DNS are "8.8.8.8" and "8.8.4.4".
+
 - otherwise, may cause
   - when `apt install` some packages,
     - get Error `Failed to fetch ... Connection failed ... E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?`.
