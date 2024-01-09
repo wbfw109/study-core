@@ -842,3 +842,7 @@ next(x_gen)
 # %%
 
 [(i, j) for i in range(3) for j in range(4, 5)]
+#%%
+from tensorflow.python.client import device_lib
+
+device_lib.list_local_devices()

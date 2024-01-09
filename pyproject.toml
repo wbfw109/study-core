@@ -13,7 +13,7 @@ exclude = ["src/python/wbfw109/libs/utilities/self"]
 
 
 [tool.poetry.dependencies]
-python = "~3.11, <3.12"
+python = "~3.11.0"
 tomlkit = "^0.11.6"
 # visualization ~
 ipykernel = "*"
@@ -58,7 +58,6 @@ PyQt6 = "*"
 [tool.poetry.group.ml]
 optional = true
 [tool.poetry.group.ml.dependencies]
-tensorflow = "*"
 pascal-voc-writer = "*"
 scipy = "*"
 imgaug = "*"

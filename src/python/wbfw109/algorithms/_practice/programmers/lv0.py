@@ -59,9 +59,9 @@ def solution_181944() -> None:
     print(f"{n} is odd" if ((n := int(input())) & 1) else f"{n} is even")
 
 
-def solution_181943(my_string: str, overwrite_string: str, s: int) -> str:
+def solution_181943(my_string: str, replace_str: str, s: int) -> str:
     """🧠 문자열 겹쳐쓰기 ; https://school.programmers.co.kr/learn/courses/30/lessons/181943"""
-    return my_string[:s] + overwrite_string + my_string[s + len(overwrite_string) :]
+    return my_string[:s] + replace_str + my_string[s + len(replace_str) :]
 
 
 def solution_181942(str1: str, str2: str) -> str:
