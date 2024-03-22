@@ -7,6 +7,8 @@ resources/
 package-lock.json
 yarn.lock
 src/kotlin/demo
+rsrc/chromedriver
+
 # svelte
 .DS_Store
 build/
