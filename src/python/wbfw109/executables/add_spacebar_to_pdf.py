@@ -14,7 +14,8 @@ for page_num in range(pdf_doc.page_count):
     page: fitz.Page = pdf_doc.load_page(page_num)
 
     # Extract text with position information (including bounding boxes)
-    extracted_text_instances = page.get_text("dict")  # Get text with coordinates
+    extracted_text_instances = page.get_text("dict")
+    # Get text with coordinates
 
     # Collect all spans to process them in bulk
     all_texts = []
