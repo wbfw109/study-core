@@ -141,7 +141,11 @@ def process_html(soup: BeautifulSoup, base_url: str) -> str:
     for tr_tag in tr_tags:
         if "rowtop" in tr_tag.get("class", []):
             result += parse_row_top(tr_tag, base_url, indent_level=2)
-        else:
+        elif "rowbottom" in tr_tag.get("class", []):
+            td_tags = tr_tag.find_all("td")
+            for td_tag in td_tags:
+                result += extract_external_links(td_tag, base_url, indent_level=2)
+        else:  # include elif "rowbottom" in tr_tag.get("class", []):
             td_tags: ResultSet[Tag] = tr_tag.find_all("td")
             for td_tag in td_tags:
                 if td_tag.find("a", title="c/experimental") and not td_tag.find(
@@ -153,10 +157,6 @@ def process_html(soup: BeautifulSoup, base_url: str) -> str:
                 else:
                     result += extract_links(td_tag, base_url, indent_level=2)
 
-        if "rowbottom" in tr_tag.get("class", []):
-            td_tags = tr_tag.find_all("td")
-            for td_tag in td_tags:
-                result += extract_external_links(td_tag, base_url, indent_level=2)
     return result
 
 
