@@ -75,8 +75,7 @@ def extract_links(
                 link = a_tag.get("href")
                 text = a_tag.get_text(strip=True)
                 result += f"{' ' * indent_level}⚓ {text} ; {base_url}{link}\n"
-
-        if (
+        elif (
             isinstance(sibling, Tag)
             and sibling.name == "div"
             and "mainpagediv" in sibling.get("class", [])
