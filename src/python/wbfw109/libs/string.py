@@ -6,6 +6,46 @@ import re
 import unicodedata
 
 
+# Writtin at 📅 2024-09-15 23:52:35
+def camel_or_pascal_to_snake(value: str):
+    """
+    Converts a CamelCase or PascalCase string to snake_case.
+
+    The function operates by finding positions in the string where an uppercase
+    letter follows a lowercase letter or another uppercase letter (except the first
+    character of the string). It inserts an underscore (`_`) before each of these
+    uppercase letters to separate them, and then converts the entire string to
+    lowercase to produce a valid snake_case output.
+
+    ❔ Mechanism:
+    - The regular expression pattern `(?<!^)(?=[A-Z])` consists of two parts:
+      1. `(?<!^)`: A negative lookbehind that ensures the match is not at the start
+         of the string. This prevents an underscore from being added before the
+         first character, even if it is uppercase.
+      2. `(?=[A-Z])`: A positive lookahead that looks for positions in the string
+         where the next character is an uppercase letter.
+    - When such a position is found (before each uppercase letter that is not the
+      first character), the `re.sub()` function inserts an underscore (`_`) at that
+      position.
+    - Finally, the resulting string is converted to lowercase to match the snake_case
+      format.
+
+    Example:
+        >>> camel_or_pascal_to_snake("Composable_Range_Views_Ranges_C++20/23")
+        'composable_range_views_ranges_cpp20_23'
+        >>> camel_or_pascal_to_snake("camelCaseExample")
+        'camel_case_example'
+
+    Args:
+        name (str): The input string in CamelCase or PascalCase format.
+
+    Returns:
+        str: The converted string in snake_case format.
+    """
+    snake_case = re.sub(r"(?<!^)(?=[A-Z])", "_", value).lower()
+    return snake_case
+
+
 # Writtin at 📅 2024-09-15 20:09:05
 def replace_special_chars(value: str) -> str:
     """
@@ -23,12 +63,14 @@ def replace_special_chars(value: str) -> str:
         "&": "and",
         "/": "_",  # Replace slashes with underscores
         "@": "at",  # Replace @ with "at"
-        ":": "",  # Remove colons
+        ":": "_",  # Remove colons
         ";": "",  # Remove semicolons
         "(": "",  # Remove parentheses
         ")": "",
         "[": "",
         "]": "",
+        "<": "_",
+        ">": "_",
         " ": "_",  # Spaces should be turned into underscores
         ".": "",  # Remove periods
         ",": "",  # Remove commas
@@ -80,7 +122,7 @@ def slugify(value: str, allow_unicode: bool = False) -> str:
         )
 
     # Replace any remaining unwanted characters
-    value = re.sub(r"[^\w\s-]", "", value.lower())
+    value = re.sub(r"[^\w\s-]", "", camel_or_pascal_to_snake(value))
 
     # Replace spaces and hyphens with underscores, and strip leading/trailing underscores
     value = re.sub(r"[-\s_]+", "_", value).strip("_")
