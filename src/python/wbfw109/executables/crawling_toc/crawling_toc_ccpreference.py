@@ -14,8 +14,8 @@ InteractiveShell.ast_node_interactivity = "all"
 
 # List of base URLs for the websites to fetch content from
 base_urls = [
-    "https://en.cppreference.com/w/c",
-    "https://en.cppreference.com/w/cpp",
+    # "https://en.cppreference.com/w/c",
+    # "https://en.cppreference.com/w/cpp",
     # Add more URLs here as needed
 ]
 
