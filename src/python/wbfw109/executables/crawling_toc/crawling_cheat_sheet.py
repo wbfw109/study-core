@@ -166,7 +166,41 @@ def process_image_tags(
                     existing_file_names.add(full_file_name)
 
 
-def process_section_part(
+def section_process_single_tag(
+    tag: Tag,
+    base_name: str,
+    base_url: str,
+    category_1: str,
+    existing_file_names: set[str],
+    picture_info: list[dict[str, Union[str, datetime]]],
+) -> None:
+    """
+    Processes a section tag with a single div, handling cases where an h3 or h4 tag exists.
+    """
+    # case 1-2
+    h3_tag = tag.find("h3", recursive=False)
+    if h3_tag:
+        category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
+        process_image_tags(
+            root_tag=tag,
+            base_name=base_name,
+            base_url=base_url,
+            category_1=category_1,
+            category_2=category_2,
+            category_3="",
+            existing_file_names=existing_file_names,
+            picture_info=picture_info,
+        )
+        return
+
+    # case 1-2: iterate through child elements
+    for child in (child for child in tag.children if isinstance(child, Tag)):
+        section_process_children_tags(
+            child, base_name, base_url, category_1, existing_file_names, picture_info
+        )
+
+
+def section_process_children_tags(
     root_tag: Tag,
     base_name: str,
     base_url: str,
@@ -174,17 +208,48 @@ def process_section_part(
     existing_file_names: set[str],
     picture_info: list[dict[str, Union[str, datetime]]],
 ) -> None:
-    sub_tags: list[Tag] = root_tag.find_all("div", recursive=False)
-    sub_tag_len: int = len(sub_tags)
+    """
+    Handles processing of child tags when there is no h3 tag, handling h4 tags or further nested tags.
+    """
+    # case 1-2-1
+    h3_tag = root_tag.find("h3", recursive=False)
+    if h3_tag:
+        category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
+        process_image_tags(
+            root_tag=root_tag,
+            base_name=base_name,
+            base_url=base_url,
+            category_1=category_1,
+            category_2=category_2,
+            category_3="",
+            existing_file_names=existing_file_names,
+            picture_info=picture_info,
+        )
+        return
 
-    # case 1
-    if sub_tag_len == 1:
-        # case 1-2
-        h3_tag = sub_tags[0].find("h3", recursive=False)
+    # case 1-2-2
+    h4_tag = root_tag.find("h4", recursive=False)
+    if h4_tag:
+        category_3 = slugify(h4_tag.get_text(separator=" ", strip=True))
+        process_image_tags(
+            root_tag=root_tag,
+            base_name=base_name,
+            base_url=base_url,
+            category_1=category_1,
+            category_2="",
+            category_3=category_3,
+            existing_file_names=existing_file_names,
+            picture_info=picture_info,
+        )
+        return
+
+    # case 1-2-3
+    for child2 in (child2 for child2 in root_tag.children if isinstance(child2, Tag)):
+        h3_tag = child2.find("h3", recursive=False)
         if h3_tag:
             category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
             process_image_tags(
-                root_tag=sub_tags[0],
+                root_tag=child2,
                 base_name=base_name,
                 base_url=base_url,
                 category_1=category_1,
@@ -193,142 +258,147 @@ def process_section_part(
                 existing_file_names=existing_file_names,
                 picture_info=picture_info,
             )
-            return
 
-        # case 1-2
-        for child in (
-            child for child in sub_tags[0].children if isinstance(child, Tag)
-        ):
-            if category_1 == "engineering":
-                print(div_or_section_1.name)
-                pass
 
-            ## if root is striped or not // h3 tag with div/a/image with description
-            # case 1-2-1
-            h3_tag = child.find("h3", recursive=False)
-            if h3_tag:
-                category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
-                process_image_tags(
-                    root_tag=child,
-                    base_name=base_name,
-                    base_url=base_url,
-                    category_1=category_1,
-                    category_2=category_2,
-                    category_3="",
-                    existing_file_names=existing_file_names,
-                    picture_info=picture_info,
-                )
-                continue
+def section_process_nested_div_tags(
+    content_div_tag: Tag,
+    base_name: str,
+    base_url: str,
+    category_1: str,
+    existing_file_names: set[str],
+    picture_info: list[dict[str, Union[str, datetime]]],
+) -> None:
+    """
+    Processes nested div tags inside a section and handles nested h3 tags for section case 2-2.
+    """
+    nest_sub_tags = content_div_tag.find_all("div", recursive=False)
+    section_j = 0
+    nest_sub_tag_len = len(nest_sub_tags)
 
-            # case 1-2-2
-            h4_tag = child.find("h4", recursive=False)
-            if not h3_tag and h4_tag:
-                category_3 = slugify(h4_tag.get_text(separator=" ", strip=True))
-                process_image_tags(
-                    root_tag=child,
-                    base_name=base_name,
-                    base_url=base_url,
-                    category_1=category_1,
-                    category_2="",
-                    category_3=category_3,
-                    existing_file_names=existing_file_names,
-                    picture_info=picture_info,
-                )
-                continue
+    while section_j < nest_sub_tag_len:
+        nest_temp_div_tag = nest_sub_tags[section_j]
 
-            # case 1-2-3
-            if not h3_tag and not h4_tag:
-                for child2 in (
-                    child2 for child2 in child.children if isinstance(child2, Tag)
-                ):
-                    h3_tag = child2.find("h3", recursive=False)
-                    if h3_tag:
-                        category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
-                        process_image_tags(
-                            root_tag=child2,
-                            base_name=base_name,
-                            base_url=base_url,
-                            category_1=category_1,
-                            category_2=category_2,
-                            category_3="",
-                            existing_file_names=existing_file_names,
-                            picture_info=picture_info,
-                        )
-    # case 2
-    else:
-        section_i = 0
-        while section_i < sub_tag_len:
-            ##
-            temp_div_tag = sub_tags[section_i]
+        h3_tag = nest_temp_div_tag.find("h3", recursive=False)
+        category_2 = ""
+        # case 2-1
+        if h3_tag:
+            category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
+            section_j += 1
+            if section_j >= nest_sub_tag_len:
+                break
 
-            category_2 = ""
-            h3_tag = temp_div_tag.find("h3", recursive=False)
-
-            # case 2-1
-            if h3_tag:
-                category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
-                section_i += 1
-                if section_i >= sub_tag_len:
-                    break
-                ##
-
-                process_image_tags(
-                    root_tag=sub_tags[section_i],
-                    base_name=base_name,
-                    base_url=base_url,
-                    category_1=category_1,
-                    category_2=category_2,
-                    category_3="",
-                    existing_file_names=existing_file_names,
-                    picture_info=picture_info,
-                )
-                section_i += 1
-                continue
-
-            # case 2-2
-            content_div_tag = temp_div_tag.find("div", recursive=False)
-            if not isinstance(content_div_tag, Tag):
-                section_i += 1
-                continue
-
-            nest_sub_tags: list[Tag] = content_div_tag.find_all("div", recursive=False)
-            nest_sub_tag_len: int = len(nest_sub_tags)
-            section_j = 0
-
-            while section_j < nest_sub_tag_len:
-                ##
-                nest_temp_div_tag = nest_sub_tags[section_j]
-
-                category_2 = ""
-                h3_tag = nest_temp_div_tag.find("h3", recursive=False)
-
-                # case 2-1
-                if h3_tag:
-                    category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
-                    section_j += 1
-                    if section_j >= nest_sub_tag_len:
-                        break
-                    ##
-                    nest_temp_div_tag = nest_sub_tags[section_j]
-                    if nest_temp_div_tag.name != "div":
-                        section_j += 1
-                        continue
-
-                    process_image_tags(
-                        root_tag=nest_temp_div_tag,
-                        base_name=base_name,
-                        base_url=base_url,
-                        category_1=category_1,
-                        category_2=category_2,
-                        category_3="",
-                        existing_file_names=existing_file_names,
-                        picture_info=picture_info,
-                    )
-                    section_j += 1
-                    continue
-
+            nest_temp_div_tag = nest_sub_tags[section_j]
+            if nest_temp_div_tag.name != "div":
                 section_j += 1
+                continue
+
+            process_image_tags(
+                root_tag=nest_temp_div_tag,
+                base_name=base_name,
+                base_url=base_url,
+                category_1=category_1,
+                category_2=category_2,
+                category_3="",
+                existing_file_names=existing_file_names,
+                picture_info=picture_info,
+            )
+        section_j += 1
+
+
+def section_process_multiple_tags(
+    sub_tags: list[Tag],
+    base_name: str,
+    base_url: str,
+    category_1: str,
+    existing_file_names: set[str],
+    picture_info: list[dict[str, Union[str, datetime]]],
+) -> None:
+    """
+    Processes multiple div tags inside a section, handling nested divs and determining categories for images.
+    """
+    section_i = 0
+    sub_tag_len = len(sub_tags)
+
+    while section_i < sub_tag_len:
+        temp_div_tag = sub_tags[section_i]
+
+        h3_tag = temp_div_tag.find("h3", recursive=False)
+        # case 2-1
+        if h3_tag:
+            category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
             section_i += 1
+            if section_i >= sub_tag_len:
+                break
+
+            process_image_tags(
+                root_tag=sub_tags[section_i],
+                base_name=base_name,
+                base_url=base_url,
+                category_1=category_1,
+                category_2=category_2,
+                category_3="",
+                existing_file_names=existing_file_names,
+                picture_info=picture_info,
+            )
+        else:
+            # case 2-2: if there's a nested div structure
+            content_div_tag = temp_div_tag.find("div", recursive=False)
+            if isinstance(content_div_tag, Tag):
+                section_process_nested_div_tags(
+                    content_div_tag,
+                    base_name,
+                    base_url,
+                    category_1,
+                    existing_file_names,
+                    picture_info,
+                )
+
+        section_i += 1
+
+
+def section_process_section_part(
+    root_tag: Tag,
+    base_name: str,
+    base_url: str,
+    category_1: str,
+    existing_file_names: set[str],
+    picture_info: list[dict[str, Union[str, datetime]]],
+) -> None:
+    """
+    The main function that determines whether to process a single div or multiple divs in a section tag.
+    Processes a section of HTML tags, handling single or multiple divs and nested structures
+        to extract and download images.
+
+    Flow of function calls:
+
+    process_section_part
+        ├──> process_single_tag [If len(sub_tags) == 1]
+        │       ├──> process_image_tags [If h3 tag found in single div]
+        │       └──> process_children_tags [If no h3 tag found]
+        │               ├──> process_image_tags [If h3 tag found in children]
+        │               └──> process_image_tags [If h4 tag found in children]
+        └──> process_multiple_tags [If len(sub_tags) > 1]
+                ├──> process_image_tags [If h3 tag found in divs]
+                └──> process_nested_div_tags [If nested div structure found]
+                        ├──> process_image_tags [If h3 tag found in nested divs]
+                        └──> process_image_tags [If nested div structure continues]
+
+    """
+    sub_tags = root_tag.find_all("div", recursive=False)
+
+    if len(sub_tags) == 1:
+        section_process_single_tag(
+            sub_tags[0],
+            base_name,
+            base_url,
+            category_1,
+            existing_file_names,
+            picture_info,
+        )
+    else:
+        section_process_multiple_tags(
+            sub_tags, base_name, base_url, category_1, existing_file_names, picture_info
+        )
 
 
 # %%
@@ -378,7 +448,7 @@ while section_i < len(children):
             continue
 
         if div_or_section_1.name == "section":
-            process_section_part(
+            section_process_section_part(
                 root_tag=div_or_section_1,
                 base_name=base_name,
                 base_url=base_url,
