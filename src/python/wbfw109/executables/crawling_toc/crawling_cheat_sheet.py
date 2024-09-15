@@ -129,9 +129,9 @@ def process_image_tags(
 ) -> None:
     img_tags = root_tag.find_all("img")
     description = ""
-    for hn_tag in root_tag.find_all(["h1", "h2", "h3", "h4", "h5", "h6"]):
-        hn_tag: Tag
-        hn_tag.extract()
+    # for hn_tag in root_tag.find_all(["h1", "h2", "h3", "h4", "h5", "h6"]):
+    #     hn_tag: Tag
+    #     hn_tag.extract()
     description = root_tag.get_text(separator=" ", strip=True)
 
     for img_tag in img_tags:
@@ -149,7 +149,7 @@ def process_image_tags(
                 full_file_name = "-".join(
                     [base_name, category_1, category_2, category_3, file_name]
                 )
-                # if category_1 == "standard_containers":
+                # if category_1 == "language_rules_and_mechanisms":
                 print(full_file_name)
                 image_url = urljoin(base_url, img_src)
 
@@ -174,22 +174,38 @@ def process_section_part(
     existing_file_names: set[str],
     picture_info: list[dict[str, Union[str, datetime]]],
 ) -> None:
-
-    temp_tag = root_tag.find_all("div", recursive=False)
-
-    # if not isinstance(temp_tag, Tag):
-    #     return
-    sub_tags: list[Tag] = temp_tag
+    sub_tags: list[Tag] = root_tag.find_all("div", recursive=False)
+    sub_tag_len: int = len(sub_tags)
 
     # case 1
-    if len(sub_tags) == 1:
+    if sub_tag_len == 1:
+        # case 1-2
+        h3_tag = sub_tags[0].find("h3", recursive=False)
+        if h3_tag:
+            category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
+            process_image_tags(
+                root_tag=sub_tags[0],
+                base_name=base_name,
+                base_url=base_url,
+                category_1=category_1,
+                category_2=category_2,
+                category_3="",
+                existing_file_names=existing_file_names,
+                picture_info=picture_info,
+            )
+            return
+
+        # case 1-2
         for child in (
             child for child in sub_tags[0].children if isinstance(child, Tag)
         ):
-            h3_tag = child.find("h3", recursive=False)
+            if category_1 == "engineering":
+                print(div_or_section_1.name)
+                pass
 
             ## if root is striped or not // h3 tag with div/a/image with description
-            # case 1-1
+            # case 1-2-1
+            h3_tag = child.find("h3", recursive=False)
             if h3_tag:
                 category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
                 process_image_tags(
@@ -202,8 +218,26 @@ def process_section_part(
                     existing_file_names=existing_file_names,
                     picture_info=picture_info,
                 )
-            # case 1-2
-            else:
+                continue
+
+            # case 1-2-2
+            h4_tag = child.find("h4", recursive=False)
+            if not h3_tag and h4_tag:
+                category_3 = slugify(h4_tag.get_text(separator=" ", strip=True))
+                process_image_tags(
+                    root_tag=child,
+                    base_name=base_name,
+                    base_url=base_url,
+                    category_1=category_1,
+                    category_2="",
+                    category_3=category_3,
+                    existing_file_names=existing_file_names,
+                    picture_info=picture_info,
+                )
+                continue
+
+            # case 1-2-3
+            if not h3_tag and not h4_tag:
                 for child2 in (
                     child2 for child2 in child.children if isinstance(child2, Tag)
                 ):
@@ -223,44 +257,84 @@ def process_section_part(
     # case 2
     else:
         section_i = 0
-        sub_tag_len: int = len(sub_tags)
         while section_i < sub_tag_len:
             ##
-
             temp_div_tag = sub_tags[section_i]
-            if temp_div_tag.name != "div":
-                section_i += 1
-                continue
 
             category_2 = ""
             h3_tag = temp_div_tag.find("h3", recursive=False)
+
+            # case 2-1
             if h3_tag:
                 category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
+                section_i += 1
+                if section_i >= sub_tag_len:
+                    break
+                ##
 
-            section_i += 1
-            if section_i >= sub_tag_len:
-                break
-            ##
-            temp_div_tag = sub_tags[section_i]
-            if temp_div_tag.name != "div":
+                process_image_tags(
+                    root_tag=sub_tags[section_i],
+                    base_name=base_name,
+                    base_url=base_url,
+                    category_1=category_1,
+                    category_2=category_2,
+                    category_3="",
+                    existing_file_names=existing_file_names,
+                    picture_info=picture_info,
+                )
                 section_i += 1
                 continue
 
-            process_image_tags(
-                root_tag=temp_div_tag,
-                base_name=base_name,
-                base_url=base_url,
-                category_1=category_1,
-                category_2=category_2,
-                category_3="",
-                existing_file_names=existing_file_names,
-                picture_info=picture_info,
-            )
+            # case 2-2
+            content_div_tag = temp_div_tag.find("div", recursive=False)
+            if not isinstance(content_div_tag, Tag):
+                section_i += 1
+                continue
+
+            nest_sub_tags: list[Tag] = content_div_tag.find_all("div", recursive=False)
+            nest_sub_tag_len: int = len(nest_sub_tags)
+            section_j = 0
+
+            while section_j < nest_sub_tag_len:
+                ##
+                nest_temp_div_tag = nest_sub_tags[section_j]
+
+                category_2 = ""
+                h3_tag = nest_temp_div_tag.find("h3", recursive=False)
+
+                # case 2-1
+                if h3_tag:
+                    category_2 = slugify(h3_tag.get_text(separator=" ", strip=True))
+                    section_j += 1
+                    if section_j >= nest_sub_tag_len:
+                        break
+                    ##
+                    nest_temp_div_tag = nest_sub_tags[section_j]
+                    if nest_temp_div_tag.name != "div":
+                        section_j += 1
+                        continue
+
+                    process_image_tags(
+                        root_tag=nest_temp_div_tag,
+                        base_name=base_name,
+                        base_url=base_url,
+                        category_1=category_1,
+                        category_2=category_2,
+                        category_3="",
+                        existing_file_names=existing_file_names,
+                        picture_info=picture_info,
+                    )
+                    section_j += 1
+                    continue
+
+                section_j += 1
             section_i += 1
 
 
 # %%
 # Create a list of Tag objects from the children of the section
+existing_file_names = set()
+picture_info = []
 children: list[Tag] = [child for child in section.children if isinstance(child, Tag)]
 
 section_i: int = 0
@@ -294,7 +368,7 @@ while section_i < len(children):
 
     while section_j < len(sub_children):
         ######### pair: (div, div)  // h3, div
-        div_or_section_1: Tag = sub_children[section_j]
+        div_or_section_1 = sub_children[section_j]
 
         class_list = get_class_list(div_or_section_1)
 
@@ -314,10 +388,6 @@ while section_i < len(children):
             )
             section_j += 1
             continue
-
-        if category_1 == "design_guidelines":
-            print(div_or_section_1.name)
-            pass
 
         # Extract category_2 from the h3 tag within div1
         h3_tag = div_or_section_1.find("h3", recursive=False)
@@ -391,8 +461,8 @@ while section_i < len(children):
     section_i += 1
 
 # Write the updated picture_info to the temporary JSON file
-with json_file_path.open("w", encoding="utf-8") as f:
-    json.dump(picture_info, f, ensure_ascii=False, indent=4)
+# with json_file_path.open("w", encoding="utf-8") as f:
+#     json.dump(picture_info, f, ensure_ascii=False, indent=4)
 
 
 # %%
