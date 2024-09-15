@@ -83,7 +83,7 @@ def slugify(value: str, allow_unicode: bool = False) -> str:
     value = re.sub(r"[^\w\s-]", "", value.lower())
 
     # Replace spaces and hyphens with underscores, and strip leading/trailing underscores
-    value = re.sub(r"[-\s]+", "_", value).strip("_")
+    value = re.sub(r"[-\s_]+", "_", value).strip("_")
 
     return value
 
