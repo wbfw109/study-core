@@ -880,6 +880,25 @@ from pathlib import Path
 STANDARD_SIZE_FOR_QHD = 1920  # 3840/2
 
 
+# def convert_png_to_avif(png_image_path: Path, avif_image_path: Path) -> None:
+#     """
+#     Converts a PNG image to AVIF format using Pillow with AVIF plugin support, handling color and transparency issues.
+
+#     Parameters:
+#         png_image_path (Path): Path to the input PNG image.
+#         avif_image_path (Path): Path to save the AVIF image.
+#     """
+#     # Load the PNG image
+#     img = Image.open(png_image_path)
+
+#     # Ensure the image is in RGB mode before conversion
+#     # if img.mode != "RGB":
+#     #     img = img.convert("RGB")
+
+
+#     # Convert and save as AVIF
+#     img.save(avif_image_path, format="PNG", quality=95)
+#     print(f"Converted {png_image_path} to {avif_image_path}")
 def upscale_image_recursively(
     input_image_path: Path,
     output_image_path: Path,
@@ -897,10 +916,8 @@ def upscale_image_recursively(
         scale_factor (int): The factor by which to upscale (default: 2).
     """
     with Image.open(input_image_path) as img:
-        # Ensure the image is in RGB mode
-        if img.mode != "RGB":
-            img = img.convert("RGB")
-
+        # Get the original image mode and size
+        original_mode = img.mode
         width, height = img.size
 
         # Recursively upscale the image if necessary
@@ -913,40 +930,20 @@ def upscale_image_recursively(
             # Update image size
             width, height = img.size
 
-        # Save the final upscaled image in RGB mode to ensure color consistency
+        # Save the final upscaled image, preserving the original color mode
         img.save(output_image_path, format="PNG", quality=95)
         print(f"Final upscaled image saved at {output_image_path}")
-
-
-# def convert_png_to_avif(png_image_path: Path, avif_image_path: Path) -> None:
-#     """
-#     Converts a PNG image to AVIF format using Pillow with AVIF plugin support, handling color and transparency issues.
-
-#     Parameters:
-#         png_image_path (Path): Path to the input PNG image.
-#         avif_image_path (Path): Path to save the AVIF image.
-#     """
-#     # Load the PNG image
-#     img = Image.open(png_image_path)
-
-#     # Ensure the image is in RGB mode before conversion
-#     # if img.mode != "RGB":
-#     #     img = img.convert("RGB")
-
-#     # Convert and save as AVIF
-#     img.save(avif_image_path, format="PNG", quality=95)
-#     print(f"Converted {png_image_path} to {avif_image_path}")
 
 
 def upscale_and_convert_directory(
     input_dir: Path, output_dir: Path, waifu2x_instance, scale_factor: int = 2
 ) -> None:
     """
-    Upscales all PNG images in the input directory and converts them to AVIF format.
+    Upscales all PNG images in the input directory.
 
     Parameters:
         input_dir (Path): Directory containing the PNG images.
-        output_dir (Path): Directory where the upscaled and converted AVIF images will be saved.
+        output_dir (Path): Directory where the upscaled images will be saved.
         waifu2x_instance (Waifu2x): An instance of the Waifu2x class for processing.
         scale_factor (int): The factor by which to upscale (default: 2).
     """
@@ -958,22 +955,11 @@ def upscale_and_convert_directory(
         output_png_path = (
             output_dir / input_image_path.name
         )  # Save as PNG in output directory
-        output_avif_path = output_dir / (
-            # input_image_path.stem + ".avif"
-            input_image_path.stem
-            + ".png"
-        )  # Save as AVIF
 
         # Step 1: Recursively upscale the image until it meets the QHD size requirements
         upscale_image_recursively(
             input_image_path, output_png_path, waifu2x_instance, scale_factor
         )
-
-        # Step 2: Convert the upscaled PNG to AVIF format
-        # convert_png_to_avif(output_png_path, output_avif_path)
-
-        # Optional: Clean up the intermediate PNG file after AVIF conversion
-        # output_png_path.unlink()  # Deletes the PNG file after converting to AVIF
 
 
 # Example usage:
