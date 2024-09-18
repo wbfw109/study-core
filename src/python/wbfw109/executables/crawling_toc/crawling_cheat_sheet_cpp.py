@@ -1,3 +1,4 @@
+# Written in 📅 2024-09-18 22:27:18
 # TODO
 """
 1. Image Processing and Crawling
@@ -32,7 +33,6 @@ Instead, opening `.avif` files with Bandiviewer and utilizing its built-in featu
 """
 
 # %%
-# Written in 📅 2024-09-18 22:27:18
 # Enable all outputs in the Jupyter notebook environment
 import json
 from datetime import datetime
@@ -897,7 +897,7 @@ if __name__ == "__main__":
 
 
 # %%
-
+#### ⚠️ in WSL Waifu and other image scaling ai model doesn't use GPU in WSL.
 
 # Write the updated picture_info to the temporary JSON file
 # with json_file_path.open("w", encoding="utf-8") as f:
