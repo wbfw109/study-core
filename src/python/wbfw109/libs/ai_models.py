@@ -173,6 +173,22 @@ class RealESRGANPlugin:
             "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesr-general-wdn-x4v3.pth",
         )
 
+    def get_model_path(self, model_name: str) -> str:
+        """
+        Retrieve the full path of a registered RealESRGAN model from the ModelManager.
+
+        Args:
+            model_name (str): The name of the model (e.g., "realesr-general-x4v3").
+
+        Returns:
+            str: The file path of the requested model.
+        """
+        model_paths = self.manager.list_model_paths("RealESRGAN")
+        if model_name in model_paths:
+            return model_paths[model_name]
+        else:
+            raise
+
     def list_real_esrgan_models(self) -> dict[str, str]:
         """
         List all registered RealESRGAN models with their paths.
