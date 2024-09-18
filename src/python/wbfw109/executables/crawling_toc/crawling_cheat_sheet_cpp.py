@@ -6,7 +6,11 @@
    - Reason: `img src` might be cropped or resized, affecting image quality when using AI-based enlargement.
    - Next: Implement AI-based image enlargement, but handle potential text distortion carefully.
 
-2. Bandiviewer Configuration
+2. Breadcrumb Structure
+   - Modify the breadcrumb structure for better readability.
+   - Instead of using "_" or "-" characters, use one space between words and the "🔪" emoji to represent the hierarchy.
+
+3. Bandiviewer Configuration
    - Lock Title Bar: Press the "`" key.
    - Settings:
      - DPI: Set to 200%.
@@ -14,7 +18,7 @@
      - Border Color: Black.
    - Use "No Filter" to avoid lag from the "Sharpen" filter during zoom or movement.
 
-3. Image Conversion and Enlargement
+4. Image Conversion and Enlargement
    - Convert downloaded SVG files to PNG with a white background.
    - Use waifu-2x to upscale all images (ensure height and width are at least 1920px).
    - Add EXIF description data from JSON to the converted images.
