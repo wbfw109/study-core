@@ -32,6 +32,9 @@ webdriver-manager = "^4.0.2"
 cairosvg = "^2.7.1"
 waifu2x-ncnn-py = "^2.0.0"
 pillow-avif-plugin = "^1.4.6"
+realesrgan = {git = "https://github.com/xinntao/Real-ESRGAN.git"}
+torch = "^2.4.1"
+torchvision = "^0.19.1"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "*"

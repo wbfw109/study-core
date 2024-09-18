@@ -16,10 +16,14 @@ from requests.compat import urljoin
 from wbfw109.libs.crawling import get_class_list
 from wbfw109.libs.file import create_temp_json_file, open_json_in_vscode
 from wbfw109.libs.string import slugify
+from wbfw109.libs.ai_models import ModelManager, RealESRGANPlugin
+
 
 InteractiveShell.ast_node_interactivity = "all"
 
 # Set the image directory
+ai_models_dir: Path = Path.home() / "ai_models"
+ai_models_dir.mkdir(parents=True, exist_ok=True)
 images_dir: Path = Path.home() / "crawling" / "images"
 images_dir.mkdir(parents=True, exist_ok=True)
 upscalling_output_dir = images_dir / "upscaling"
@@ -977,3 +981,139 @@ upscale_and_convert_directory(input_directory, output_directory, waifu2x_instanc
 #! sudo apt install -y libomp5 libvulkan-dev
 
 # %%
+# python inference_realesrgan.py -n RealESRGAN_x4plus -i input_folder --outscale 4
+# /home/wbfw109/crawling/converted_images
+# python inference_realesrgan.py -n RealESRGAN_x4plus -i /home/wbfw109/crawling/converted_images_test_sample --outscale 4
+
+poetry 에서 Real-ESRGAN 을 설치하고 이미지의 크기를 scaling 하기 위한 방법.
+ STANDARD_SIZE_FOR_QHD = 1920  # 3840/2
+으로 높이나 너비가 1920 이상이 될 때가지 *2 를 반복하는 또는 한번에 그 크기보다 크도록 *4나 *8.. 이렇게 되도록 코드를 짜줄 수 있어? 후자가 더 효율적일 것 같아. 이 케이스에 대해 짜줘.
+
+#%%
+import subprocess
+
+def upscale_image_cli(input_image_path: str, output_image_path: str, scale: int = 4):
+    """
+    Python에서 Real-ESRGAN CLI 명령어를 사용하여 이미지를 업스케일하는 함수.
+    
+    Args:
+        input_image_path (str): 입력 이미지 파일 경로.
+        output_image_path (str): 출력 이미지 파일 경로.
+        scale (int): 업스케일 배율 (기본값은 4배).
+    """
+    # CLI 명령어 구성
+    command = [
+        "python", "inference_realesrgan.py",  # Real-ESRGAN inference 스크립트
+        "-i", input_image_path,               # 입력 이미지 경로
+        "-o", output_image_path,              # 출력 이미지 경로
+        "--scale", str(scale)                 # 업스케일 배율
+    ]
+    
+    # 명령어 실행
+    result = subprocess.run(command, capture_output=True, text=True)
+    
+    # 실행 결과 출력 (성공/실패 여부와 메시지)
+    if result.returncode == 0:
+        print(f"Successfully upscaled the image and saved to {output_image_path}")
+    else:
+        print(f"Error in upscaling: {result.stderr}")
+
+# 사용 예시
+my_input_file: str = "~/crawling/converted_images_test_sample/cheat_sheet_cpp-terminology-function_contracts--function_contracts_crop.png"
+my_output_file: str = "~/crawling/converted_images_test_sample/cheat_sheet_cpp-terminology-function_contracts--function_contracts_crop-tttt.png"
+upscale_image_cli(my_input_file, my_output_file, scale=4)
+# %%
+
+
+# %%
+if __name__ == "__main__":
+    # Create a general model manager
+    model_manager = ModelManager()
+
+    # RealESRGAN plug-in
+    real_esrgan_plugin = RealESRGANPlugin(model_manager)
+
+    # List all RealESRGAN models with their file paths
+    print("Available RealESRGAN models with their paths:")
+    print(real_esrgan_plugin.list_real_esrgan_models())
+
+    # Download all RealESRGAN models
+    # real_esrgan_plugin.download_real_esrgan_models(overwrite="ignore")
+
+    # List all model paths across all sources
+    print("All registered model paths:")
+    print(model_manager.list_model_paths())
+
+    # Access the manager and register more plugins if needed
+    manager = real_esrgan_plugin.get_manager()
+
+#%%
+import cv2
+import torch
+from basicsr.archs.rrdbnet_arch import RRDBNet
+from realesrgan import RealESRGANer
+
+STANDARD_SIZE_FOR_QHD = 1920  # Target size
+
+def compute_scale_factor(image_width: int, image_height: int, target_size: int = STANDARD_SIZE_FOR_QHD) -> int:
+    """
+    Compute the scale factor based on the input image dimensions to ensure both dimensions meet or exceed the target size.
+    """
+    max_dim = max(image_width, image_height)
+    scale_factor = 1
+    
+    # Calculate the scale factor as a power of 2, e.g., 2, 4, 8
+    while max_dim * scale_factor < target_size:
+        scale_factor *= 2
+    
+    return scale_factor
+
+def upscale_image(input_image_path: str, output_image_path: str, model_path: str, target_size: int = STANDARD_SIZE_FOR_QHD):
+    """
+    Upscale an image using Real-ESRGAN until both dimensions exceed or match the target size.
+    
+    Args:
+        input_image_path (str): Path to the input image.
+        output_image_path (str): Path where the upscaled image will be saved.
+        model_path (str): Path to the Real-ESRGAN model.
+        target_size (int): Target size for width or height (default is 1920).
+    """
+    # Load the Real-ESRGAN model (RRDBNet architecture)
+    model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
+    
+    # Initialize the upsampler (RealESRGANer)
+    upsampler = RealESRGANer(
+        scale=4,  # The model is trained for 4x upscaling
+        model_path=model_path,
+        model=model,
+        tile=0,  # You can use tiling if you run out of memory, 0 disables it
+        tile_pad=10,
+        pre_pad=0,
+        half=True  # Use FP16 for faster and more memory-efficient inference
+    )
+    
+    # Read the input image
+    img = cv2.imread(input_image_path, cv2.IMREAD_COLOR)
+    height, width = img.shape[:2]
+    
+    # Compute the scale factor needed to meet the target size
+    scale_factor = compute_scale_factor(width, height, target_size)
+
+    print(f"Original dimensions: {width}x{height}")
+    print(f"Computed scale factor: {scale_factor}")
+
+    # Scale the image up by the calculated factor using Real-ESRGAN
+    for _ in range(scale_factor // 4):  # Scale in steps of 4x (since model is trained for 4x)
+        img, _ = upsampler.enhance(img, outscale=4)
+
+    # Save the upscaled image
+    cv2.imwrite(output_image_path, img)
+    print(f"Upscaled image saved to {output_image_path}")
+
+
+# Example usage
+model_path = "path_to_your_model/realesr-general-x4v3.pth"  # Change to the correct model path
+input_image_path = "input_image.jpg"
+output_image_path = "output_image.png"
+
+upscale_image(input_image_path, output_image_path, model_path, target_size=STANDARD_SIZE_FOR_QHD)
