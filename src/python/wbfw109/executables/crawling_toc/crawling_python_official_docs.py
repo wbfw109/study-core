@@ -1,16 +1,5 @@
 """
 Written at 📅 2024-09-24 04:27:38
-
-TODO: crawling query 2: document.querySelectorAll('table[class*="sidebar"]')
-TODO: crawling query 3: document.querySelectorAll('table[role="navigation"]')
-
-TODO: It seems that Sidebar table may not have consistent structure. It required to be checked for sidebar tables in other documentations. it may be similar with structure of crawling query 3'
-
-crawling query 3
-    /html/body/div[2]/div/div[3]/main/div[3]/div[3]/div[1]/div[52]/table/tbody/tr[3]/td[1]/table/tbody/tr[3]/td/div/ul/li[1]/a
-    /html/body/div[2]/div/div[3]/main/div[3]/div[3]/div[1]/div[52]/table/tbody/tr[3]/td[1]/table/tbody/tr[1]/td/div/ul/li[1]/a
-    /html/body/div[2]/div/div[3]/main/div[3]/div[3]/div[1]/div[52]/table/tbody/tr[4]/td/div/ul/li[1]/a
-
 """
 
 import asyncio
