@@ -51,7 +51,7 @@ from IPython.core.interactiveshell import InteractiveShell
 from PIL import Image
 from requests.compat import urljoin
 from wbfw109.libs.crawling import get_class_list
-from wbfw109.libs.file import create_temp_json_file, open_json_in_vscode
+from wbfw109.libs.file import create_temp_json_file, open_file_in_vscode
 from wbfw109.libs.string import slugify
 
 # from wbfw109.libs.ai_models import ModelManager, RealESRGANPlugin
@@ -883,7 +883,7 @@ def fetch_data() -> Path:
     )
 
     # Open the JSON file in VS Code
-    open_json_in_vscode(temp_json_file)
+    open_file_in_vscode(temp_json_file)
 
     return temp_json_file
 
