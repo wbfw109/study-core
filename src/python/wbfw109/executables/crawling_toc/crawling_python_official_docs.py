@@ -1,5 +1,16 @@
 """
-Written at 📅 2024-09-24 02:54:45
+Written at 📅 2024-09-24 04:27:38
+
+TODO: crawling query 2: document.querySelectorAll('table[class*="sidebar"]')
+TODO: crawling query 3: document.querySelectorAll('table[role="navigation"]')
+
+TODO: It seems that Sidebar table may not have consistent structure. It required to be checked for sidebar tables in other documentations. it may be similar with structure of crawling query 3'
+
+crawling query 3
+    /html/body/div[2]/div/div[3]/main/div[3]/div[3]/div[1]/div[52]/table/tbody/tr[3]/td[1]/table/tbody/tr[3]/td/div/ul/li[1]/a
+    /html/body/div[2]/div/div[3]/main/div[3]/div[3]/div[1]/div[52]/table/tbody/tr[3]/td[1]/table/tbody/tr[1]/td/div/ul/li[1]/a
+    /html/body/div[2]/div/div[3]/main/div[3]/div[3]/div[1]/div[52]/table/tbody/tr[4]/td/div/ul/li[1]/a
+
 """
 
 import asyncio
@@ -52,15 +63,18 @@ async def parse_toc_elements(
         text = await a_tag.inner_text()
 
         # Check if href exists, otherwise skip this element
-        if href is None:
+        if href is None and not text:
             return result_list
 
         # Build the full href
-        full_href = base_url + href
+        full_href_format = f" ; {base_url}{href}" if href else ""
         # Increase indent by 2 spaces per level
         current_indent += "  " if result_list else ""
-        anchor_symbol: str = "#️⃣" if href.find("#") != -1 else "⚓"
-        result_list.append(f"{current_indent}{anchor_symbol} {text} ; {full_href}")
+        # set anchor_symbol
+        anchor_symbol: str = "#"
+        if href is not None:
+            anchor_symbol: str = "#️⃣" if href.find("#") != -1 else "⚓"
+        result_list.append(f"{current_indent}{anchor_symbol} {text}{full_href_format}")
 
     # Traverse the direct children of the current tag and perform DFS on <ul> or <li> tags
     child_elements = await tag.query_selector_all(":scope > ul, :scope > li")
