@@ -33,7 +33,7 @@ async def parse_toc_elements_opencv(
     prefix_or_item_header = await extract_direct_text(tag)
     next_indent = current_indent
     a_tag = await tag.query_selector(":scope > a")
-    href = full_href = full_href_format = ""
+    href = full_href_format = ""
     text = prefix_or_item_header
     anchor_symbol = "#"
     if a_tag:
@@ -63,7 +63,7 @@ async def parse_toc_elements_opencv(
     if not child_elements and not href:
         return result_list
 
-    if prefix_or_item_header or text:
+    if text:
         # Add the result in the format with indentation
         result_list.append(f"{current_indent}{anchor_symbol} {text}{full_href_format}")
         next_indent += "  "
@@ -113,7 +113,9 @@ async def extract_opencv_toc(url: str) -> str:
             return toc_string
 
         # Get all <li>, <p> elements from the ToC
-        toc_items = await toc_container.query_selector_all("ul > li, li > p")
+        toc_items = await toc_container.query_selector_all(
+            ":scope > div.textblock > ul > li"
+        )
 
         # Initialize result list
         result_list: list[str] = []
@@ -130,7 +132,7 @@ async def extract_opencv_toc(url: str) -> str:
 
 if __name__ == "__main__":
     # Example OpenCV page URL
-    url = "https://docs.opencv.org/5.x/d6/d00/tutorial_py_root.html"
-    # url = "https://docs.opencv.org/5.x/index.html"
+    # url = "https://docs.opencv.org/5.x/d6/d00/tutorial_py_root.html"
+    url = "https://docs.opencv.org/5.x/index.html"
     result = asyncio.run(extract_opencv_toc(url))
     print(result)
