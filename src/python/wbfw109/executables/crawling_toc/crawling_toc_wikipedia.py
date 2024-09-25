@@ -1,4 +1,5 @@
 """
+📰 update required by crawling_toc_opencv.py
 Written at 📅 2024-09-24 04:27:38
 https://en.wikipedia.org/wiki/Systems_development_life_cycle
 
@@ -21,7 +22,7 @@ from playwright.async_api import ElementHandle, async_playwright
 
 # DFS function to parse <ul> or <li> elements and extract links
 # DFS function to parse <ul> or <li> elements and extract links
-async def parse_toc_elements_id_vector_toc(
+async def parse_toc_elements_wikipedia_id_vector_toc(
     tag: ElementHandle, base_url: str, result_list: list[str], current_indent: str = ""
 ) -> list[str]:
     """
@@ -82,7 +83,7 @@ async def parse_toc_elements_id_vector_toc(
     # Recursively search child <ul> or <li> elements and increase indentation level
     child_elements = await tag.query_selector_all(":scope > ul > li")
     for child in child_elements:
-        await parse_toc_elements_id_vector_toc(
+        await parse_toc_elements_wikipedia_id_vector_toc(
             child, base_url, result_list, current_indent + "  "
         )
 
@@ -90,7 +91,7 @@ async def parse_toc_elements_id_vector_toc(
 
 
 # Main function to initiate parsing
-async def extract_wikipedia_toc(url: str) -> str:
+async def extract_toc_wikipedia(url: str) -> str:
     """
     Extract and format Wikipedia ToC from a given URL using Playwright.
 
@@ -102,7 +103,8 @@ async def extract_wikipedia_toc(url: str) -> str:
              the hierarchy of the content.
     """
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(headless=True, channel="msedge")
+
         page = await browser.new_page()
 
         # Navigate to the Wikipedia page
@@ -122,7 +124,7 @@ async def extract_wikipedia_toc(url: str) -> str:
         # Initialize result list
         result_list: list[str] = []
         for item in toc_items:
-            await parse_toc_elements_id_vector_toc(
+            await parse_toc_elements_wikipedia_id_vector_toc(
                 item, "https://en.wikipedia.org", result_list
             )
 
@@ -133,5 +135,5 @@ async def extract_wikipedia_toc(url: str) -> str:
 
 if __name__ == "__main__":
     url = "https://en.wikipedia.org/wiki/Software_engineering"
-    result = asyncio.run(extract_wikipedia_toc(url))
+    result = asyncio.run(extract_toc_wikipedia(url))
     print(result)

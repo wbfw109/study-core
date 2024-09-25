@@ -1,4 +1,5 @@
 """
+📰 update required by crawling_toc_opencv.py
 Written at 📅 2024-09-24 04:27:38
 """
 
@@ -99,7 +100,7 @@ async def extract_links_from_page(url: str, parse_sphinx_toc: bool = False) -> s
     """
     async with async_playwright() as p:
         # Launch Edge browser in headful mode
-        browser = await p.chromium.launch(headless=False, channel="msedge")
+        browser = await p.chromium.launch(headless=True, channel="msedge")
         page = await browser.new_page()
 
         # Navigate to the URL

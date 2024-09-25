@@ -1,6 +1,6 @@
-# Written in 📅 2024-09-18 22:27:18
 # TODO
 """
+Written in 📅 2024-09-18 22:27:18
 1. Image Processing and Crawling
    - If `img src` and `a href` share the same extension, prioritize crawling the image from `a href`.
    - Reason: `img src` might be cropped or resized, affecting image quality when using AI-based enlargement.

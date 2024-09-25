@@ -1,3 +1,7 @@
+"""
+Written at 📅 2024-09-26 01:26:45
+"""
+
 import asyncio
 from urllib.parse import urljoin
 
@@ -74,7 +78,7 @@ async def parse_toc_elements_opencv(
 
 
 # Main function to initiate parsing
-async def extract_opencv_toc(url: str) -> str:
+async def extract_toc_opencv(url: str) -> str:
     """
     Extract and format OpenCV ToC from a given URL using Playwright.
 
@@ -86,9 +90,7 @@ async def extract_opencv_toc(url: str) -> str:
              the hierarchy of the content.
     """
     async with async_playwright() as p:
-        browser = await p.chromium.launch(
-            headless=True
-        )  # Change headless to False if you want to see the browser
+        browser = await p.chromium.launch(headless=True, channel="msedge")
         page = await browser.new_page()
 
         # Navigate to the OpenCV page
@@ -134,5 +136,5 @@ if __name__ == "__main__":
     # Example OpenCV page URL
     # url = "https://docs.opencv.org/5.x/d6/d00/tutorial_py_root.html"
     url = "https://docs.opencv.org/5.x/index.html"
-    result = asyncio.run(extract_opencv_toc(url))
+    result = asyncio.run(extract_toc_opencv(url))
     print(result)

@@ -1,3 +1,7 @@
+"""
+📰 update required by crawling_toc_opencv.py
+"""
+
 from typing import Optional, Union
 
 from bs4 import BeautifulSoup
