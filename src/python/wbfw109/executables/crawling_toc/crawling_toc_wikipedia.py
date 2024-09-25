@@ -102,7 +102,7 @@ async def extract_wikipedia_toc(url: str) -> str:
              the hierarchy of the content.
     """
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
 
         # Navigate to the Wikipedia page
