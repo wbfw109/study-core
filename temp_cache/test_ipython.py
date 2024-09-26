@@ -1,7 +1,6 @@
 # %%
 from __future__ import annotations
 
-
 from IPython.core.interactiveshell import InteractiveShell
 
 # + allow multiple print
@@ -13,10 +12,32 @@ InteractiveShell.ast_node_interactivity = "all"
 # %%
 import cv2
 
-# 비디오 캡처 객체 생성 (0은 기본 웹캠을 의미)
+# Open a connection to the webcam (0 is the default camera)
 cap = cv2.VideoCapture(0)
 
-print(cv2.__version__)
+if not cap.isOpened():
+    print("Error: Could not open video stream.")
+else:
+    # Loop to continuously capture frames from the webcam
+    while True:
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+
+        # If frame is read correctly, ret wil be True
+        if not ret:
+            print("Error: Could not read frame.")
+            break
+
+        # Display the resulting frame
+        cv2.imshow("Webcam Video", frame)
+
+        # Press 'q' on the keyboard to exit the loop
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
+
+# Release the webcam and close all windows
+cap.release()
+cv2.destroyAllWindows()
 
 # %%
 if not cap.isOpened():

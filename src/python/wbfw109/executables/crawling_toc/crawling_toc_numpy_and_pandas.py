@@ -1,9 +1,16 @@
+"""
+Written at 📅 2024-09-26 23:40:26
+📝 It is last recent crawling code.
+"""
+
 import asyncio
 from dataclasses import dataclass
 from urllib.parse import urljoin
 
 from playwright.async_api import ElementHandle, async_playwright
 from wbfw109.libs.crawling.playwright_utils import extract_direct_text, get_tag_name
+
+INDENT_BASE_UNIT = "  "
 
 
 @dataclass(frozen=True)
@@ -28,37 +35,43 @@ async def parse_toc_elements_pandas(
     tag: ElementHandle,
     base_url: str,
     result_list: list[str],
-    current_indent: str = "  ",
+    current_indent: str = INDENT_BASE_UNIT,
 ) -> SiblingImpact:
     """
-    Recursively parse <ul>, <li>, or <p> elements and extract links from Pandas ToC.
+    Recursively parse <ul>, <li>, or <p> elements and extract links from a Table of Contents (ToC).
 
-    This function performs a DFS to traverse through the nested elements,
-    collecting all links from <a> tags. The extracted links are appended to the result_list
-    in a hierarchical format with increasing indentation for deeper levels.
+    This function performs a Depth-First Search (DFS) to traverse the nested structure of a
+    Table of Contents in Pandas documentation. It collects all links (<a> tags) from the
+    elements (<ul>, <li>, or <p>), formats them with hierarchical indentation, and appends them to the result list.
+
+    The indentation increases as we dive deeper into the nested structure, and additional
+    indentation is applied to siblings after encountering a <p> tag in the same DOM level.
 
     Parameters:
         tag (ElementHandle): The current HTML element to start parsing from.
-        base_url (str): The base URL to prepend to relative links.
-        result_list (list[str]): A list to store the formatted link entries.
-        current_indent (str): The current level of indentation for the hierarchy.
+        base_url (str): The base URL to resolve relative links.
+        result_list (list[str]): A list to store the formatted output with links.
+        current_indent (str): The current indentation level to apply to the hierarchy.
 
     Returns:
-        list[str]: The updated list of links with hierarchical indentation.
+        SiblingImpact: An object indicating if additional indentation is needed for siblings.
     """
 
-    # Find the <a> tag directly under the <li>
+    # Identify the tag type (e.g., <p>, <ul>, <li>) and handle text extraction
     tag_name = await get_tag_name(tag)
     if tag_name == "p":
         prefix_or_item_header = await tag.inner_text()
     else:
         prefix_or_item_header = await extract_direct_text(tag)
 
+    # Initialize the next indentation level
     next_indent = current_indent
     a_tag = await tag.query_selector(":scope > a")
     href = full_href_format = ""
     text = prefix_or_item_header
     anchor_symbol = "#"
+
+    # If an <a> tag is found, extract its href and text
     if a_tag:
         href = await a_tag.get_attribute("href")
         if href is None or href == "#":
@@ -70,50 +83,45 @@ async def parse_toc_elements_pandas(
             else a_tag_text
         )
 
-        # Use urljoin to resolve the relative URL against the base URL
+        # Resolve the href against the base URL and prepare for formatting
         if href:
             full_href = urljoin(base_url, href)
-            # Dynamically build the full href
             full_href_format = f" ; {full_href}"
             anchor_symbol = "#️⃣" if href.find("#") != -1 else "⚓"
 
-    # Recursively search child <ul>, <li> elements and increase indentation level
+    # Find child elements for further recursive processing (<ul>, <li>, <p>)
     child_elements = await tag.query_selector_all(
         ":scope > p, :scope > ul, :scope > li"
     )
 
-    # # Add result if it's not the last node in DFS
-    # if not child_elements and not href:
-    #     return SiblingImpact(0)
-
     if text:
-        # Add the result in the format with indentation
+        # Append the current item to the result list with the current indentation
         result_list.append(f"{current_indent}{anchor_symbol} {text}{full_href_format}")
-        next_indent += "  "
+        next_indent += INDENT_BASE_UNIT  # Increase the indent for child elements
 
-    # whether <p> tag acts as parent tree of next siblings which not <p> tag in same DOM parent level.
+    # Track whether additional indentation is required after encountering a <p> tag
     indent_offset: int = 0
     for child in child_elements:
-        ## pre-process
+        # Pre-processing: determine the tag name of the child element
         child_tag_name = await get_tag_name(child)
         child_indent = next_indent
 
+        # Apply extra indentation only after a <p> tag at the same DOM level
         if child_tag_name != "p":
-            child_indent += "  " * indent_offset
+            child_indent += INDENT_BASE_UNIT * indent_offset
 
-        ## process
+        # Recursively process child elements
         sibling_impact = await parse_toc_elements_pandas(
             child, base_url, result_list, child_indent
         )
 
-        ## pro-process
-        # After first encountering a <p> tag in same DOM parent level.
+        # Post-processing: after encountering the first <p> tag, apply extra indentation to siblings
         if indent_offset == 0 and sibling_impact.additional_indent != 0:
-            # it maintains additional indent until in same DOm parent level except for <p> tag; refer to "pre-process" part
-            indent_offset = 2
+            indent_offset = 1  # Set the additional indent flag for non-<p> siblings
 
+    # If the current element is a <p> tag with text, return an indicator for extra indentation
     if tag_name == "p" and text:
-        return SiblingImpact(additional_indent=2)
+        return SiblingImpact(additional_indent=1)
     else:
         return SiblingImpact(additional_indent=0)
 
@@ -197,6 +205,6 @@ if __name__ == "__main__":
     print("\n\n\n")
 
     # Parse the main bar
-    # print("\nParsing Main Bar:")
-    # result_main_bar = asyncio.run(extract_toc_pandas(url, bar_type="main_bar"))
-    # print(result_main_bar)
+    print("\nParsing Main Bar:")
+    result_main_bar = asyncio.run(extract_toc_pandas(url, bar_type="main_bar"))
+    print(result_main_bar)
