@@ -96,12 +96,10 @@ async def parse_toc_elements_pandas(
     for child in child_elements:
         ## pre-process
         child_tag_name = await get_tag_name(child)
-        child_indent = ""
+        child_indent = next_indent
 
-        if tag_name == "p" and text:
-            child_indent = next_indent
-        else:
-            child_indent = next_indent + "  " * indent_offset
+        if child_tag_name != "p":
+            child_indent += "  " * indent_offset
 
         ## process
         sibling_impact = await parse_toc_elements_pandas(
@@ -113,6 +111,7 @@ async def parse_toc_elements_pandas(
         if indent_offset == 0 and sibling_impact.additional_indent != 0:
             # it maintains additional indent until in same DOm parent level except for <p> tag; refer to "pre-process" part
             indent_offset = 2
+
     if tag_name == "p" and text:
         return SiblingImpact(additional_indent=2)
     else:
@@ -175,17 +174,10 @@ async def extract_toc_pandas(url: str, bar_type: str = "side_bar") -> str:
         if toc_string:
             result_list.append(toc_string)
 
-        # Get all <li> elements from the ToC
-        toc_items = await toc_container.query_selector_all(
-            ":scope > p, :scope > li, :scope > ul"
-        )
-
         next_indent = "  " if toc_string else ""
-        for item in toc_items:
-
-            await parse_toc_elements_pandas(
-                item, url, result_list, current_indent=next_indent
-            )
+        await parse_toc_elements_pandas(
+            toc_container, url, result_list, current_indent=next_indent
+        )
 
         await browser.close()
 
