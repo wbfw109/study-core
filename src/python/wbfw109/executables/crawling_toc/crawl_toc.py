@@ -1,11 +1,12 @@
 """
-Written at 📅 2024-09-28 17:53:14
+Written at 📅 2024-09-28 19:20:16
 📝 It is last recent crawling code.
 
 This script extracts Table of Contents (ToC) from various documentation websites using Playwright.
 It supports multiple websites and provides a generalized approach to parsing ToC based on URL patterns.
 
 Supported sites:
+- OpenCV (https://docs.opencv.org)
 - PyTorch (https://pytorch.org)
 - TensorFlow (https://www.tensorflow.org)
 
@@ -29,7 +30,7 @@ INDENT_BASE_UNIT = "  "
 
 class TableOfContentsType(Enum):
     MAIN_CONTENT_AREA_TOC = 1
-    DOCUMENT_NAVIGIATON_TOC = 2
+    SECTION_NAVIGIATON_TOC = 2
 
 
 @dataclass
@@ -78,14 +79,40 @@ def get_toc_selectors(
     Returns:
         ToCSelectors: An object containing selectors for ToC container, body, and title query.
     """
-    if "docs.opencv.org" in url:
+    if "numpy.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
             return ToCSelectors(
-                toc_selector="body > div:nth-child(2)",
+                toc_selector="body",
+                toc_body_selector=":scope div[class='bd-toc-item navbar-nav']",
+                title_query=":scope > header li[class='nav-item current active'] > a",
+            )
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
+            return ToCSelectors(
+                toc_selector="div[id='pytorch-documentation']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
+    elif "pandas.pydata.org" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            return ToCSelectors(
+                toc_selector="body > div:not([id])",
                 toc_body_selector=":scope > div[class='contents']",
                 title_query=":scope div[class='title']",
             )
-        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
+            return ToCSelectors(
+                toc_selector="div[id='pytorch-documentation']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
+    elif "docs.opencv.org" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            return ToCSelectors(
+                toc_selector="body > div:not([id])",
+                toc_body_selector=":scope > div[class='contents']",
+                title_query=":scope div[class='title']",
+            )
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
             return None
     elif "pytorch.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
@@ -94,7 +121,7 @@ def get_toc_selectors(
                 toc_body_selector="",
                 title_query=":scope > h1",
             )
-        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
             return ToCSelectors(
                 toc_selector="div[id='pytorch-documentation']",
                 toc_body_selector="",
@@ -107,7 +134,7 @@ def get_toc_selectors(
                 toc_body_selector="",
                 title_query=":scope > h1",
             )
-        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
             return ToCSelectors(
                 toc_selector="ul[class~='devsite-nav-list'][menu='_book']",
                 toc_body_selector="",
@@ -305,9 +332,10 @@ if __name__ == "__main__":
     # Title: OpenCV
     result = asyncio.run(
         extract_toc(
-            url="https://docs.opencv.org/5.x/index.html",
-            # url="https://docs.opencv.org/5.x/d6/d00/tutorial_py_root.html",
-            tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+            # url="https://docs.opencv.org/5.x/index.html",
+            url="https://numpy.org/doc/stable/user/quickstart.html",
+            # tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+            tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
         )
     )
 
@@ -322,7 +350,7 @@ if __name__ == "__main__":
     # result = asyncio.run(
     #     extract_toc(
     #         url="https://www.tensorflow.org/tutorials/keras/regression",
-    #         tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
+    #         tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
     #     )
     # )
 
@@ -337,7 +365,7 @@ if __name__ == "__main__":
     # result = asyncio.run(
     #     extract_toc(
     #         url="https://pytorch.org/docs/stable/index.html",
-    #         tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
+    #         tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
     #     )
     # )
 
