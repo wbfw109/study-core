@@ -1,6 +1,17 @@
 """
 Written at 📅 2024-09-28 17:53:14
 📝 It is last recent crawling code.
+
+This script extracts Table of Contents (ToC) from various documentation websites using Playwright.
+It supports multiple websites and provides a generalized approach to parsing ToC based on URL patterns.
+
+Supported sites:
+- PyTorch (https://pytorch.org)
+- TensorFlow (https://www.tensorflow.org)
+
+Usage:
+    You can pass the URL of the documentation page and specify the type of ToC (Main content or Navigation).
+    The appropriate ToC selectors are determined based on the URL.
 """
 
 import asyncio
@@ -20,9 +31,9 @@ class TableOfContentsType(Enum):
 
 
 @dataclass(frozen=True)
-class SiblingImpact:
+class NextSiblingAdjustment:
     """
-    Data class to store the impact on the next sibling element during DFS traversal.
+    Data class to store the adjustment applied to the next sibling element during DFS traversal.
 
     Attributes:
         additional_indent (int): The additional indentation to apply to the next sibling element.
@@ -36,22 +47,59 @@ class SiblingImpact:
     additional_indent: int
 
 
+def get_toc_selectors(url: str, tos_type: TableOfContentsType) -> tuple[str, str]:
+    """
+    Returns the appropriate toc_selector and toc_body_selector based on the URL and ToC type.
+
+    Parameters:
+        url (str): The URL to determine which site's ToC to extract.
+        tos_type (TableOfContentsType): The type of ToC to extract.
+
+    Returns:
+        tuple: A tuple containing toc_selector and toc_body_selector.
+    """
+    # Site-specific selectors based on URL pattern
+    if "pytorch.org" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            toc_selector = 'div[id="pytorch-side-scroll-right"]'
+            toc_body_selector = ""
+        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
+            toc_selector = 'div[id="pytorch-documentation"]'
+            toc_body_selector = ""
+        else:
+            return "", ""
+    elif "tensorflow.org" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            toc_selector = 'devsite-toc[class="devsite-nav devsite-toc"]'
+            toc_body_selector = ""
+        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
+            toc_selector = 'ul[class~="devsite-nav-list"][menu="_book"]'
+            toc_body_selector = ""
+        else:
+            return "", ""
+    else:
+        # If the URL doesn't match any known site, return empty selectors
+        return "", ""
+
+    return toc_selector, toc_body_selector
+
+
 # DFS function to parse <ul>, <li>, or <p> elements and extract links
-async def parse_toc_elements_pytorch(
+async def parse_toc_elements(
     tag: ElementHandle,
     base_url: str,
     result_list: list[str],
     current_indent: str = INDENT_BASE_UNIT,
-) -> SiblingImpact:
+) -> NextSiblingAdjustment:
     """
     Recursively parse <ul>, <li>, or <p> elements and extract links from a Table of Contents (ToC).
 
     This function performs a Depth-First Search (DFS) to traverse the nested structure of a
-    Table of Contents in Pandas documentation. It collects all links (<a> tags) from the
-    elements (<ul>, <li>, or <p>), formats them with hierarchical indentation, and appends them to the result list.
+    Table of Contents. It collects all links (<a> tags) from the elements (<ul>, <li>, or <p>),
+    formats them with hierarchical indentation, and appends them to the result list.
 
     The indentation increases as we dive deeper into the nested structure, and additional
-    indentation is applied to siblings after encountering a <p> tag in the same DOM level.
+    indentation is applied to the next sibling after encountering a <p> tag in the same DOM level.
 
     Parameters:
         tag (ElementHandle): The current HTML element to start parsing from.
@@ -60,7 +108,8 @@ async def parse_toc_elements_pytorch(
         current_indent (str): The current indentation level to apply to the hierarchy.
 
     Returns:
-        SiblingImpact: An object indicating if additional indentation is needed for siblings.
+        NextSiblingAdjustment: An object indicating whether additional indentation is needed
+        for the next sibling element.
     """
     next_indent = current_indent
     href = full_href_format = ""
@@ -120,23 +169,23 @@ async def parse_toc_elements_pytorch(
             child_indent += INDENT_BASE_UNIT * indent_offset
 
         # Recursively process child elements
-        sibling_impact = await parse_toc_elements_pytorch(
+        next_sibling_adjustment = await parse_toc_elements(
             child, base_url, result_list, child_indent
         )
 
         # Post-processing: after encountering the first <p> tag, apply extra indentation to siblings
-        if indent_offset == 0 and sibling_impact.additional_indent != 0:
+        if indent_offset == 0 and next_sibling_adjustment.additional_indent != 0:
             indent_offset = 1  # Set the additional indent flag for non-<p> siblings
 
     # If the current element is a <p> tag with text, return an indicator for extra indentation
     if tag_name in ["div", "p"] and text:
-        return SiblingImpact(additional_indent=1)
+        return NextSiblingAdjustment(additional_indent=1)
     else:
-        return SiblingImpact(additional_indent=0)
+        return NextSiblingAdjustment(additional_indent=0)
 
 
 # Main function to initiate parsing
-async def extract_toc_pytorch(
+async def extract_toc(
     url: str, tos_type: TableOfContentsType = TableOfContentsType.MAIN_CONTENT_AREA_TOC
 ) -> str:
     """
@@ -171,11 +220,11 @@ async def extract_toc_pytorch(
             """
         )
         ## Parse browser
-        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
-            toc_selector = 'div[id="pytorch-side-scroll-right"]'
-        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
-            toc_selector = 'div[id="pytorch-documentation"]'
-        else:
+        # Get toc_selector and toc_body_selector based on the URL and ToC type
+        toc_selector, toc_body_selector = get_toc_selectors(url, tos_type)
+
+        if not toc_selector:
+            print(f"Table of Contents (ToC) for {tos_type} not found!")
             return ""
 
         toc_container = await page.query_selector(toc_selector)
@@ -194,14 +243,6 @@ async def extract_toc_pytorch(
         if toc_string:
             result_list.append(toc_string)
 
-        # Differentiate between direct use or further query inside toc_container
-        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
-            toc_body_selector = ""
-        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
-            toc_body_selector = ""
-        else:
-            return ""
-
         # If toc_body_selector is different, perform an internal query; otherwise use toc_container directly
         if toc_body_selector:
             toc_body = await toc_container.query_selector(toc_body_selector)
@@ -213,9 +254,7 @@ async def extract_toc_pytorch(
 
         ## Start parsing tos body
         next_indent = "  " if toc_string else ""
-        await parse_toc_elements_pytorch(
-            toc_body, url, result_list, current_indent=next_indent
-        )
+        await parse_toc_elements(toc_body, url, result_list, current_indent=next_indent)
 
         await browser.close()
 
@@ -224,20 +263,41 @@ async def extract_toc_pytorch(
 
 
 if __name__ == "__main__":
+    # Title: tensorflow
+
     # print("MAIN_CONTENT_AREA_TOC:")
+    # main_content_area_toc = asyncio.run(
+    #     extract_toc(
+    #         url="https://www.tensorflow.org/tutorials/keras/regression",
+    #         tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+    #     )
+    # )
+    # print(main_content_area_toc)
+
+    # print("\n\n\nDOCUMENT_NAVIGIATON_TOC:")
+    # document_navigation_toc = asyncio.run(
+    #     extract_toc(
+    #         url="https://www.tensorflow.org/tutorials/keras/regression",
+    #         tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
+    #     )
+    # )
+    # print(document_navigation_toc)
+
+    # Title: pytorch
+    print("MAIN_CONTENT_AREA_TOC:")
     main_content_area_toc = asyncio.run(
-        extract_toc_pytorch(
+        extract_toc(
             url="https://pytorch.org/docs/stable/notes/cuda.html",
             tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
         )
     )
     print(main_content_area_toc)
 
-    # print("\n\n\nDOCUMENT_NAVIGIATON_TOC:")
-    # document_navigation_toc = asyncio.run(
-    #     extract_toc_pytorch(
-    #         url="https://pytorch.org/docs/stable/index.html",
-    #         tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
-    #     )
-    # )
-    # print(document_navigation_toc)
+    print("\n\n\nDOCUMENT_NAVIGIATON_TOC:")
+    document_navigation_toc = asyncio.run(
+        extract_toc(
+            url="https://pytorch.org/docs/stable/index.html",
+            tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
+        )
+    )
+    print(document_navigation_toc)
