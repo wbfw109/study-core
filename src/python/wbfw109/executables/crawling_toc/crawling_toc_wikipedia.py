@@ -1,4 +1,8 @@
 """
+🌪️ Wikipedia API 사용해서 크롤링하기..
+MediaWiki API - Wikipedia navigational templates (우측에 Table)..
+<a> tag 에서 inner_text() 에서 <span class="vector-toc-numb">4</span> 이런 부분 빼야 함.
+
 📰 update required by crawling_toc_opencv.py
 Written at 📅 2024-09-24 04:27:38
 https://en.wikipedia.org/wiki/Systems_development_life_cycle
@@ -20,7 +24,6 @@ import asyncio
 from playwright.async_api import ElementHandle, async_playwright
 
 
-# DFS function to parse <ul> or <li> elements and extract links
 # DFS function to parse <ul> or <li> elements and extract links
 async def parse_toc_elements_wikipedia_id_vector_toc(
     tag: ElementHandle, base_url: str, result_list: list[str], current_indent: str = ""

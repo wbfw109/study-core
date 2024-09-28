@@ -222,6 +222,12 @@ async def parse_toc_elements(
             prefix_or_item_header = await extract_direct_text(span_element)
     else:
         prefix_or_item_header = await extract_direct_text(tag)
+        # # History: from MSDN crawling
+        # if not prefix_or_item_header:
+        #     span_element = await tag.query_selector(":scope > span")
+        #     if span_element:
+        #         prefix_or_item_header = await extract_direct_text(span_element)
+
     text = prefix_or_item_header
 
     # Initialize the next indentation level
