@@ -70,40 +70,55 @@ def get_toc_selectors(
     url: str, tos_type: TableOfContentsType
 ) -> Optional[ToCSelectors]:
     """
-    Returns an object of ToCSelectors containing the appropriate selectors based on the URL and ToC type.
+        Returns an object of ToCSelectors containing the appropriate selectors based on the URL and ToC type.
 
-    Parameters:
-        url (str): The URL to determine which site's ToC to extract.
-        tos_type (TableOfContentsType): The type of ToC to extract.
-
-    Returns:
-        ToCSelectors: An object containing selectors for ToC container, body, and title query.
+        Parameters:
+            url (str): The URL to determine which site's ToC to extract.
+            tos_type (TableOfContentsType): The type of ToC to extract.
+    class="bd-toc-nav page-toc"
+        Returns:
+            ToCSelectors: An object containing selectors for ToC container, body, and title query.
     """
-    if "numpy.org" in url:
+
+    if "docs.yoctoproject.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            return ToCSelectors(
+                toc_selector="div[role='main'][class='document'] > div > section",
+                toc_body_selector=":scope > div[class='toctree-wrapper compound']",
+                title_query=":scope > h1",
+            )
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
+            # recommend ti run script in https://docs.yoctoproject.org/index.html
+            return ToCSelectors(
+                toc_selector="div[class='wy-menu wy-menu-vertical']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
+    elif "numpy.org" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            return ToCSelectors(
+                toc_selector="body main[id='main-content']",
+                toc_body_selector="nav[class='bd-toc-nav page-toc']",
+                title_query="article[class='bd-article'] > section > h1",
+            )
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
             return ToCSelectors(
                 toc_selector="body",
                 toc_body_selector=":scope div[class='bd-toc-item navbar-nav']",
                 title_query=":scope > header li[class='nav-item current active'] > a",
             )
-        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
-            return ToCSelectors(
-                toc_selector="div[id='pytorch-documentation']",
-                toc_body_selector="",
-                title_query=":scope > h1",
-            )
     elif "pandas.pydata.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
             return ToCSelectors(
-                toc_selector="body > div:not([id])",
-                toc_body_selector=":scope > div[class='contents']",
-                title_query=":scope div[class='title']",
+                toc_selector="body main[id='main-content']",
+                toc_body_selector="nav[class='bd-toc-nav page-toc']",
+                title_query="article[class='bd-article'] > section > h1",
             )
         elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
             return ToCSelectors(
-                toc_selector="div[id='pytorch-documentation']",
-                toc_body_selector="",
-                title_query=":scope > h1",
+                toc_selector="body",
+                toc_body_selector=":scope div[class='bd-toc-item navbar-nav']",
+                title_query=":scope > nav[class~='bd-header'] li[class='nav-item current active'] > a",
             )
     elif "docs.opencv.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
@@ -130,9 +145,9 @@ def get_toc_selectors(
     elif "tensorflow.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
             return ToCSelectors(
-                toc_selector="devsite-toc[class='devsite-nav devsite-toc']",
-                toc_body_selector="",
-                title_query=":scope > h1",
+                toc_selector="main[class='devsite-main-content']",
+                toc_body_selector="devsite-toc[class='devsite-nav devsite-toc']",
+                title_query=":scope > devsite-content > article> h1",
             )
         elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
             return ToCSelectors(
@@ -329,27 +344,21 @@ async def extract_toc(
 
 
 if __name__ == "__main__":
-    # Title: OpenCV
+    # Title: Yocto Project
     result = asyncio.run(
         extract_toc(
-            # url="https://docs.opencv.org/5.x/index.html",
-            url="https://numpy.org/doc/stable/user/quickstart.html",
-            # tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
-            tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
+            # url="https://docs.yoctoproject.org/index.html",
+            url="https://docs.yoctoproject.org/overview-manual/index.html",
+            tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+            # tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
         )
     )
-
-    # # Title: tensorflow
+    # Title: OpenCV
     # result = asyncio.run(
     #     extract_toc(
-    #         url="https://www.tensorflow.org/tutorials/keras/regression",
-    #         tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
-    #     )
-    # )
-
-    # result = asyncio.run(
-    #     extract_toc(
-    #         url="https://www.tensorflow.org/tutorials/keras/regression",
+    #         url="https://pandas.pydata.org/docs/user_guide/io.html",
+    #         # url="https://numpy.org/doc/stable/user/quickstart.html",
+    #         # tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
     #         tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
     #     )
     # )
@@ -365,6 +374,15 @@ if __name__ == "__main__":
     # result = asyncio.run(
     #     extract_toc(
     #         url="https://pytorch.org/docs/stable/index.html",
+    #         tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
+    #     )
+    # )
+
+    # # Title: tensorflow
+    # result = asyncio.run(
+    #     extract_toc(
+    #         url="https://www.tensorflow.org/tutorials/keras/regression",
+    #         # tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
     #         tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
     #     )
     # )

@@ -78,9 +78,8 @@ def open_file_in_vscode(file_path: Path) -> None:
         Opened /tmp/cheat_sheet-cpp12345.json in VS Code.
     """
     try:
-        subprocess.run(
-            ["code", str(file_path)], check=True
-        )  # Convert Path to str for subprocess
+        # Convert Path to str for subprocess
+        subprocess.run(["code", str(file_path)], check=True)
         print(f"Opened {file_path} in VS Code.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to open {file_path} in VS Code: {e}")
