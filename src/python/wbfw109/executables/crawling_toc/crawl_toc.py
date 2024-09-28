@@ -1,11 +1,18 @@
 """
 Written at 📅 2024-09-28 19:20:16
-📝 It is last recent crawling code.
+🌪️ TODO:
+    - crawl with dl, dt, dd in Python (https://docs.python.org/3/using/cmdline.html#cmdoption-c)
+        add TableOfContentsType.<??> or .. add when MAIN_CONTENT_AREA_TOC
+    - 
 
 This script extracts Table of Contents (ToC) from various documentation websites using Playwright.
 It supports multiple websites and provides a generalized approach to parsing ToC based on URL patterns.
 
 Supported sites:
+- Python (https://docs.python.org)
+- Yocto Project (https://docs.yoctoproject.org)
+- Numpy (https://numpy.org)
+- Pandas (https://pandas.pydata.org)
 - OpenCV (https://docs.opencv.org)
 - PyTorch (https://pytorch.org)
 - TensorFlow (https://www.tensorflow.org)
@@ -79,8 +86,23 @@ def get_toc_selectors(
         Returns:
             ToCSelectors: An object containing selectors for ToC container, body, and title query.
     """
-
-    if "docs.yoctoproject.org" in url:
+    if "docs.python.org" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            # 🛍️ e.g. https://docs.python.org/3/reference/expressions.html
+            return ToCSelectors(
+                toc_selector="div[class='sphinxsidebarwrapper'] > div > ul",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
+            # 📝 It is only works for each root category ursl from https://docs.python.org/3/index.html
+            # 🛍️ e.g. https://docs.python.org/3/reference/index.html, https://docs.python.org/3/library/index.html
+            return ToCSelectors(
+                toc_selector="div[role='main'][class='body'] > section",
+                toc_body_selector=":scope > div[class='toctree-wrapper compound']",
+                title_query=":scope > h1",
+            )
+    elif "docs.yoctoproject.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
             return ToCSelectors(
                 toc_selector="div[role='main'][class='document'] > div > section",
@@ -88,7 +110,7 @@ def get_toc_selectors(
                 title_query=":scope > h1",
             )
         elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
-            # recommend ti run script in https://docs.yoctoproject.org/index.html
+            # 📝 recommend to run script in https://docs.yoctoproject.org/index.html
             return ToCSelectors(
                 toc_selector="div[class='wy-menu wy-menu-vertical']",
                 toc_body_selector="",
@@ -344,15 +366,24 @@ async def extract_toc(
 
 
 if __name__ == "__main__":
-    # Title: Yocto Project
+    # Title: Python
     result = asyncio.run(
         extract_toc(
-            # url="https://docs.yoctoproject.org/index.html",
-            url="https://docs.yoctoproject.org/overview-manual/index.html",
+            url="https://docs.python.org/3/reference/expressions.html",
+            # url="https://docs.python.org/3/reference/index.html",
             tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
             # tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
         )
     )
+    # # Title: Yocto Project
+    # result = asyncio.run(
+    #     extract_toc(
+    #         # url="https://docs.yoctoproject.org/index.html",
+    #         url="https://docs.yoctoproject.org/overview-manual/index.html",
+    #         tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+    #         # tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
+    #     )
+    # )
     # Title: OpenCV
     # result = asyncio.run(
     #     extract_toc(
