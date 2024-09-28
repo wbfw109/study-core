@@ -36,9 +36,7 @@ def create_temp_json_file(
     return Path(temp_file_name)
 
 
-def create_temp_str_file(
-    data: str, prefix: str = "cheat_sheet-cpp", suffix: str = ".txt"
-) -> Path:
+def create_temp_str_file(data: str, prefix: str = "", suffix: str = ".txt") -> Path:
     """
     Create a temporary file with a specified prefix and suffix to store a string.
 

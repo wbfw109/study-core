@@ -17,10 +17,12 @@ Usage:
 import asyncio
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 from urllib.parse import urljoin
 
 from playwright.async_api import ElementHandle, async_playwright
 from wbfw109.libs.crawling.playwright_utils import extract_direct_text, get_tag_name
+from wbfw109.libs.file import create_temp_str_file, open_file_in_vscode
 
 INDENT_BASE_UNIT = "  "
 
@@ -28,6 +30,22 @@ INDENT_BASE_UNIT = "  "
 class TableOfContentsType(Enum):
     MAIN_CONTENT_AREA_TOC = 1
     DOCUMENT_NAVIGIATON_TOC = 2
+
+
+@dataclass
+class ToCSelectors:
+    """
+    Class to store selectors for extracting the Table of Contents (ToC) and related elements.
+
+    Attributes:
+        toc_selector (str): Selector for the ToC container.
+        toc_body_selector (str): Selector for the body of the ToC inside the container.
+        title_query (str): Selector for extracting the title element (default: "h1").
+    """
+
+    toc_selector: str
+    toc_body_selector: str
+    title_query: str = "h1"
 
 
 @dataclass(frozen=True)
@@ -47,41 +65,57 @@ class NextSiblingAdjustment:
     additional_indent: int
 
 
-def get_toc_selectors(url: str, tos_type: TableOfContentsType) -> tuple[str, str]:
+def get_toc_selectors(
+    url: str, tos_type: TableOfContentsType
+) -> Optional[ToCSelectors]:
     """
-    Returns the appropriate toc_selector and toc_body_selector based on the URL and ToC type.
+    Returns an object of ToCSelectors containing the appropriate selectors based on the URL and ToC type.
 
     Parameters:
         url (str): The URL to determine which site's ToC to extract.
         tos_type (TableOfContentsType): The type of ToC to extract.
 
     Returns:
-        tuple: A tuple containing toc_selector and toc_body_selector.
+        ToCSelectors: An object containing selectors for ToC container, body, and title query.
     """
-    # Site-specific selectors based on URL pattern
-    if "pytorch.org" in url:
+    if "docs.opencv.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
-            toc_selector = 'div[id="pytorch-side-scroll-right"]'
-            toc_body_selector = ""
+            return ToCSelectors(
+                toc_selector="body > div:nth-child(2)",
+                toc_body_selector=":scope > div[class='contents']",
+                title_query=":scope div[class='title']",
+            )
         elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
-            toc_selector = 'div[id="pytorch-documentation"]'
-            toc_body_selector = ""
-        else:
-            return "", ""
+            return None
+    elif "pytorch.org" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            return ToCSelectors(
+                toc_selector="div[id='pytorch-side-scroll-right']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
+        elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
+            return ToCSelectors(
+                toc_selector="div[id='pytorch-documentation']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
     elif "tensorflow.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
-            toc_selector = 'devsite-toc[class="devsite-nav devsite-toc"]'
-            toc_body_selector = ""
+            return ToCSelectors(
+                toc_selector="devsite-toc[class='devsite-nav devsite-toc']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
         elif tos_type == TableOfContentsType.DOCUMENT_NAVIGIATON_TOC:
-            toc_selector = 'ul[class~="devsite-nav-list"][menu="_book"]'
-            toc_body_selector = ""
-        else:
-            return "", ""
-    else:
-        # If the URL doesn't match any known site, return empty selectors
-        return "", ""
+            return ToCSelectors(
+                toc_selector="ul[class~='devsite-nav-list'][menu='_book']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
 
-    return toc_selector, toc_body_selector
+    # Default case for unsupported URLs
+    return None
 
 
 # DFS function to parse <ul>, <li>, or <p> elements and extract links
@@ -199,6 +233,7 @@ async def extract_toc(
         str: A formatted string containing the extracted links, with indentation indicating
              the hierarchy of the content.
     """
+    print(f"Start parse {url}")
 
     async with async_playwright() as p:
         ### Initialize result list
@@ -220,32 +255,36 @@ async def extract_toc(
             """
         )
         ## Parse browser
-        # Get toc_selector and toc_body_selector based on the URL and ToC type
-        toc_selector, toc_body_selector = get_toc_selectors(url, tos_type)
+        # Get ToCSelectors object based on the URL and ToC type
+        toc_selectors = get_toc_selectors(url, tos_type)
+        if not toc_selectors:
+            return "the corresponding domain name in the URL is not supported or the specified TOC does not exist in the URL! 📅 2024-09-28 18:48:34"
 
-        if not toc_selector:
+        if not toc_selectors.toc_selector:
             print(f"Table of Contents (ToC) for {tos_type} not found!")
             return ""
 
-        toc_container = await page.query_selector(toc_selector)
+        toc_container = await page.query_selector(toc_selectors.toc_selector)
         if not toc_container:
             print(f"Table of Contents (ToC) for {tos_type} not found!")
             return ""
 
-        # Search whether title exists or not on the page.
+        # Search whether title exists or not on the page using title_query.
         toc_string = ""
-        title_element = await toc_container.query_selector("h1")
+        title_element = await toc_container.query_selector(toc_selectors.title_query)
         if title_element:
             # Extract the title text and URL
             title_text = await extract_direct_text(title_element)
             root_url = page.url
-            toc_string = f"⚓ {title_text} ; {root_url}\n"
+            toc_string = f"⚓ {title_text} ; {root_url}"
         if toc_string:
             result_list.append(toc_string)
 
         # If toc_body_selector is different, perform an internal query; otherwise use toc_container directly
-        if toc_body_selector:
-            toc_body = await toc_container.query_selector(toc_body_selector)
+        if toc_selectors.toc_body_selector:
+            toc_body = await toc_container.query_selector(
+                toc_selectors.toc_body_selector
+            )
         else:
             toc_body = toc_container  # toc_container is directly used as toc_body
         if not toc_body:
@@ -263,41 +302,44 @@ async def extract_toc(
 
 
 if __name__ == "__main__":
-    # Title: tensorflow
+    # Title: OpenCV
+    result = asyncio.run(
+        extract_toc(
+            url="https://docs.opencv.org/5.x/index.html",
+            # url="https://docs.opencv.org/5.x/d6/d00/tutorial_py_root.html",
+            tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+        )
+    )
 
-    # print("MAIN_CONTENT_AREA_TOC:")
-    # main_content_area_toc = asyncio.run(
+    # # Title: tensorflow
+    # result = asyncio.run(
     #     extract_toc(
     #         url="https://www.tensorflow.org/tutorials/keras/regression",
     #         tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
     #     )
     # )
-    # print(main_content_area_toc)
 
-    # print("\n\n\nDOCUMENT_NAVIGIATON_TOC:")
-    # document_navigation_toc = asyncio.run(
+    # result = asyncio.run(
     #     extract_toc(
     #         url="https://www.tensorflow.org/tutorials/keras/regression",
     #         tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
     #     )
     # )
-    # print(document_navigation_toc)
 
-    # Title: pytorch
-    print("MAIN_CONTENT_AREA_TOC:")
-    main_content_area_toc = asyncio.run(
-        extract_toc(
-            url="https://pytorch.org/docs/stable/notes/cuda.html",
-            tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
-        )
-    )
-    print(main_content_area_toc)
+    # # Title: pytorch
+    # result = main_content_area_toc = asyncio.run(
+    #     extract_toc(
+    #         url="https://pytorch.org/docs/stable/notes/cuda.html",
+    #         tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+    #     )
+    # )
 
-    print("\n\n\nDOCUMENT_NAVIGIATON_TOC:")
-    document_navigation_toc = asyncio.run(
-        extract_toc(
-            url="https://pytorch.org/docs/stable/index.html",
-            tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
-        )
-    )
-    print(document_navigation_toc)
+    # result = asyncio.run(
+    #     extract_toc(
+    #         url="https://pytorch.org/docs/stable/index.html",
+    #         tos_type=TableOfContentsType.DOCUMENT_NAVIGIATON_TOC,
+    #     )
+    # )
+
+    temp_str_file = create_temp_str_file(result, prefix="")
+    open_file_in_vscode(temp_str_file)
