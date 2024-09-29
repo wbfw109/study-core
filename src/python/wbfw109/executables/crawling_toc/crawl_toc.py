@@ -3,7 +3,8 @@ Written at 📅 2024-09-28 19:20:16
 🌪️ TODO:
     - crawl with dl, dt, dd in Python (https://docs.python.org/3/using/cmdline.html#cmdoption-c)
         add TableOfContentsType.<??> or .. add when MAIN_CONTENT_AREA_TOC
-    - 
+    - MSDN crawling; dynamic call html element by click. (not one-time. multiple-times click is required for new recieved html elements.)
+    - OpenVINO ; https://docs.openvino.ai/2024/index.html
 
 This script extracts Table of Contents (ToC) from various documentation websites using Playwright.
 It supports multiple websites and provides a generalized approach to parsing ToC based on URL patterns.

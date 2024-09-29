@@ -21,7 +21,7 @@ cap = cv2.VideoCapture(0)
 
 # 📍 Set the video format to MJPG. if not set, >> [ WARN:0@10.334] global cap_v4l.cpp:1136 tryIoctl VIDEOIO(V4L2:/dev/video0): select() timeout.
 cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc(*"MJPG"))
-
+# cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc(*"YUYV"))
 if not cap.isOpened():
     print("Error: Could not open video stream.")
 else:
