@@ -74,8 +74,10 @@ PySide6 = "*"
 optional = true
 [tool.poetry.group.ml.dependencies]
 pascal-voc-writer = "*"
-scipy = "*"
 imgaug = "*"
+torch = "*"
+# scipy = "*"
+# imgaug = "*"
 
 [tool.poetry.group.web]
 optional = true
