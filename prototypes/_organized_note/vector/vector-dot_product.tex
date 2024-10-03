@@ -1,0 +1,134 @@
+\documentclass[12pt]{article}
+\usepackage{emoji}
+\usepackage{fontspec} % Required for font settings
+\usepackage[utf8]{inputenc}
+
+% Set the main font to Noto Sans CJK KR for Korean and English
+\setmainfont{Noto Sans CJK KR}
+\newfontfamily\emojiFont{Noto Color Emoji} % Optional: for explicit emoji handling
+\usepackage{xcolor}   % Required for color settings
+% Set background color and text color
+\pagecolor{black}  % Set the background color to black
+\color{white}      % Set the text color to white
+
+\usepackage{amsmath}  % Required for mathematical symbols
+\usepackage{graphicx} % Required for including images
+\usepackage{tikz}     % 3D 그래프 그리기
+\usepackage{pgfplots} % 3D 그래프 추가
+\usepackage{hyperref} % 하이퍼링크 추가
+
+% Set up hyperref options
+\hypersetup{
+    colorlinks=true,     % 하이퍼링크에 색상을 적용
+    linkcolor=cyan,      % 목차와 섹션 링크의 색상
+    urlcolor=cyan,       % URL 링크 색상
+    pdftitle={벡터 내적 (Dot Product)},
+    pdfauthor={Author: wbfw109v2},
+    pdfsubject={벡터 간 관계를 설명하는 수학적 모델}
+}
+
+\title{
+    벡터 내적 (Dot Product): \\
+    벡터 간 관계의 수학적 모델과 응용
+}
+\author{Author: wbfw109v2}
+\date{\today}
+
+\begin{document}
+
+% Title and Table of Contents
+\maketitle
+\tableofcontents
+
+\section{배경과 역사}
+
+\noindent 벡터 내적(Dot product)은 수학과 물리학에서 벡터 간의 관계를 설명하는 중요한 연산입니다. 이 개념은 기원적으로 벡터 간의 상호작용을 수학적으로 설명하기 위해 도입되었습니다. 특히 물리학에서, 힘(Force)과 이동 거리(Distance) 간의 상관관계를 설명하는 도구로 사용됩니다.
+
+\noindent "벡터 내적은 언제 처음 정의되었고, 그 기원은 무엇인가요?"라는 질문을 통해 내적의 역사적 배경을 탐구할 수 있습니다.
+
+\section{정의와 목적}
+
+\noindent 벡터 내적은 두 벡터의 크기와 이들 간의 각도에 따라 결정되는 스칼라 연산입니다. 이는 벡터 간의 방향성을 측정하는 데 목적이 있습니다. 두 벡터 \( \mathbf{A} \)와 \( \mathbf{B} \)의 내적은 다음과 같이 정의됩니다:
+
+\[
+  \mathbf{A} \cdot \mathbf{B} = \| \mathbf{A} \| \| \mathbf{B} \| \cos{\theta}
+\]
+
+\noindent 여기서:
+
+- \( \| \mathbf{A} \| \), \( \| \mathbf{B} \| \): 각각 벡터 \( \mathbf{A} \)와 \( \mathbf{B} \)의 크기(Magnitude)를 나타냅니다.
+
+- \( \theta \): 벡터 \( \mathbf{A} \)와 \( \mathbf{B} \) 사이의 각도입니다.
+
+- 결과는 스칼라 값으로, 벡터 간의 크기와 방향성을 반영합니다.
+
+\section{연산 | 메커니즘의 이유}
+
+\noindent 벡터 내적은 수학적으로 편리한 특성을 가지고 있습니다. 두 벡터가 수직일 때, 내적의 결과는 0이 되며, 두 벡터가 같은 방향을 가리킬 때는 두 벡터 크기의 곱이 됩니다. 이러한 정의는 두 벡터 간의 기하학적 관계를 정확하게 설명하는 수학적 도구로 자리잡았습니다.
+
+\noindent 예를 들어, "왜 벡터 내적은 두 벡터의 크기와 방향의 곱으로 정의되었나요?"라는 질문을 통해, 내적의 정의가 갖는 수학적, 물리적 이유를 더 깊이 이해할 수 있습니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 벡터 \( \mathbf{A} = (3, 0) \)와 \( \mathbf{B} = (0, 4) \)는 수직 관계이므로, 내적은 0이 됩니다:
+
+\[
+  \mathbf{A} \cdot \mathbf{B} = 3 \times 0 + 0 \times 4 = 0
+\]
+
+\section{비교 | 대조 | 성질}
+
+\noindent 벡터 내적은 스칼라 값을 반환하며, 이는 두 벡터 간의 방향성이나 유사성을 설명하는 데 사용됩니다. 반면, 벡터 외적(Cross product)은 벡터를 반환하며 두 벡터가 만드는 평면에 수직한 방향을 나타냅니다. 이 두 연산은 서로 다른 특성을 갖고 있으며, 서로 다른 문제 해결에 사용됩니다.
+
+\noindent 예를 들어, "벡터 내적과 외적의 차이점은 무엇인가요?"라는 질문을 통해 두 개념의 차이점을 명확하게 이해할 수 있습니다.
+
+\section{응용 | 실제 사례}
+
+\noindent 벡터 내적은 물리학, 컴퓨터 그래픽스, 신호 처리 등 다양한 분야에서 응용됩니다. 물리학에서는 힘(Force)과 이동 거리(Distance)의 내적을 통해 물체에 가해진 일을 계산합니다. 또한, 컴퓨터 그래픽스에서는 빛의 방향과 표면의 법선 간의 내적을 사용해 빛의 반사를 계산합니다.
+
+\subsection{물리학에서의 응용}
+
+\noindent 물리학에서 벡터 내적은 힘 \( \mathbf{F} \)과 이동 거리 \( \mathbf{d} \)의 관계를 설명하는 데 사용됩니다. 이를 통해 물체에 가해진 일을 계산할 수 있으며, 이는 다음과 같이 표현됩니다:
+\[
+  W = \mathbf{F} \cdot \mathbf{d} = \| \mathbf{F} \| \| \mathbf{d} \| \cos{\theta}
+\]
+
+\noindent 여기서 \( \theta \)는 힘과 이동 거리 사이의 각도입니다. 두 벡터가 동일한 방향이면, 최대의 일을 하게 됩니다.
+
+\subsection{Computer Graphics}
+
+\noindent 컴퓨터 그래픽스에서는 빛의 방향 벡터 \( \mathbf{L} \)과 표면의 법선 벡터 \( \mathbf{N} \) 간의 내적을 사용하여 표면의 밝기를 계산합니다. 이 계산은 Lambertian 반사 모델에서 자주 사용되며, 내적이 클수록 표면이 밝게 보입니다:
+
+\[
+  \text{표면 밝기} = \mathbf{L} \cdot \mathbf{N}
+\]
+
+\subsection{기계 학습과 데이터 분석}
+
+\noindent 벡터 내적은 기계 학습 및 데이터 분석에서 코사인 유사도(Cosine similarity)를 계산하는 데 사용됩니다. 코사인 유사도는 두 벡터 간의 방향성을 비교하는 방법으로, 두 벡터의 각도를 기반으로 유사성을 측정합니다. 이는 정보 검색, 자연어 처리(NLP)에서 두 문서 간의 유사성을 비교하는 데 주로 사용됩니다.
+
+\[
+  \cos{\theta} = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|}
+\]
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 벡터 \( \mathbf{A} = (1, 0) \)과 \( \mathbf{B} = (0, 1) \)의 코사인 유사도는 다음과 같이 계산됩니다:
+
+\[
+  \cos{\theta} = \frac{1 \times 0 + 0 \times 1}{\sqrt{1^2 + 0^2} \sqrt{0^2 + 1^2}} = 0
+\]
+
+\noindent 따라서 두 벡터는 수직 관계에 있으며, 유사성이 없음을 의미합니다.
+
+\subsection{Signal Processing}
+
+\noindent 신호 처리에서 벡터 내적은 필터링 및 신호의 상관관계를 분석하는 데 사용됩니다. 두 신호를 벡터로 나타내고, 이들의 내적을 계산하여 신호 간의 유사성을 분석할 수 있습니다. 이는 특히 잡음 제거 및 주파수 분석에서 중요한 역할을 합니다.
+
+
+\section{관련 논문 | 참고 자료}
+
+\noindent 벡터 내적과 관련된 다양한 논문과 참고 자료가 있습니다. 이는 선형 대수학(Linear Algebra)과 벡터 공간 이론(Vector Space Theory)의 중요한 부분으로 다뤄집니다. 더 깊이 있는 이해를 원한다면, 다음과 같은 참고 문헌을 참고할 수 있습니다:
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. \textit{Gilbert Strang}, \textit{Linear Algebra and Its Applications}에서는 벡터 내적의 이론적 배경을 심도 있게 다룹니다. 이 책은 벡터의 기초 개념부터 고급 응용까지 폭넓은 내용을 다룹니다.
+
+\end{document}

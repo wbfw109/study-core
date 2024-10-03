@@ -1,0 +1,48 @@
+\documentclass[12pt]{article}
+\usepackage{emoji}
+\usepackage{fontspec} % Required for font settings
+\usepackage[utf8]{inputenc}
+
+% Set the main font to Noto Sans CJK KR for Korean and English
+\setmainfont{Noto Sans CJK KR}
+\newfontfamily\emojiFont{Noto Color Emoji} % Optional: for explicit emoji handling
+
+\usepackage{xcolor}   % Required for color settings
+% Set background color and text color
+\pagecolor{black}  % Set the background color to black
+\color{white}      % Set the text color to white
+
+\usepackage{amsmath}  % Required for mathematical symbols
+\usepackage{graphicx} % Required for including images
+\usepackage{tikz}     % 3D 그래프 그리기
+\usepackage{pgfplots} % 3D 그래프 추가
+\usepackage{hyperref} % 하이퍼링크 추가
+
+% Set up hyperref options
+\hypersetup{
+    colorlinks=true,     % 하이퍼링크에 색상을 적용
+    linkcolor=cyan,      % 목차와 섹션 링크의 색상
+    urlcolor=cyan,       % URL 링크 색상
+    pdftitle={Vectors...},
+    pdfauthor={Author: wbfw109v2},
+    pdfsubject={Vectors...}
+}
+
+\title{Vectors...}
+
+\author{Author: wbfw109v2}
+\date{\today}
+
+\begin{document}
+
+% Title and Table of Contents
+\maketitle
+\tableofcontents
+% \input{vector/unit_vector.tex}
+% \input{vector/linear_algebra-basis.tex}
+% \input{vector/vector-dot_product.tex}
+% \input{vector/vector-cross_product.tex}
+\input{vector/vector-projection.tex}
+\input{vector/vector-normal.tex}
+
+\end{document}

@@ -6,12 +6,13 @@ from IPython.core.interactiveshell import InteractiveShell
 # + allow multiple print
 InteractiveShell.ast_node_interactivity = "all"
 # %doctest_mode
+cd ~/repo/intel-edge-academy-6/.vscode/ && code intel-edge-academy-6.code-workspace
 
 # from google.protobuf.internal import api_implementation
 # print(api_implementation.Type())
 # %%
 import cv2
-
+# code $HOME/repo/intel-edge-academy-6/.vscode/intel-edge-academy-6.code-workspace
 # Open a connection to the webcam (0 is the default camera)
 cap = cv2.VideoCapture(0)
 

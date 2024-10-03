@@ -1,0 +1,90 @@
+{
+  // Title: Indentation, Bracket
+  "editor.detectIndentation": false,
+  "editor.language.colorizedBracketPairs": [
+    ["[", "]"],
+    ["(", ")"],
+    ["{", "}"]
+  ],
+  "editor.guides.bracketPairs": "active",
+  "[latex]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  // Title: Ruff setting from https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  // for Jupyter Notebooks:
+  "notebook.formatOnSave.enabled": true,
+  "notebook.codeActionsOnSave": {
+    "notebook.source.fixAll": "explicit",
+    "notebook.source.organizeImports": "explicit"
+  },
+  // Title: Terminal settings
+  "window.titleBarStyle": "custom", // change VScode's tile bar color
+  "terminal.integrated.env.linux": {
+    //  in order to prevent from 'The "no new privileges" flag is set, which prevents sudo from running as root.' message when run sudo command in Ubuntu 📅 2024-08-31 01:29:37
+    "SUDO_ASKPASS": null
+  },
+  "terminal.integrated.defaultProfile.linux": "fish",
+  "python.defaultInterpreterPath": "${env:PYTHON_POETRY_BASE_EXECUTABLE}",
+  // Title: Latex setting from https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop
+  "files.exclude": {
+    "build/note/**": true
+  },
+  "latex-workshop.latex.recipe.default": "lualatex",
+  "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/build/note",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "lualatex",
+      "tools": ["lualatex"]
+    },
+    {
+      "name": "xelatex",
+      "tools": ["xelatex"]
+    },
+    {
+      "name": "latexmk",
+      "tools": ["latexmk"]
+    },
+    {
+      "name": "pdflatex -> bibtex -> pdflatex*2",
+      "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "lualatex",
+      "command": "lualatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-output-directory=%WORKSPACE_FOLDER%/build/note",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-pdf",
+        "-lualatex",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-auxdir=/tmp",
+        "-outdir=%WORKSPACE_FOLDER%/build/note",
+        "%DOC%"
+      ],
+      "env": {}
+    }
+  ]
+}

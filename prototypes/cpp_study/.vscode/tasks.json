@@ -1,0 +1,94 @@
+{
+  "tasks": [
+    {
+      "label": "Debug-1.1. Conan Install",
+      "type": "shell",
+      "command": "conan",
+      "args": [
+        "install",
+        ".",
+        "--build=missing",
+        "--profile:host=./profiles/linux_gcc_ninja_debug",
+        "--profile:build=./profiles/linux_gcc_ninja_debug"
+        // "--profile:host=./profiles/linux_clang_ninja_debug",
+        // "--profile:build=./profiles/linux_clang_ninja_debug"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true, // default
+        "reveal": "always", // default
+        "focus": false,
+        "panel": "shared", // default
+        "showReuseMessage": true, // default
+        "clear": false // default
+      },
+      "problemMatcher": [],
+      "detail": "install Conan packages [Debug]"
+    },
+    {
+      "label": "Debug-1.2. Run Virtual Environment",
+      "type": "shell",
+      "command": "bash",
+      "args": ["./build/Debug/generators/conanbuild.sh"], // not used directly "source' command for compatibility with fish shell.
+      "group": {
+        "kind": "build"
+      },
+      "problemMatcher": [],
+      "detail": "Run Conan build script"
+    },
+    {
+      "label": "Debug-2.1. CMake Configure Preset",
+      "type": "shell",
+      "command": "cmake --preset conan-debug",
+      "group": "build",
+      "dependsOrder": "sequence",
+      "dependsOn": ["Debug-1.2. Run Virtual Environment"],
+      "problemMatcher": [],
+      "detail": "run CMake Preset [Debug]"
+    },
+    {
+      "label": "Debug-2.2. CMake Build",
+      "type": "shell",
+      "command": "cmake --build . --preset conan-debug",
+      "group": "build",
+      "dependsOrder": "sequence",
+      "dependsOn": ["Debug-1.2. Run Virtual Environment"],
+      "problemMatcher": [],
+      "detail": "Build project [Debug]"
+    },
+    {
+      "label": "Debug-3. Run executable",
+      "type": "shell",
+      "command": "./build/Debug/cpp_study",
+      "group": "test",
+      "problemMatcher": [],
+      "detail": "run executable [Debug]"
+    },
+    {
+      "label": "Debug-[Sequence] Install, Configure, Build, Run",
+      "type": "shell",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Debug-1.1. Conan Install",
+        "Debug-1.2. Run Virtual Environment",
+        "Debug-2.1. CMake Configure Preset",
+        "Debug-2.2. CMake Build"
+      ],
+      "problemMatcher": [],
+      "detail": "Install, Configure, Build"
+    },
+    {
+      "label": "Debug-[Sequence] Build, Run",
+      "type": "shell",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Debug-1.2. Run Virtual Environment",
+        "Debug-2.2. CMake Build",
+        "Debug-3. Run executable"
+      ],
+      "problemMatcher": [],
+      "detail": "Build, Run executable [Debug]"
+    }
+  ],
+  "version": "2.0.0"
+}

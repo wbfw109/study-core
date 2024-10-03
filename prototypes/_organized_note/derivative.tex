@@ -1,0 +1,239 @@
+\documentclass[12pt]{article}
+\usepackage{emoji}
+\usepackage{fontspec} % Required for font settings
+\usepackage[utf8]{inputenc}
+
+% Set the main font to Noto Sans CJK KR for Korean and English
+\setmainfont{Noto Sans CJK KR}
+\newfontfamily\emojiFont{Noto Color Emoji} % Optional: for explicit emoji handling
+
+\usepackage{xcolor}   % Required for color settings
+% Set background color and text color
+\pagecolor{black}  % Set the background color to black
+\color{white}      % Set the text color to white
+
+\usepackage{amsmath}  % Required for mathematical symbols
+\usepackage{graphicx} % Required for including images
+\usepackage{tikz}     % 3D 그래프 그리기
+\usepackage{pgfplots} % 3D 그래프 추가
+\usepackage{hyperref} % 하이퍼링크 추가
+
+% Set up hyperref options
+\hypersetup{
+    colorlinks=true,     % 하이퍼링크에 색상을 적용
+    linkcolor=cyan,      % 목차와 섹션 링크의 색상
+    urlcolor=cyan,       % URL 링크 색상
+    pdftitle={외적 (Cross Product)},
+    pdfauthor={Author: wbfw109v2},
+    pdfsubject={벡터 간 관계의 수학적 모델과 응용}
+}
+
+\title{
+    미분 및 편미분 (Differentiation and Partial Differentiation): \\
+    수학적 원리와 응용
+}
+\author{Author: wbfw109v2}
+\date{\today}
+
+\begin{document}
+
+% Title and Table of Contents
+\maketitle
+\tableofcontents
+
+\section{미분의 기본 개념 (Basic Concepts of Differentiation)}
+
+\noindent 미분(Differentiation)은 함수의 변화를 분석하는 수학적 도구입니다. 특히, 독립 변수의 값이 변화할 때 종속 변수의 값이 어떻게 변하는지를 측정하는 방법입니다. 기하학적으로는 함수의 그래프에서 곡선의 기울기를 구하는 방법을 의미합니다.
+
+\subsection{미분의 정의 (Definition of Differentiation)}
+
+\noindent 함수 \( f(x) \)의 미분은 다음과 같이 정의됩니다:
+\[
+  f'(x) = \lim_{\Delta x \to 0} \frac{f(x + \Delta x) - f(x)}{\Delta x}
+\]
+이 식은 \( x \)에서의 작은 변화 \( \Delta x \)에 대한 함수의 변화율을 의미합니다.
+
+\vspace{2\baselineskip}
+\noindent \emoji{shopping} e.g. \( y = x^2 \)의 미분 증명 (Proof of Differentiation of \( y = x^2 \))
+
+\noindent 함수 \( y = x^2 \)의 미분을 구해보겠습니다:
+\[
+  f(x) = x^2
+\]
+위 정의를 사용하여 미분을 계산하면:
+\[
+  f'(x) = \lim_{\Delta x \to 0} \frac{(x + \Delta x)^2 - x^2}{\Delta x}
+\]
+우선 \( (x + \Delta x)^2 \)을 전개하면:
+\[
+  (x + \Delta x)^2 = x^2 + 2x\Delta x + (\Delta x)^2
+\]
+따라서,
+\[
+  f'(x) = \lim_{\Delta x \to 0} \frac{x^2 + 2x\Delta x + (\Delta x)^2 - x^2}{\Delta x} = \lim_{\Delta x \to 0} \frac{2x\Delta x + (\Delta x)^2}{\Delta x}
+\]
+\[
+  = \lim_{\Delta x \to 0} (2x + \Delta x) = 2x
+\]
+결론적으로, \( y = x^2 \)의 미분은 \( f'(x) = 2x \)입니다.
+
+\vspace{3\baselineskip}
+\noindent \emoji{shopping} e.g. \( y = x^3 \)의 미분 증명 (Proof of Differentiation of \( y = x^3 \))
+
+\noindent 이제 함수 \( y = x^3 \)의 미분을 구해보겠습니다:
+\[
+  f(x) = x^3
+\]
+위 정의를 사용하여 미분을 계산하면:
+\[
+  f'(x) = \lim_{\Delta x \to 0} \frac{(x + \Delta x)^3 - x^3}{\Delta x}
+\]
+우선 \( (x + \Delta x)^3 \)을 전개하면:
+\[
+  (x + \Delta x)^3 = x^3 + 3x^2\Delta x + 3x(\Delta x)^2 + (\Delta x)^3
+\]
+따라서,
+\[
+  f'(x) = \lim_{\Delta x \to 0} \frac{x^3 + 3x^2\Delta x + 3x(\Delta x)^2 + (\Delta x)^3 - x^3}{\Delta x}
+\]
+\[
+  = \lim_{\Delta x \to 0} \frac{3x^2\Delta x + 3x(\Delta x)^2 + (\Delta x)^3}{\Delta x} = \lim_{\Delta x \to 0} (3x^2 + 3x\Delta x + (\Delta x)^2)
+\]
+\[
+  = 3x^2
+\]
+따라서 \( y = x^3 \)의 미분은 \( f'(x) = 3x^2 \)입니다.
+
+\section{편미분의 개념 (Concept of Partial Differentiation)}
+
+\noindent 편미분(Partial differentiation)은 다변수 함수에서 한 변수에 대해서만 미분을 계산하는 방법입니다. 다변수 함수에서 각 변수는 다른 변수와 독립적으로 다룰 수 있기 때문에, 편미분을 통해 각 변수의 변화가 함수에 미치는 영향을 분석할 수 있습니다.
+
+\subsection{편미분의 정의 (Definition of Partial Differentiation)}
+
+\noindent 다변수 함수 \( f(x, y) \)에서 \( x \)에 대한 편미분은 다음과 같이 정의됩니다:
+\[
+  \frac{\partial f}{\partial x} = \lim_{\Delta x \to 0} \frac{f(x + \Delta x, y) - f(x, y)}{\Delta x}
+\]
+이때 \( y \)는 상수로 취급되며, \( x \)에 대해서만 변화가 일어납니다.
+
+\subsection{다변수 함수에서의 편미분 (Partial Differentiation in Multivariable Functions)}
+
+\noindent 편미분은 다변수 함수의 각 좌표축이 독립적일 때 유용합니다. 즉, 각 변수는 다른 변수와 상관없이 독립적으로 변화할 수 있으므로, 이를 통해 함수의 각 변수에 대한 민감도를 측정할 수 있습니다. 이는 물리학이나 공학에서 각 변수의 변화가 전체 시스템에 미치는 영향을 분석할 때 주로 사용됩니다.
+
+\vspace{2\baselineskip}
+\noindent \emoji{shopping} e.g. 함수 \( f(x, y) = x^2 + y^2 \)에서 \( x \)와 \( y \)에 대한 편미분을 구해보겠습니다:
+\[
+  \frac{\partial f}{\partial x} = 2x, \quad \frac{\partial f}{\partial y} = 2y
+\]
+이처럼, 각 변수에 대해 독립적으로 미분할 수 있습니다.
+
+\section{일반 미분 방정식 (Ordinary Differential Equation)}
+
+\subsection{일반 미분 방정식의 정의 (Definition of Ordinary Differential Equation)}
+
+\noindent ODE는 다음과 같은 형태로 표현됩니다:
+\[
+  F(x, y, y', y'', \dots, y^{(n)}) = 0
+\]
+여기서 \( y = y(x) \)는 미지 함수이며, \( y', y'', \dots, y^{(n)} \)는 그 함수의 미분들입니다. \( n \)은 방정식의 차수를 나타내며, ODE의 차수는 가장 높은 차수의 미분 항을 기준으로 결정됩니다.
+
+\noindent 예를 들어, 다음은 2차 ODE의 예시입니다:
+\[
+  y'' + p(x)y' + q(x)y = g(x)
+\]
+이 식에서 \( y'' \)는 \( y \)의 2차 미분, \( y' \)는 \( y \)의 1차 미분을 의미하며, \( p(x), q(x), g(x) \)는 주어진 함수입니다.
+
+\subsection{1차 ODE (First-Order ODE)}
+
+\noindent 1차 ODE는 가장 기본적인 미분 방정식으로, 미지 함수의 1차 미분만을 포함하는 방정식입니다. 일반적인 1차 ODE는 다음과 같은 형태로 표현됩니다:
+\[
+  \frac{dy}{dx} = f(x, y)
+\]
+여기서 \( \frac{dy}{dx} \)는 \( y \)의 \( x \)에 대한 1차 미분입니다. \( f(x, y) \)는 주어진 함수로, 이 함수가 미지 함수 \( y \)와 독립 변수 \( x \)의 관계를 설명합니다.
+
+\subsubsection{1차 ODE의 풀이 방법 (Solution of First-Order ODE)}
+
+\noindent 1차 ODE는 여러 가지 방법으로 풀 수 있습니다. 대표적인 풀이 방법은 \textbf{분리 변수법(Separation of Variables)}과 \textbf{적분 인수법(Integrating Factor Method)}입니다.
+
+\paragraph{분리 변수법 (Separation of Variables)}
+
+\noindent 분리 변수법은 \( x \)와 \( y \)를 별도로 분리한 후 양변을 적분하여 방정식을 푸는 방법입니다. 예를 들어, 다음과 같은 방정식을 고려해보겠습니다:
+\[
+  \frac{dy}{dx} = g(x)h(y)
+\]
+이 방정식에서 양변을 \( y \)와 \( x \)에 대한 함수로 분리한 다음 적분하면:
+\[
+  \int \frac{1}{h(y)} dy = \int g(x) dx
+\]
+적분 결과로 얻어진 방정식은 특정 초기 조건에 따라 해를 결정할 수 있습니다.
+
+\paragraph{적분 인수법 (Integrating Factor Method)}
+
+\noindent 적분 인수법은 1차 선형 미분 방정식을 풀기 위한 방법입니다. 예를 들어, 다음과 같은 1차 선형 방정식을 고려해보겠습니다:
+\[
+  \frac{dy}{dx} + P(x)y = Q(x)
+\]
+이 방정식에서 적분 인수 \( \mu(x) \)는 다음과 같이 정의됩니다:
+\[
+  \mu(x) = e^{\int P(x) dx}
+\]
+양변에 적분 인수 \( \mu(x) \)를 곱한 후 적분하여 \( y(x) \)를 구할 수 있습니다.
+
+\subsection{ODE와 실제 응용 (Applications of ODE)}
+
+\noindent ODE는 다양한 실세계 문제를 모델링하는 데 사용됩니다. 예를 들어, 물체의 운동 방정식, 전기 회로 분석, 인구 성장 모델 등이 ODE로 표현됩니다. 이러한 방정식은 미분 방정식을 통해 시간 또는 공간에 따라 변하는 물리적 현상을 설명합니다.
+
+\section{체인 룰 (Chain Rule)}
+
+\noindent 체인 룰(Chain rule)은 복합 함수의 미분을 계산할 때 사용됩니다. 즉, 함수가 여러 함수로 구성된 경우, 각 함수의 변화율을 곱하여 전체 미분을 계산하는 방법입니다. 체인 룰은 다단계의 함수 관계를 분석할 때 매우 유용합니다.
+
+\subsection{체인 룰의 정의 (Definition of Chain Rule)}
+
+\noindent 두 함수 \( g(x) \)와 \( f(g(x)) \)가 있을 때, 체인 룰에 따르면 \( f(g(x)) \)의 미분은 다음과 같이 계산됩니다:
+\[
+  \frac{d}{dx}f(g(x)) = f'(g(x)) \cdot g'(x)
+\]
+이는 내부 함수 \( g(x) \)의 변화가 외부 함수 \( f \)에 어떻게 영향을 미치는지를 보여줍니다.
+
+\subsection{체인 룰 vs 직접 미분 (Chain Rule vs Direct Differentiation)}
+
+\noindent 직접 미분은 단일 함수의 미분을 의미하며, 체인 룰은 복합 함수의 경우에 사용됩니다.
+
+\vspace{2\baselineskip}
+\noindent \emoji{shopping} e.g. \( f(x) = (3x^2 + 2)^3 \)이라는 함수에서 직접 미분을 수행하는 것과 체인 룰을 적용하는 방법을 비교해보겠습니다.
+
+\textbf{직접 미분}:
+\[
+  f'(x) = 3(3x^2 + 2)^2 \cdot 6x = 18x(3x^2 + 2)^2
+\]
+
+\textbf{체인 룰 사용}:
+\[
+  f'(x) = 3(3x^2 + 2)^2 \cdot \frac{d}{dx}(3x^2 + 2) = 18x(3x^2 + 2)^2
+\]
+두 방법은 동일한 결과를 주지만, 체인 룰은 복합 함수의 경우 더 체계적으로 계산할 수 있게 해줍니다.
+
+\subsection{체인 룰이 여러 함수에서의 적용 (Chain Rule with Multiple Functions)}
+
+\noindent 체인 룰은 여러 함수로 구성된 복합 함수에서도 적용됩니다. 함수가 세 개 \( h(x), g(x), f(x) \)로 구성된 경우, 예를 들어 \( f(g(h(x))) \)의 형태라면 체인 룰은 다음과 같이 적용됩니다:
+\[
+  \frac{d}{dx}f(g(h(x))) = f'(g(h(x))) \cdot g'(h(x)) \cdot h'(x)
+\]
+이 방법을 사용하여 복잡한 함수들의 미분을 단계별로 계산할 수 있습니다.
+
+\subsection{역전파와 체인 룰 (Backpropagation and Chain Rule)}
+
+\noindent 체인 룰은 역전파(Backpropagation) 알고리즘에서도 매우 중요한 역할을 합니다. 역전파는 신경망에서의 가중치 업데이트를 위한 미분 계산을 수행하는 알고리즘으로, 각 가중치에 대한 손실 함수의 기울기를 체인 룰을 통해 계산합니다. 이를 통해 신경망이 학습하는 과정에서 각 가중치의 영향을 분석하고, 가중치를 조정하여 최적화할 수 있습니다.
+
+\vspace{2\baselineskip}
+\noindent \emoji{shopping} e.g. 체인 룰을 적용한 역전파 알고리즘의 예:
+\[
+  \frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial a_2} \cdot \frac{\partial a_2}{\partial z_2} \cdot \frac{\partial z_2}{\partial w_1}
+\]
+여기서 \( L \)은 손실 함수, \( a_2 \)는 활성화 함수의 출력, \( z_2 \)는 선형 조합 결과입니다. 이를 통해 가중치 업데이트를 수행할 수 있습니다.
+
+\section{결론}
+
+\noindent 미분과 편미분은 함수의 변화를 분석하는 강력한 도구입니다. 다변수 함수에서는 편미분을 통해 각 변수의 독립적인 영향을 분석할 수 있으며, 체인 룰은 복합 함수의 미분을 계산할 때 중요한 방법입니다. 이러한 개념들은 역전파와 같은 현대적인 기계 학습 알고리즘에도 중요한 역할을 하며, 수학적 분석과 최적화의 핵심 도구로 자리잡고 있습니다.
+
+\end{document}

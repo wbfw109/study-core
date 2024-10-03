@@ -1,0 +1,19 @@
+{
+  "files.exclude": {
+    "**/.git": false,
+    "**/__pycache__": true,
+    "**/.pixi": true,
+    "**/.pytest_cache": true
+  },
+  "search.exclude": {
+    "**/.git": true,
+    "**/.pixi": true,
+    "**/.pytest_cache": true
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // "python.defaultInterpreterPath": "C:/Python312/python.exe",
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
+}

@@ -1,0 +1,130 @@
+\documentclass[12pt]{article}
+\usepackage{emoji}
+\usepackage{fontspec} % Required for font settings
+\usepackage[utf8]{inputenc}
+
+% Set the main font to Noto Sans CJK KR for Korean and English
+\setmainfont{Noto Sans CJK KR}
+\newfontfamily\emojiFont{Noto Color Emoji} % Optional: for explicit emoji handling
+
+\usepackage{xcolor}   % Required for color settings
+% Set background color and text color
+\pagecolor{black}  % Set the background color to black
+\color{white}      % Set the text color to white
+
+\usepackage{amsmath}  % Required for mathematical symbols
+\usepackage{graphicx} % Required for including images
+\usepackage{tikz}     % 3D 그래프 그리기
+\usepackage{pgfplots} % 3D 그래프 추가
+\usepackage{hyperref} % 하이퍼링크 추가
+
+% Set up hyperref options
+\hypersetup{
+    colorlinks=true,     % 하이퍼링크에 색상을 적용
+    linkcolor=cyan,      % 목차와 섹션 링크의 색상
+    urlcolor=cyan,       % URL 링크 색상
+    pdftitle={외적 (Cross Product)},
+    pdfauthor={Author: wbfw109v2},
+    pdfsubject={벡터 간 관계의 수학적 모델과 응용}
+}
+
+\title{
+    외적 (Cross Product): \\
+    벡터 간 관계의 수학적 모델과 응용
+}
+\author{Author: wbfw109v2}
+\date{\today}
+
+\begin{document}
+
+% Title and Table of Contents
+\maketitle
+\tableofcontents
+
+\section{배경과 역사}
+
+\noindent 벡터의 외적(Cross product)은 두 벡터 사이의 기하학적 관계를 설명하는 중요한 연산으로, 주로 3차원 공간에서 사용됩니다. 물리학(Physics) 및 공학(Engineering)의 다양한 분야에서 외적의 응용은 필수적입니다.
+
+\subsection{왜 "외적"인가? (Explanation of the Term "Cross Product")}
+
+\noindent 한국어로 "외적"은 두 벡터 간의 곱을 의미하는 수학적 연산을 설명할 때 사용됩니다. "외(外)"는 "바깥" 또는 "외부"를 의미하며, 벡터들이 이루는 평면의 바깥 방향, 즉 평면에 수직한 벡터를 나타냅니다. "적(積)"은 곱셈(Multiplication) 또는 누적을 의미하며, 이는 벡터 사이의 곱을 계산하는 연산을 의미합니다.
+
+\section{정의와 목적}
+
+\subsection{벡터 외적의 수학적 정의 (Mathematical Definition of Cross Product)}
+
+\noindent 벡터 \(\mathbf{a}\)와 \(\mathbf{b}\)의 외적(Cross product)은 두 벡터가 만드는 평행사변형(Parallelogram)의 넓이와, 그 평면에 수직한 벡터를 나타냅니다. 외적의 크기(Magnitude)는 다음과 같이 주어집니다:
+
+\[
+  \mathbf{a} \times \mathbf{b} = |\mathbf{a}| |\mathbf{b}| \sin(\theta) \mathbf{n}
+\]
+
+\noindent 여기서 \(\theta\)는 두 벡터 사이의 각도(Angle)이고, \(\mathbf{n}\)은 오른손 법칙(Right-hand rule)에 따른 방향의 단위 벡터(Unit vector)입니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 벡터 \(\mathbf{a} = (1, 0, 0)\)와 \(\mathbf{b} = (0, 1, 0)\)의 외적은:
+\[
+  \mathbf{a} \times \mathbf{b} = |\mathbf{a}| |\mathbf{b}| \sin(90^\circ) \hat{k} = 1 \times 1 \times 1 \hat{k} = \hat{k} = (0, 0, 1)
+\]
+이는 \(x\)-축과 \(y\)-축을 이루는 평면에 수직한 \(z\)-축 방향의 단위 벡터입니다.
+
+\subsection{성분별 외적 계산 (Component-wise Cross Product Calculation)}
+
+\noindent 외적은 각 성분별로 교차 곱(Cross multiplication)을 통해 계산됩니다. 두 벡터 \(\mathbf{a} = (a_x, a_y, a_z)\)와 \(\mathbf{b} = (b_x, b_y, b_z)\)의 외적은 다음과 같은 행렬식(Determinant)으로 구할 수 있습니다:
+
+\[
+  \mathbf{a} \times \mathbf{b} = \begin{vmatrix}
+    \hat{i} & \hat{j} & \hat{k} \\
+    a_x     & a_y     & a_z     \\
+    b_x     & b_y     & b_z
+  \end{vmatrix}
+\]
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 벡터 \(\mathbf{a} = (2, 3, 4)\)와 \(\mathbf{b} = (5, 6, 7)\)의 외적은:
+\[
+  \mathbf{a} \times \mathbf{b} = \begin{vmatrix}
+    \hat{i} & \hat{j} & \hat{k} \\
+    2       & 3       & 4       \\
+    5       & 6       & 7
+  \end{vmatrix} = \hat{i}(3 \cdot 7 - 4 \cdot 6) - \hat{j}(2 \cdot 7 - 4 \cdot 5) + \hat{k}(2 \cdot 6 - 3 \cdot 5)
+\]
+\[
+  = \hat{i}(-3) - \hat{j}(-6) + \hat{k}(-3) = (-3, 6, -3)
+\]
+
+\subsection{외적의 차원성 (Dimensionality of Cross Product)}
+
+\noindent 외적은 \textbf{3차원}(3D)에서만 정의됩니다. 2차원 공간에서는 두 벡터가 만드는 평면에 수직한 벡터를 정의할 수 없기 때문에, 외적이 성립하지 않습니다. 3차원에서 두 벡터가 이루는 평면에 수직한 벡터만이 외적의 결과로 나타날 수 있습니다.
+
+\section{외적의 물리적 및 수학적 의미 (Physical and Mathematical Meaning of Cross Product)}
+
+\subsection{외적의 본질: 기하학적 모델 (Geometrical Model of Cross Product)}
+
+\noindent 외적은 벡터 간의 평면을 정의하고, 이 평면에 수직한 벡터를 생성합니다. 이를 통해 벡터 간의 기하학적 관계를 직관적으로 이해할 수 있습니다.
+
+\subsection{벡터 간의 평면 정의 및 방향 (Plane Definition and Direction between Vectors)}
+
+\noindent 두 벡터가 이루는 평면에 수직한 방향은 오른손 법칙(Right-hand rule)에 따라 결정됩니다. 이 평면에 수직한 벡터는 외적의 결과입니다.
+
+\subsection{오른손 법칙과 물리적 배경 (Right-hand Rule and Physical Background)}
+
+\noindent 오른손 법칙은 두 벡터의 외적에서 결과 벡터의 방향을 결정하는 규칙입니다. 오른손을 사용해 첫 번째 벡터에 손가락을 따라가면, 두 번째 벡터 방향으로 손가락이 굽혀지고, 엄지가 가리키는 방향이 외적의 결과 벡터(Direction of cross product)의 방향입니다.
+
+예를 들어, 전류(Current)가 흐르는 도선 주위에 생성되는 자기장의 방향은 오른손 법칙에 의해 결정됩니다. 전류의 방향을 따라 엄지를 두고, 나머지 손가락이 자기장(Magnetic field)의 방향을 나타냅니다.
+
+\subsection{외적의 결과가 오른손 법칙을 따르는 이유 (Why Cross Product Follows the Right-hand Rule)}
+
+외적(Cross product)은 두 벡터가 정의하는 평면에 수직한 벡터를 생성합니다. 이 벡터의 방향을 결정하는 데 오른손 법칙을 사용합니다. 이 법칙은 벡터의 순서와 방향을 명확히 하기 위한 규칙으로, 다음과 같은 이유로 채택되었습니다:
+
+\begin{itemize}
+  \item \textbf{벡터의 순서와 방향 명확화}: 두 벡터 \(\mathbf{a}\)와 \(\mathbf{b}\)의 외적 \(\mathbf{a} \times \mathbf{b}\)의 방향은 벡터 \(\mathbf{a}\)에서 \(\mathbf{b}\)로 이동하는 방향에 수직입니다. 오른손 법칙은 이 방향을 일관되게 결정할 수 있는 방법을 제공합니다. 만약 두 벡터의 순서가 바뀌면 결과 벡터의 방향도 반대가 되기 때문에, 법칙을 사용하여 방향성을 정의합니다.
+  \item \textbf{물리적 일관성}: 오른손 법칙은 물리학에서 회전, 자이로스코프, 전자기학 등 다양한 응용에서 일관성을 제공합니다. 예를 들어, 회전 운동의 방향, 자기장과 전류의 상호작용 등에서 이 법칙이 자연스럽게 적용됩니다.
+  \item \textbf{3D 벡터 공간의 표준}: 3차원 공간에서는 외적의 방향이 2차원 평면에서 수직을 정의해야 합니다. 오른손 법칙을 사용하면 이 방향을 일관되게 정의할 수 있어, 다양한 수학적 및 물리적 문제를 해결하는 데 유용합니다.
+\end{itemize}
+
+\section{결론}
+
+\noindent 벡터 외적은 3차원 공간에서 벡터 간의 기하학적 관계를 명확히 이해하는 데 중요한 도구입니다. 오른손 법칙은 외적의 방향성을 결정하는 직관적이고 유용한 방법입니다.
+
+\end{document}

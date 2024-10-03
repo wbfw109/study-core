@@ -1,0 +1,122 @@
+\documentclass[12pt]{article}
+\usepackage{emoji}
+\usepackage{fontspec}
+\usepackage[utf8]{inputenc}
+\setmainfont{Noto Sans CJK KR}
+\newfontfamily\emojiFont{Noto Color Emoji}
+\usepackage{xcolor}
+\pagecolor{black}
+\color{white}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cyan,
+    urlcolor=cyan,
+    pdftitle={Tensor: 수학적 및 딥러닝 관련 개념},
+    pdfauthor={Author: wbfw109v2},
+    pdfsubject={Tensor의 수학적 정의 및 딥러닝에서의 응용}
+}
+\title{
+    Tensor: \\
+    수학적 정의 및 딥러닝에서의 응용
+}
+\author{Author: wbfw109v2}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{배경과 역사}
+
+\noindent Tensor는 원래 물리학에서 응력(Stress), 변형률(Strain) 등의 물리량을 다루기 위해 도입된 개념입니다. 텐서는 다양한 차원을 가진 데이터나 물리적 시스템을 모델링하는 데 매우 유용하며, 기원적으로는 전자기장, 중력장, 그리고 물체의 물리적 상태를 설명하는 도구로 발전해 왔습니다.
+
+\vspace{1\baselineskip}
+\noindent 텐서는 그 후 수학적 개념으로 확장되었으며, 현대에 들어서는 딥러닝(Deep Learning)과 같은 분야에서도 다차원 데이터를 다루는 중요한 수단으로 자리잡게 되었습니다.
+
+\section{정의와 목적}
+
+\noindent 텐서(Tensor)는 다차원 데이터를 표현하는 수학적 구조로, 스칼라(Scalar), 벡터(Vector), 행렬(Matrix)의 일반화로 생각할 수 있습니다. 텐서는 \( n \)-차원 공간에서 정의되며, 다양한 차원을 가지는 데이터를 다루는 데 유용합니다.
+
+\noindent 텐서의 수학적 정의는 다음과 같이 주어집니다:
+\[
+  \mathcal{T} = (T_{i_1, i_2, \dots, i_n}), \quad i_k \in \{1, 2, \dots, N_k\}, \, k = 1, 2, \dots, n
+\]
+여기서 \( N_k \)는 각 차원에서 성분의 개수, 즉 텐서의 크기입니다. 이 수식은 텐서가 단순한 2차원이 아니라 \( n \)-차원 공간에서 정의된 성분들을 나타내며, 각 차원에 대한 인덱스 \( i_k \)가 포함됩니다.
+
+\noindent 수학적 표기에서 사용된 글꼴은 의미의 차이를 나타냅니다. 예를 들어, 텐서를 나타내는 \( \mathcal{T} \)는 텐서(Tensor)라는 구조 전체를 의미하며, 개별 성분 \( T \)는 그 텐서의 각각의 값을 나타냅니다. 이를 구별하기 위해 사용하는 두 가지 주요 글씨체는 다음과 같습니다:
+
+\begin{itemize}
+  \item \( \mathcal{T} \): \textbf{Mathematical Script | 캘리그래픽 서체 (calligraphic letter)}는 전체 텐서(또는 큰 수학적 구조)를 나타냅니다.
+  \item \( T_{i_1, i_2, \dots, i_n} \): \textbf{일반 이탤릭 서체 (italic font)}는 텐서의 개별 성분을 나타내며, 인덱스 \( i_1, i_2, \dots, i_n \)에 의해 특정 성분이 결정됩니다.
+\end{itemize}
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 딥러닝에서 자주 사용되는 3차원 텐서 \( I \)는 높이(Height), 너비(Width), 그리고 채널(Channels)로 구성된 이미지 데이터를 표현할 수 있습니다. 128x128 크기의 RGB 이미지는 다음과 같은 3차원 텐서로 표현됩니다:
+\[
+  I_{i,j,k}, \quad i = 1, \dots, 128, \quad j = 1, \dots, 128, \quad k = 1, 2, 3
+\]
+여기서 \( i \)는 높이(height), \( j \)는 너비(width), \( k \)는 각 채널(R, G, B)을 나타냅니다. 예를 들어, \( I_{64, 64, 1} = 255 \)는 해당 이미지의 가운데 픽셀의 빨간색(Red) 값이 최대임을 의미합니다.
+
+\noindent 여기서 \( I \)는 \textbf{이미지 텐서}를 의미하며, 딥러닝에서 이미지 데이터를 나타내기 위해 자주 사용됩니다. 이는 인덱스가 아니라 이미지라는 구체적 데이터를 나타내는 약자로 사용된 것입니다.
+
+\noindent 딥러닝에서 텐서는 입력 데이터, 가중치, 출력 등을 다루는 데 필수적인 개념입니다. 특히 CNN(Convolutional Neural Networks)과 같은 신경망 구조에서는 필터(Filter)를 사용해 텐서에 합성곱 연산을 적용함으로써 특징을 추출합니다.
+
+\section{연산 | 메커니즘의 이유}
+
+\noindent 텐서 연산은 주로 고차원 데이터를 다루기 위해 설계되었습니다. 텐서의 기본 연산으로는 덧셈, 내적(Dot Product), 외적(Cross Product), 그리고 변환(Transformation) 등이 있습니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 두 개의 2차원 텐서 \( \mathbf{A} \)와 \( \mathbf{B} \)가 주어졌을 때, 이들의 내적은 다음과 같이 계산됩니다:
+\[
+  C_{ij} = \sum_k A_{ik} B_{kj}
+\]
+이 계산 방식은 행렬곱과 유사하지만, 차원이 확장된 형태로 텐서 연산을 수행할 수 있습니다. 딥러닝에서 이러한 연산은 신경망의 전방 패스(forward pass)에서 자주 사용됩니다.
+
+\noindent 텐서 연산의 유용성은 고차원 데이터를 효율적으로 처리하고, 다양한 차원에서 복잡한 상호작용을 표현할 수 있다는 점에서 기인합니다.
+
+\section{비교 | 대조 | 성질}
+
+\noindent 텐서는 행렬(Matrix)이나 벡터(Vector)와 비교할 때, 차원의 수가 더 자유롭고, 고차원 데이터를 효과적으로 처리할 수 있습니다. 행렬은 2차원 구조로 제한되지만, 텐서는 \( n \)-차원까지 확장할 수 있습니다.
+
+\vspace{1\baselineskip}
+\noindent 텐서와 행렬의 주요 차이점은 텐서가 다차원 데이터를 더 직관적으로 표현할 수 있다는 점입니다. 예를 들어, 딥러닝에서는 텐서가 배치 크기(batch size), 입력 차원(input dimension), 출력 차원(output dimension) 등을 포함한 여러 차원을 쉽게 다룰 수 있습니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 2차원 행렬 \( A \)와 벡터 \( \mathbf{v} \) 간의 내적은 다음과 같이 계산됩니다:
+\[
+  \mathbf{w} = A \cdot \mathbf{v}
+\]
+그러나 3차원 텐서 \( \mathcal{T} \)와 2차원 행렬 \( A \) 간의 연산은 다음과 같이 일반화됩니다:
+\[
+  \mathcal{T'}_{ijk} = \sum_l \mathcal{T}_{ijl} A_{lk}
+\]
+
+\section{응용 | 실제 사례}
+
+\noindent 텐서는 특히 딥러닝에서 광범위하게 사용됩니다. 신경망 모델에서는 입력 데이터, 가중치, 출력 모두가 텐서로 표현되며, 텐서 연산을 통해 데이터가 처리됩니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 딥러닝에서 이미지 분류 작업을 예로 들면, 입력 이미지 \( I \)는 3차원 텐서로 표현됩니다:
+\[
+  I = \mathcal{T}_{ijk}, \quad i = \text{height}, j = \text{width}, k = \text{channels}
+\]
+CNN(Convolutional Neural Network)에서 필터(Filter)를 이미지에 적용하는 연산은 텐서와 필터 간의 합성곱 연산으로 수행됩니다.
+
+\noindent 물리학에서는 텐서가 응력(Strain)과 같은 물리적 현상을 설명하는 데 사용되며, 일반 상대성이론에서도 중요한 역할을 합니다.
+
+\section{관련 논문 | 참고 자료}
+
+\noindent 텐서와 관련된 중요한 논문과 참고 자료로는 다음과 같은 자료를 참고할 수 있습니다.
+
+\noindent \emoji{shopping} e.g. \textit{Ian Goodfellow, Yoshua Bengio, Aaron Courville}, \textit{Deep Learning}은 딥러닝에서 텐서의 역할과 기초 수학적 개념을 다룹니다. 이 책은 딥러닝을 공부하는 학습자에게 필수적인 텐서 연산에 대한 기초적인 내용을 제공합니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. \textit{Roger Penrose}, \textit{The Road to Reality}는 물리학에서 텐서의 개념을 설명하며, 특히 상대성이론에서의 응용을 강조합니다.
+
+\end{document}

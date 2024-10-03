@@ -1,0 +1,128 @@
+\documentclass[12pt]{article}
+\usepackage{emoji}
+\usepackage{fontspec} % Required for font settings
+\usepackage[utf8]{inputenc}
+
+% Set the main font to Noto Sans CJK KR for Korean and English
+\setmainfont{Noto Sans CJK KR}
+\newfontfamily\emojiFont{Noto Color Emoji} % Optional: for explicit emoji handling
+
+\usepackage{xcolor}   % Required for color settings
+% Set background color and text color
+\pagecolor{black}  % Set the background color to black
+\color{white}      % Set the text color to white
+
+\usepackage{amsmath}  % Required for mathematical symbols
+\usepackage{graphicx} % Required for including images
+\usepackage{tikz}     % For 3D graphics
+\usepackage{hyperref} % For hyperlinking
+
+% Set up hyperref options
+\hypersetup{
+    colorlinks=true,     % Hyperlinks in color
+    linkcolor=cyan,      % Color for section links
+    urlcolor=cyan,       % URL links color
+    pdftitle={벡터 프로젝션 (Projection)},
+    pdfauthor={Author: Scholar GPT},
+    pdfsubject={벡터의 프로젝션 정의 및 연산}
+}
+
+\title{
+    벡터 프로젝션 (Projection): \\
+    벡터 간의 투영 관계 이해
+}
+\author{Author: Scholar GPT}
+\date{\today}
+
+\begin{document}
+
+% Title and Table of Contents
+\maketitle
+\tableofcontents
+
+\section{배경과 역사}
+\noindent 벡터 프로젝션(Projection)의 개념은 기하학적 문제에서 두 벡터 간의 관계를 이해하기 위한 방법으로 처음 도입되었습니다. 주로 물리학과 공학에서 벡터가 다른 벡터에 대해 얼마나 투영되는지를 계산할 때 사용됩니다. 기원적으로, 벡터 프로젝션은 기하학에서 길이와 각도를 측정하는 문제에서 중요한 역할을 하였습니다.
+
+\vspace{1\baselineskip}
+\noindent 이 개념은 물리학에서 힘의 분해, 공학에서 기계 구조물의 하중 분석 등 여러 분야에 걸쳐 응용됩니다.
+
+\section{정의와 목적}
+\noindent 벡터 프로젝션은 벡터 \( \mathbf{a} \)가 벡터 \( \mathbf{b} \)의 방향으로 얼마나 떨어지는지를 계산하는 연산입니다. 이는 벡터가 다른 벡터에 대해 투영되는 양을 구하는 과정으로, 벡터 \( \mathbf{a} \)의 벡터 \( \mathbf{b} \) 위로의 투영은 다음과 같이 정의됩니다:
+
+\[
+  \text{proj}_{\mathbf{b}} \mathbf{a} = \frac{\mathbf{a} \cdot \mathbf{b}}{\mathbf{b} \cdot \mathbf{b}} \mathbf{b}
+\]
+
+\noindent 여기서 \( \mathbf{a} \cdot \mathbf{b} \)는 두 벡터의 내적(Dot Product)이고, \( \mathbf{b} \cdot \mathbf{b} \)는 벡터 \( \mathbf{b} \)의 크기의 제곱입니다.
+
+\noindent 벡터 프로젝션은 두 벡터 간의 기하학적 관계를 명확히 하기 위한 중요한 도구로, 벡터의 방향성을 유지하면서도 크기를 조정하여 계산하는 데 사용됩니다.
+
+\section{연산 | 메커니즘의 이유}
+\noindent 벡터 프로젝션이 위와 같은 방식으로 정의된 이유는, 투영된 벡터가 \( \mathbf{b} \)와 같은 방향을 가지되, 벡터 \( \mathbf{a} \)의 성분 중 \( \mathbf{b} \) 방향으로의 크기만 반영되도록 하기 위함입니다. 이를 기하학적으로 설명하면, 벡터 \( \mathbf{a} \)의 \( \mathbf{b} \) 방향으로의 투영은 벡터 \( \mathbf{b} \)의 방향 성분만을 남기고 나머지 성분은 제거하는 과정입니다.
+
+\subsection{벡터 \( \mathbf{a} \)의 \( \mathbf{b} \) 방향으로의 크기 성분 유도}
+\noindent 벡터 \( \mathbf{a} \)의 \( \mathbf{b} \) 방향으로의 크기 성분을 구하려면, 내적(Dot Product)을 이용합니다. 내적의 정의는 다음과 같습니다:
+
+\[
+  \mathbf{a} \cdot \mathbf{b} = |\mathbf{a}| |\mathbf{b}| \cos{\theta}
+\]
+
+여기서 \( \theta \)는 두 벡터 사이의 각도입니다. 내적을 통해 벡터 \( \mathbf{a} \)가 벡터 \( \mathbf{b} \) 방향으로 가지는 성분을 계산할 수 있으며, 이는 다음과 같이 나타낼 수 있습니다:
+
+\[
+  \text{크기 성분} = \frac{\mathbf{a} \cdot \mathbf{b}}{|\mathbf{b}|}
+\]
+
+이 값은 벡터 \( \mathbf{a} \)가 \( \mathbf{b} \) 방향으로 가지는 크기 성분을 나타내지만, 이는 숫자일 뿐 벡터가 아닙니다. 따라서 벡터로 변환하기 위해 방향 성분을 추가해야 합니다.
+
+\subsection{벡터 \( \mathbf{b} \)의 단위 방향 결합}
+\noindent 프로젝션 결과는 **벡터**로 나타내야 하므로, 크기 성분뿐만 아니라 **방향**도 포함해야 합니다. 벡터의 방향은 항상 \( \mathbf{b} \)와 동일해야 하며, 이를 위해 벡터 \( \mathbf{b} \)의 단위 벡터 \( \hat{\mathbf{b}} = \frac{\mathbf{b}}{|\mathbf{b}|} \)를 사용합니다.
+
+단위 벡터는 방향만을 제공하고 크기는 1로 고정되므로, 크기 성분을 이 단위 벡터와 결합하여 투영된 벡터를 구할 수 있습니다. 최종적으로, 벡터 \( \mathbf{a} \)가 벡터 \( \mathbf{b} \) 위로 투영된 벡터는 다음과 같이 구할 수 있습니다:
+
+\[
+  \text{proj}_{\mathbf{b}} \mathbf{a} = \left( \frac{\mathbf{a} \cdot \mathbf{b}}{|\mathbf{b}|^2} \right) \mathbf{b}
+\]
+
+이 수식에서:
+- \( \frac{\mathbf{a} \cdot \mathbf{b}}{|\mathbf{b}|^2} \)는 투영된 벡터의 크기 성분,
+- \( \mathbf{b} \)는 투영된 벡터의 방향을 제공합니다.
+
+\noindent 프로젝션은 단순한 크기 성분이 아닌, 벡터의 방향까지 고려하여 계산되는 과정입니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 벡터 \( \mathbf{a} = (2, 3) \)와 벡터 \( \mathbf{b} = (1, 0) \)에 대해 벡터 \( \mathbf{a} \)의 \( \mathbf{b} \) 위로의 프로젝션을 계산하면:
+
+\[
+  \text{proj}_{\mathbf{b}} \mathbf{a} = \frac{(2)(1) + (3)(0)}{(1)^2 + (0)^2}(1, 0) = (2, 0)
+\]
+
+\noindent 이 결과는 벡터 \( \mathbf{a} \)의 \( \mathbf{b} \) 방향으로의 성분만 남긴 것입니다.
+
+\section{비교 | 대조 | 성질}
+\noindent 벡터 프로젝션은 다른 벡터 연산, 예를 들어 내적(Dot Product)이나 외적(Cross Product)과 비교하여, 두 벡터의 관계에서 "성분"을 분리하는 연산입니다. 내적은 두 벡터 사이의 각도를 반영하여 평행 여부를 판단하는 데 사용되고, 외적은 두 벡터가 만드는 평면에 수직인 벡터를 계산합니다.
+
+\noindent 프로젝션의 성질은 다음과 같습니다:
+\begin{itemize}
+  \item 프로젝션의 방향은 항상 벡터 \( \mathbf{b} \)와 동일합니다.
+  \item 벡터의 크기는 \( \mathbf{a} \)의 \( \mathbf{b} \) 방향으로의 성분에 비례합니다.
+  \item 내적을 사용하여 계산됩니다.
+\end{itemize}
+
+\noindent 벡터 외적과는 달리, 프로젝션은 두 벡터 사이의 평행사변형 면적과 관계없이, 특정 방향에 대한 성분을 구하는 데 초점을 맞춥니다.
+
+\section{응용 | 실제 사례}
+\noindent 벡터 프로젝션은 물리학과 공학에서 다양하게 응용됩니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. 물리학에서 힘 \( \mathbf{F} \)가 경사면 위로 작용할 때, 경사면 방향으로의 힘의 성분을 구할 때 벡터 프로젝션을 사용합니다. 또한, 컴퓨터 그래픽스에서는 빛의 방향에 따른 표면상의 그림자 투영을 계산할 때 활용됩니다.
+
+\noindent 공학에서는 구조물의 하중이 특정 축을 따라 어떻게 분해되는지를 분석할 때 벡터 프로젝션을 사용하여 각 벡터 성분을 분리합니다.
+
+\section{관련 논문 | 참고 자료}
+\noindent 벡터 프로젝션에 대한 더 깊은 연구는 선형대수학 및 기하학적 벡터 연산에 관한 논문에서 다루어집니다. 관련 논문 및 서적을 통해 이 주제를 더욱 심도 있게 탐구할 수 있습니다.
+
+\vspace{1\baselineskip}
+\noindent \emoji{shopping} e.g. \textit{Gilbert Strang}, \textit{Introduction to Linear Algebra}에서는 벡터 프로젝션과 관련된 기본적인 이론과 응용 사례를 상세하게 설명합니다.
+
+\end{document}
