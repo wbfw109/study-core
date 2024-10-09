@@ -10,6 +10,7 @@ This script extracts Table of Contents (ToC) from various documentation websites
 It supports multiple websites and provides a generalized approach to parsing ToC based on URL patterns.
 
 Supported sites:
+- MMAction2 (https://mmaction2.readthedocs.io/en/)
 - Python (https://docs.python.org)
 - Yocto Project (https://docs.yoctoproject.org)
 - Numpy (https://numpy.org)
@@ -87,7 +88,16 @@ def get_toc_selectors(
         Returns:
             ToCSelectors: An object containing selectors for ToC container, body, and title query.
     """
-    if "docs.python.org" in url:
+    if "mmaction2.readthedocs.io" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            return None
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
+            return ToCSelectors(
+                toc_selector="div[role='navigation'][class='pytorch-menu pytorch-menu-vertical']",
+                toc_body_selector="",
+                title_query=":scope > h1",
+            )
+    elif "docs.python.org" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
             # 🛍️ e.g. https://docs.python.org/3/reference/expressions.html
             return ToCSelectors(
@@ -312,7 +322,13 @@ async def extract_toc(
 
         # Launch Microsoft Edge
         browser = await p.chromium.launch(headless=True, channel="msedge")
-        page = await browser.new_page()
+
+        # 🚣 In order to bypass potential blocking mechanisms that detect automated tools.
+        context = await browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
+        )
+        page = await context.new_page()
+        # page = await browser.new_page()
 
         # Navigate to the Pandas page
         await page.goto(url)
@@ -374,14 +390,14 @@ async def extract_toc(
 
 if __name__ == "__main__":
     # Title: Python
-    result = asyncio.run(
-        extract_toc(
-            url="https://docs.python.org/3/reference/expressions.html",
-            # url="https://docs.python.org/3/reference/index.html",
-            tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
-            # tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
-        )
-    )
+    # result = asyncio.run(
+    #     extract_toc(
+    #         url="https://docs.python.org/3/reference/expressions.html",
+    #         # url="https://docs.python.org/3/reference/index.html",
+    #         tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
+    #         # tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
+    #     )
+    # )
     # # Title: Yocto Project
     # result = asyncio.run(
     #     extract_toc(
@@ -425,5 +441,12 @@ if __name__ == "__main__":
     #     )
     # )
 
+    # Title: mmaction2
+    result = asyncio.run(
+        extract_toc(
+            url="https://mmaction2.readthedocs.io/en/latest/get_started/overview.html",
+            tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
+        )
+    )
     temp_str_file = create_temp_str_file(result, prefix="")
     open_file_in_vscode(temp_str_file)
