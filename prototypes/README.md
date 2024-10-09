@@ -1,5 +1,3 @@
-Backed-up directory at 📅 2024-10-03 19:45:26
-
 # Project Setup Instructions
 📰 DOING and Legacy ... because development platform is changed. 📅 2024-08-27 01:23:01
 

@@ -17,6 +17,15 @@ import threading
 import time
 import tkinter as tk
 from typing import Optional
+#%%
+test_dir = Path.home() / "Downloads/2024_EfficientGCN-B4_ntu-xset120.pth/archive"
+file_dir = test_dir / "data.pkl"
+with file_dir.open("rb") as file:
+    data = pickle.load(file)
+data
+
+
+
 # %%
 ### requirees package: imageio[ffmpeg]
 # 🆚 Sleep (or equivalent) vs waitKey ;  https://answers.opencv.org/question/228472/sleep-or-equivalent-vs-waitkey/
@@ -59,7 +68,112 @@ else:
 # Use imageio to read the downloaded video
 video_reader = imageio.get_reader(str(video_path), "ffmpeg")
 # Load YOLO model
-model = YOLO("yolov8n.pt")
+model = YOLO("yolo11n.pt")
+#%%
+import numpy as np
+print(next(model.model.parameters()).dtype) # torch.float32
+
+# 최대 472 GFLOPS (FP16 기준)
+# FP32 기준으로는 236 GFLOPS입니다.
+# EffcieintGCN-B0 2.73 FLOPS. FP32
+# EffcieintGCN-B0 2.73 FLOPS
+
+#%%
+import pandas as pd
+import itertools
+
+# Constants for YOLO models (FLOPS and mAP values)
+yolo_models = {
+    'YOLO11n': {'FLOPS': 6.5, 'mAP': 39.5},
+    'YOLO11s': {'FLOPS': 21.5, 'mAP': 47.0},
+    'YOLO11m': {'FLOPS': 68.0, 'mAP': 51.5},
+    'YOLO11l': {'FLOPS': 86.9, 'mAP': 53.4},
+    'YOLO11x': {'FLOPS': 194.9, 'mAP': 54.7},
+}
+
+# Constants for EfficientGCN models
+efficientgcn_models = {
+    'EfficientGCN-B0': 2.73,
+    'EfficientGCN-B2': 4.05,
+    'EfficientGCN-B4': 8.36,
+}
+
+mediapipe_flops = 1.0  # FLOPS for MediaPipe models
+
+# Jetson Nano performance constants
+jetson_nano_fp16_performance = 472  # GFLOPS for FP16
+jetson_nano_int8_performance = jetson_nano_fp16_performance * 2  # GFLOPS for INT8 (double FP16 performance)
+
+# Function to calculate total GFLOPS based on the number of detected people and frames per second
+def calculate_total_flops(yolo_flops, efficientgcn_flops, num_people, fps, optimization_factor=1.0):
+    # Apply optimization factor (1.0 for no optimization, 0.5 for FP16, 0.25 for INT8)
+    yolo_optimized = yolo_flops * optimization_factor
+    efficientgcn_optimized = efficientgcn_flops * optimization_factor
+    return (yolo_optimized + (num_people * (mediapipe_flops + efficientgcn_optimized))) * fps
+
+# Define missing variables
+optimization_types = {
+    'None': 1.0,
+    'FP16': 0.5,
+    'INT8': 0.25
+}
+
+people_counts = list(range(2, 11, 2))  # People counts: 2, 4, 6, 8, 10
+fps_values = [10, 20, 30]  # Frame rates
+
+# Create all combinations using itertools.product
+combinations = itertools.product(
+    yolo_models.items(),
+    efficientgcn_models.items(),
+    optimization_types.items(),
+    people_counts,
+    fps_values
+)
+
+# Dictionary to store results
+results = {
+    'YOLO Model': [],
+    'EfficientGCN Model': [],
+    'Optimization': [],
+    'Number of People': [],
+    'FPS': [],
+    'Total GFLOPS': []
+}
+
+# Calculate GFLOPS for each combination
+for (yolo_name, yolo_info), (gcn_name, gcn_flops), (optimization, factor), num_people, fps in combinations:
+    total_flops = calculate_total_flops(yolo_info['FLOPS'], gcn_flops, num_people, fps, factor)
+    results['YOLO Model'].append(yolo_name)
+    results['EfficientGCN Model'].append(gcn_name)
+    results['Optimization'].append(optimization)
+    results['Number of People'].append(num_people)
+    results['FPS'].append(fps)
+    results['Total GFLOPS'].append(total_flops)
+
+# Convert results to a DataFrame
+df_results = pd.DataFrame(results)
+
+# Filter the DataFrame based on Jetson Nano's FP16 and INT8 performance limits
+df_filtered = df_results[
+    (
+        ((df_results['Optimization'] == 'FP16') & (df_results['Total GFLOPS'] <= jetson_nano_fp16_performance)) |
+        ((df_results['Optimization'] == 'INT8') & (df_results['Total GFLOPS'] <= jetson_nano_int8_performance))
+    ) &
+    (df_results['FPS'] == 20) &
+    (df_results['Total GFLOPS'] < 472*2 - 16*5*2)
+].reset_index(drop=True)
+
+# Sort the filtered DataFrame by 'Total GFLOPS' in ascending order
+df_sorted = df_filtered.sort_values(by='Total GFLOPS').reset_index(drop=True)
+
+# Display the sorted DataFrame without truncation
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+df_sorted
+
+
+
+#%%
 # Get FPS from the video metadata
 fps = video_reader.get_meta_data().get("fps", 30)
 if fps == 0:

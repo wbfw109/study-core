@@ -1,0 +1,76 @@
+# %shell> poetry install --with openvino,openmmlab,dev
+# %shell> poetry install --all-extras
+
+
+[tool.poetry]
+name = "python-study"
+version = "0.1.0"
+description = ""
+authors = ["wbfw109v2 <wbfw109v2@gmail.com>"]
+packages = [{ include = "python_study" }]
+
+
+[tool.poetry.dependencies]
+python = "~3.12.0"
+tensorflow = {extras = [], version = "^2.17.0", allow-prereleases = true}
+pandas = "^2.2.2"
+pyside6 = "^6.7.2"
+matplotlib = "^3.9.2"
+jupyter = "^1.1.1"
+tensorflow-datasets = "^4.9.6"
+gpustat = "^1.1.1"
+finance-datareader = "^0.9.94"
+bs4 = "^0.0.2"
+plotly = "^5.24.1"
+torch = "^2.4.1"
+ultralytics = "^8.2.99"
+onnx = "^1.16.2"
+imageio = {extras = ["ffmpeg"], version = "^2.35.1"}
+pytubefix = "^6.17.0"
+pyserial = "^3.5"
+opencv-contrib-python = "^4.10.0.84"
+numpy = "<2.0.0"
+mediapipe = "^0.10.15"
+scikit-build = "^0.18.1"
+opencv-python = "^4.10.0.84"
+pyqt5 = "^5.15.11"
+tox = "^4.21.2" 
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "*"
+bandit = "*"
+pydocstringformatter = "^0.7.2"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+pytest-bdd = "*"
+# pytest-selenium = "^4.0.0"
+# pytest-factoryboy = "^2.5.1"
+
+
+# Define OpenVINO-specific group from https://openvinotoolkit.github.io/training_extensions/stable/guide/get_started/installation.html#run-tests
+[tool.poetry.group.openvino.dependencies]
+openvino = "*"
+[tool.poetry.group.openmmlab.dependencies]
+torchvision = "*"
+torch = "*"
+mmengine = "*"
+mmcv = "*"
+mmaction2 = "*"
+# [tool.poetry.group.efficientgcn.dependencies]
+# seaborn = "*"
+# pyyaml = "*"
+# nvidia-ml-py3 = "*"
+# tensorboardX = "*"
+# thop = "*"
+
+[tool.pytest.ini_options]
+bdd_features_base_dir = "features/"
+addopts = ["--import-mode=importlib"]
+pythonpath = "src/python"
+
+
+[build-system]
+requires = ["poetry-core>=1.1.0"]
+build-backend = "poetry.core.masonry.api"
