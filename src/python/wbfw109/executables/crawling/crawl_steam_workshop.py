@@ -1,7 +1,15 @@
+# %%
 """
 Wirrten at 📅 2024-10-13 04:30:08
 """
 
+from IPython.core.interactiveshell import InteractiveShell
+
+# + allow multiple print
+InteractiveShell.ast_node_interactivity = "all"
+
+# %%
+# Title: crawl steam workshop
 import asyncio
 import re
 
@@ -110,3 +118,62 @@ if __name__ == "__main__":
     # Replace with the actual URL of the Steam Workshop page
     url = "https://steamcommunity.com/workshop/browse/?appid=1188930&searchtext=kr&childpublishedfileid=0&browsesort=trend&section=readytouseitems&created_date_range_filter_start=0&created_date_range_filter_end=0&updated_date_range_filter_start=0&updated_date_range_filter_end=0&actualsort=trend&p=1"
     asyncio.run(crawl_steam_workshop(url))
+
+# %%
+# Title: for chronoark "Workshop Mod KR Localization" mod patch ; https://steamcommunity.com/sharedfiles/filedetails/?id=3343188695&searchtext=local
+import shutil
+from pathlib import Path
+
+# Set up paths
+chrono_ark_steam_app_path: Path = Path(
+    "/mnt/c/Program Files/Steam/steamapps/workshop/content/1188930"
+)
+workshop_mod_kr_localization_path: Path = (
+    chrono_ark_steam_app_path / "3343188695" / "Localization"
+)
+
+# Dictionary of workshop items
+workshop_items: dict[str, str] = {
+    "Clyu": "3338047948",
+    "AliceToho": "3285393554",
+    "Lumia": "3294493213",
+    "Kogasa": "3292385904",
+    "Clyne": "3266293043",
+    "Reimu": "3340884556",
+    "Sanae": "3337971709",
+    "Chiyo": "3299933546",
+    "Meiring": "3340670336",
+    "Dorchi": "3333102302",
+    "EnchantedArk": "3219754941",
+}
+
+
+# Function to copy localization files
+def copy_localization_files(
+    workshop_items: dict[str, str],
+    chrono_ark_steam_app_path: Path,
+    workshop_mod_kr_localization_path: Path,
+) -> None:
+    for name, workshop_id in workshop_items.items():
+        source_path: Path = workshop_mod_kr_localization_path / name / "LangDataDB.csv"
+        destination_path: Path = (
+            chrono_ark_steam_app_path / workshop_id / "Localization" / "LangDataDB.csv"
+        )
+
+        # Copy only if destination_path exists
+        if destination_path.exists():
+            try:
+                shutil.copy(source_path, destination_path)
+                print(f"{name} localization file copied successfully.")
+            except FileNotFoundError:
+                print(f"Source file for {name} not found.")
+            except Exception as e:
+                print(f"Error copying localization file for {name}: {e}")
+        else:
+            print(f"Destination path for {name} does not exist.")
+
+
+# Execute the function
+copy_localization_files(
+    workshop_items, chrono_ark_steam_app_path, workshop_mod_kr_localization_path
+)
