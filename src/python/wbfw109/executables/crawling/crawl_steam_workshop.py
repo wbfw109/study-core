@@ -121,6 +121,29 @@ if __name__ == "__main__":
 
 # %%
 # Title: for chronoark "Workshop Mod KR Localization" mod patch ; https://steamcommunity.com/sharedfiles/filedetails/?id=3343188695&searchtext=local
+"""
+#!/usr/bin/env fish
+
+# Create an empty JSON object
+set output "{}"
+
+for filepath in (find . -type f -name "ChronoArkMod.json" -path "./BOSS*")
+    # Extract the parent folder name
+    set parent_folder (basename (dirname "$filepath"))
+    
+    # Extract the WorkShopId using jq
+    set workshop_id (jq --raw-output '.WorkShopId' "$filepath")
+    
+    # Add the parent folder and WorkShopId to the JSON output
+    set output (echo $output | jq --arg folder "$parent_folder" --arg id "$workshop_id" '. + {($folder): ($id)}')
+end
+
+# Print the final JSON result
+echo $output | jq .
+
+
+"""
+# Written at 📅 2024-10-15 00:16:41
 import shutil
 from pathlib import Path
 
@@ -134,17 +157,26 @@ workshop_mod_kr_localization_path: Path = (
 
 # Dictionary of workshop items
 workshop_items: dict[str, str] = {
-    "Clyu": "3338047948",
     "AliceToho": "3285393554",
-    "Lumia": "3294493213",
-    "Kogasa": "3292385904",
-    "Clyne": "3266293043",
-    "Reimu": "3340884556",
-    "Sanae": "3337971709",
+    "BOSSCouple": "3310016762",
+    "BOSSHuz": "3298894951",
+    "BOSSIlya": "3308266369",
+    "BOSSJohan": "3300156465",
+    "BOSSLian": "3296317325",
+    "BOSSMomori": "3301340399",
+    "BOSSPressel": "3313506675",
+    "BOSSTwin": "3304495579",
     "Chiyo": "3299933546",
-    "Meiring": "3340670336",
+    "Clyne": "3266293043",
+    "Clyu": "3338047948",
     "Dorchi": "3333102302",
     "EnchantedArk": "3219754941",
+    "Kasen": "3330384834",
+    "Kogasa": "3292385904",
+    "Lumia": "3294493213",
+    "Meiring": "3340670336",
+    "Reimu": "3340884556",
+    "Sanae": "3337971709",
 }
 
 
