@@ -21,7 +21,7 @@ register-python-argcomplete --shell fish pipx >$FISH_COMPLETIONS/pipx.fish
 curl https://pyenv.run | bash
 
 # Set PYENV_ROOT environment variable
-set -Ux PYENV_ROOT $HOME/.pyenv
+set -Ux PYENV_ROOT $HOME/.pye노nv
 fish_add_path $PYENV_ROOT/bin
 
 # Append the necessary commands to the Fish config file if not already present
@@ -46,7 +46,10 @@ end
 
 # Define the content to be added to the Fish config file.
 set config_content "
-# Check and Set DISPLAY for SSH Connections and Tailscale 📅 Last updated date: 2024-10-10 01:35:47
+### Check and Set DISPLAY for SSH Connections and Tailscale 📅 Last updated date: 2024-10-10 01:35:47
+## ⚠️ This script works for X11 forwarding on systems where a direct display can be shown
+# , such as Windows, VSCode Remote-SSH extension, or Unix-like systems.
+# However, for WSL terminals, you must manually set the DISPLAY variable with the Windows IP.
 if set --query SSH_CONNECTION
     set client_ip (echo \$SSH_CONNECTION | awk '{print \$1}')
     
@@ -94,6 +97,31 @@ pipx install poetry conan
 curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
 echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list > /dev/null
 sudo apt update -y; and sudo apt install microsoft-edge-stable
+
+
+#### Install Terminal-based editor: Helix 🔗 https://docs.helix-editor.com/package-managers.html
+# https://docs.helix-editor.com/keymap.html
+# command starts with 'hx'
+sudo add-apt-repository ppa:maveonair/helix-editor
+sudo apt update -y
+sudo apt install -y helix
+
+
+#### Install VS Code from https://code.visualstudio.com/docs/setup/linux
+echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
+sudo apt install -y wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+rm -f packages.microsoft.gpg
+sudo apt install -y apt-transport-https
+sudo apt update -y
+sudo apt install -y code
+
+
+#### ⌨️ Gnome Keyboard shorcut change
+gsettings set org.gnome.settings-daemon.plugins.media-keys home "['<Super>e']"
+echo Keyboard shortcut changed for home key to (gsettings get org.gnome.settings-daemon.plugins.media-keys home)
 
 
 

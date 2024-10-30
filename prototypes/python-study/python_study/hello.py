@@ -1,5 +1,33 @@
+import cv2
+
 if __name__ == "__main__":
-    print("hello")
+    cap = cv2.VideoCapture(0)
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            cv2.imshow("Test Window", frame)
+
+            # 종료 조건 (ESC 키를 누르면 종료)
+            if cv2.waitKey(1) & 0xFF == 27:
+                break
+    finally:
+        cap.release()
+        cv2.destroyAllWindows()
+
+    # print("hello")
+    # # Tkinter 윈도우 생성
+    # root = tk.Tk()
+    # root.title("SSH X11 Forwarding Test")
+
+    # # 라벨 추가
+    # label = tk.Label(root, text="Tkinter X11 Forwarding Test")
+    # label.pack(padx=20, pady=20)
+
+    # # 윈도우 실행
+    # root.mainloop()
 
 # # %%
 # import cv2
@@ -37,33 +65,3 @@ if __name__ == "__main__":
 #             int(end_landmark.y * frame.shape[0]),
 #         )
 #         cv2.line(frame, start_point, end_point, (0, 255, 0), 1)
-
-
-# cap = cv2.VideoCapture(0)
-
-# while True:
-#     ret, frame = cap.read()
-#     if not ret:
-#         break
-
-#     # 이미지 전처리
-#     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-#     results = face_mesh.process(frame_rgb)
-
-#     if results.multi_face_landmarks:
-#         for face_landmarks in results.multi_face_landmarks:
-#             # 외곽선만 그리기
-#             draw_connections(
-#                 frame, face_landmarks.landmark, mp_face_mesh.FACEMESH_CONTOURS
-#             )
-
-#     # 화면에 비디오 표시
-#     cv2.imshow("Face Mesh", frame)
-
-#     # 종료 조건 (ESC 키를 누르면 종료)
-#     if cv2.waitKey(1) & 0xFF == 27:
-#         break
-
-# # 웹캠 해제 및 모든 창 닫기
-# cap.release()
-# cv2.destroyAllWindows()

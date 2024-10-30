@@ -1,4 +1,6 @@
 {
+  // Title: Remote developemnt from https://code.visualstudio.com/docs/devcontainers/containers#_temporarily-forwarding-a-port
+  "remote.restoreForwardedPorts": true,
   // Title: Indentation, Bracket
   "editor.detectIndentation": false,
   "editor.language.colorizedBracketPairs": [
@@ -7,6 +9,7 @@
     ["{", "}"]
   ],
   "editor.guides.bracketPairs": "active",
+  "editor.tabSize": 2,
   "[latex]": {
     "editor.formatOnSave": true,
     "editor.tabSize": 2,
@@ -14,6 +17,7 @@
   },
   // Title: Ruff setting from https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff
   "[python]": {
+    "editor.tabSize": 4,
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",

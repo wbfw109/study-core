@@ -3,28 +3,40 @@
   // Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
   // List of extensions which should be recommended for users of this workspace.
   "recommendations": [
-    "esbenp.prettier-vscode",
-    "ms-vscode.cpptools-extension-pack",
-    "ms-vscode.cmake-tools",
-    "ms-toolsai.jupyter",
-    "charliermarsh.ruff",
-    "ms-python.python",
-    "eamodio.gitlens",
-    "mhutchie.git-graph",
-    "yzhang.markdown-all-in-one",
     "ionutvmi.path-autocomplete",
     "spmeesseman.vscode-taskexplorer",
+    // Visual ~
+    "pkief.material-icon-theme",
+    // Language, Shell Script ~
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "ms-vscode.cmake-tools",
+    "ms-vscode.cpptools-extension-pack",
     "tamasfe.even-better-toml",
     "arcanis.vscode-zipfs",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "bierner.markdown-mermaid",
     "bmalehorn.vscode-fish",
+    // Source Coude Mangement (SCM) ~
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    // Embedded ~
+    "platformio.platformio-ide",
     // Documentation ~
     "james-yu.latex-workshop",
     "bierner.emojisense",
     "jsynowiec.vscode-insertdatestring",
-    "alefragnani.bookmarks"
+    "alefragnani.bookmarks",
+    "1nvitr0.blocksort",
+    // Documentation 🔪 Artifacts ~
+    "bierner.markdown-mermaid",
+    // Formatter, Linter~
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "charliermarsh.ruff",
+    "yzhang.markdown-all-in-one",
+    // Reommendations from offical VS Code ~
+    "ms-vscode-remote.vscode-remote-extensionpack", // from https://code.visualstudio.com/docs/remote/remote-overview
+    "ms-azuretools.vscode-docker", // from https://code.visualstudio.com/docs/devcontainers/containers#_inspecting-volumes
+    "ms-python.mypy-type-checker" // from https://code.visualstudio.com/docs/python/linting
   ],
   // List of extensions recommended by VS Code that should not be recommended for users of this workspace.
   "unwantedRecommendations": []
