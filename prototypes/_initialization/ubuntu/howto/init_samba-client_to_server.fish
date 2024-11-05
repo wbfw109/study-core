@@ -1,14 +1,15 @@
-# Written at 📅 2024-10-28 13:48:11
+##### init_samba-client_to_server.fish
+# 🪱 Samba is an implementation of the Server Message Block (SMB)/Common Internet File System (CIFS) protocol for Unix systems, providing support for cross-platform file and printer sharing with Microsoft Windows, OS X, and other Unix
+# Written at 📅 2024-11-04 10:34:45
 : '
 * 🧪 if you already mount, you can test this script after run %shell> sudo umount $LOCAL_MOUNT_POINT
 * Prerequisite
 %shell> sudo apt update -y && sudo apt install -y samba
 '
-### 0. Install required packages, Load my modules, Define functions
-# It requires sudo permissions.
-sudo -v
-
-# https://ubuntu.com/tutorials/install-and-configure-samba#2-installing-samba
+### 1. Prerequisites and Initial Setup
+# This step ensures that the necessary permissions are available and checks if Samba is installed on the system.
+# If not, it installs Samba to enable file sharing between Unix and Windows systems.
+# This step also verifies sudo permissions and defines the main variables for connecting to the Samba server.
 
 # Handle SIGINT (Ctrl+C) to exit the script and terminate any child processes
 function on_interrupt
@@ -20,36 +21,51 @@ end
 trap on_interrupt SIGINT
 
 
+## It requires sudo permissions.
+sudo -v
 
-## 1.1. Set the path to the remote share and the local mount point, credentai file
-# Define the remote SMB/CIFS share path
-set -x REMOTE_SHARE_PATH //10.10.14.40/samba
+## Check if Samba is installed
+if not type -q samba
+  echo "Samba is not installed. Installing Samba..."
+  # https://ubuntu.com/tutorials/install-and-configure-samba#2-installing-samba
+  sudo apt update -y && sudo apt install -y samba
+else
+  echo "Samba is already installed."
+end
 
-# Define the local directory where the share will be mounted
-set -x LOCAL_MOUNT_POINT $HOME/mnt/class
+## Define variables
+# Adds a newline after each entry for readability
+echo ""
 
-# The credentials file name is hardcoded for class5 on Windows
-set -x CREDENTIALS_FILE /etc/samba/class5_windows_credentials
+echo "❔ Enter the Samba server address:"
+echo "  🛍️ e.g. '10.10.14.40/samba'"
+read SMB_REMOTE_DIR_NAME
+set SMB_REMOTE_DIR //{$SMB_REMOTE_DIR_NAME}
+
+echo "❔ Enter the name of the local directory where the shared folder will be accessible (located in <Your home>/mnt/):"
+echo "  🛍️ e.g. 'class'"
+read SMB_LOCAL_MOUNT_DIR_NAME
+set LOCAL_MOUNT_POINT $HOME/mnt/{$SMB_LOCAL_MOUNT_DIR_NAME}
 mkdir --parents $LOCAL_MOUNT_POINT
 # --parents: Create parent directories as needed without error if they already exist
+echo "Your Local mount folder is $LOCAL_MOUNT_POINT)."
+
+echo "❔ Enter the Samba server name for identification:"
+echo "  🛍️ e.g. 'class5_windows'"
+read SMB_SERVER_NAME
+set CREDENTIALS_FILE /etc/samba/{$SMB_SERVER_NAME}_credentials
 
 
-## 1.2. Prompt the user for input (password hidden)
-# Prompt for the remote username
-echo "Enter remote username: "
+echo "❔ Enter remote username: "
 read REMOTE_USERNAME
 
-# Prompt for the remote password (hidden input)
-echo "Enter password: "
+echo "❔ Enter password (hidden input): "
 read --silent REMOTE_PASSWORD
 
-# Add a newline after password entry for better formatting
 echo ""
 
 
-
-
-## 1.3. Ensure the credentials file exists
+## Ensure the credentials file exists
 
 ## Write the username and password to the credentials file securely
 # No need for '-e' since Fish's echo interprets escape sequences by default
@@ -59,6 +75,8 @@ echo -e "username=$REMOTE_USERNAME\npassword=$REMOTE_PASSWORD" \
 ## Set ownership of the credentials file to the current user
 # Ensures the user can access the file without sudo
 sudo chown $USER:$USER $CREDENTIALS_FILE
+# Restrict access to the current user for security
+sudo chmod 600 $CREDENTIALS_FILE
 
 ## Verify that the credentials file was created and is accessible
 if not test -f $CREDENTIALS_FILE
@@ -71,7 +89,7 @@ echo "Credentials file $CREDENTIALS_FILE created successfully."
 
 
 
-## 2.1. Extract username and password from the credentials file using grep with Perl-compatible regex
+### 2.1. Extract username and password from the credentials file using grep with Perl-compatible regex
 set USERNAME (grep -oP '(?<=username=).*' $CREDENTIALS_FILE)
 set PASSWORD (grep -oP '(?<=password=).*' $CREDENTIALS_FILE)
 # -o, --only-matching: Output only the part of the line that matches the regex.
@@ -79,18 +97,17 @@ set PASSWORD (grep -oP '(?<=password=).*' $CREDENTIALS_FILE)
 # (?<=username=): Positive lookbehind to match only the text that follows 'username='.
 # .*: Match any number of characters after 'username='.
 
-## 2.2. Test access using Samba client by listing the contents of the shared folder
-smbclient $REMOTE_SHARE_PATH -U $USERNAME%$PASSWORD -c "ls"
+### 2.2. Test access using Samba client by listing the contents of the shared folder
+smbclient $SMB_REMOTE_DIR -U $USERNAME%$PASSWORD -c "ls"
 # smbclient: Connects to the remote share and runs commands on it
 # -U: Provides the username and password in username%password format.
 # -c, --command: Executes a specified command (e.g., "ls") on the remote share.
 
 
 
-
-## 2.3. Mount the shared folder to the local directory using CIFS protocol
+### 2.3. Mount the shared folder to the local directory using CIFS protocol
 sudo mount -t cifs -o credentials=$CREDENTIALS_FILE,vers=3.0 \
-  $REMOTE_SHARE_PATH $LOCAL_MOUNT_POINT
+  $SMB_REMOTE_DIR $LOCAL_MOUNT_POINT
 
 # Check the result of the mount operation
 if test $status -eq 0
@@ -104,15 +121,13 @@ end
 
 
 
-## 3.1. Add the mount configuration to /etc/fstab for automatic mounting at boot
+### 3.1. Add the mount configuration to /etc/fstab for automatic mounting at boot
 #🚣 '_netdev' ensures the network is up before mounting the share.
-## 3.1. Add the mount configuration to /etc/fstab for automatic mounting at boot
 
-
-
-set fstab_line "$REMOTE_SHARE_PATH $LOCAL_MOUNT_POINT cifs credentials=$CREDENTIALS_FILE,vers=3.0,_netdev,user,uid=1000,gid=1000,file_mode=0777,dir_mode=0777 0 0"
+set fstab_line "$SMB_REMOTE_DIR $LOCAL_MOUNT_POINT cifs credentials=$CREDENTIALS_FILE,vers=3.0,_netdev,user,uid=1000,gid=1000,file_mode=0777,dir_mode=0777 0 0"
 if not grep --quiet --fixed-strings "$fstab_line" /etc/fstab
     echo "$fstab_line" | sudo tee -a /etc/fstab > /dev/null
+    echo "Reloading systemd to apply fstab changes..."
     systemctl daemon-reload  # Reloads systemd to apply changes to fstab.
     echo "Mount configuration added to /etc/fstab."
 else
@@ -120,14 +135,8 @@ else
 end
 
 
-
-## 3.2. Reload systemd to apply the fstab changes
-echo "Reloading systemd to apply fstab changes..."
-
-
-
-## 3.3. Check if the shared folder is already mounted
-echo "Checking if the shared folder is already mounted..."
+## #3.2. Check if the shared folder is already mounted
+echo "Checking if the shared folder is mounted..."
 
 if mount | grep -q "$LOCAL_MOUNT_POINT"
     echo "Shared folder is already mounted at $LOCAL_MOUNT_POINT."
@@ -145,9 +154,9 @@ end
 : '
 💡 Explanation of the fstab configuration line being added:
 # https://help.ubuntu.com/community/Fstab
-<REMOTE_SHARE_PATH> <LOCAL_MOUNT_POINT> <file_system_type> <options> <dump> <pass>
+<SMB_REMOTE_DIR> <LOCAL_MOUNT_POINT> <file_system_type> <options> <dump> <pass>
 
-1. REMOTE_SHARE_PATH:
+1. SMB_REMOTE_DIR:
    - This refers to the remote CIFS (Windows) share you want to mount.
      Example: //10.10.14.40/samba
 

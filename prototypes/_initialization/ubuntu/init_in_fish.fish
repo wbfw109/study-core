@@ -100,12 +100,67 @@ sudo apt update -y; and sudo apt install microsoft-edge-stable
 
 
 #### Install Terminal-based editor: Helix 🔗 https://docs.helix-editor.com/package-managers.html
+# Written at 📅 2024-11-05 15:18:43. It may requires lldb-dap version whenever lldb major version is upgraded.
 # https://docs.helix-editor.com/keymap.html
 # command starts with 'hx'
 sudo add-apt-repository ppa:maveonair/helix-editor
 sudo apt update -y
 sudo apt install -y helix
 
+# install packages for c/c++
+sudo apt install -y clangd lldb clang-format
+# create symbolic link for lldb-dap
+sudo ln -s (which lldb-dap-18) /usr/local/bin/lldb-dap
+
+# Helix settings 🔪 Themes
+mkdir -p $HOME/.config/helix/themes
+echo '# My private Theme
+inherits = "dark_high_contrast"
+
+## Override the theming for "keyword"s:
+"ui.virtual.inlay-hint" = { fg = "light-gray" }
+"ui.virtual.inlay-hint.parameter" = { fg = "light-gray" }
+"ui.virtual.inlay-hint.type" = { fg = "light-gray" }
+"ui.virtual.wrap" = "light-gray"
+
+# 🛍️ e.g. "keyword" = { fg = "gold" }
+
+## Override colors in the palette:
+# [palette]
+# 🛍️ e.g. berry = "#2A2A4D"
+' | tee $HOME/.config/helix/themes/dark_high_contrast_modified.toml > /dev/null
+
+# Helix settings 🔪 Languages
+echo '## https://docs.helix-editor.com/languages.html#languagestoml-files
+# C/C++ settings
+[[language]]
+name = "c"
+auto-format = true
+formatter = { command = "clang-format" }
+
+[[language]]
+name = "cpp"
+auto-format = true
+formatter = { command = "clang-format" }
+' | tee $HOME/.config/helix/languages.toml > /dev/null
+
+# Helix settings 🔪 Configuration
+echo '# https://docs.helix-editor.com/configuration.html
+## Theme settings
+# ⚓ Helix Theme index ; https://github.com/helix-editor/helix/wiki/Themes
+# https://docs.helix-editor.com/themes.html
+# https://github.com/helix-editor/helix/tree/master/runtime/themes
+theme = "dark_high_contrast_modified"
+
+## Editors
+[editor]
+lsp.display-inlay-hints = true
+' | tee $HOME/.config/helix/config.toml > /dev/null
+
+echo "❔ hx --health c"
+hx --health c
+echo -e "\n❔ hx --health cpp"
+hx --health cpp
 
 #### Install VS Code from https://code.visualstudio.com/docs/setup/linux
 echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
@@ -119,9 +174,56 @@ sudo apt update -y
 sudo apt install -y code
 
 
+
 #### ⌨️ Gnome Keyboard shorcut change
 gsettings set org.gnome.settings-daemon.plugins.media-keys home "['<Super>e']"
 echo Keyboard shortcut changed for home key to (gsettings get org.gnome.settings-daemon.plugins.media-keys home)
+
+
+
+#### Install 'Twemoji Mozilla' Fonts to fix problems 'Unicode characters (emojis) are black/white' and 'Extra spacing after emoji variants for Noto Coolor Fonts' in Ubuntu 🔗 https://github.com/13rac1/twemoji-color-font
+# Written at 📅 2024-11-05 10:34:21
+# Set download directory
+set font_dir $HOME/_temp_fonts
+set font_archive TwitterColorEmoji-SVGinOT-Linux-15.1.0.tar.gz
+set font_url https://github.com/13rac1/twemoji-color-font/releases/download/v15.1.0/$font_archive
+
+# Create the directory and move into it
+mkdir -p $font_dir && cd $font_dir
+
+# Download the font archive
+echo "Downloading Twemoji font..."
+wget $font_url
+
+# Uncompress the downloaded archive
+echo "Uncompressing the font archive..."
+tar zxf $font_archive
+
+# Install requirements
+echo "Installing requirements..."
+sudo apt install -y ttf-bitstream-vera
+
+# Run the installer
+cd TwitterColorEmoji-SVGinOT-Linux-15.1.0
+echo "Installing the font..."
+bash ./install.sh
+
+echo "Checking installed location..."
+fc-list | grep -i 'Twitter Color Emoji'
+# >> Installed the font in: $HOME/.local/share/fonts/
+
+# Update font cache
+echo "Updating font cache..."
+fc-cache -f -v
+
+# Clean up
+echo "Cleaning up..."
+cd $HOME
+rm -rf $font_dir
+
+echo "Font installation complete and temporary files removed."
+#
+echo "🚨 Reboot required to render 'Twemoji Mozilla' font correctly"
 
 
 

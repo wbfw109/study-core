@@ -10,6 +10,29 @@ sudo apt update -y
 
 
 
+
+#### Intsall (Clipboard Manager: gnome-shell-extension-clipboard-indicator) in Ubuntu 📅 2024-10-31 19:17:00
+sudo apt install gnome-shell-extensions
+### 1. Available option 1 (recommneded)
+# 🤬 manullay run: browser https://extensions.gnome.org/extension/779/clipboard-indicator/ and clikc the "Install"
+
+### 1. Available option 2 (not recommneded)
+# set gnone_shell_extension_dir ~/.local/share/gnome-shell/extensions
+# git clone https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator.git $gnone_shell_extension_dir/clipboard-indicator@tudmotu.com
+# sudo systemctl restart gdm
+## 🤬 manullay run: 
+# gnome-extensions enable clipboard-indicator@tudmotu.com
+
+### 2. Change Keyboard shortcut
+echo "[/]
+toggle-menu=['<Super>c']
+" | dconf load /org/gnome/shell/extensions/clipboard-indicator/
+
+
+
+
+
+
 #### Install Wine for Kakaotalk with locale-Korean 
 
 ### install Wine ; https://gitlab.winehq.org/wine/wine/-/wikis/Debian-Ubuntu

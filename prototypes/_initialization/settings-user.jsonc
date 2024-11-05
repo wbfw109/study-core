@@ -1,6 +1,16 @@
 {
+  // Title: Fonts to fix problems 'Unicode characters (emojis) are black/white' and 'Extra spacing after emoji variants for Noto Coolor Fonts' in Ubuntu 🔗 https://github.com/13rac1/twemoji-color-font
+  "editor.fontFamily": "'Twemoji Mozilla', monospace",
   // Title: Remote developemnt from https://code.visualstudio.com/docs/devcontainers/containers#_temporarily-forwarding-a-port
   "remote.restoreForwardedPorts": true,
+  // Title: Bookmarks from https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks
+  "bookmarks.saveBookmarksInProject": true,
+  // Title: Material Icon Theme from https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme
+  "workbench.iconTheme": "material-icon-theme",
+  // Title: Emojisense from https://marketplace.visualstudio.com/items?itemName=bierner.emojisense
+  "emojisense.languages": {
+    "*": true
+  },
   // Title: Indentation, Bracket
   "editor.detectIndentation": false,
   "editor.language.colorizedBracketPairs": [
@@ -15,7 +25,26 @@
     "editor.tabSize": 2,
     "editor.insertSpaces": true
   },
-  // Title: Ruff setting from https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff
+  "[fish]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4
+  },
+  // Title: C/Cpp
+  // clangd ; https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd
+  // LLDB Dap ; https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.lldb-dap
+  // This option is duplicated if use clangd. "C_Cpp.inlayHints.parameterNames.enabled": true,
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.formatOnSave": true
+  },
+  "[c]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.formatOnSave": true
+  },
+  "C_Cpp.clang_format_fallbackStyle": "LLVM",
+  "lldb-dap.executable-path": "/usr/local/bin/lldb-dap",
+  // Title: Python Ruff setting from https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff
   "[python]": {
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
@@ -32,7 +61,8 @@
     "notebook.source.organizeImports": "explicit"
   },
   // Title: Terminal settings
-  "window.titleBarStyle": "custom", // change VScode's tile bar color
+  // change VScode's tile bar color
+  "window.titleBarStyle": "custom",
   "terminal.integrated.env.linux": {
     //  in order to prevent from 'The "no new privileges" flag is set, which prevents sudo from running as root.' message when run sudo command in Ubuntu 📅 2024-08-31 01:29:37
     "SUDO_ASKPASS": null

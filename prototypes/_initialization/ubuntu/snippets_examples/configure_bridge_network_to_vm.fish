@@ -1,32 +1,7 @@
+##### configure_bridge_network_to_vm.fish
 #!/usr/bin/env fish
 # Written at 📅 2024-10-30 15:39:12
-: '
-# https://gee6809.github.io/posts/qemu-network/
-✈️ Purpose: Configure Bridge / Tap Network. not NAT (Network Address Translation).
-                      +---------------------+ 
-                      |   Host Machine      | 
-                      |                     | 
-                      |                     | 
-                      |     +-----------+   | 
-      LAN  --------------------- eth0   |   |       +-------------------+
-(192.168.0.1)         |     |   tap0 ---------------|        VM0        |
-                      |     |   tap1 ------------+  |  (192.168.0.3)    |
-                      |     +-----------+   |    |  +-------------------+
-                      |         br0         |    |
-                      |    (192.168.0.2)    |    |  +-------------------+
-                      |                     |    +--|        VM1        |
-                      +---------------------+       |  (192.168.0.4)    |
-                                                    +-------------------+
-Tap serves to direct network data flow in another direction.
-Bridge acts like a virtual switch and connects networks together.
-📝 Taps and bridges must be created on the host machine.
 
-
-About 🪱 "connection.autoconnect yes"
-    Enable autoconnect to ensure that this network connection is automatically activated whenever possible.
-    This is crucial for persistent network setups, especially for bridge interfaces, as it ensures that the connection remains active even after system reboots.
-    Without autoconnect, manual intervention would be required to bring the network up after each reboot.
-'
 
 set connection_name 'eth-br0'
 set bridge_name 'br0'
@@ -320,7 +295,9 @@ function vm_ubuntu_init
                 -enable-kvm -smp 1 -m 2048 -machine q35 -cpu host \
                 -global ICH9-LPC.disable_s3=1 \
                 -net nic,model=virtio \
+                # -net user # NAT with PortForwarding \
                 -net user,hostfwd=tcp::8022-:22,hostfwd=tcp::8090-:80 \
+                # -net user # NAT \
                 -drive file=$HOME/qemu/OVMF_CODE_4M.secboot.fd,if=pflash,format=raw,unit=0,readonly=on \
                 -drive file=$HOME/qemu/OVMF_VARS_4M.ms.fd,if=pflash,format=raw,unit=1 \
                 -drive file=$HOME/qemu/ubuntu-vm.qcow2,if=none,id=disk0,format=qcow2,cache=writeback \
