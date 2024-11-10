@@ -3942,7 +3942,7 @@ def thieve_jewels(input_lines: Optional[Iterator[str]] = None) -> str:
     """❔ get Maximum sum of value of available jewels ; https://www.acmicpc.net/problem/1202
 
     Time Complexity (Worst-case): O(n(log n) + O(k log k))
-        - O(n(log n)) + O(k(log k)) from Tim sort
+        - O(n(log n)) + O(k(log k)) + O(k(log n)) from Tim sort and Heap push and pop
             n is the number of jewels, k is the number of bags.
         - O(k) from bag loop  *
             ( O(1) comparison from Jewel consumed iteration  +  O(log k) from Hip (pop | push) )
