@@ -14,9 +14,18 @@
   // Title: Indentation, Bracket
   "editor.detectIndentation": false,
   "editor.language.colorizedBracketPairs": [
-    ["[", "]"],
-    ["(", ")"],
-    ["{", "}"]
+    [
+      "[",
+      "]"
+    ],
+    [
+      "(",
+      ")"
+    ],
+    [
+      "{",
+      "}"
+    ]
   ],
   "editor.guides.bracketPairs": "active",
   "editor.tabSize": 2,
@@ -64,7 +73,7 @@
   // change VScode's tile bar color
   "window.titleBarStyle": "custom",
   "terminal.integrated.env.linux": {
-    //  in order to prevent from 'The "no new privileges" flag is set, which prevents sudo from running as root.' message when run sudo command in Ubuntu 📅 2024-08-31 01:29:37
+    // in order to prevent from 'The "no new privileges" flag is set, which prevents sudo from running as root.' message when run sudo command in Ubuntu 📅 2024-08-31 01:29:37
     "SUDO_ASKPASS": null
   },
   "terminal.integrated.defaultProfile.linux": "fish",
@@ -78,19 +87,30 @@
   "latex-workshop.latex.recipes": [
     {
       "name": "lualatex",
-      "tools": ["lualatex"]
+      "tools": [
+        "lualatex"
+      ]
     },
     {
       "name": "xelatex",
-      "tools": ["xelatex"]
+      "tools": [
+        "xelatex"
+      ]
     },
     {
       "name": "latexmk",
-      "tools": ["latexmk"]
+      "tools": [
+        "latexmk"
+      ]
     },
     {
       "name": "pdflatex -> bibtex -> pdflatex*2",
-      "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+      "tools": [
+        "pdflatex",
+        "bibtex",
+        "pdflatex",
+        "pdflatex"
+      ]
     }
   ],
   "latex-workshop.latex.tools": [

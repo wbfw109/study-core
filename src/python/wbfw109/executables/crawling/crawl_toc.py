@@ -10,6 +10,7 @@ This script extracts Table of Contents (ToC) from various documentation websites
 It supports multiple websites and provides a generalized approach to parsing ToC based on URL patterns.
 
 Supported sites:
+- gnu 🔪 Coreutils (https://www.gnu.org/software/coreutils/manual/coreutils.html)
 - MMAction2 (https://mmaction2.readthedocs.io/en/)
 - Python (https://docs.python.org)
 - Yocto Project (https://docs.yoctoproject.org)
@@ -88,7 +89,16 @@ def get_toc_selectors(
         Returns:
             ToCSelectors: An object containing selectors for ToC container, body, and title query.
     """
-    if "mmaction2.readthedocs.io" in url:
+    if "gnu.org/software/coreutils/manual" in url:
+        if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
+            return ToCSelectors(
+                toc_selector="div[id='SEC_Contents']",
+                toc_body_selector=":scope > div[class='contents']",
+                title_query=":scope > h2",
+            )
+        elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
+            return None
+    elif "mmaction2.readthedocs.io" in url:
         if tos_type == TableOfContentsType.MAIN_CONTENT_AREA_TOC:
             return None
         elif tos_type == TableOfContentsType.SECTION_NAVIGIATON_TOC:
@@ -442,10 +452,18 @@ if __name__ == "__main__":
     # )
 
     # Title: mmaction2
+    # result = asyncio.run(
+    #     extract_toc(
+    #         url="https://mmaction2.readthedocs.io/en/latest/get_started/overview.html",
+    #         tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
+    #     )
+    # )
+
+    # Title: GNU 🔪 Coreutils
     result = asyncio.run(
         extract_toc(
-            url="https://mmaction2.readthedocs.io/en/latest/get_started/overview.html",
-            tos_type=TableOfContentsType.SECTION_NAVIGIATON_TOC,
+            url="https://www.gnu.org/software/coreutils/manual/coreutils.html",
+            tos_type=TableOfContentsType.MAIN_CONTENT_AREA_TOC,
         )
     )
     temp_str_file = create_temp_str_file(result, prefix="")
